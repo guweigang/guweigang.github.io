@@ -1,7 +1,5 @@
-#+TITLE: 闭眼听世界
+#+TITLE: 博客首页
 
-This is the home page of Gu Weigang.
-
-* hello111fadafd
-* world
+- [[http://roygu.com][hello111fadafd]]
+- [[http://guweigang.com][fadf]]
 
