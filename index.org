@@ -1,6 +1,7 @@
-#+TITLE: Index
+#+TITLE: 闭眼听世界
 
 This is the home page of Gu Weigang.
 
 * hello
 * world
+
