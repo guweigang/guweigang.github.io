@@ -1,0 +1,3 @@
+#+TITLE: 尝试newlisp
+
+一直有一个lisp梦，想好好学学lisp，但一直被common lisp那苦涩的语法糖阻拦着。。。
