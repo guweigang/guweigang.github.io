@@ -1,3 +1,12 @@
-#+TITLE: 尝试newlisp
+#+TITLE: try newlisp
+#+AUTHOR:      <author name here>
+#+EMAIL:       [author's email]
+#+DATE:        <the day you created this post, e.g. 2011-10-23 Sun>
+#+URI:         /blog/%y/%m/%d/try-lisp/
+#+KEYWORDS:    lisp, newlisp
+#+TAGS:        lisp, newlisp
+#+LANGUAGE:    en
+#+OPTIONS:     H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: newlisp
 
 一直有一个lisp梦，想好好学学lisp，但一直被common lisp那苦涩的语法糖阻拦着。。。
