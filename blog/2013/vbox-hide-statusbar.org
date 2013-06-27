@@ -2,7 +2,7 @@
 #+AUTHOR:      Gu Weigang
 #+EMAIL:       guweigang@baidu.com
 #+DATE:        2013-06-27 Thu
-#+URI:         vbox-hide-statusbar
+#+URI:         /blog/%y/%m/%d/vbox-hide-statusbar/
 #+KEYWORDS:    virtualbox statusbar
 #+TAGS:        virtualbox statusbar
 #+LANGUAGE:    en
