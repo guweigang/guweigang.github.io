@@ -1,4 +1,4 @@
-#+TITLE: 博客首页
+#+TITLE: 顾伟刚的博客
 #+AUTHOR:      Guweigang
 #+EMAIL:       guweigang@outlook.com
 #+DATE:        2013-06-20 Thu
@@ -9,6 +9,4 @@
 #+OPTIONS:     H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
 #+DESCRIPTION: 顾伟刚的博客
 
-- [[http://roygu.com][hello111fadafd]]
-- [[Http://guweigang.com][fadf]]
-
+顾伟刚，号江湖校长。

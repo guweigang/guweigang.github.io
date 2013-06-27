@@ -1,0 +1,24 @@
+#+TITLE:       如何隐藏Virtualbox的任务栏？
+#+AUTHOR:      Gu Weigang
+#+EMAIL:       guweigang@baidu.com
+#+DATE:        2013-06-27 Thu
+#+URI:         vbox-hide-statusbar
+#+KEYWORDS:    virtualbox statusbar
+#+TAGS:        virtualbox statusbar
+#+LANGUAGE:    en
+#+OPTIONS:     H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 本文介绍如何隐藏Virtualbox的任务栏和状态栏
+
+
+Run the following command in your terminal (or command prompt):
+
+VBoxManage setextradata global GUI/Customizations noMenuBar,noStatusBar
+
+Start your VM. The Menu bar and the Status bar should be gone now.
+
+To retrieve back your menu bar and status bar, run the command:
+
+VBoxManage setextradata global GUI/Customizations MenuBar,StatusBar
+While the menu bar is gone, you might want to learn some Virtualbox keyboard shortcuts to quickly access the menu options.
+
+Bring up the menu options – Host + HOME
