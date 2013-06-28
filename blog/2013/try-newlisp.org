@@ -3,8 +3,8 @@
 #+EMAIL:       guweigang@outlook.com
 #+DATE:        2013-06-21 Mon
 #+URI:         /blog/%y/%m/%d/try-newlisp/
-#+KEYWORDS:    lisp , newlisp
-#+TAGS:        lisp , newlisp
+#+KEYWORDS:    lisp, newlisp
+#+TAGS:        lisp:newlisp
 #+LANGUAGE:    en
 #+OPTIONS:     H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
 #+DESCRIPTION: newlisp
