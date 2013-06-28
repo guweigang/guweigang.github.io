@@ -4,7 +4,7 @@
 #+DATE:        2013-06-20 Thu
 #+URI:         /index/
 #+KEYWORDS:    技术博客
-#+TAGS:        
+#+TAGS:        homepage:guweigang
 #+LANGUAGE:    en
 #+OPTIONS:     H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
 #+DESCRIPTION: 顾伟刚的博客
