@@ -1,0 +1,36 @@
+#+TITLE: in PHP what does it mean by a function being binary-safe ?
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2012-01-13 Fri
+#+URI: /blog/2012/01/13/in-php-what-does-it-mean-by-a-function-being-binary-safe/
+#+KEYWORDS: php, binary safe
+#+TAGS: binary safe, php
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+It means the function will work correctly when you pass it arbitrary binary data (i.e. strings containing non-ASCII bytes and/or null bytes).
+
+For example, a non-binary-safe function might be based on a C function which expects null-terminated strings, so if the string contains a null character, the function would ignore anything after it.
+
+This is relevant because PHP does not cleanly separate string and binary data.
+
+For instance, if PHP's =strlen= function worked like C standard library =strlen=, the result here would be wrong:
+
+
+#+BEGIN_EXAMPLE
+    如果函数是binary safe的话，我们将得到7；如果函数是非binary safe的话，我们将得到3 * strlen是binary safe的，所以实际上以下的运行结果是"7"
+#+END_EXAMPLE
+
+
+#+BEGIN_EXAMPLE
+    
+$str = "abc\x00abc"; 
+echo strlen($str); //gives 7, not 3!
+
+#+END_EXAMPLE
+
+
+
+
+

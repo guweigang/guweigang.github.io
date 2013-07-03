@@ -1,0 +1,102 @@
+#+TITLE: MySQL:在一次查询中进行批量更新
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2012-04-25 Wed
+#+URI: /blog/2012/04/25/mysql-in-a-query-batch-updates/
+#+KEYWORDS: mysql, batch updates
+#+TAGS: mysql, batch updates
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+为了提高工作效率以及节省人力时间，批量操作在现在的应用中越来越常见。
+
+对于数据库来说，无非是“插删改查”，“查询”和“删除“自然不在话下，但是”删“的话我们一般遵循单查询批量=1000=这个上限，再多可能会影响数据库同步延迟。
+
+而批量”插入“则可以通过拼SQL方式实现，即：
+
+INSERT INTO tbl\_name (a,b,c) VALUES(1,2,3),(4,5,6),(7,8,9);
+
+当然，我们要限制单条SQL的大小，一般来说10Ｍ吧。
+
+但是对于批量“更新”呢？能不能单查询批量更新（这里的批量更新指的是=Where=之后只有单条结果的情况）呢？ 下面来看看批量“更新”的几种方案：
+
+
+
+1. 使用=INSERT ... ON DUPLICATE KEY UPDATE=
+
+INSERT INTO table (id,Col1,Col2) VALUES (1,1,1),(2,2,3),(3,9,3),(4,10,12)
+ON DUPLICATE KEY UPDATE Col1=VALUES(Col1),Col2=VALUES(Col2);
+
+这种方法倒是简单，但是官方文档有提示在Multi Unique Index的时候慎用，官方文档原话如下：
+
+
+
+   #+BEGIN_QUOTE
+     In general, you should try to avoid using an ON DUPLICATE KEY clause on tables with multiple unique indexes.
+   #+END_QUOTE
+
+   
+
+
+
+2. 使用MySQL的Case语句,原型如下：
+
+CASE case\_value
+ WHEN when\_value THEN statement\_list
+ [WHEN when\_value THEN statement\_list] ...
+ [ELSE statement\_list]
+END CASE
+
+
+在更新时则这么用：
+
+UPDATE table SET Col1 = CASE id 
+ WHEN 1 THEN 1 
+ WHEN 2 THEN 2 
+ WHEN 4 THEN 10 
+ ELSE Col1 
+ END CASE, 
+ Col2 = CASE id 
+ WHEN 3 THEN 3 
+ WHEN 4 THEN 12 
+ ELSE Col2 
+ END CASE
+ WHERE id IN (1, 2, 3, 4);
+
+这种方式太过复杂，我想谁也不会在代码中这么用，所以不推荐使用。。。
+
+3. 新建临时表，把新数据放在临时表中，然后再逐条更新，示例代码（PHP）如下：
+
+// Reorder items
+function update\_items\_tempdb(&$items)
+{
+ shuffle($items);
+ $table\_name = uniqid('tmp\_test\_');
+ $sql = "CREATE TEMPORARY TABLE `$table\_name` ("
+ ." `id` int(10) unsigned NOT NULL AUTO\_INCREMENT"
+ .", `position` int(10) unsigned NOT NULL"
+ .", PRIMARY KEY (`id`)"
+ .") ENGINE = MEMORY";
+ query($sql);
+ $i = 0;
+ $sql = '';
+ foreach ($items as &$item)
+ {
+ $item->position = $i++;
+ $sql .= ($sql ? ', ' : '')."({$item->id}, {$item->position})";
+ }
+ if ($sql)
+ {
+ query("INSERT INTO `$table\_name` (id, position) VALUES $sql");
+ $sql = "UPDATE `test`, `$table\_name` SET `test`.position = `$table\_name`.position"
+ ." WHERE `$table\_name`.id = `test`.id";
+ query($sql);
+ }
+ query("DROP TABLE `$table\_name`");
+}
+
+
+总结一下：对于少量的更新，我们仍将使用单查询更新一条记录的方式（指的是根据Unique字段查询的单条结果）。如果更新数据大到某张表（百万数据量）的一半时，我们将使用临时表方案，也就是这里说的第三种方案。
+
+

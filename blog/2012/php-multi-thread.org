@@ -1,0 +1,30 @@
+#+TITLE: php multi-thread
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2012-03-19 Mon
+#+URI: /blog/2012/03/19/php-multi-thread/
+#+KEYWORDS: php, multi-thread
+#+TAGS: multi-thread, php
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+今天突然想看看PHP多线程的问题，发现很多人讲PHP的多线程其实是多进程，唉，破灭了！！！网上给PHP的模拟多线程提出了几种方案，下面仅摘录：
+
+#+BEGIN_QUOTE
+  
+There are a few solutions, varying from "Hmmm, just about OK" through to "Poke out your eyes".
+
+ 1. Write your multithreaded code as a PHP extension. Probably the most supported, but you need to write in C (or another language supported for extensions).
+ 2. Spawn child processes onto the underlying OS, and read/write to their input/output with standard file handles. See popen for one route in, or PCNTRL. Reasonable, and you can use PHP from the command line.
+ 3. Make other HTTP requests to yourself via CURL or similar, thus piggybacking on your web servers multi-processing capacity. Keeps all your code "web like", but runs the risk of irate support developers tracking you down and breaking thumbs.
+
+
+#+END_QUOTE
+
+
+
+
+
+
+
