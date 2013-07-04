@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <title>今天开始学习GTK+!!! - 闭眼听世界</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Gu Weigang" />
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <link rel="stylesheet" href="/media/css/main.css" type="text/css">
+  </head>
+  <body class="container">
+    <div> 
+      <header class="masthead">
+        <h1 class="masthead-title"><a href="/">闭眼听世界</a></h1>
+        <p>心如松静意无尘，气若浮萍了无痕！</p>
+        <ul>
+          <li><a href="/blog/">Blog</a></li>
+          <li><a href="/wiki/">Wiki</a></li>
+          <li><a href="/tags/">Tags</a></li>
+          <li><a href="/about/">About</a></li>
+          <li><a href="https://github.com/guweigang">GitHub</a></li>
+          <li><a href="https://google.com/search?q=site:guweigang.com">Search</a></li>
+        </ul>
+      </header>
+    </div>
+    <div> 
+      <div class="post">
+        <h1>今天开始学习GTK+!!!</h1>
+        <p>
+GTK+(GIMP Toolkit)是一套跨多种平台的图形工具包,按LGPL许可协议发布的。虽然最初是为GIMP写的，但目前已发展为一个功能强大、设计灵活的一个通用图形库。特别是被GNOME选中使得GTK+广为流传，成为Linux下开发图形界面的应用程序的主流开发工具之一，当然GTK+并不要求必须在Linux上，事实上，目前GTK+已经有了成功的windows版本。
+</p>
+
+<p>
+在这里先提供几个学习资源，也是某人学习GTK+的笔记，不过可惜作者没有把这一系统笔记写完：
+</p>
+
+<p>
+<a href="http://redvale.bokee.com/5809558.html">大家一起用gtk编程1(开始与热身)</a>
+<a href="http://redvale.bokee.com/5809573.html">大家一起用gtk编程2(添加按钮和连接事件)</a>
+<a href="http://redvale.bokee.com/5809580.html">大家一起用gtk编程3(初步使用Makefile)</a>
+<a href="http://redvale.bokee.com/5809583.html">大家一起用gtk编程4(使用GDB调试程序)</a>
+<a href="http://redvale.bokee.com/5809588.html">大家一起用gtk编程5(窗口布局初探)</a>
+<a href="http://redvale.bokee.com/5809591.html">大家一起用gtk编程6(按钮/单选/复选组件)</a>
+</p>
+
+<p>
+一直想要开始学习GTK，一直在想，一直在想，从没有开始过，其实之前也有尝试过，不过被那烦人的环境配置整晕了。今天终于开始了。
+(1) 在<a href="http://www.gtk.org/download-windows.html">这里</a>下载All-in-one bundles，我下的是2.20。
+(2) 安装MinGW32+msys，假设安装在C:\MINGW32和C:\MINGW32\msys，不会安装的自行Google
+(3) 把下载后的GTK+解压到文件夹C:\MINGW32\GTK+，并把C:\MINGW32\GTK+\bin加入系统Path路径
+(4) 在CMD中测试`pkg-config --cflags gtk+-2.0`及`pkg-config --libs gtk+-2.0`，这会输出可用的包含头文件和库文件。如果无误，那么GTK+的环境算是配好了。
+(5) 第一个Hello,world程序。
+</p>
+
+
+<pre class="example">
+#include 
+int main( int   argc, char *argv[] ){
+  GtkWidget *window, *label;
+  gtk_init (&amp;argc, &amp;argv);
+  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  label = gtk_label_new ("Hello GTK");
+  gtk_container_add (GTK_CONTAINER (window), label);
+  gtk_container_set_border_width (GTK_CONTAINER (window), 10);
+  gtk_widget_show(label);
+  gtk_widget_show (window);
+  gtk_main ();
+  return 0;
+}
+</pre>
+
+
+<p>
+先看下演示图：
+[[<img src="http://roygu.com/?attachment_id=1018][[[http://roygu.com/wp-content/uploads/2010/10/gtk-hello.png"  alt="gtk-hello.png"/>]]]]
+如何编译执行呢？这是一个问题！！！而且这个问题我搞了好久，因为是第一次搞这个，所以很困惑。有两种方法：
+A. 此种方法只适合单个文件（美元符号是命令提示符）
+</p>
+
+
+<pre class="example">
+$ gcc -o click.exe click.c `pkg-config --cflags --libs gtk+-2.0`
+</pre>
+
+
+<p>
+B. 第二种是写makefile文件
+可以先看看<a href="http://roygu.com/?p=1007">跟我一起写Makefile！</a>，然后再参考这里：
+</p>
+
+
+<pre class="example">
+#---- 用户修改区域 开始
+CC=gcc
+PROG_NAME=hello
+INCS=
+SRCS=hello.c
+
+#从xx.c 文件得到 xx.o 文件
+OBJS=${SRCS:.c=.o}
+
+#编译GTK程序时要用到的库
+LIBS=gtk+-2.0
+#---- 用户修改区域 结束
+
+# -O2
+CFLAGS=`pkg-config --cflags ${LIBS}` -g -Wall
+LDFLAGS=`pkg-config --libs ${LIBS}`   -g -Wall
+
+all: ${PROG_NAME}
+
+${PROG_NAME}:${OBJS}
+   ${CC} -o ${PROG_NAME} ${OBJS} ${LDFLAGS}
+
+${OBJS}:${INCS}
+
+.c.o:
+  ${CC} -c $&lt;  ${CFLAGS}
+
+clean:
+  rm -f *.o ${PROG_NAME}
+
+rebuild: clean all
+</pre>
+
+      </div>
+    </div>
+    <div> 
+      <div class="post-meta">
+        <span title="post date" class="post-info">2010-10-12</span>
+        <span title="last modification date" class="post-info">2013-07-04</span>
+        <span title="tags" class="post-info"><a href="/tags/gtk/">gtk</a>, <a href="/tags/hellogtk/">hellogtk</a></span>
+        <span title="author" class="post-info">Gu Weigang</span>
+      </div>
+      <section>
+        <h1>Comments</h1>
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+          //var disqus_developer = 1;
+          var disqus_identifier = "/blog/2010/10/12/today-started-learning-gtk+/";
+          var disqus_url = "http://guweigang.com/blog/2010/10/12/today-started-learning-gtk+/";
+          var disqus_shortname = 'guweigang';
+          /* * * DON'T EDIT BELOW THIS LINE * * */
+          (function() {
+          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+          dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+          })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </section>
+      <div class="footer">
+        <p>Generated by <a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.3.1 (<a href="http://orgmode.org">Org</a> mode 8.0.3)</p>
+        <p> 
+          Copyright &copy; 2012 - 2013 <a href="mailto:guweigang &lt;at&gt; outlook &lt;dot&gt; com">Gu Weigang</a>
+          &nbsp;&nbsp;-&nbsp;&nbsp;
+          Powered by <a href="https://github.com/kelvinh/org-page" target="_blank">org-page</a>
+        </p>
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <title>Solar manual 1.4. 配置系统 - 闭眼听世界</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Gu Weigang" />
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <link rel="stylesheet" href="/media/css/main.css" type="text/css">
+  </head>
+  <body class="container">
+    <div> 
+      <header class="masthead">
+        <h1 class="masthead-title"><a href="/">闭眼听世界</a></h1>
+        <p>心如松静意无尘，气若浮萍了无痕！</p>
+        <ul>
+          <li><a href="/blog/">Blog</a></li>
+          <li><a href="/wiki/">Wiki</a></li>
+          <li><a href="/tags/">Tags</a></li>
+          <li><a href="/about/">About</a></li>
+          <li><a href="https://github.com/guweigang">GitHub</a></li>
+          <li><a href="https://google.com/search?q=site:guweigang.com">Search</a></li>
+        </ul>
+      </header>
+    </div>
+    <div> 
+      <div class="post">
+        <h1>Solar manual 1.4. 配置系统</h1>
+        <ol class="org-ol">
+<li>打开SYSTEM/config.php文 件，在该文件末尾的return语句之前，给文件中的$config数组添加新键值。
+</li>
+<li>查找前端控制器配置项，并通过修改“classes”键指向的值来指定应用类名的前缀。
+</li>
+</ol>
+
+
+<pre class="example">
+       &lt;?php
+// front controller
+$config['Solar_Controller_Front'] = array(
+    'classes' =&gt; array('Acme_App', 'Solar_App'),
+    // ...
+    'explain' =&gt; true,
+);
+</pre>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="figure">
+<p><img src="//C:/Program Files/Oxygen XML Editor 11/frameworks/docbook/xsl/images/note.png"  alt="note.png"/></p>
+</div>
+
+
+
+
+<p>
+Note
+</p>
+
+
+
+
+
+
+
+
+
+
+<p>
+把Solar\_App也压入应用类栈中，这使Solar在第一次定位应用时，不 仅会查找Acme\_App，而且也会查找Solar\_App。
+</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<ol class="org-ol">
+<li>查找模型目录配置项，并指定应用类名的前缀。
+</li>
+</ol>
+
+
+<pre class="example">
+       &lt;?php
+// model catalog
+$config['Solar_Sql_Model_Catalog']['classes'] = array('Acme_Model');
+</pre>
+
+
+
+
+<ol class="org-ol">
+<li>给$config数组添加新元素，指定应用所使用的SQL适配器，并做相关配置。对于SQLite，使用下面这种配置：
+</li>
+</ol>
+
+
+<pre class="example">
+       &lt;?php
+// the SQL adapter class to use
+$config['Solar_Sql']['adapter'] = 'Solar_Sql_Adapter_Sqlite';
+
+// configure the SQL adapter class
+$config['Solar_Sql_Adapter_Sqlite'] = array(
+    'name' =&gt; "$system/sqlite/acme.sq3",  // the database file to use
+);
+</pre>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="figure">
+<p><img src="//C:/Program Files/Oxygen XML Editor 11/frameworks/docbook/xsl/images/note.png"  alt="note.png"/></p>
+</div>
+
+
+
+
+<p>
+Note
+</p>
+
+
+
+
+
+
+
+
+
+
+<p>
+变量$system在SYSTEM/config.php文件中定义，它的值是 SYSTEM目录。
+</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<p>
+对于MySQL，使用下面这种配置：
+</p>
+
+
+<pre class="example">
+       &lt;?php
+// the SQL adapter class to use
+$config['Solar_Sql']['adapter'] = 'Solar_Sql_Adapter_Mysql';
+
+// configure the SQL adapter class
+$config['Solar_Sql_Adapter_Mysql'] = array(
+    'host' =&gt; 'localhost', // the database server host
+    'name' =&gt; 'database',  // the database name
+    'user' =&gt; 'username',  // authenticate as this user
+    'pass' =&gt; 'password',  // authenticate with this password
+);
+</pre>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="figure">
+<p><img src="//C:/Program Files/Oxygen XML Editor 11/frameworks/docbook/xsl/images/note.png"  alt="note.png"/></p>
+</div>
+
+
+
+
+<p>
+Note
+</p>
+
+
+
+
+
+
+
+
+
+
+<p>
+对于PostgreSQL，用Solar\_Sql\_Adapter\_Pgsql 替换适配器名及配置项的键名。
+</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<p>
+最后，配置文件的最后一部分应该像这样：
+</p>
+
+
+<pre class="example">
+    &lt;?php
+/**
+ * project overrides
+ */
+
+// front controller
+$config['Solar_Controller_Front'] = array(
+    'classes' =&gt; array('Acme_App', 'Solar_App'),
+    'disable' =&gt; array(),
+    'default' =&gt; 'hello',
+    'rewrite' =&gt; array(),
+    'routing' =&gt; array(),
+    'explain' =&gt; true,
+);
+
+// model catalog
+$config['Solar_Sql_Model_Catalog']['classes'] = array('Acme_Model');
+
+// the SQL adapter class to use
+$config['Solar_Sql']['adapter'] = 'Solar_Sql_Adapter_Sqlite';
+
+// configure the SQL adapter class
+$config['Solar_Sql_Adapter_Sqlite'] = array(
+    'name' =&gt; "$system/sqlite/acme.sq3",  // the database file to use
+);
+
+/**
+ * done!
+ */
+return $config;
+</pre>
+
+      </div>
+    </div>
+    <div> 
+      <div class="post-meta">
+        <span title="post date" class="post-info">2010-04-13</span>
+        <span title="last modification date" class="post-info">2013-07-04</span>
+        <span title="tags" class="post-info"><a href="/tags/manual/">manual</a>, <a href="/tags/solar/">solar</a>, <a href="/tags/solar-manual/">solar manual</a></span>
+        <span title="author" class="post-info">Gu Weigang</span>
+      </div>
+      <section>
+        <h1>Comments</h1>
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+          //var disqus_developer = 1;
+          var disqus_identifier = "/blog/2010/04/13/solar-manual-1_4-configuring-system/";
+          var disqus_url = "http://guweigang.com/blog/2010/04/13/solar-manual-1_4-configuring-system/";
+          var disqus_shortname = 'guweigang';
+          /* * * DON'T EDIT BELOW THIS LINE * * */
+          (function() {
+          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+          dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+          })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </section>
+      <div class="footer">
+        <p>Generated by <a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.3.1 (<a href="http://orgmode.org">Org</a> mode 8.0.3)</p>
+        <p> 
+          Copyright &copy; 2012 - 2013 <a href="mailto:guweigang &lt;at&gt; outlook &lt;dot&gt; com">Gu Weigang</a>
+          &nbsp;&nbsp;-&nbsp;&nbsp;
+          Powered by <a href="https://github.com/kelvinh/org-page" target="_blank">org-page</a>
+        </p>
+      </div>
+    </div>
+  </body>
+</html>

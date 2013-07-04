@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <title>时隔三月，发布solar-system-win-1.1.1-0.4版并更新solar离线文档！ - 闭眼听世界</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Gu Weigang" />
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <link rel="stylesheet" href="/media/css/main.css" type="text/css">
+  </head>
+  <body class="container">
+    <div> 
+      <header class="masthead">
+        <h1 class="masthead-title"><a href="/">闭眼听世界</a></h1>
+        <p>心如松静意无尘，气若浮萍了无痕！</p>
+        <ul>
+          <li><a href="/blog/">Blog</a></li>
+          <li><a href="/wiki/">Wiki</a></li>
+          <li><a href="/tags/">Tags</a></li>
+          <li><a href="/about/">About</a></li>
+          <li><a href="https://github.com/guweigang">GitHub</a></li>
+          <li><a href="https://google.com/search?q=site:guweigang.com">Search</a></li>
+        </ul>
+      </header>
+    </div>
+    <div> 
+      <div class="post">
+        <h1>时隔三月，发布solar-system-win-1.1.1-0.4版并更新solar离线文档！</h1>
+        <p>
+时隔三月，终发布solar-win-1.1.1的第四个版本，这段时间非常忙碌，和林军、熊正理、刘修宏一起创办公司（长沙市尤盛网络科技有限公司），和李铁一起共事。期间领导团队帮助名师网开发暑期选课系统、开发免单社区站(<a href="http://miandan.net">http://miandan.net</a>)。
+</p>
+
+<p>
+紧接着就是毕业生找工作，一直就没有停止过，也一直沉不下心来做事情。所幸我已基本脱离这种状态，又回来了！
+</p>
+
+<p>
+闲话不多说了，新版本主要解决上一个版本中的Bug:
+</p>
+<ol class="org-ol">
+<li>在link-vendor时，无论是否存在vendor，都会在script目录下建立vendor.bat和vendor的链接
+</li>
+<li>在windows xp, 2000, 2003下，sync-vendor命令仍然存在很多问题，经常出现代码丢失等现象。
+</li>
+</ol>
+<p>
+另外，新的离线文档更新了Package部分的格式，更清晰明了。
+</p>
+
+<p>
+*Solar下载地址：*下载地址：<a href="http://solarphp.cn/download/solar-system-1.1.1-win-0.4.rar"><a href="http://solarphp.cn/download/solar-system-1.1.1-win-0.4.rar">http://solarphp.cn/download/solar-system-1.1.1-win-0.4.rar</a></a>
+当然，你也可以到这里下载，<a href="http://solarphp.cn/download/solar-system-win-latest.rar"><a href="http://solarphp.cn/download/solar-system-win-latest.rar">http://solarphp.cn/download/solar-system-win-latest.rar</a></a>
+这是目前的最新版，可能是当前发布版，也可能有下一个版本的某些新功能。
+*文档下载地址：*<a href="http://solarphp.cn/download/solar_manual_offline_v1.3.chm"><a href="http://solarphp.cn/download/solar\_manual\_offline\_v1.3.chm">http://solarphp.cn/download/solar\_manual\_offline\_v1.3.chm</a></a>
+不过过去的三个月并非无进展：
+一、 我们建立了<a href="http://demo.solarphp.cn">solar功能演示站</a>
+</p>
+<ol class="org-ol">
+<li>Ajax演示 - Roy
+</li>
+</ol>
+<p>
+(1)<a href="http://demo.solarphp.cn/ajax/">http://demo.solarphp.cn/ajax/</a>
+(2)<a href="http://demo.solarphp.cn/ajax/form">http://demo.solarphp.cn/ajax/form</a>
+</p>
+<ol class="org-ol">
+<li>图片处理演示 - Roy
+</li>
+</ol>
+<p>
+(1) <a href="http://demo.solarphp.cn/image/magick">http://demo.solarphp.cn/image/magick</a>
+(2) <a href="http://demo.solarphp.cn/image/gd">http://demo.solarphp.cn/image/gd</a>
+</p>
+<ol class="org-ol">
+<li>支付演示 - Roy
+</li>
+</ol>
+<p>
+(1) <a href="http://demo.solarphp.cn/pay/alipay">http://demo.solarphp.cn/pay/alipay</a>
+</p>
+<ol class="org-ol">
+<li>上传演示 - Roy
+</li>
+</ol>
+<p>
+(1) 附件上传：<a href="http://demo.solarphp.cn/upload/attachment">http://demo.solarphp.cn/upload/attachment</a>
+(2) 图片上传：<a href="http://demo.solarphp.cn/upload/image">http://demo.solarphp.cn/upload/image</a>
+</p>
+<ol class="org-ol">
+<li>验证码演示 - Life
+</li>
+</ol>
+<p>
+(1) <a href="http://demo.solarphp.cn/captcha/index">http://demo.solarphp.cn/captcha/index</a>
+</p>
+<ol class="org-ol">
+<li>购物车演示 - Roy
+</li>
+</ol>
+<p>
+(1) <a href="http://demo.solarphp.cn/cart/index">http://demo.solarphp.cn/cart/index</a>
+</p>
+<ol class="org-ol">
+<li>代码高亮演示 - Roy
+</li>
+</ol>
+<p>
+(1) 在每个演示中都有代码显示，不过这个插件主要是由Libear完成的，Life提出了很好的建议，由Roy修改，现为版本0.2
+二、我们开发了相当多的类库并将继续开发
+(1) Web Service: XML-RPC, Json-RPC, Soap
+(2) Pay: Alipay(已完成), 财付通, 百付宝, 网银在线
+(3) 购物车(已完成)
+(4) Ajax(已完成)
+(5) 文件上传 - Upload(已完成)
+(6) 图片处理 - Image(已完成)
+(7) 验证码 - Captcha(已完成)
+(8) 代码高亮 - Geshi(已完成)
+</p>
+
+<p>
+在接下来的日子里，我会继续努力，为开源社区贡献自己的力量。
+</p>
+
+      </div>
+    </div>
+    <div> 
+      <div class="post-meta">
+        <span title="post date" class="post-info">2010-11-06</span>
+        <span title="last modification date" class="post-info">2013-07-04</span>
+        <span title="tags" class="post-info"><a href="/tags/solar/">solar</a>, <a href="/tags/version-released/">version released</a></span>
+        <span title="author" class="post-info">Gu Weigang</span>
+      </div>
+      <section>
+        <h1>Comments</h1>
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+          //var disqus_developer = 1;
+          var disqus_identifier = "/blog/2010/11/06/after-a-lapse-of-march-released-solar-system-win-1_1_1-0_4-version-and-update-the-solar-offline-documentation/";
+          var disqus_url = "http://guweigang.com/blog/2010/11/06/after-a-lapse-of-march-released-solar-system-win-1_1_1-0_4-version-and-update-the-solar-offline-documentation/";
+          var disqus_shortname = 'guweigang';
+          /* * * DON'T EDIT BELOW THIS LINE * * */
+          (function() {
+          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+          dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+          })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </section>
+      <div class="footer">
+        <p>Generated by <a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.3.1 (<a href="http://orgmode.org">Org</a> mode 8.0.3)</p>
+        <p> 
+          Copyright &copy; 2012 - 2013 <a href="mailto:guweigang &lt;at&gt; outlook &lt;dot&gt; com">Gu Weigang</a>
+          &nbsp;&nbsp;-&nbsp;&nbsp;
+          Powered by <a href="https://github.com/kelvinh/org-page" target="_blank">org-page</a>
+        </p>
+      </div>
+    </div>
+  </body>
+</html>

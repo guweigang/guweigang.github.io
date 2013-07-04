@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <title>solarphp中SQL基础 - 闭眼听世界</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Gu Weigang" />
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <link rel="stylesheet" href="/media/css/main.css" type="text/css">
+  </head>
+  <body class="container">
+    <div> 
+      <header class="masthead">
+        <h1 class="masthead-title"><a href="/">闭眼听世界</a></h1>
+        <p>心如松静意无尘，气若浮萍了无痕！</p>
+        <ul>
+          <li><a href="/blog/">Blog</a></li>
+          <li><a href="/wiki/">Wiki</a></li>
+          <li><a href="/tags/">Tags</a></li>
+          <li><a href="/about/">About</a></li>
+          <li><a href="https://github.com/guweigang">GitHub</a></li>
+          <li><a href="https://google.com/search?q=site:guweigang.com">Search</a></li>
+        </ul>
+      </header>
+    </div>
+    <div> 
+      <div class="post">
+        <h1>solarphp中SQL基础</h1>
+        <p>
+主要涉及到Solar\_Sql包
+<a href="http://godpress.cn/?p=243">上篇文章中我们有提到solar初始化时会自动注册Solar\_Sql类</a>，所以我们只需要使用Solar\_Registry，就可以实例化Solar\_Sql类。
+</p>
+
+
+<pre class="example">
+$sql = Solar_Registry::get('sql');
+</pre>
+
+
+<p>
+Solar\_Sql是基于PDO的，能够适用MySQL, PostgreSQL, SQLite，而对于使用者来讲只需要使用Sloar\_Sql的功能，不用关心各种不同数据库的细节。
+配置Sloar\_Sql对象
+</p>
+
+
+<pre class="example">
+    $config['Solar_Sql']['adapter'] = 'Solar_Sql_Adapter_Mysql';
+$config['Solar_Sql_Adapter_Mysql'] = array(
+    'host' =&gt; 'localhost',
+    'user' =&gt; 'root',
+    'pass' =&gt; '123456',
+    'name' =&gt; 'solar',
+);
+</pre>
+
+
+<p>
+那么你就可以像这样使用它了：
+</p>
+
+
+<pre class="example">
+    $rs = $sql-&gt;query("select * from message");
+$this-&gt;arr = $rs-&gt;fetchAll();
+</pre>
+
+
+<p>
+查旬的结果是<a href="http://godpress.cn/?p=250">pdoStatement格式</a>，获取数据可以用下面这些方式：
+</p>
+
+
+<pre class="example">
+    Solar_Sql_Adapter::fetchAll() //returns a sequential array of all rows. The rows themselves are associative arrays (keys are the column names).
+Solar_Sql_Adapter::fetchAssoc() //returns an associative array of all rows (key is the first column).
+Solar_Sql_Adapter::fetchCol() //returns a sequential array of all values in the first column.
+Solar_Sql_Adapter::fetchOne() //returns the first row as an associative array (keys are the column names).
+Solar_Sql_Adapter::fetchPairs() //returns an associative array where each key is the first column and each value is the second column.
+Solar_Sql_Adapter::fetchValue() //returns the value of the first row in the first column.
+</pre>
+
+
+<p>
+To quote values so they can be used safely in SQL commands, use ...
+</p>
+
+
+<ul class="org-ul">
+<li><a href="http://solarphp.com/class/Solar_Sql_Adapter/quote()">Solar\_Sql\_Adapter::quote()</a>
+</li>
+<li><a href="http://solarphp.com/class/Solar_Sql_Adapter/quoteInto()">Solar\_Sql\_Adapter::quoteInto()</a>
+</li>
+<li><a href="http://solarphp.com/class/Solar_Sql_Adapter/quoteMulti()">Solar\_Sql\_Adapter::quoteMulti()</a>
+</li>
+</ul>
+
+
+<p>
+For direct-execution of commands, use...
+</p>
+
+
+<ul class="org-ul">
+<li><a href="http://solarphp.com/class/Solar_Sql_Adapter/query()">Solar\_Sql\_Adapter::query()</a>
+</li>
+</ul>
+
+
+<p>
+To fetch results, use ...
+</p>
+
+
+<ul class="org-ul">
+<li><a href="http://solarphp.com/class/Solar_Sql_Adapter/fetchAll()">Solar\_Sql\_Adapter::fetchAll()</a>
+</li>
+<li><a href="http://solarphp.com/class/Solar_Sql_Adapter/fetchAssoc()">Solar\_Sql\_Adapter::fetchAssoc()</a>
+</li>
+<li><a href="http://solarphp.com/class/Solar_Sql_Adapter/fetchCol()">Solar\_Sql\_Adapter::fetchCol()</a>
+</li>
+<li><a href="http://solarphp.com/class/Solar_Sql_Adapter/fetchOne()">Solar\_Sql\_Adapter::fetchOne()</a>
+</li>
+<li><a href="http://solarphp.com/class/Solar_Sql_Adapter/fetchPairs()">Solar\_Sql\_Adapter::fetchPairs()</a>
+</li>
+<li><a href="http://solarphp.com/class/Solar_Sql_Adapter/fetchPdo()">Solar\_Sql\_Adapter::fetchPdo()</a>
+</li>
+<li><a href="http://solarphp.com/class/Solar_Sql_Adapter/fetchSql()">Solar\_Sql\_Adapter::fetchSql()</a>
+</li>
+<li><a href="http://solarphp.com/class/Solar_Sql_Adapter/fetchValue()">Solar\_Sql\_Adapter::fetchValue()</a>
+</li>
+</ul>
+
+
+<p>
+To conveniently manipulate data in individual tables, use...
+</p>
+
+
+<ul class="org-ul">
+<li><a href="http://solarphp.com/class/Solar_Sql_Adapter/insert()">Solar\_Sql\_Adapter::insert()</a>
+</li>
+<li><a href="http://solarphp.com/class/Solar_Sql_Adapter/update()">Solar\_Sql\_Adapter::update()</a>
+</li>
+<li><a href="http://solarphp.com/class/Solar_Sql_Adapter/delete()">Solar\_Sql\_Adapter::delete()</a>
+</li>
+</ul>
+
+
+<p>
+For auto-increment values and database-portable sequences, use...
+</p>
+
+
+<ul class="org-ul">
+<li><a href="http://solarphp.com/class/Solar_Sql_Adapter/lastInsertId()">Solar\_Sql\_Adapter::lastInsertId()</a>
+</li>
+<li><a href="http://solarphp.com/class/Solar_Sql_Adapter/createSequence()">Solar\_Sql\_Adapter::createSequence()</a>
+</li>
+<li><a href="http://solarphp.com/class/Solar_Sql_Adapter/dropSequence()">Solar\_Sql\_Adapter::dropSequence()</a>
+</li>
+<li><a href="http://solarphp.com/class/Solar_Sql_Adapter/nextSequence()">Solar\_Sql\_Adapter::nextSequence()</a>
+</li>
+</ul>
+
+
+<p>
+For database-portable transactions, use...
+</p>
+
+
+<ul class="org-ul">
+<li><a href="http://solarphp.com/class/Solar_Sql_Adapter/begin()">Solar\_Sql\_Adapter::begin()</a>
+</li>
+<li><a href="http://solarphp.com/class/Solar_Sql_Adapter/commit()">Solar\_Sql\_Adapter::commit()</a>
+</li>
+<li><a href="http://solarphp.com/class/Solar_Sql_Adapter/rollback()">Solar\_Sql\_Adapter::rollback()</a>
+</li>
+</ul>
+
+
+<p>
+For database-portable table/column/index modification, use...
+</p>
+
+
+<ul class="org-ul">
+<li><a href="http://solarphp.com/class/Solar_Sql_Adapter/createTable()">Solar\_Sql\_Adapter::createTable()</a>
+</li>
+<li><a href="http://solarphp.com/class/Solar_Sql_Adapter/dropTable()">Solar\_Sql\_Adapter::dropTable()</a>
+</li>
+<li><a href="http://solarphp.com/class/Solar_Sql_Adapter/addColumn()">Solar\_Sql\_Adapter::addColumn()</a>
+</li>
+<li><a href="http://solarphp.com/class/Solar_Sql_Adapter/dropColumn()">Solar\_Sql\_Adapter::dropColumn()</a>
+</li>
+<li><a href="http://solarphp.com/class/Solar_Sql_Adapter/createIndex()">Solar\_Sql\_Adapter::createIndex()</a>
+</li>
+<li><a href="http://solarphp.com/class/Solar_Sql_Adapter/dropIndex()">Solar\_Sql\_Adapter::dropIndex()</a>
+</li>
+</ul>
+
+      </div>
+    </div>
+    <div> 
+      <div class="post-meta">
+        <span title="post date" class="post-info">2010-01-02</span>
+        <span title="last modification date" class="post-info">2013-07-04</span>
+        <span title="tags" class="post-info"><a href="/tags/solar_sql/">Solar_Sql</a>, <a href="/tags/solarphp/">solarphp</a></span>
+        <span title="author" class="post-info">Gu Weigang</span>
+      </div>
+      <section>
+        <h1>Comments</h1>
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+          //var disqus_developer = 1;
+          var disqus_identifier = "/blog/2010/01/02/solarphp-in-sql-basics/";
+          var disqus_url = "http://guweigang.com/blog/2010/01/02/solarphp-in-sql-basics/";
+          var disqus_shortname = 'guweigang';
+          /* * * DON'T EDIT BELOW THIS LINE * * */
+          (function() {
+          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+          dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+          })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </section>
+      <div class="footer">
+        <p>Generated by <a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.3.1 (<a href="http://orgmode.org">Org</a> mode 8.0.3)</p>
+        <p> 
+          Copyright &copy; 2012 - 2013 <a href="mailto:guweigang &lt;at&gt; outlook &lt;dot&gt; com">Gu Weigang</a>
+          &nbsp;&nbsp;-&nbsp;&nbsp;
+          Powered by <a href="https://github.com/kelvinh/org-page" target="_blank">org-page</a>
+        </p>
+      </div>
+    </div>
+  </body>
+</html>

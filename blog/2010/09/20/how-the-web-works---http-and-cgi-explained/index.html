@@ -1,0 +1,1122 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <title>How the web works: HTTP and CGI explained - 闭眼听世界</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Gu Weigang" />
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <link rel="stylesheet" href="/media/css/main.css" type="text/css">
+  </head>
+  <body class="container">
+    <div> 
+      <header class="masthead">
+        <h1 class="masthead-title"><a href="/">闭眼听世界</a></h1>
+        <p>心如松静意无尘，气若浮萍了无痕！</p>
+        <ul>
+          <li><a href="/blog/">Blog</a></li>
+          <li><a href="/wiki/">Wiki</a></li>
+          <li><a href="/tags/">Tags</a></li>
+          <li><a href="/about/">About</a></li>
+          <li><a href="https://github.com/guweigang">GitHub</a></li>
+          <li><a href="https://google.com/search?q=site:guweigang.com">Search</a></li>
+        </ul>
+      </header>
+    </div>
+    <div> 
+      <div class="post">
+        <h1>How the web works: HTTP and CGI explained</h1>
+        <p>
+原文链接：<a href="http://www.garshol.priv.no/download/text/http-tut.html"><a href="http://www.garshol.priv.no/download/text/http-tut.html">http://www.garshol.priv.no/download/text/http-tut.html</a></a>
+</p>
+
+
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1">Introduction</h2>
+<div class="outline-text-2" id="text-1">
+</div><div id="outline-container-sec-1-1" class="outline-3">
+<h3 id="sec-1-1">About this tutorial</h3>
+<div class="outline-text-3" id="text-1-1">
+<p>
+This is an attempt to give a basic understanding of how the web works and was written because I saw so many articles on various news groups that plainly showed that people needed to learn this. Not knowing of any one place to find this info, I decided to collect it into an article. Hope you find it useful!
+</p>
+
+<p>
+It covers the HTTP protocol, which is used to transmit and receive web pages, as well as some server workings and scripting technologies. It is assumed that you already know how to make web pages and preferably some HTML as well.. It is also assumed that you have some basic knowledge of URLs. (A URL is the address of a document, what you need to be able to get hold of the document.)
+</p>
+
+<p>
+I'm not entirely happy with this, so feedback would be very welcome. If you're not really a technical person and this tutorial leaves you puzzled or does not answer all your questions I'd very much like to hear about it. Corrections and opinions are also welcome.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-1-2" class="outline-3">
+<h3 id="sec-1-2">Some background</h3>
+<div class="outline-text-3" id="text-1-2">
+<p>
+When you browse the web the situation is basically this: you sit at your computer and want to see a document somewhere on the web, to which you have the URL.
+</p>
+
+<p>
+Since the document you want to read is somewhere else in the world and probably very far away from you some more details are needed to make it available to you. The first detail is your browser. You start it up and type the URL into it (at least you tell the browser somehow where you want to go, perhaps by clicking on a link).
+</p>
+
+<p>
+However, the picture is still not complete, as the browser can't read the document directly from the disk where it's stored if that disk is on another continent. So for you to be able to read the document the computer that contains the document must run a web server. A web server is a just a computer program that listens for requests from browsers and then execute them.
+</p>
+
+<p>
+So what happens next is that the browser contacts the server and requests that the server deliver the document to it. The server then gives a response which contains the document and the browser happily displays this to the user. The server also tells the browser what kind of document this is (HTML file, PDF file, ZIP file etc) and the browser then shows the document with the program it was configured to use for this kind of document.
+</p>
+
+<p>
+The browser will display HTML documents directly, and if there are references to images, Java applets, sound clips etc in it and the browser has been set up to display these it will request these also from the servers on which they reside. (Usually the same server as the document, but not always.) It's worth noting that these will be separate requests, and add additional load to the server and network. When the user follows another link the whole sequence starts anew.
+</p>
+
+<p>
+These requests and responses are issued in a special language called HTTP, which is short for HyperText Transfer Protocol. What this article basically does is describe how this works. Other common protocols that work in similar ways are FTP and Gopher, but there are also protocols that work in completely different ways. None of these are covered here, sorry. (There is a link to some more details about FTP in the <a href="http://www.garshol.priv.no/download/text/http-tut.html#app">references</a>.)
+</p>
+
+<p>
+It's worth noting that HTTP only defines what the browser and web server say to each other, not how they communicate. The actual work of moving bits and bytes back and forth across the network is done by <a href="http://www.garshol.priv.no/download/text/http-tut.html#termTCPIP">TCP and IP</a>, which are also used by FTP and Gopher (as well as most other internet protocols).
+</p>
+
+<p>
+When you continue, note that any software program that does the same as a web browser (ie: retrieve documents from servers) is called a client in network terminology and a user agent in web terminology. Also note that the server is properly the server program, and not the computer on which the server is an application program. (Sometimes called the server machine.)
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-2" class="outline-2">
+<h2 id="sec-2">What happens when I follow a link?</h2>
+<div class="outline-text-2" id="text-2">
+</div><div id="outline-container-sec-2-1" class="outline-3">
+<h3 id="sec-2-1">Step 1: Parsing the URL</h3>
+<div class="outline-text-3" id="text-2-1">
+<p>
+The first thing the browser has to do is to look at the URL of the new document to find out how to get hold of the new document. Most URLs have this basic form: "protocol://server/request-URI". The protocol part describes how to tell the server which document the you want and how to retrieve it. The server part tells the browser which server to contact, and the request-URI is the name used by the web server to identify the document. (I use the term request-URI since it's the one used by the HTTP standard, and I can't think of anything else that is general enough to not be misleading.)
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-2-2" class="outline-3">
+<h3 id="sec-2-2">Step 2: Sending the request</h3>
+<div class="outline-text-3" id="text-2-2">
+<p>
+Usually, the protocol is "http". To retrieve a document via HTTP the browser transmits the following request to the server: "GET /request-URI HTTP/version", where version tells the server which HTTP version is used. (Usually, the browser includes some more information as well. The details are covered <a href="http://www.garshol.priv.no/download/text/http-tut.html#creq">later</a>.)
+</p>
+
+<p>
+One important point here is that this request string is all the server ever sees. So the server doesn't care if the request came from a browser, a link checker, a validator, a search engine robot or if you typed it in manually. It just performs the request and returns the result.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-2-3" class="outline-3">
+<h3 id="sec-2-3">Step 3: The server response</h3>
+<div class="outline-text-3" id="text-2-3">
+<p>
+When the server receives the HTTP request it locates the appropriate document and returns it. However, an HTTP response is required to have a particular form. It must look like this:
+</p>
+
+
+<pre class="example">
+    HTTP/[VER] [CODE] [TEXT]
+Field1: Value1
+Field2: Value2
+
+...Document content here...
+</pre>
+
+
+<p>
+The first line shows the HTTP version used, followed by a three-digit number (the HTTP status code) and a reason phrase meant for humans. Usually the code is 200 (which basically means that all is well) and the phrase "OK". The first line is followed by some lines called the header, which contains information about the document. The header ends with a blank line, followed by the document content. This is a typical header:
+</p>
+
+
+<pre class="example">
+    HTTP/1.0 200 OK
+Server: Netscape-Communications/1.1
+Date: Tuesday, 25-Nov-97 01:22:04 GMT
+Last-modified: Thursday, 20-Nov-97 10:44:53 GMT
+Content-length: 6372
+Content-type: text/html
+
+&lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN"&gt;
+&lt;HTML&gt;
+...followed by document content...
+</pre>
+
+
+<p>
+We see from the first line that the request was successful. The second line is optional and tells us that the server runs the Netscape Communications web server, version 1.1. We then get what the server thinks is the current date and when the document was modified last, followed by the size of the document in bytes and the most important field: "Content-type".
+</p>
+
+<p>
+The content-type field is used by the browser to tell which format the document it receives is in. HTML is identified with "text/html", ordinary text with "text/plain", a GIF is "image/gif" and so on. The advantage of this is that the URL can have any ending and the browser will still get it right.
+</p>
+
+<p>
+An important concept here is that to the browser, the server works as a black box. Ie: the browser requests a specific document and the document is either returned or an error message is returned. How the server produces the document remains unknown to the browser. This means that the server can read it from a file, run a program that generates it, compile it by parsing some kind of command file or (very unlikely, but in principle possible) have it dictated by the server administrator via speech recognition software. This gives the server administrator great freedom to experiment with different kinds of services as the users don't care (or even know) how pages are produced.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-2-4" class="outline-3">
+<h3 id="sec-2-4">What the server does</h3>
+<div class="outline-text-3" id="text-2-4">
+<p>
+When the server is set up it is usually configured to use a directory somewhere on disk as its root directory and that there be a default file name (say "index.html") for each directory. This means that if you ask the server for the file "/" (as in "<a href="http://www.domain.tld/">http://www.domain.tld/</a>") you'll get the file index.html in the server root directory. Usually, asking for "/foo/bar.html" will give you the bar.html file from the foo directory directly beneath the server root.
+</p>
+
+<p>
+Usually, that is. The server can be set up to map "<i>foo</i>" into some other directory elsewhere on disk or even to use server-side programs to answer all requests that ask for that directory. The server does not even have to map requests onto a directory structure at all, but can use some other scheme.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-2-5" class="outline-3">
+<h3 id="sec-2-5">HTTP versions</h3>
+<div class="outline-text-3" id="text-2-5">
+<p>
+So far there are three versions of HTTP. The first one was HTTP/0.9, which was truly primitive and never really specified in any standard. This was corrected by HTTP/1.0, which was issued as a standard in RFC 1945. (See <a href="http://www.garshol.priv.no/download/text/http-tut.html#app">references</a>). HTTP/1.0 is the version of HTTP that is in common use today (usually with some 1.1 extensions), while HTTP/0.9 is rarely, if ever, used by browsers. (Some simpler HTTP clients still use it since they don't need the later extensions.)
+</p>
+
+<p>
+RFC 2068 describes HTTP/1.1, which extends and improves HTTP/1.0 in a number of areas. Very few browsers support it (MSIE 4.0 is the only one known to the author), but servers are beginning to do so.
+</p>
+
+<p>
+The major differences are a some extensions in HTTP/1.1 for authoring documents online via HTTP and a feature that lets clients request that the connection be kept open after a request so that it does not have to be reestablished for the next request. This can save some waiting and server load if several requests have to be issued quickly.
+</p>
+
+<p>
+This document describes HTTP/1.0, except some sections that cover the HTTP/1.1 extensions. Those will be explicitly labeled.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-3" class="outline-2">
+<h2 id="sec-3">The request sent by the client</h2>
+<div class="outline-text-2" id="text-3">
+</div><div id="outline-container-sec-3-1" class="outline-3">
+<h3 id="sec-3-1">The shape of a request</h3>
+<div class="outline-text-3" id="text-3-1">
+<p>
+Basically, all requests look like this:
+</p>
+
+
+<pre class="example">
+    [METH] [REQUEST-URI] HTTP/[VER]
+[fieldname1]: [field-value1]
+[fieldname2]: [field-value2]
+
+[request body, if any]
+</pre>
+
+
+<p>
+The METH (for request method) gives the request method used, of which there are several, and which all do different things. The above example used GET, but below some more are explained. The REQUEST-URI is the identifier of the document on the server, such as "/index.html" or whatever. VER is the HTTP version, like in the response. The header fields are also the same as in the server response.
+</p>
+
+<p>
+The request body is only used for requests that transfer data to the server, such as POST and PUT. (Described below.)
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-3-2" class="outline-3">
+<h3 id="sec-3-2">GETting a document</h3>
+<div class="outline-text-3" id="text-3-2">
+<p>
+There are several request types, with the most common one being GET. A GET request basically means "send me this document" and looks like this: "GET document\_path HTTP/version". (Like it was described above.) For the URL <a href="http://www.yahoo.com/">"<a href="http://www.yahoo.com/">http://www.yahoo.com/</a>"</a> the document\_path would be "/", and for <a href="http://www.w3.org/Talks/General.html">"<a href="http://www.w3.org/Talks/General.html">http://www.w3.org/Talks/General.html</a>"</a> it is "/Talks/General.html".
+</p>
+
+<p>
+However, this first line is not the only thing a user agent (UA) usually sends, although it's the only thing that's really necessary. The UA can include a number of header fields in the request to give the server more information. These fields have the form "fieldname: value" and are all put on separate lines after the first request line.
+</p>
+
+<p>
+Some of the header fields that can be used with GET are:
+</p>
+
+
+
+<dl class="org-dl">
+<dt> User-Agent </dt><dd>This is a string identifying the user agent. An English version of Netscape 4.03 running under Windows NT would send "Mozilla/4.03 [en] (WinNT; I ;Nav)". (Mozilla is the old name for Netscape. See the <a href="http://www.garshol.priv.no/download/text/http-tut.html#app">references</a> for more details.)
+</dd>
+<dt> Referer </dt><dd>The referer field (yes, it's misspelled in the standard) tells the server where the user came from, which is very useful for logging and keeping track of who links to ones pages.
+</dd>
+<dt> If-Modified-Since </dt><dd>If a browser already has a version of the document in its <a href="http://www.garshol.priv.no/download/text/http-tut.html#bcache">cache</a> it can include this field and set it to the time it retrieved that version. The server can then check if the document has been modified since the browser last downloaded it and send it again if necessary. The whole point is of course that if the document /hasn't/ changed, then the server can just say so and save some waiting and network traffic.
+</dd>
+<dt> From </dt><dd>This header field is a spammers dream come true: it is supposed to contain the email address of whoever controls the user agent. Very few, if any, browsers use it, partly because of the threat from spammers. However, web robots should use it, so that webmasters can contact the people responsible for the robot should it misbehave.
+</dd>
+<dt> Authorization </dt><dd>This field can hold username and password if the document in question requires <a href="http://www.garshol.priv.no/download/text/http-tut.html#auth">authorization</a> to be accessed.
+</dd>
+</dl>
+
+<p>
+To put all these pieces together: this is a typical GET request, as issued by my browser (Opera):
+</p>
+
+
+<pre class="example">
+    GET / HTTP/1.0
+User-Agent: Mozilla/3.0 (compatible; Opera/3.0; Windows 95/NT4)
+Accept: */*
+Host: birk105.studby.uio.no:81
+</pre>
+</div>
+</div>
+
+
+
+<div id="outline-container-sec-3-3" class="outline-3">
+<h3 id="sec-3-3">HEAD: checking documents</h3>
+<div class="outline-text-3" id="text-3-3">
+<p>
+One may somtimes want to see the headers returned by the server for a particular document, without actually downloading the document. This is exactly what the HEAD request method provides. HEAD looks and works exactly like GET, only with the difference that the server only returns the headers and not the document content.
+</p>
+
+<p>
+This is very useful for programs like link checkers, people who want to see the response headers (to see what server is used or to verify that they are correct) and many other kinds of uses.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-3-4" class="outline-3">
+<h3 id="sec-3-4">Playing web browser</h3>
+<div class="outline-text-3" id="text-3-4">
+<p>
+You can actually play web browser yourself and write HTTP requests directly to web servers. This can be done by telnetting to port 80, writing the request and hitting enter twice, like this:
+</p>
+
+
+<pre class="example">
+    larsga - tyrfing&gt;telnet www.w3.org 80
+Trying 18.23.0.23...
+Connected to www.w3.org.
+Escape character is '^]'.
+HEAD / HTTP/1.0
+
+HTTP/1.1 200 OK
+Date: Tue, 17 Feb 1998 22:24:53 GMT
+Server: Apache/1.2.5
+Last-Modified: Wed, 11 Feb 1998 18:22:22 GMT
+ETag: "2c3136-23c1-34e1ec5e"
+Content-Length: 9153
+Accept-Ranges: bytes
+Connection: close
+Content-Type: text/html; charset=ISO-8859-1
+
+Connection closed by foreign host.
+larsga - tyrfing&gt;
+</pre>
+
+
+<p>
+However, this works best under Unix as the Windows telnet clients I've used are not very suitable for this (and hard to set up so that it works). Instead you can use HTTPTest, a CGI script I've linked to in <a href="http://www.garshol.priv.no/download/text/http-tut.html#app">the references</a>.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-4" class="outline-2">
+<h2 id="sec-4">The response returned by the server</h2>
+<div class="outline-text-2" id="text-4">
+</div><div id="outline-container-sec-4-1" class="outline-3">
+<h3 id="sec-4-1">Outline</h3>
+<div class="outline-text-3" id="text-4-1">
+<p>
+What the server returns consists of a line with the status code, a list of header fields, a blank line and then the requested document, if it is returned at all. Sort of like this:
+</p>
+
+
+<pre class="example">
+    HTTP/1.0 code text
+Field1: Value1
+Field2: Value2
+
+...Document content here...
+</pre>
+</div>
+</div>
+
+
+
+<div id="outline-container-sec-4-2" class="outline-3">
+<h3 id="sec-4-2">The status codes</h3>
+<div class="outline-text-3" id="text-4-2">
+<p>
+The status codes are all three-digit numbers that are grouped by the first digit into 5 groups. The reason phrases given with the status codes below are just suggestions. Server can return any reason phrase they wish.
+</p>
+</div>
+
+
+<div id="outline-container-sec-4-2-1" class="outline-4">
+<h4 id="sec-4-2-1">1xx: Informational</h4>
+<div class="outline-text-4" id="text-4-2-1">
+<p>
+No 1xx status codes are defined, and they are reserved for experimental purposes only.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-4-2-2" class="outline-4">
+<h4 id="sec-4-2-2">2xx: Successful</h4>
+<div class="outline-text-4" id="text-4-2-2">
+<p>
+Means that the request was processed successfully.
+</p>
+
+
+
+<dl class="org-dl">
+<dt> 200 OK </dt><dd>Means that the server did whatever the client wanted it to, and all is well.
+</dd>
+<dt> Others </dt><dd>The rest of the 2xx status codes are mainly meant for script processing and are not often used.
+</dd>
+</dl>
+</div>
+</div>
+
+
+
+<div id="outline-container-sec-4-2-3" class="outline-4">
+<h4 id="sec-4-2-3">3xx: Redirection</h4>
+<div class="outline-text-4" id="text-4-2-3">
+<p>
+Means that the resource is somewhere else and that the client should try again at a new address.
+</p>
+
+
+
+<dl class="org-dl">
+<dt> 301 Moved permanently </dt><dd>The resource the client requested is somewhere else, and the client should go there to get it. Any links or other references to this resource should be updated.
+</dd>
+<dt> 302 Moved temporarily </dt><dd>This means the same as the 301 response, but links should now not be updated, since the resource may be moved again in the future.
+</dd>
+<dt> 304 Not modified </dt><dd>This response can be returned if the client used the if-modified-since header field and the resource has not been modified since the given time. Simply means that the cached version should be displayed for the user.
+</dd>
+</dl>
+</div>
+</div>
+
+
+
+<div id="outline-container-sec-4-2-4" class="outline-4">
+<h4 id="sec-4-2-4">4xx: Client error</h4>
+<div class="outline-text-4" id="text-4-2-4">
+<p>
+Means that the client screwed up somehow, usually by asking for something it should not have asked for.
+</p>
+
+
+
+<dl class="org-dl">
+<dt> 400: Bad request </dt><dd>The request sent by the client didn't have the correct syntax.
+</dd>
+<dt> 401: Unauthorized </dt><dd>Means that the client is not allowed to access the resource. This may change if the client retries with an <a href="http://www.garshol.priv.no/download/text/http-tut.html#auth">authorization</a> header.
+</dd>
+<dt> 403: Forbidden </dt><dd>The client is not allowed to access the resource and authorization will not help.
+</dd>
+<dt> 404: Not found </dt><dd>Seen this one before? :) It means that the server has not heard of the resource and has no further clues as to what the client should do about it. In other words: dead link.
+</dd>
+</dl>
+</div>
+</div>
+
+
+
+<div id="outline-container-sec-4-2-5" class="outline-4">
+<h4 id="sec-4-2-5">5xx: Server error</h4>
+<div class="outline-text-4" id="text-4-2-5">
+<p>
+This means that the server screwed up or that it couldn't do as the client requested.
+</p>
+
+
+
+<dl class="org-dl">
+<dt> 500: Internal server error </dt><dd>Something went wrong inside the server.
+</dd>
+<dt> 501: Not implemented </dt><dd>The request method is not supported by the server.
+</dd>
+<dt> 503: Service unavailable </dt><dd>This sometimes happens if the server is too heavily loaded and cannot service the request. Usually, the solution is for the client to wait a while and try again.
+</dd>
+</dl>
+</div>
+</div>
+</div>
+
+
+
+<div id="outline-container-sec-4-3" class="outline-3">
+<h3 id="sec-4-3">The response header fields</h3>
+<div class="outline-text-3" id="text-4-3">
+<p>
+These are the header fields a server can return in response to a request.
+</p>
+
+
+
+<dl class="org-dl">
+<dt> Location </dt><dd>This tells the user agent where the resource it requested can be found. The value is just the URL of the new resource.
+</dd>
+<dt> Server </dt><dd>This tells the user agent which web server is used. Nearly all web servers return this header, although some leave it out.
+</dd>
+<dt> Content-length </dt><dd>This gives the size of the resource, in bytes.
+</dd>
+<dt> Content-type </dt><dd>This describes the file format of the resource.
+</dd>
+<dt> Content-encoding </dt><dd>This means that the resource has been coded in some way and must be decoded before use.
+</dd>
+<dt> Expires </dt><dd>This field can be set for data that are updated at a known time (for instance if they are generated by a script). It is used to prevent browsers from caching the resource beyond the given date.
+</dd>
+<dt> Last-modified </dt><dd>This tells the browser when the resource was last modified. Can be useful for mirroring, update notification etc.
+</dd>
+</dl>
+</div>
+</div>
+</div>
+
+
+
+<div id="outline-container-sec-5" class="outline-2">
+<h2 id="sec-5">Caching: agents between the server and client</h2>
+<div class="outline-text-2" id="text-5">
+</div><div id="outline-container-sec-5-1" class="outline-3">
+<h3 id="sec-5-1">The browser cache</h3>
+<div class="outline-text-3" id="text-5-1">
+<p>
+You may have noticed that when you go back to a page you've looked at not too long before the page loads much quicker. That's because the browser stored a local copy of it when it was first downloaded. These local copies are kept in what's called a cache. Usually one sets a maximum size for the cache and a maximum caching time for documents.
+</p>
+
+<p>
+This means that when a new page is visited it is stored in the cache, and if the cache is full (near the maximum size limit) some document that the browser considers unlikely to be visited again soon is deleted to make room. Also, if you go to a page that is stored in the cache the browser may find that you've set 7 days as a the maximum storage time and 8 days have now passed since the last visit, so the page needs to be reloaded.
+</p>
+
+<p>
+Exactly how caches work differ between browsers, but this is the basic idea, and it's a good one because it saves both time for the user and network traffic. There are also some HTTP details involved, but they will be covered later.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-5-2" class="outline-3">
+<h3 id="sec-5-2">Proxy caches</h3>
+<div class="outline-text-3" id="text-5-2">
+<p>
+Browser caches are a nice feature, but when many users browse from the same site one usually ends up storing the same document in many different caches and refreshing it over and over for different uses. Clearly, this isn't optimal.
+</p>
+
+<p>
+The solution is to let the users share a cache, and this is exactly what proxy caches are all about. Browsers still have their local caches, but HTTP requests for documents not in the browser cache are not sent to the server any more, instead they are sent to the proxy cache. If the proxy has the document in its cache it will just return the document (like the browser cache would), and if it doesn't it will submit the request on behalf of the browser, store the result and relay it to the browser.
+</p>
+
+<p>
+So the proxy is really a common cache for a number of users and can reduce network traffic rather dramatically. It can also skew log-based statistics badly. :)
+</p>
+
+<p>
+A more advanced solution than a single proxy cache is a hierarchy of proxy caches. Imagine a large ISP may have one proxy cache for each part of the country and set up each of the regional proxies to use a national proxy cache instead of going directly to the source web servers. This solution can reduce network traffic even further. More detail on this is linked to in the <a href="http://www.garshol.priv.no/download/text/http-tut.html#app">references</a>.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-6" class="outline-2">
+<h2 id="sec-6">Server-side programming</h2>
+<div class="outline-text-2" id="text-6">
+</div><div id="outline-container-sec-6-1" class="outline-3">
+<h3 id="sec-6-1">What is it and why do it?</h3>
+<div class="outline-text-3" id="text-6-1">
+<p>
+Server-side scripts or programs are simply programs that are run on the web server in response to requests from the client. These scripts produce normal HTML (and sometimes HTTP headers as well) as output which is then fed back to the client as if the client had requested an ordinary page. In fact, there is no way for the client software to tell whether scripting has been used or not.
+</p>
+
+<p>
+Technologies such as JavaScript, VBScript and Java applets all run in the client and so are not examples of this. There is a major difference between server-side and client-side scripting as the client and server are usually different computers. So if all the data the program needs are located on the server it may make sense to use server-side scripting instead of client-side. (There is also the problem that the client may not have a browser that supports the scripting technology or it may be turned off.) If the program and user need to interact often client-side scripting is probably best, to reduce the number of requests sent to the server.
+</p>
+
+<p>
+So: in general, if the program needs a lot of data and infrequent interactions with the server server-side scripting is probably best. Applications that use less data and more interaction are best put in the client. Also, applications that gather data over time need to be on the server where the data file is kept.
+</p>
+
+<p>
+An example of the first would be search engines like Altavista. Obviously it's not feasible to download all the documents Altavista has collected to search in them locally. An example of the last would be a simple board game. No data are needed and having to send a new request to the server for each move you make quickly gets tedious.
+</p>
+
+<p>
+There is one kind of use that has been left out here: what do you do when you want a program to work on data with a lot of interaction with the user? There is no good solution right now, but there is one on the horizon called XML. (See the <a href="http://www.garshol.priv.no/download/text/http-tut.html#app">the references</a> for more info.)
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-6-2" class="outline-3">
+<h3 id="sec-6-2">How it works</h3>
+<div class="outline-text-3" id="text-6-2">
+<p>
+The details of how server-side scripting works vary widely with the technique used (and there are loads of them). However, some things remain the same. The web server receives a request just like any other, but notes that this URL does not map to a flat file, but instead somehow to a scripting area.
+</p>
+
+<p>
+The server then starts the script, feeding it all the information contained in the request headers and URL. The script then runs and produces as its output the HTML and HTTP headers to be returned to the client, which the server takes care of.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-6-3" class="outline-3">
+<h3 id="sec-6-3">CGI</h3>
+<div class="outline-text-3" id="text-6-3">
+<p>
+CGI (Common Gateway Interface) is a way for web servers and server-side programs to interact. CGI is completely independent of programming language, operating system and web server. Currently it is the most common server-side programming technique and it's also supported by almost every web server in existence. Moreover, all servers implement it in (nearly) the same way, so that you can make a CGI script for one server and then distribute it to be run on any web server.
+</p>
+
+<p>
+Like I wrote above, the server needs a way to know which URLs map to scripts and which URLs just map to ordinary HTML files. For CGI this is usually done by creating CGI directories on the server. This is done in the server setup and tells the server that all files in a particular top-level directory are CGI scripts (located somewhere on the disk) to be executed when requested. (The default directory is usually <i>cgi-bin</i>, so one can tell that URLs like this: <a href="http://www.varsity.edu/cgi-bin/search">http://www.varsity.edu/cgi-bin/search</a> point to a CGI script. Note that the directory can be called anything.) Some servers can also be set up to not use CGI directories and instead require that all CGI programs have file names ending in .cgi.
+</p>
+
+<p>
+CGI programs are just ordinary executable programs (or interpreted programs written in, say, Perl or Python, as long as the server knows how to start the program), so you can use just about any programming language you want. Before the CGI program is started the web server sets a number of environment variables that contain the information the web server received in the request. Examples of this are the IP address of the client, the headers of the request etc. Also, if the URL requested contained a ?, everything after the ? is put in an environment variable by itself.
+</p>
+
+<p>
+This means that extra information about the request can be put into the URL in the link. One way this is often used is by multi-user hit counters to tell which user was hit this time. Thus, the user can insert an image on his/her page and have the SRC attribute be a link to the CGI script like this: SRC="<a href="http://stats.vendor.com/cgi-bin/counter.pl?username">http://stats.vendor.com/cgi-bin/counter.pl?username</a>". Then the script can tell which user was hit and increment and display the correct count. (Ie: that of Peter and not Paul.)
+</p>
+
+<p>
+The way the CGI returns its output (HTTP headers and HTML document) to the server is exceedingly simple: it writes it to standard out. In other words, in a Perl or Python script you just use the print statement. In C you use printf or some equivalent (C++ uses cout &lt;&lt;) while Java would use System.out.println.
+</p>
+
+<p>
+More information on CGI is available in <a href="http://www.garshol.priv.no/download/text/http-tut.html#app">the references</a>.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-6-4" class="outline-3">
+<h3 id="sec-6-4">Other techniques</h3>
+<div class="outline-text-3" id="text-6-4">
+<p>
+CGI is certainly not the only way to make server-side programs and has been much criticized for inefficiency. This last claim has some weight since the CGI program has to be loaded into memory and reexecuted from scratch each time it is requested.
+</p>
+
+<p>
+A much faster alternative is programming to the server API itself. Ie: making a program that essentially becomes a part of the server process and uses an <a href="http://www.garshol.priv.no/download/text/http-tut.html#termAPI">API</a> exposed by the server. The problem with this technique is that the API is of course server-dependent and that if you use C/C++ (which is common) programming errors can crash the whole server.
+</p>
+
+<p>
+The main advantage of server API programming is that it is much faster since when the request arrives the program is already loaded into memory together with whatever data it needs.
+</p>
+
+<p>
+Some servers allow scripting in crash-proof languages. One example is AOLServer, which uses tcl. There are also modules available for servers like Apache, which let you do your server API programming in Perl or Python, which effectively removes the risk of programming errors crashing the server.
+</p>
+
+<p>
+There are also lots and lots of proprietary (and non-proprietary) scripting languages and techniques for various web servers. Some of the best-known are ASP, MetaHTML and PHP3.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-6-5" class="outline-3">
+<h3 id="sec-6-5">Submitting forms</h3>
+<div class="outline-text-3" id="text-6-5">
+<p>
+The most common way for server-side programs to communicate with the web server is through ordinary HTML forms. The user fills in the form and hits the submit button, upon which the data are submitted to the server. If the form author specified that the data should be submitted via a GET request the form data are encoded into the URL, using the ? syntax I described above. The encoding used is in fact very simple. If the form consists of the fields name and email and the user fills them out as Joe and joe@hotmail.com the resulting URL looks like this: <a href="http://www.domain.tld/cgi-bin/script?name=joe&email=joe@hotmail.com">http://www.domain.tld/cgi-bin/script?name=joe&email=joe@hotmail.com</a>.
+</p>
+
+<p>
+If the data contain characters that are not allowed in URLs, these characters are URL-encoded. This basically means that the character (say ~) is replaced with a % followed by its two-digit ASCII number (say %7E). The details are available in RFC 1738 about URLs, which is linked to in <a href="http://www.garshol.priv.no/download/text/http-tut.html#app">the references</a>.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-6-6" class="outline-3">
+<h3 id="sec-6-6">POST: Pushing data to the server</h3>
+<div class="outline-text-3" id="text-6-6">
+<p>
+GET is not the only way to submit data from a form, however. One can also use POST, in which case the request contains both headers and a body. (This is just like the response from the server.) The body is then the form data encoded just like they would be on the URL if one had used GET.
+</p>
+
+<p>
+Primarily, POST should be used when the request causes a permanent change of state on the server (such as adding to a data list) and GET when this is not the case (like when doing a search).
+</p>
+
+<p>
+If the data can be long (more than 256 characters) it is a bit risky to use GET as the URL can end up being snipped in transit. Some OSes don't allow environment variables to be longer than 256 characters, so the environment variable that holds the ?-part of the request may be silently truncated. This problem is avoided with POST as the data are then not pushed through an environment variable.
+</p>
+
+<p>
+Some scripts that handle POST requests cause problems by using a 302 status code and Location header to redirect browsers to a confirmation page. However, according to the standard, this does not mean that the browser should retrieve the referenced page, but rather that it should resubmit the data to the new destination. See the <a href="http://www.garshol.priv.no/download/text/http-tut.html#app">references</a> for details on this.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-7" class="outline-2">
+<h2 id="sec-7">More details</h2>
+<div class="outline-text-2" id="text-7">
+</div><div id="outline-container-sec-7-1" class="outline-3">
+<h3 id="sec-7-1">Content negotiation</h3>
+<div class="outline-text-3" id="text-7-1">
+<p>
+Imagine that you've just heard of the fancy new PNG image format, and want to use this for your images instead of the older GIF. However, GIF is supported by all browsers with some self-respect, while PNG is only supported by the most modern ones. So if you replace all your GIFs with PNGs, only a limited number of users will be able to actually see your images.
+</p>
+
+<p>
+To avoid this one could set up a link to an imaginary location (lets call it /foo/imgbar). Then, when browsers request this image after seeing the location in an IMG element they will add an Accept header field to their request. (Most browsers do this with all requests.)
+</p>
+
+<p>
+The accept header would then be set to "image/*, image/png", which would then mean: I prefer PNG images, but if you can't deliver that, then just send me any image you've got.
+</p>
+
+<p>
+That would be in a standards-based world. We do, however, live in a decidedly non-standard world. Most browsers simply send the header "Accept: <b>/</b>" which doesn't really tell the server anything at all. This may change in the future, but for now this is a nice, but useless feature.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-7-2" class="outline-3">
+<h3 id="sec-7-2">Cookies</h3>
+<div class="outline-text-3" id="text-7-2">
+<p>
+An inconvenient side of the HTTP protocol is that each request essentially stands on its own and is completely unrelated to any other request. This is inconvenient for scripting, because one may want to know what a user has done before this last request was issued. As long as plain HTTP is used there is really no way to know this. (There are some tricks, but they are ugly and expensive.)
+</p>
+
+<p>
+To illustrate the problem: imagine a server that offers a lottery. People have to view ads to participate in the lottery, and those who offer the lottery don't want people to be able to just reload and reload until they win something. This can be done by not allowing subsequent visits from a single IP address (ie: computer) within a certain time interval. However, this causes problems as one doesn't really know if it's the same user.
+</p>
+
+<p>
+People who dial up via modems to connect to the internet are usually given a new IP address from a pool of available addresses each time, which means that the same IP address may be given to two different users within an hour if the first one disconnects and another user is given the same IP later. (Also: on larger UNIX installations many people are usually using the same computer simultaneously from different terminals.)
+</p>
+
+<p>
+The solution proposed by Netscape is to use magic strings called cookies. (The specification says they are called this "for no compelling reason", but the name has a <a href="http://www.garshol.priv.no/download/text/http-tut.html#app">long history</a>.) The server returns a "Set-cookie" header that gives a cookie name, expiry time and some more info. When the user returns to the same URL (or some other URL, this can be specified by the server) the browser returns the cookie if it hasn't expired.
+</p>
+
+<p>
+This way, our imaginary lottery could set a cookie when the user first tries the lottery and set it to expire when the user can return. The lottery script could then check if the cookie is delivered with the request and if so just tell the user to try again later. This would work just fine if browsers didn't allow users to turn off cookies...
+</p>
+
+<p>
+Cookies can also be used to track the path of a user through a web site or to give pages a personalized look by remembering what the user has done before. Rather useful, but there are some privacy issues involved here.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-7-3" class="outline-3">
+<h3 id="sec-7-3">Server logs</h3>
+<div class="outline-text-3" id="text-7-3">
+<p>
+Most servers (if not all) create logs of their usage. This means that every time the server gets a request it will add a line in its log, which gives information about the request. Below an excerpt from an actual log:
+</p>
+
+
+<pre class="example">
+    rip.axis.se - - [04/Jan/1998:21:24:46 +0100] "HEAD /ftp/pub/software/ HTTP/1.0" 200 6312 - "Mozilla/4.04 [en] (WinNT; I)"
+tide14.microsoft.com - - [04/Jan/1998:21:30:32 +0100] "GET /robots.txt HTTP/1.0" 304 158 - "Mozilla/4.0 (compatible; MSIE 4.0; MSIECrawler; Windows 95)"
+microsnot.HIP.Berkeley.EDU - - [04/Jan/1998:22:28:21 +0100] "GET /cgi-bin/wwwbrowser.pl HTTP/1.0" 200 1445 "http://www.ifi.uio.no/~larsga/download/stats/" "Mozilla/4.03 [en] (Win95; U)"
+isdn69.ppp.uib.no - - [05/Jan/1998:00:13:53 +0100] "GET /download/RFCsearch.html HTTP/1.0" 200 2399 "http://www.kvarteret.uib.no/~pas/" "Mozilla/4.04 [en] (Win95; I)"
+isdn69.ppp.uib.no - - [05/Jan/1998:00:13:53 +0100] "GET /standard.css HTTP/1.0" 200 1064 - "Mozilla/4.04 [en] (Win95; I)"
+</pre>
+
+
+<p>
+This log is in the extended common log format, which is supported by most web servers. The first hit is from Netscape 4.04, the second from some robot version of MSIE 4.0, while three to five are again from Netscape 4.04. (Note that the MSIECrawler got a 304 response, which means that if used the If-modified-since header.)
+</p>
+
+<p>
+A server log can be useful when debugging applications and scripts or the server setup. It can also be run through a log analyzer, which can create various kinds of usage reports. One should however be aware that these reports are not 100% accurate due to the use of <a href="http://www.garshol.priv.no/download/text/http-tut.html#bcache">caches</a>.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-7-4" class="outline-3">
+<h3 id="sec-7-4">A sample HTTP client</h3>
+<div class="outline-text-3" id="text-7-4">
+<p>
+Just to illustrate, in case some are interested, here is a simple HTTP client written as a Python function that takes a host name and path as parameters and issues a GET request, printing the returned results. (This can be made even simpler by using the Python URL library, but that would make the example useless.)
+</p>
+
+
+<pre class="example">
+# Simple Python function that issues an HTTP request
+
+from socket import *
+
+def http_req(server, path):
+
+    # Creating a socket to connect and read from
+    s=socket(AF_INET,SOCK_STREAM)
+
+    # Finding server address (assuming port 80)
+    adr=(gethostbyname(server),80)
+
+    # Connecting to server
+    s.connect(adr)
+
+    # Sending request
+    s.send("GET "+path+" HTTP/1.0\n\n")
+
+    # Printing response
+    resp=s.recv(1024)
+    while resp!="":
+   print resp
+    resp=s.recv(1024)
+</pre>
+
+
+<p>
+Here is the server log entry that resulted from this call: =http_req("birk105.studby.uio.no","/")=
+</p>
+
+
+<pre class="example">
+birk105.studby.uio.no - - [26/Jan/1998:12:01:51 +0100] "GET / HTTP/1.0" 200 2272 - -
+</pre>
+
+
+<p>
+The "- -"s at the end are the referrer and user-agent fields, which are empty because the request did not contain this information.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-7-5" class="outline-3">
+<h3 id="sec-7-5">Authentication</h3>
+<div class="outline-text-3" id="text-7-5">
+<p>
+A server can be set up to disallow access to certain URLs unless the user can confirm his/her identity. This is usually done with a user-name/password combination which is specified in the setup, but there are other methods as well.
+</p>
+
+<p>
+When such a page is requested the server generally returns a "401 Not authorized" status code as mentioned above. The browser will then usually prompt the user for a user name and password, which the user supplies (if it is known!). The browser then tries again, this time adding an "Authorization" header with the user name and password as the value.
+</p>
+
+<p>
+If this is accepted by the server the resource is returned just like in an ordinary request. If not, the server again responds with a 401 status code.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-7-6" class="outline-3">
+<h3 id="sec-7-6">Server-side HTML extensions</h3>
+<div class="outline-text-3" id="text-7-6">
+<p>
+Some servers, such as the Roxen and MetaHTML servers, allow users to embed non-HTML commands within their HTML files. These commands are then processed when the file is requested and generates the HTML that is sent to the client. This can be used to tailor the page contents and/or to access a database to deliver contents from it.
+</p>
+
+<p>
+What these languages have in common is usually that they are tied to a single server and that they produce a combination of ordinary HTTP headers and HTML contents as their output.
+</p>
+
+<p>
+This is important because it means that the client does not notice what is going on at all, and so can use any browser.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-7-7" class="outline-3">
+<h3 id="sec-7-7">Authoring/maintainance: HTTP extensions for this</h3>
+<div class="outline-text-3" id="text-7-7">
+<p>
+HTTP/1.0 only defined the GET, HEAD and POST methods and for ordinary browsing this is enough. However, one may want to use HTTP to edit and maintain files directly on the server, instead of having to go through an FTP server as is common today. HTTP/1.1 adds a number of new methods for this.
+</p>
+
+<p>
+These are:
+</p>
+
+
+
+<dl class="org-dl">
+<dt> PUT </dt><dd>PUT uploads a new resource (file) to the server under the given URL. Exactly what happens on the server is not defined by the HTTP/1.1 spec, but authoring programs like Netscape Composer use PUT to upload a file to the web server and store it there. PUT requests should not be cached.
+</dd>
+<dt> DELETE </dt><dd>Well, it's obvious, isn't it? The DELETE method requests the server to delete the resource identified by the URL. On UNIX systems this can fail if the server is not allowed to delete the file by the file system.
+</dd>
+</dl>
+</div>
+</div>
+
+
+
+<div id="outline-container-sec-7-8" class="outline-3">
+<h3 id="sec-7-8">META HTTP-EQUIV</h3>
+<div class="outline-text-3" id="text-7-8">
+<p>
+Not all web servers are made in such a way that it is easy to set, say the Expires header field or some other header field you might want to set for one particular file. There is a way around that problem. In HTML there is an element called META that can be used to set HTTP header fields. It was really supposed to be parsed by the web server and inserted into the response headers, but very few servers actually do this, so browsers have started implementing it instead. It's not supported in all browsers, but it can still be of some help.
+</p>
+
+<p>
+The usage is basically this: put it in the HEAD-element of the HTML file and make it look like this:
+</p>
+
+
+<pre class="example">
+&lt;META HTTP-EQUIV="header field name" CONTENT="field value"&gt;
+</pre>
+</div>
+</div>
+
+
+
+<div id="outline-container-sec-7-9" class="outline-3">
+<h3 id="sec-7-9">The Host header field</h3>
+<div class="outline-text-3" id="text-7-9">
+<p>
+Many web hotels let a single physical machine serve what to the user looks like several different servers. For instance, <a href="http://www.foo.com/">http://www.foo.com/</a>, <a href="http://www.bar.com/">http://www.bar.com/</a> and <a href="http://www.baz.com/">http://www.baz.com/</a> could all very well be served from the same web server. Still, the user would see different pages by going to each of the different URLs. To enable this, an extension to the HTTP protocol was needed to let the web server know which of these different web servers the user wanted to access.
+</p>
+
+<p>
+The solution is the Host header field. When the user requests <a href="http://www.bar.com/">http://www.bar.com/</a> the web server will receive a header set to "Host: www.bar.com" and thus know which top page to deliver. It will also usually create separate logs for the different virtual servers.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-8" class="outline-2">
+<h2 id="sec-8">Answers to some common questions</h2>
+<div class="outline-text-2" id="text-8">
+</div><div id="outline-container-sec-8-1" class="outline-3">
+<h3 id="sec-8-1">Can I prevent people from seeing my HTML source?</h3>
+<div class="outline-text-3" id="text-8-1">
+<p>
+No. Once you let people issue an HTTP request that retrieves your document they can do whatever they want with it. No HTML tag can stop this because one could just use a Python program like the one I included above and let it save the HTML to file without even looking at it. Nor is any such tag recognized by browsers.
+</p>
+
+<p>
+Some people try obfuscating the HTML by putting all the markup on a single line, but this is easily fixed by running the HTML through a pretty-printer.
+</p>
+
+<p>
+In short: give it up. There's no way to protect the information in your HTML and there's no reason to try unless you put vital information in hidden form controls, and you shouldn't do that anyway.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-8-2" class="outline-3">
+<h3 id="sec-8-2">Can I prevent people from stealing my images?</h3>
+<div class="outline-text-3" id="text-8-2">
+<p>
+The answer is the same for this as it is for HTML: you can't do it. You can watermark them and prove that they belong to you and enter comments that say this in clear text, but it still doesn't keep people from issuing an HTTP request and saving the image.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-8-3" class="outline-3">
+<h3 id="sec-8-3">Files in format X are not displayed correctly, why not?</h3>
+<div class="outline-text-3" id="text-8-3">
+<p>
+This is a rather common problem for some formats: you put up a file on your web server in a new format you've never used before and when you try to download it it comes up in your browser as plain text (where it looks like complete gobbledygook) instead of being saved, played or shown or whatever.
+</p>
+
+<p>
+The problem is probably that the server does not know what kind of file this is and signals it as Content-type: text/plain, which the browser happily displays as if it really were text. The solution is to configure the server so that it knows what kind of file this is and signals it correctly. The references link to the list of registered MIME types.
+</p>
+
+<p>
+One thing to note here is that MSIE 3.0 (4.0?) does not honour the content-type given by the server, but instead tries to guess which format the file is in and treat it accordingly. This is a blatant violation of the HTTP specification on the part of Microsoft, but it's not the only standard violation they've committed and there's nothing to do about it except to be aware of it.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-8-4" class="outline-3">
+<h3 id="sec-8-4">How can I pass a parameter to a web page?</h3>
+<div class="outline-text-3" id="text-8-4">
+<p>
+If the web page is a plain HTML file: forget it. HTML files are just displayed and nothing more is ever done with them, so the concept of a parameter just doesn't apply.
+</p>
+
+<p>
+What you /can/ do is to use server-side scripting the way it is described elsewhere in this document.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-8-5" class="outline-3">
+<h3 id="sec-8-5">How can I prevent browsers from caching my page/script?</h3>
+<div class="outline-text-3" id="text-8-5">
+<p>
+This is done by setting the correct HTTP headers. If the Expiration header is set to a date/time in the past the output from the request will not be cached. (Note that HTTP requires browsers to keep the result in the browser history, so that going back to a non-cached page does not cause a new request.)
+</p>
+
+<p>
+The expiration time can be set with a server-script or possibly by configuring the server correctly.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-8-6" class="outline-3">
+<h3 id="sec-8-6">Should I include a slash (/) at the end of my URLs?</h3>
+<div class="outline-text-3" id="text-8-6">
+<p>
+If the URL points to a directory and you want the server to list the contents or the index.html file: yes. (Remember: the URL may point to a file without an extension or the server may not map it to directory/file structure at all.) If you follow a URL like this one: <a href="http://www.garshol.priv.no/download">http://www.garshol.priv.no/download</a> the server will notice that someone requested a file that doesn't exist, but there is a directory with the same name. The server will then give a 301 response redirecting the client to the URL <a href="http://www.garshol.priv.no/download/">http://www.garshol.priv.no/download/</a> which the client will then try and succeed. It is worth noting here that these two are actually different URLs, which is why the server cannot return the contents of the first URL directly. (In fact, one could well argue that it shouldn't offer the redirect at all.)
+</p>
+
+<p>
+All this is invisible to the user, but the user will have to wait a little longer and the server will have to work harder. So the best thing is to include the slash and avoid extra network traffic and server load.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-9" class="outline-2">
+<h2 id="sec-9">Appendices</h2>
+<div class="outline-text-2" id="text-9">
+</div><div id="outline-container-sec-9-1" class="outline-3">
+<h3 id="sec-9-1">Explanations of some technical terms</h3>
+<div class="outline-text-3" id="text-9-1">
+<dl class="org-dl">
+<dt> API </dt><dd>An Application Programming Interface is an interface exposed by a program, part of an operating system or programming language to other programs, so that the programs that use the API can exploit the features of the program that exposes the API. One example of this would be the AWT windowing library of Java that exposes an API that can be used to write programs with graphical user interfaces. APIs are only used by programs, they are not user interfaces.
+</dd>
+<dt> TCP/IP </dt><dd>The IP protocol (IP is short for Internet Protocol) is the backbone of the internet, the foundation on which all else is built. To be a part of the internet a computer must support IP, which is what is used for all data transfer on the internet. TCP is another protocl (Transport Control Protocol) that extends IP with features useful for most higher-level protocols such as HTTP. (Lots of other protocols also use TCP: FTP, Gopher, SMTP, POP, IMAP, NNTP etc.) Some protocols use UDP instead of TCP.
+</dd>
+</dl>
+</div>
+</div>
+
+
+
+<div id="outline-container-sec-9-2" class="outline-3">
+<h3 id="sec-9-2">Acknowledgements</h3>
+<div class="outline-text-3" id="text-9-2">
+<p>
+In closing I'd like to thank the following people who have helped me with this tutorial:
+</p>
+
+
+<ul class="org-ul">
+<li><a href="http://cpcug.org/user/jelks/">Jelks Cabaniss</a>, who provided early feedback on form and contents as well as encouragement.
+</li>
+<li><a href="http://ppewww.ph.gla.ac.uk/~flavell/aflavell.html">Alan J. Flavell</a>, for detailed and highly useful criticism.
+</li>
+<li><a href="http://www.hut.fi/u/jkorpela/">Jukka Korpela</a>, for help with the markup in this document and extensive criticism on form and content, as well as a couple of useful links.
+</li>
+<li><a href="http://www.mediascience.no/~chr/">Christian Nybø</a>, for suggesting that I mention telnetting to servers and making HTTPTest a little more prominent.
+</li>
+<li>Harald Joerg, who found a number of typos, and suggested some improvements in the organization.
+</li>
+<li><a href="http://www.pvv.org/~borud/">Bjørn Borud</a>, for some hints on organization as well as a typo fix.
+</li>
+<li>Ingrid Melve for some useful links.
+</li>
+<li>Darren Moore for suggesting that I define some technical terms.
+</li>
+<li>Felipe Wersen for pointing out a typo.
+</li>
+</ul>
+</div>
+</div>
+
+
+
+<div id="outline-container-sec-9-3" class="outline-3">
+<h3 id="sec-9-3">References</h3>
+<div class="outline-text-3" id="text-9-3">
+</div><div id="outline-container-sec-9-3-1" class="outline-4">
+<h4 id="sec-9-3-1">Important specifications and official pages</h4>
+<div class="outline-text-4" id="text-9-3-1">
+<ul class="org-ul">
+<li><a href="http://www.w3.org/Protocols/">The W3C pages on HTTP</a>.
+</li>
+<li><a href="http://www.cis.ohio-state.edu/htbin/rfc/rfc1945.html">RFC 1945</a>, the specification of HTTP 1.0.
+</li>
+<li><a href="http://www.cis.ohio-state.edu/htbin/rfc/rfc2068.html">RFC 2068</a>, the specification of HTTP 1.1.
+</li>
+<li><a href="http://www.cis.ohio-state.edu/htbin/rfc/rfc1738.html">RFC 1738</a>, which describes URLs.
+</li>
+<li><a href="http://home.netscape.com/newsref/std/cookie_spec.html">The magic cookie specification</a>, from Netscape.
+</li>
+</ul>
+</div>
+</div>
+
+
+
+<div id="outline-container-sec-9-3-2" class="outline-4">
+<h4 id="sec-9-3-2">Proxy caches</h4>
+<div class="outline-text-4" id="text-9-3-2">
+<ul class="org-ul">
+<li><a href="http://www.uninett.no/prosjekt/desire/arneberg/">Web caching architecture</a>, a guide for system administrators who want to set up proxy caches.
+</li>
+<li><a href="http://www.nlanr.net/Cache/">A Distributed Testbed for National Information Provisioning</a>, a project to set up a national US-wide cache system.
+</li>
+</ul>
+</div>
+</div>
+
+
+
+<div id="outline-container-sec-9-3-3" class="outline-4">
+<h4 id="sec-9-3-3">Various</h4>
+<div class="outline-text-4" id="text-9-3-3">
+<ul class="org-ul">
+<li><a href="http://www.snafu.de/~tilman/mozilla/index.html">The Mozilla Museum</a>
+</li>
+<li><a href="ftp://ftp.isi.edu/in-notes/iana/assignments/media-types/media-types">The registered MIME types</a>, from IANA.
+</li>
+<li><a href="http://www.garshol.priv.no/download/HTTPTest.html">HTTPTest</a>. Try sending HTTP requests to various servers and see the responses.
+</li>
+<li><a href="http://webcompare.internet.com/">An overview of most web servers available</a>.
+</li>
+<li><a href="http://www.crl.com/~subir/lynx/why.html#post-redirect">The POST redirect problem</a>.
+</li>
+<li><a href="http://www.wins.uva.nl/~mes/jargon/c/cookie.html">About the use of the word 'cookie' in computing</a>.
+</li>
+<li><a href="http://www.garshol.priv.no/linker/WWWlinks.html#XML">More information about XML</a>.
+</li>
+<li><a href="http://www.hut.fi/u/jkorpela/ftpurl.html">About FTP URLs</a>.
+</li>
+<li><a href="http://www.uninett.no/UNINyTT/2-96.http.html">A short Norwegian intro to HTTP</a>.
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+
+      </div>
+    </div>
+    <div> 
+      <div class="post-meta">
+        <span title="post date" class="post-info">2010-09-20</span>
+        <span title="last modification date" class="post-info">2013-07-04</span>
+        <span title="tags" class="post-info"><a href="/tags/cgi/">cgi</a>, <a href="/tags/http/">http</a>, <a href="/tags/web/">web</a></span>
+        <span title="author" class="post-info">Gu Weigang</span>
+      </div>
+      <section>
+        <h1>Comments</h1>
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+          //var disqus_developer = 1;
+          var disqus_identifier = "/blog/2010/09/20/how-the-web-works---http-and-cgi-explained/";
+          var disqus_url = "http://guweigang.com/blog/2010/09/20/how-the-web-works---http-and-cgi-explained/";
+          var disqus_shortname = 'guweigang';
+          /* * * DON'T EDIT BELOW THIS LINE * * */
+          (function() {
+          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+          dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+          })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </section>
+      <div class="footer">
+        <p>Generated by <a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.3.1 (<a href="http://orgmode.org">Org</a> mode 8.0.3)</p>
+        <p> 
+          Copyright &copy; 2012 - 2013 <a href="mailto:guweigang &lt;at&gt; outlook &lt;dot&gt; com">Gu Weigang</a>
+          &nbsp;&nbsp;-&nbsp;&nbsp;
+          Powered by <a href="https://github.com/kelvinh/org-page" target="_blank">org-page</a>
+        </p>
+      </div>
+    </div>
+  </body>
+</html>

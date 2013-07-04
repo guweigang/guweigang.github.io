@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <title>solar php更新至1.1.0 - 闭眼听世界</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Gu Weigang" />
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <link rel="stylesheet" href="/media/css/main.css" type="text/css">
+  </head>
+  <body class="container">
+    <div> 
+      <header class="masthead">
+        <h1 class="masthead-title"><a href="/">闭眼听世界</a></h1>
+        <p>心如松静意无尘，气若浮萍了无痕！</p>
+        <ul>
+          <li><a href="/blog/">Blog</a></li>
+          <li><a href="/wiki/">Wiki</a></li>
+          <li><a href="/tags/">Tags</a></li>
+          <li><a href="/about/">About</a></li>
+          <li><a href="https://github.com/guweigang">GitHub</a></li>
+          <li><a href="https://google.com/search?q=site:guweigang.com">Search</a></li>
+        </ul>
+      </header>
+    </div>
+    <div> 
+      <div class="post">
+        <h1>solar php更新至1.1.0</h1>
+        <p>
+终于迎来了solar的再次更新，不过本此更新主要针对命令行doc生成。官方也把手册更新到第7章了。请看更新说明：
+</p>
+
+
+<blockquote>
+
+
+<p>
+The biggest set of changes is related to API documentation generation. We now have a Markdown set that will convert inline API documentation to DocBook, and the `make-docs` command now support building DocBook files from class and package wiki docs. Look for this to be used on the solarphp.com class and package documentation pages when I update the site later today. (One bonus from using DocBook is that we will now have downloadable API docs.)
+</p>
+</blockquote>
+
+
+
+<p>
+New Classes
+<code>=========</code>
+</p>
+
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1">Solar\_Cli\_MakeDocbook: Class to convert wiki-based docs to DocBook files.</h2>
+</div>
+
+<div id="outline-container-sec-2" class="outline-2">
+<h2 id="sec-2">Solar\_Markdown\_Apidoc: Transformation classes for converting apidoc</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+wiki markup to DocBook.
+</p>
+</div>
+</div>
+<div id="outline-container-sec-3" class="outline-2">
+<h2 id="sec-3">Solar\_View\_Helper\_Foot: Class to collect scripts for the foot of the</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+document; thanks, Bedrich Rios, for the request that lead to this feature.
+</p>
+
+
+<p>
+Changes
+<code>=====</code>
+</p>
+
+<p>
+script/solar
+</p>
+<hr/>
+</div>
+</div>
+<div id="outline-container-sec-4" class="outline-2">
+<h2 id="sec-4">[FIX] Use realpath() on --config value so we know in advance if it exists</h2>
+<div class="outline-text-2" id="text-4">
+<p>
+or not.
+</p>
+</div>
+</div>
+<div id="outline-container-sec-5" class="outline-2">
+<h2 id="sec-5">[REF] Convert from a procedural script to a class for easier maintenance.</h2>
+<div class="outline-text-2" id="text-5">
+<p>
+Solar
+</p>
+<hr/>
+</div>
+</div>
+<div id="outline-container-sec-6" class="outline-2">
+<h2 id="sec-6">[CHG] Forcibly cast $params to array for call\_user\_func\_array().</h2>
+<div class="outline-text-2" id="text-6">
+<p>
+Solar\_Access\_Adapter
+</p>
+<hr/>
+</div>
+</div>
+<div id="outline-container-sec-7" class="outline-2">
+<h2 id="sec-7">[CHG] Method isAllowed() now allows an object as its first param (to specify</h2>
+<div class="outline-text-2" id="text-7">
+<p>
+the object class being controlled) instead of only a string class name.
+</p>
+
+
+<p>
+Solar\_Cache\_Adapter\_File
+</p>
+<hr/>
+</div>
+</div>
+<div id="outline-container-sec-8" class="outline-2">
+<h2 id="sec-8">[ADD] Method \_deleteAll() as a support method for recursively deleting</h2>
+<div class="outline-text-2" id="text-8">
+<p>
+subdirectories. Thanks, Lee, for the report and initial patch.
+</p>
+</div>
+</div>
+<div id="outline-container-sec-9" class="outline-2">
+<h2 id="sec-9">[CHG] Method deleteAll(), when hashing is turned off, now recursively</h2>
+<div class="outline-text-2" id="text-9">
+<p>
+deletes cache subdirectories.
+</p>
+
+
+<p>
+Solar\_Cli\_LinkPublic
+</p>
+<hr/>
+</div>
+</div>
+<div id="outline-container-sec-10" class="outline-2">
+<h2 id="sec-10">[CHG] Better error reporting when symlink creation fails.</h2>
+<div class="outline-text-2" id="text-10">
+<p>
+Solar\_Cli\_LinkVendor
+</p>
+<hr/>
+</div>
+</div>
+<div id="outline-container-sec-11" class="outline-2">
+<h2 id="sec-11">[CHG] Better error reporting when symlink creation fails.</h2>
+<div class="outline-text-2" id="text-11">
+<p>
+Solar\_Cli\_MakeDocs
+</p>
+<hr/>
+</div>
+</div>
+<div id="outline-container-sec-12" class="outline-2">
+<h2 id="sec-12">[FIX] Method writeClassOverview() now sets the package name correctly. (This</h2>
+<div class="outline-text-2" id="text-12">
+<p>
+was due to the change from @package being only a name, to being a name and
+an optional summary.)
+</p>
+</div>
+</div>
+<div id="outline-container-sec-13" class="outline-2">
+<h2 id="sec-13">[CHG] Method writePackageIndex() now structures the index file as a table,</h2>
+<div class="outline-text-2" id="text-13">
+<p>
+rather than as a pipe-separated values file.
+</p>
+</div>
+</div>
+<div id="outline-container-sec-14" class="outline-2">
+<h2 id="sec-14">[CHG] Method writeClassesIndex() now structures the index file as a table,</h2>
+<div class="outline-text-2" id="text-14">
+<p>
+rather than as a pipe-separated values file.
+</p>
+</div>
+</div>
+<div id="outline-container-sec-15" class="outline-2">
+<h2 id="sec-15">[DEL] Throughout, removed all instances of \_title1(). This means that page</h2>
+<div class="outline-text-2" id="text-15">
+<p>
+titles need to be generated by the display software now.
+</p>
+</div>
+</div>
+<div id="outline-container-sec-16" class="outline-2">
+<h2 id="sec-16">[CHG] In class overview, change how properties, methods, constants, and</h2>
+<div class="outline-text-2" id="text-16">
+<p>
+config keys so that they link directly to their anchors on the proper
+pages.
+</p>
+</div>
+</div>
+<div id="outline-container-sec-17" class="outline-2">
+<h2 id="sec-17">[CHG] Method writeClassConstants() now puts each constant under its own</h2>
+<div class="outline-text-2" id="text-17">
+<p>
+section header, with corollary ID for independent targeting.
+</p>
+</div>
+</div>
+<div id="outline-container-sec-18" class="outline-2">
+<h2 id="sec-18">[CHG] Throughout, use new anchor IDs.</h2>
+</div>
+
+<div id="outline-container-sec-19" class="outline-2">
+<h2 id="sec-19">[DEL] Method \_title4(), as it was never used.</h2>
+</div>
+
+<div id="outline-container-sec-20" class="outline-2">
+<h2 id="sec-20">[CHG] On the class page for Constants, only show a summary if it exists.</h2>
+</div>
+
+<div id="outline-container-sec-21" class="outline-2">
+<h2 id="sec-21">[ADD] Option flag `--docbook-dir`.</h2>
+</div>
+
+<div id="outline-container-sec-22" class="outline-2">
+<h2 id="sec-22">[ADD] Property $\_docbook\_dir to retain the value of --docbook-dir.</h2>
+</div>
+
+<div id="outline-container-sec-23" class="outline-2">
+<h2 id="sec-23">[CHG] Method \_exec(), when $\_docbook\_dir is specified, now automatically</h2>
+<div class="outline-text-2" id="text-23">
+<p>
+converts the wiki-based docs to DocBook via `make-docbook`.
+</p>
+</div>
+</div>
+<div id="outline-container-sec-24" class="outline-2">
+<h2 id="sec-24">[FIX] Package index now properly generates a link to the package overview.</h2>
+</div>
+
+<div id="outline-container-sec-25" class="outline-2">
+<h2 id="sec-25">[CHG] Class index now generates a link to the class overview.</h2>
+</div>
+
+<div id="outline-container-sec-26" class="outline-2">
+<h2 id="sec-26">[CHG] Method synopsis now displays Class::method(), instead of just method().</h2>
+</div>
+
+<div id="outline-container-sec-27" class="outline-2">
+<h2 id="sec-27">[CHG] Show package index as a list, not a table.</h2>
+</div>
+
+<div id="outline-container-sec-28" class="outline-2">
+<h2 id="sec-28">[FIX] In method \_write(), if a file exists where a directory needs to be</h2>
+<div class="outline-text-2" id="text-28">
+<p>
+created, throw an exception. Thanks, zined, for the report and patch.
+</p>
+
+
+<p>
+Solar\_Cli\_MakeModel
+</p>
+<hr/>
+</div>
+</div>
+<div id="outline-container-sec-29" class="outline-2">
+<h2 id="sec-29">[ADD] Method \_execMulti(). When you call "make-model Vendor\_Model\_*", the</h2>
+<div class="outline-text-2" id="text-29">
+<p>
+\_exec() method will recognize the trailing "\_*" and interpret it as a
+command to make one model class for each table in the database. Thanks,
+Anthony Gentile, for the report that led to this feature.
+</p>
+
+
+<p>
+Solar\_Cache\_Adapter
+</p>
+<hr/>
+</div>
+</div>
+<div id="outline-container-sec-30" class="outline-2">
+<h2 id="sec-30">[FIX] Methods fetchOrSave() and fetchOrAdd() now pass the custom $life</h2>
+<div class="outline-text-2" id="text-30">
+<p>
+parameter. Thanks, probd, for the report and patch.
+</p>
+
+
+<p>
+Solar\_Controller\_Command
+</p>
+<hr/>
+</div>
+</div>
+<div id="outline-container-sec-31" class="outline-2">
+<h2 id="sec-31">[CHG] Methods \_out(), \_outln(), \_err(), and \_errln() no longer use fwrite()</h2>
+<div class="outline-text-2" id="text-31">
+<p>
+directly. Instead, they use Solar\_Vt100::write() so that escape codes are
+honored or stripped depending on the output handle type. This means escape
+codes will no longer show up in non-TTY environments. Thanks, Abu Bakar
+Al-Idrus, for the report that led to this change.
+</p>
+
+
+<p>
+Solar\_Docs\_Apiref
+</p>
+<hr/>
+</div>
+</div>
+<div id="outline-container-sec-32" class="outline-2">
+<h2 id="sec-32">[ADD] Support for docblocks on constants:</h2>
+</div>
+
+<div id="outline-container-sec-33" class="outline-2">
+<h2 id="sec-33">[CHG] Method addClass() now takes a second param, $file, which gives the</h2>
+<div class="outline-text-2" id="text-33">
+<p>
+path to the file that defines the class. This is needed for reading the
+file contents to parse the docblocks for its constants.
+</p>
+</div>
+</div>
+<div id="outline-container-sec-34" class="outline-2">
+<h2 id="sec-34">[CHG] Method \_addConstants() now takes a second param, $file, which</h2>
+<div class="outline-text-2" id="text-34">
+<p>
+gives the path to the file that defines the class. This is needed for
+reading the file contents to parse the docblocks for its constants.
+</p>
+</div>
+</div>
+<div id="outline-container-sec-35" class="outline-2">
+<h2 id="sec-35">[CHG] Method \_addConstants() now reads the class file and parses it</h2>
+<div class="outline-text-2" id="text-35">
+<p>
+manually to find the docblocks on constants and retain the summary,
+narrative, and technical information. (Does not yet support discovery of
+inherited constants.)
+</p>
+
+
+<p>
+Solar\_Mail\_Message
+</p>
+<hr/>
+</div>
+</div>
+<div id="outline-container-sec-36" class="outline-2">
+<h2 id="sec-36">[ADD] Methods setTo(), setCc(), and setBcc() to set the recipients for those</h2>
+<div class="outline-text-2" id="text-36">
+<p>
+types, replacing any previous recipients. Thanks, Rodrigo Moraes, for the
+feature request that led to this addition.
+</p>
+
+
+<p>
+Solar\_Markdown\_Extra\_Deflist
+</p>
+<hr/>
+</div>
+</div>
+<div id="outline-container-sec-37" class="outline-2">
+<h2 id="sec-37">[ADD] Properties $\_dt\_open, $\_dt\_close, $\_dd\_open, and $\_dd\_close. These</h2>
+<div class="outline-text-2" id="text-37">
+<p>
+hold the tags for opening and closing terms and definitions.
+</p>
+</div>
+</div>
+<div id="outline-container-sec-38" class="outline-2">
+<h2 id="sec-38">[CHG] Throughout, use the new tag properties instead of hard-coded strings.</h2>
+<div class="outline-text-2" id="text-38">
+<p>
+Solar\_Markdown\_Plugin\_List
+</p>
+<hr/>
+</div>
+</div>
+<div id="outline-container-sec-39" class="outline-2">
+<h2 id="sec-39">[ADD] Properties $\_ul\_open, $\_ul\_close, $\_ol\_open, $\_ol\_close, $\_li\_item,</h2>
+<div class="outline-text-2" id="text-39">
+<p>
+and $\_li\_close. These hold the opening and closing tags for lists and
+items.
+</p>
+</div>
+</div>
+<div id="outline-container-sec-40" class="outline-2">
+<h2 id="sec-40">[CHG] Throughout, use the new tag properties instead of hard-coded strings.</h2>
+<div class="outline-text-2" id="text-40">
+<p>
+Solar\_Markdown\_Plugin\_Uri
+</p>
+<hr/>
+</div>
+</div>
+<div id="outline-container-sec-41" class="outline-2">
+<h2 id="sec-41">[FIX] Method \_parseEmail() now correctly converts the parsed email address</h2>
+<div class="outline-text-2" id="text-41">
+<p>
+to a HTML token so that it doesn't get double-escaped. Thanks, Lee, for the
+report and patch. Fixes #154.
+</p>
+
+
+<p>
+Solar\_Markdown\_Wiki\_MethodSynopsis
+</p>
+<hr/>
+</div>
+</div>
+<div id="outline-container-sec-42" class="outline-2">
+<h2 id="sec-42">[ADD] Config key 'param\_void' to indicate the template for when a method</h2>
+<div class="outline-text-2" id="text-42">
+<p>
+has no parameters.
+</p>
+</div>
+</div>
+<div id="outline-container-sec-43" class="outline-2">
+<h2 id="sec-43">[CHG] Method \_parse() now honors 'param\_void'.</h2>
+</div>
+
+<div id="outline-container-sec-44" class="outline-2">
+<h2 id="sec-44">[CHG] Config values for 'param' and 'param\_default' now have the `$`</h2>
+<div class="outline-text-2" id="text-44">
+<p>
+hard-coded in them.
+</p>
+
+
+<p>
+Solar\_Request
+</p>
+<hr/>
+</div>
+</div>
+<div id="outline-container-sec-45" class="outline-2">
+<h2 id="sec-45">[FIX] Remove empty string index when HTTPS\_* values are passed in $\_SERVER.</h2>
+<div class="outline-text-2" id="text-45">
+<p>
+Thanks, Robert Gonzalez, for the report and patch.
+</p>
+</div>
+</div>
+<div id="outline-container-sec-46" class="outline-2">
+<h2 id="sec-46">[ADD] Method isSsl() to check if the request is HTTPS or on port 443.</h2>
+<div class="outline-text-2" id="text-46">
+<p>
+Solar\_Sql\_Adapter
+</p>
+<hr/>
+</div>
+</div>
+<div id="outline-container-sec-47" class="outline-2">
+<h2 id="sec-47">[FIX] Method \_selectSingle() now wraps the FROM clause in parentheses; this</h2>
+<div class="outline-text-2" id="text-47">
+<p>
+forces MySQL to use the correct precedence and not confuse the last FROM
+element with any follwing JOIN clauses. Thanks, John Elofson, for the report
+and patch.
+</p>
+
+
+<p>
+Solar\_Symlink
+</p>
+<hr/>
+</div>
+</div>
+<div id="outline-container-sec-48" class="outline-2">
+<h2 id="sec-48">[FIX] Method \_make() now redirects STDERR to STDOUT so that if the last line</h2>
+<div class="outline-text-2" id="text-48">
+<p>
+is an error line, exec() will return it.
+</p>
+
+
+<p>
+Solar\_Uri
+</p>
+<hr/>
+</div>
+</div>
+<div id="outline-container-sec-49" class="outline-2">
+<h2 id="sec-49">[CHG] Method set() now uses $request-&gt;isSsl() to determine the scheme.</h2>
+</div>
+
+<div id="outline-container-sec-50" class="outline-2">
+<h2 id="sec-50">[ADD] Method \_\_toString() to represent the object as its full URI string.</h2>
+<div class="outline-text-2" id="text-50">
+<p>
+Thanks, Luke Visinoni, for the patch. fixes #276
+</p>
+
+
+<p>
+Solar\_View\_Helper\_(Date|Time|Timestamp)
+</p>
+<hr/>
+</div>
+</div>
+<div id="outline-container-sec-51" class="outline-2">
+<h2 id="sec-51">[CHG] Now displays empty/null options (shown as "--") when the value is</h2>
+<div class="outline-text-2" id="text-51">
+<p>
+empty and not required. When the value is empty and <b>is</b> required, it still
+defaults to the current timestamp.
+</p>
+
+
+<p>
+Solar\_View\_Helper\_Form
+</p>
+<hr/>
+</div>
+</div>
+<div id="outline-container-sec-52" class="outline-2">
+<h2 id="sec-52">[CHG] Rename method \_addCsrfElement() to \_modCsrfElement().</h2>
+</div>
+
+<div id="outline-container-sec-53" class="outline-2">
+<h2 id="sec-53">[FIX] In method \_modCsrfElement(), add logic to remove a CSRF element that's</h2>
+<div class="outline-text-2" id="text-53">
+<p>
+not needed (i.e., in GET forms). This prevents GET forms from failing due to
+the presence of a spurious CSRF element. Thanks, Jon Elofson, for the report
+that led to this fix.
+</p>
+</div>
+</div>
+<div id="outline-container-sec-54" class="outline-2">
+<h2 id="sec-54">[FIX] Method reset() no longer resets the $\_id\_count property. This is</h2>
+<div class="outline-text-2" id="text-54">
+<p>
+because the form() helper might be used for two or more forms on the same
+page, and those forms might have identical element names, so they need to be
+deconflicted from each other for W3C validation. Thanks, dmytrok, for the
+report that led to this fix.
+</p>
+</div>
+</div>
+<div id="outline-container-sec-55" class="outline-2">
+<h2 id="sec-55">[ADD] Method addHtml() to add arbitrary HTML as part of the stack (i.e., not</h2>
+<div class="outline-text-2" id="text-55">
+<p>
+as an element in the form). Thanks, Eric Parent, for the report and patch.
+</p>
+
+
+<p>
+Solar\_View\_Helper\_Head
+</p>
+<hr/>
+</div>
+</div>
+<div id="outline-container-sec-56" class="outline-2">
+<h2 id="sec-56">[ADD] Method setTitleRaw() and property $\_title\_raw to turn off/on title</h2>
+<div class="outline-text-2" id="text-56">
+<p>
+escaping at fetch() time. Thanks, Bedrich Rios, for the report that led to
+this change.
+</p>
+</div>
+</div>
+<div id="outline-container-sec-57" class="outline-2">
+<h2 id="sec-57">[CHG] Method fetch() honors the value of $\_title\_raw.</h2>
+<div class="outline-text-2" id="text-57">
+<p>
+Solar\_View\_Helper\_Pager
+</p>
+<hr/>
+</div>
+</div>
+<div id="outline-container-sec-58" class="outline-2">
+<h2 id="sec-58">[FIX] Method pager() now honors the configuration values for 'prev' and</h2>
+<div class="outline-text-2" id="text-58">
+<p>
+'next'. Thanks, Dmytrok, for the report.
+</p>
+
+
+<p>
+Solar\_View\_Helper\_Title
+</p>
+<hr/>
+</div>
+</div>
+<div id="outline-container-sec-59" class="outline-2">
+<h2 id="sec-59">[ADD] Method title() now has second parameter $raw; when true, will output</h2>
+<div class="outline-text-2" id="text-59">
+<p>
+the title without escaping it (default false).
+</p>
+
+
+<p>
+Solar\_Vt100
+</p>
+<hr/>
+</div>
+</div>
+<div id="outline-container-sec-60" class="outline-2">
+<h2 id="sec-60">[ADD] Method plain() to strip escape codes from a string.</h2>
+</div>
+
+<div id="outline-container-sec-61" class="outline-2">
+<h2 id="sec-61">[ADD] Method write() that looks at the output file handle to honor or strip</h2>
+<div class="outline-text-2" id="text-61">
+<p>
+escape codes using posix\_isatty().
+</p>
+</div>
+</div>
+
+      </div>
+    </div>
+    <div> 
+      <div class="post-meta">
+        <span title="post date" class="post-info">2010-06-20</span>
+        <span title="last modification date" class="post-info">2013-07-04</span>
+        <span title="tags" class="post-info"><a href="/tags/solar/">solar</a>, <a href="/tags/solar-php/">solar php</a></span>
+        <span title="author" class="post-info">Gu Weigang</span>
+      </div>
+      <section>
+        <h1>Comments</h1>
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+          //var disqus_developer = 1;
+          var disqus_identifier = "/blog/2010/06/20/solar-php-updated-to-1_1_0/";
+          var disqus_url = "http://guweigang.com/blog/2010/06/20/solar-php-updated-to-1_1_0/";
+          var disqus_shortname = 'guweigang';
+          /* * * DON'T EDIT BELOW THIS LINE * * */
+          (function() {
+          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+          dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+          })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </section>
+      <div class="footer">
+        <p>Generated by <a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.3.1 (<a href="http://orgmode.org">Org</a> mode 8.0.3)</p>
+        <p> 
+          Copyright &copy; 2012 - 2013 <a href="mailto:guweigang &lt;at&gt; outlook &lt;dot&gt; com">Gu Weigang</a>
+          &nbsp;&nbsp;-&nbsp;&nbsp;
+          Powered by <a href="https://github.com/kelvinh/org-page" target="_blank">org-page</a>
+        </p>
+      </div>
+    </div>
+  </body>
+</html>

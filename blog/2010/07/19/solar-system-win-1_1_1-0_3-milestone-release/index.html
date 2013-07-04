@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <title>solar-system-win-1.1.1-0.3，里程碑版本发布 - 闭眼听世界</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Gu Weigang" />
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <link rel="stylesheet" href="/media/css/main.css" type="text/css">
+  </head>
+  <body class="container">
+    <div> 
+      <header class="masthead">
+        <h1 class="masthead-title"><a href="/">闭眼听世界</a></h1>
+        <p>心如松静意无尘，气若浮萍了无痕！</p>
+        <ul>
+          <li><a href="/blog/">Blog</a></li>
+          <li><a href="/wiki/">Wiki</a></li>
+          <li><a href="/tags/">Tags</a></li>
+          <li><a href="/about/">About</a></li>
+          <li><a href="https://github.com/guweigang">GitHub</a></li>
+          <li><a href="https://google.com/search?q=site:guweigang.com">Search</a></li>
+        </ul>
+      </header>
+    </div>
+    <div> 
+      <div class="post">
+        <h1>solar-system-win-1.1.1-0.3，里程碑版本发布</h1>
+        <p>
+伴随着Solar Deployment Soluton on WindowsXP, 2000 and 2003-0.1的发布，solar-system-win-1.1.1也迎来了她的第三个版本，在此版本中解决了多个bug，以及解决了在windows xp平台的使用问题（至少是布署问题），所以这也是solar-win的一个里程碑版本。
+</p>
+
+<p>
+solar在XP平台上是采用复制文件的方式来同步文件的，复制文件是存在风险的，为什么这么说呢？因为现在的做法是先删除已存在的文件然后再复制过去，如果删除完毕但是复制出问题的话，文件会丢失。所以还需要探索更好的方法。
+下址地址：<a href="http://solarphp.cn/download/solar-system-win-latest.rar"><a href="http://solarphp.cn/download/solar-system-win-latest.rar">http://solarphp.cn/download/solar-system-win-latest.rar</a></a>
+</p>
+
+<p>
+主要的更新如下：
+</p>
+
+
+<p>
+#+BEGIN_EXAMPLE
+</p>
+
+<p>
+2010-07-14
+<code>==================</code>
+@ /script/solar
+</p>
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1">line 16</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+add a property $this-&gt;_script to indicate which script is current one
+</p>
+</div>
+</div>
+<div id="outline-container-sec-2" class="outline-2">
+<h2 id="sec-2">line 58</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+get current script name
+</p>
+</div>
+</div>
+<div id="outline-container-sec-3" class="outline-2">
+<h2 id="sec-3">line 76</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+prepare directory - windows-style dir with separator before
+</p>
+</div>
+</div>
+<div id="outline-container-sec-4" class="outline-2">
+<h2 id="sec-4">line 87</h2>
+<div class="outline-text-2" id="text-4">
+<p>
+add two elements into array $dirs
+</p>
+
+<p>
+@ /script/solar.bat
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-5" class="outline-2">
+<h2 id="sec-5">line 18</h2>
+<div class="outline-text-2" id="text-5">
+<p>
+get current script name
+</p>
+</div>
+</div>
+<div id="outline-container-sec-6" class="outline-2">
+<h2 id="sec-6">line 28</h2>
+<div class="outline-text-2" id="text-6">
+<p>
+change param of PHP_COMMAND
+</p>
+
+<p>
+@ /source/solar/Solar/Cli/LinkVendor.php
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-7" class="outline-2">
+<h2 id="sec-7">line 122</h2>
+<div class="outline-text-2" id="text-7">
+<p>
+romove links for script/vendor
+</p>
+
+
+<p>
+2010-07-15
+<code>==================</code>
+@ /index.php
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-8" class="outline-2">
+<h2 id="sec-8">line 19</h2>
+<div class="outline-text-2" id="text-8">
+<p>
+fix include path, if solar can not find "/include/Solar" dir and "/include/Solar.php" file, it will include "/source/solar" dir automatically as its core library. Warning: This is just for the first-time demo.it can browse "hello,world" sample without any config or command. You still need link solar vendor after that.
+</p>
+
+
+<p>
+@ /docroot/index.php
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-9" class="outline-2">
+<h2 id="sec-9">line 8</h2>
+<div class="outline-text-2" id="text-9">
+<p>
+fix include path, if solar can not find "/include/Solar" dir and "/include/Solar.php" file, it will include "/source/solar" dir automatically as its core library. Warning: This is just for the first-time demo.it can browse "hello,world" sample without any config or command. You still need link solar vendor after that.
+</p>
+
+
+<p>
+2010-07-18
+<code>===========</code>
+</p>
+
+<p>
+@ /source/solar/Solar/Cli/SyncVendor.php and /source/solar/Solar/Cli/SyncVendor
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-10" class="outline-2">
+<h2 id="sec-10">add file and directories</h2>
+<div class="outline-text-2" id="text-10">
+<p>
+add this file and directory to add new command "sync-vendor"
+</p>
+
+<p>
+@ /source/solar/Solar/Symlink.php
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-11" class="outline-2">
+<h2 id="sec-11">line 84</h2>
+<div class="outline-text-2" id="text-11">
+<p>
+this change is to determine, if you use make-app or make-model, and if already exists app or model ,it will override the exist app or model
+</p>
+
+<p>
+fixed: remove the if-condition, remove directories in syncvendor step
+</p>
+<ul class="org-ul">
+<li></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-sec-12" class="outline-2">
+<h2 id="sec-12">line 101</h2>
+<div class="outline-text-2" id="text-12">
+<p>
+add a condition to determine which nt version is. according to that, use different method to process files and directories
+</p>
+<ul class="org-ul">
+<li></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-sec-13" class="outline-2">
+<h2 id="sec-13">line 231</h2>
+<div class="outline-text-2" id="text-13">
+<p>
+add a new method here to copy/overwrite files on windows xp, 2000 and 2003
+</p>
+<ul class="org-ul">
+<li></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-sec-14" class="outline-2">
+<h2 id="sec-14">line 247</h2>
+<div class="outline-text-2" id="text-14">
+<p>
+add a new method here to copy/override directories on windows xp, 2000 and 2003
+</p>
+
+<p>
+@ /source/solar/Solar/Cli/UnlinkVendor.php
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-15" class="outline-2">
+<h2 id="sec-15">line 91</h2>
+<div class="outline-text-2" id="text-15">
+<p>
+add a condition to determine which nt version is. according to that, use sync-vendor command sync files and directories between /include/Vendor and /source/script/Vendor
+</p>
+<ul class="org-ul">
+<li></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-sec-16" class="outline-2">
+<h2 id="sec-16">line 103</h2>
+<div class="outline-text-2" id="text-16">
+<p>
+unlink directoies that not empty, you can not use unlink function. on windows xp, 2000 and 2003, we must use rmdir command to remove directories that not empty.
+</p>
+
+<p>
+enjoy~
+</p>
+
+<p>
+#+END_EXAMPLE
+</p>
+
+
+
+<p>
+具体请查看solar-bug站的变更日志：<a href="http://bug.solarphp.cn/changelog_page.php"><a href="http://bug.solarphp.cn/changelog\_page.php">http://bug.solarphp.cn/changelog\_page.php</a></a>
+</p>
+</div>
+</div>
+
+      </div>
+    </div>
+    <div> 
+      <div class="post-meta">
+        <span title="post date" class="post-info">2010-07-19</span>
+        <span title="last modification date" class="post-info">2013-07-04</span>
+        <span title="tags" class="post-info"><a href="/tags/solar/">solar</a>, <a href="/tags/solarphp/">solarphp</a></span>
+        <span title="author" class="post-info">Gu Weigang</span>
+      </div>
+      <section>
+        <h1>Comments</h1>
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+          //var disqus_developer = 1;
+          var disqus_identifier = "/blog/2010/07/19/solar-system-win-1_1_1-0_3-milestone-release/";
+          var disqus_url = "http://guweigang.com/blog/2010/07/19/solar-system-win-1_1_1-0_3-milestone-release/";
+          var disqus_shortname = 'guweigang';
+          /* * * DON'T EDIT BELOW THIS LINE * * */
+          (function() {
+          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+          dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+          })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </section>
+      <div class="footer">
+        <p>Generated by <a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.3.1 (<a href="http://orgmode.org">Org</a> mode 8.0.3)</p>
+        <p> 
+          Copyright &copy; 2012 - 2013 <a href="mailto:guweigang &lt;at&gt; outlook &lt;dot&gt; com">Gu Weigang</a>
+          &nbsp;&nbsp;-&nbsp;&nbsp;
+          Powered by <a href="https://github.com/kelvinh/org-page" target="_blank">org-page</a>
+        </p>
+      </div>
+    </div>
+  </body>
+</html>

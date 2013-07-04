@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <title>Solar manual: 比预期要早，最快明天完成 - 闭眼听世界</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Gu Weigang" />
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <link rel="stylesheet" href="/media/css/main.css" type="text/css">
+  </head>
+  <body class="container">
+    <div> 
+      <header class="masthead">
+        <h1 class="masthead-title"><a href="/">闭眼听世界</a></h1>
+        <p>心如松静意无尘，气若浮萍了无痕！</p>
+        <ul>
+          <li><a href="/blog/">Blog</a></li>
+          <li><a href="/wiki/">Wiki</a></li>
+          <li><a href="/tags/">Tags</a></li>
+          <li><a href="/about/">About</a></li>
+          <li><a href="https://github.com/guweigang">GitHub</a></li>
+          <li><a href="https://google.com/search?q=site:guweigang.com">Search</a></li>
+        </ul>
+      </header>
+    </div>
+    <div> 
+      <div class="post">
+        <h1>Solar manual: 比预期要早，最快明天完成</h1>
+        <p>
+今天刚译完了附录的B.7节，这也意味着附录也只剩下3小节了。原以为会需要2周时间，看来比预期的要快很多啊，最快可能明天就能全部译完了。附录主要是讲Solar的系统结构、文件系统以及命名约定、规范这些内容。当然对于一个优秀的程序员来说，形成自己的代码风格及命名约定是极其重要的。
+</p>
+
+<p>
+例如，Solar中：
+</p>
+
+<p>
+类名：Solar\_Auth\_Adapter\_Sql类位于Solar/Auth/Adapter/Sql.php文件。
+方法名：
+</p>
+
+
+
+
+
+
+
+<p>
+方法名
+</p>
+
+
+<p>
+用途
+</p>
+
+
+<p>
+示例
+</p>
+
+
+
+
+
+
+
+
+
+
+<p>
+<code>delete</code>
+</p>
+
+
+<p>
+从存储中删除数据（而不应该使用remove/destroy）
+</p>
+
+
+<p>
+<code>$table-&gt;delete($where)</code>
+</p>
+
+
+
+
+
+
+<p>
+<code>fetch=或=fetchOne</code>
+</p>
+
+
+<p>
+从存储中返回一条记录（而不应该使用get/find/retrieve）
+</p>
+
+
+<p>
+<code>$cache-&gt;fetch($id)</code>
+</p>
+
+
+
+
+
+
+<p>
+<code>fetchBy==或fetchOneBy</code>
+</p>
+
+
+<p>
+从存储中返回一条记录，使用方法中指定的替代或额外标准（而不应该使用fetchWith/fetchFor）
+</p>
+
+
+<p>
+<code>$table-&gt;fetchByName($name)</code>
+</p>
+
+
+
+
+
+
+<p>
+<code>fetchAll</code>
+</p>
+
+
+<p>
+从存储中返回多条记录
+</p>
+
+
+<p>
+<code>$table-&gt;fetchAll()</code>
+</p>
+
+
+
+
+
+
+<p>
+<code>fetchAllBy</code>
+</p>
+
+
+<p>
+从存储中返回多条记录，使用方法中指定的替代或额外标准
+</p>
+
+
+<p>
+<code>$table-&gt;fetchAllByName($name)</code>
+</p>
+
+
+
+
+
+
+<p>
+<code>fix</code>
+</p>
+
+
+<p>
+修改一个配置值、参数或属性，以符合某个标准格式或结构
+</p>
+
+
+<p>
+<code>$fetch-&gt;fixParams()</code>
+</p>
+
+
+
+
+
+
+<p>
+<code>get</code>
+</p>
+
+
+<p>
+获取某个属性的值
+</p>
+
+
+<p>
+<code>$obj-&gt;getProperty()</code>
+</p>
+
+
+
+
+
+
+<p>
+<code>has=或=exists</code>
+</p>
+
+
+<p>
+检查某个值或某个属性是否已存在，返回布类型的true或false
+</p>
+
+
+<p>
+<code>$session-&gt;hasFlash()</code>
+</p>
+
+
+
+
+
+
+<p>
+<code>insert</code>
+</p>
+
+
+<p>
+向存储插入新数据（而不应该使用add/new/save）
+</p>
+
+
+<p>
+<code>$table-&gt;insert($data)</code>
+</p>
+
+
+
+
+
+
+<p>
+<code>is</code>
+</p>
+
+
+<p>
+此方法返回布类型的true或false
+</p>
+
+
+<p>
+<code>$cache-&gt;isActive()</code>
+</p>
+
+
+
+
+
+
+<p>
+<code>load</code>
+</p>
+
+
+<p>
+从外部源加载属性值
+</p>
+
+
+<p>
+<code>$role-&gt;load($handle)</code>
+</p>
+
+
+
+
+
+
+<p>
+<code>sanitize</code>
+</p>
+
+
+<p>
+强制某个值匹配某个规刚
+</p>
+
+
+<p>
+<code>$filter-&gt;sanitizeFloat($value)</code>
+</p>
+
+
+
+
+
+
+<p>
+<code>save</code>
+</p>
+
+
+<p>
+在存储中更新现有数据或插入新的数据（而不应该使用replace）
+</p>
+
+
+<p>
+<code>$cache-&gt;save($id, $data)</code>
+</p>
+
+
+
+
+
+
+<p>
+<code>set</code>
+</p>
+
+
+<p>
+设置属性的值
+</p>
+
+
+<p>
+<code>$obj-&gt;setProperty($value)</code>
+</p>
+
+
+
+
+
+
+<p>
+<code>update</code>
+</p>
+
+
+<p>
+更新存储中现有数据（而不应该使用save/change）
+</p>
+
+
+<p>
+<code>$table-&gt;update($data, $where)</code>
+</p>
+
+
+
+
+
+
+<p>
+<code>validate</code>
+</p>
+
+
+<p>
+检查某个值是否匹配某个规刚，返回布类型的true或false
+</p>
+
+
+<p>
+<code>$filter-&gt;validateFloat($value)</code>
+</p>
+
+      </div>
+    </div>
+    <div> 
+      <div class="post-meta">
+        <span title="post date" class="post-info">2010-04-22</span>
+        <span title="last modification date" class="post-info">2013-07-04</span>
+        <span title="tags" class="post-info"><a href="/tags/solar/">solar</a>, <a href="/tags/solar-manual/">solar manual</a>, <a href="/tags/solarphp/">solarphp</a></span>
+        <span title="author" class="post-info">Gu Weigang</span>
+      </div>
+      <section>
+        <h1>Comments</h1>
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+          //var disqus_developer = 1;
+          var disqus_identifier = "/blog/2010/04/22/solar-manual---earlier-than-expected-the-fastest-to-complete-tomorrow/";
+          var disqus_url = "http://guweigang.com/blog/2010/04/22/solar-manual---earlier-than-expected-the-fastest-to-complete-tomorrow/";
+          var disqus_shortname = 'guweigang';
+          /* * * DON'T EDIT BELOW THIS LINE * * */
+          (function() {
+          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+          dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+          })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </section>
+      <div class="footer">
+        <p>Generated by <a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.3.1 (<a href="http://orgmode.org">Org</a> mode 8.0.3)</p>
+        <p> 
+          Copyright &copy; 2012 - 2013 <a href="mailto:guweigang &lt;at&gt; outlook &lt;dot&gt; com">Gu Weigang</a>
+          &nbsp;&nbsp;-&nbsp;&nbsp;
+          Powered by <a href="https://github.com/kelvinh/org-page" target="_blank">org-page</a>
+        </p>
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <title>用C语言写CGI程式－入门篇 - 闭眼听世界</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Gu Weigang" />
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <link rel="stylesheet" href="/media/css/main.css" type="text/css">
+  </head>
+  <body class="container">
+    <div> 
+      <header class="masthead">
+        <h1 class="masthead-title"><a href="/">闭眼听世界</a></h1>
+        <p>心如松静意无尘，气若浮萍了无痕！</p>
+        <ul>
+          <li><a href="/blog/">Blog</a></li>
+          <li><a href="/wiki/">Wiki</a></li>
+          <li><a href="/tags/">Tags</a></li>
+          <li><a href="/about/">About</a></li>
+          <li><a href="https://github.com/guweigang">GitHub</a></li>
+          <li><a href="https://google.com/search?q=site:guweigang.com">Search</a></li>
+        </ul>
+      </header>
+    </div>
+    <div> 
+      <div class="post">
+        <h1>用C语言写CGI程式－入门篇</h1>
+        <p>
+原文链接：<a href="http://www.cs.tut.fi/~jkorpela/forms/cgic.html"><a href="http://www.cs.tut.fi/~jkorpela/forms/cgic.html">http://www.cs.tut.fi/~jkorpela/forms/cgic.html</a></a>
+</p>
+
+
+<pre class="example">
+这是一篇用C语言写CGI程式的入门文章。假定读者对C语言有基本的认识，熟悉HTML并且会在WEB服务器上安装CGI脚本。
+</pre>
+
+
+
+
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1">为什么要用CGI程式？</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+大家都应该知道如何用HTML写表单，那么写好表单后，为了可靠地使用、处理表单数据，你仍然需要服务端脚本。通常服务端脚本以简单、类似的方式处理表单提交，典型地如向某个邮件地址发送文本数据。
+</p>
+
+<p>
+但是，如果你要处理更复杂的问题，如采集数据并写入文件或数据库、或者接收信息然后转发又或者对提交的数据做四则运算，那么你不得不自己写一个的服务端脚本。
+</p>
+
+<p>
+简单地说，CGI是HTML表单和服务端脚本的接口。
+</p>
+
+<p>
+但CGI不是唯一的选择。建议看下<a href="http://www.garshol.priv.no/">Lars Marius Garshol</a>的 <a href="http://www.garshol.priv.no/download/text/http-tut.html">How the web works: HTTP and CGI explained</a> 文章，可以使您了解CGI的概念和除CGI外的其他选择。
+</p>
+
+<p>
+如果有人建议用javascript写CGI程式，让他看看这篇文章： <a href="http://www.cs.tut.fi/~jkorpela/forms/javascript.html">JavaScript and HTML: possibilities and caveats</a>. 简单说，如果不使用服务端服本备份的话，JavaScript根本不可靠。
+</p>
+</div>
+</div>
+
+
+
+<div id="outline-container-sec-2" class="outline-2">
+<h2 id="sec-2">先来测试下环境是否可能？</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+呵呵，我写了一个hello, world的cgi，把它放到cgi-bin目录下即可，猛击：
+<a href="http://roygu.com/cgi-bin/hello.cgi"><a href="http://roygu.com/cgi-bin/hello.cgi">http://roygu.com/cgi-bin/hello.cgi</a></a>
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-3" class="outline-2">
+<h2 id="sec-3">一个简单的示例</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+假如有一个简单的表单（如下）：
+</p>
+
+
+<pre class="example">
+Multiplicand 1:
+
+Multiplicand 2:
+</pre>
+
+
+<p>
+效果如下：
+</p>
+
+
+
+
+
+
+<p>
+Multiplicand 1:
+</p>
+
+
+
+
+
+
+<p>
+Multiplicand 2:
+</p>
+
+
+
+
+
+
+
+
+
+<p>
+试一下？呵呵，输入4和9, 结果如下：
+</p>
+</div>
+</div>
+
+
+
+
+<div id="outline-container-sec-4" class="outline-2">
+<h2 id="sec-4">Multiplication results</h2>
+<div class="outline-text-2" id="text-4">
+<p>
+The product of 4 and 9 is 36.
+</p>
+</div>
+</div>
+
+
+
+
+
+<div id="outline-container-sec-5" class="outline-2">
+<h2 id="sec-5">对上面的示例进行分析</h2>
+<div class="outline-text-2" id="text-5">
+<p>
+我们现在来分析下上面例子是如何工作的。
+</p>
+
+<p>
+假设你在一个输入框中输入4,在另一个输入框中输入9，然后点击提交按钮。你的浏览器将会利用HTTP协议向服主机roygu.com发送一次请求。浏览器通过表单的Action属性来获得该主机名，而主机名只是action指定的URL的一部分。（很多时候，action属性使用相对URL指向同一服务器上的某个文件，当然像上面那个示例一样，这不是必须的。）
+</p>
+
+<p>
+当发送请求时，浏览器会提供额外的信息，在这种情况下，它会指定一个相对的URL：如下
+</p>
+
+<p>
+/cgi-bin/mult.cgi?m=4&amp;n=9
+</p>
+
+<p>
+这个是根据form表单的action属性主机名后面的那部分构建的，在后面添加问号和表单数据的编码形式。
+</p>
+
+<p>
+主机接收到请求后，并会根据自己的规则来处理它。一般来说，主机的配置中定义了相对URLS和本地目录/文件的映射关系，并且定义了执行cgi程式的目录。那么URL中的cgi-bin部分就是由主机指定的可执行cgi程式的目录。也就是说，主机为仅令是收集数据然后返回HTML文件或其他格式文件，而是执行URL中指定的脚本或程序（在这里是mult.cgi），并且给它传递相关数据（在这里，数据是m=4&amp;n=9）。
+</p>
+
+<p>
+在实际生产环境中，上面的过程还是要取决于服务器。在本文中，主机执行了roygu站点下的cgi-bin目录下的mult.cgi程式。在你的主机上可能就不一样了，这取决于主机的配置。
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-6" class="outline-2">
+<h2 id="sec-6">那么，什么是CGI编程？</h2>
+<div class="outline-text-2" id="text-6">
+<p>
+*CGI*的全称是*Common Gateway Interface*，这个术看上去很神秘，其实它只是一个规范，规定如何调用程序和参数如何传递的细节。
+</p>
+
+<p>
+程序调用意思是不同的情况有不同的调用方法。例如，如果是Pel脚本，那么主机便会启动Perl解释器并且让以解释方式执行当前脚本。如果是那种已经编译好了的可执行程序（比如C语言），那么主机会启动一个新进程来执行它。
+</p>
+
+<p>
+一般来说，“脚本”代表解释执行的代码，而CGI脚本即可以是解释型代码也可以是可执行程序。具体可以查看这里<a href="http://www.webthing.com/tutorials/cgifaq.1.html#2">answer to question Is it a script or a program</a>?
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-7" class="outline-2">
+<h2 id="sec-7">用C语言写CGI程式</h2>
+<div class="outline-text-2" id="text-7">
+<p>
+要把一个C程序转变成一个CGI脚本，需要把它转换成二进制可执行的程序。这通常是一个问题，因为大部份人在windows平台上工作，而服务器一般使用的是UNIX或LINUX。你开发程序的系统和你要运行CGI脚本的服务器系统可能有完全不一样的架构，所以同一个可执行程序只能在它们中的某个上运行。
+</p>
+
+<p>
+这可能是个无法解决的问题。如果你不能登陆服务器或者你找不到一个兼容的系统（或跨平台编译器），那么你很不走运。很多服务器允许你登陆并且交互模式下使用主机，也就是通常说的shell用户，并且主机包含有C编译器。
+</p>
+
+
+<pre class="example">
+你必须在服务器上编辑并链接你的C程序。（或者理论上来说，在一个相同架构的系统上也可以）
+</pre>
+
+
+<p>
+通常来说，你需要执行以下步骤：
+</p>
+
+
+<ol class="org-ol">
+<li>在正常的交互环境下，编译并且测试C程序
+</li>
+<li>为了适应CGI环境，对C程序做相应的修改。程序应该要读取表单提交的数据。使用默认的GTE方法，从环境变量输入“QUERY\_STRING”中读入输入。（当然程序也有可能从本机服器上的文件读取输入）程序应该在标准输出流（stdout）中产生输出，并且使用恰当的HTTP头。通常来说是HTML格式。
+</li>
+<li>再次编译测试。在这个测试阶段，你可以设置环境变量QUERY\_STRING，把表单发送过来的测试数据赋给它。例如，如果你打算在表单中使用foo字段域，那么你可以这样设置环境变量=setenv QUERY_STRING "foo=42" =(when using the tcsh shell)
+</li>
+</ol>
+<p>
+或者=QUERY_STRING="foo=42" =(when using the bash shell).
+</p>
+<ol class="org-ol">
+<li>检查你编译的版本能够在服务器上运行。这可能会需要再次编译。你可能需要登陆服务器（使用Telnet, SSH或其他终端模拟工具）
+</li>
+<li>新建一个简单的HTML页面，在此矾面中创建一个FORM表单
+</li>
+</ol>
+
+
+<p>
+现在呢，你把可执行文件放到某个合适的目录下，并且根据服务器规定给文件命名。即使是服务器端的编译命令和你正在使用的工作站的不一样。例如：如果服务器运行类Unix系统，并且装的是GNU C编译器，那么使用编译命令=gcc -o mult.cgi mult.c=，接着把= (mv) mult.cgi=移动某个目录下，比如=cgi-bin=，不过编译命令也可能是CC。强烈建议你检查服务器的指令。
+</p>
+
+<p>
+文件后缀.cgi没有实际的意义。但是此命名方式由服务器规定。一般来说会是.cgi和.exe。
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-8" class="outline-2">
+<h2 id="sec-8">如何处理一个简单的表单</h2>
+<div class="outline-text-2" id="text-8">
+<p>
+对于使用=METHOD="GET"=的表单（就像上面介绍的那个表单一样，GET也是表单默认的提交方式）来说，CGI规定数据通过环境变量=QUERY_STRING=传递给程序。
+</p>
+
+
+<p>
+如何访问环境变量和脚本或程序语言有关。在C语言中，你可以使用库函数=getenv=(在标准库stdlib中定义)以字符串形式获取环境变量的值。接着你可以使用变量技术从字符串中提取数据，把数据转为数字类型等等。。。
+</p>
+
+<p>
+脚本或程序输出是一种特殊的方式处理的，就好比C语言的=stdin=实际上，它是定向输出到浏览器。因此，通过写一个C程序，它的标准输出是一个HTML文件，这个文件将会出现在用户的屏幕上，作为对表单提交的回应。
+</p>
+
+<p>
+C代码如下：
+</p>
+
+
+<pre class="example">
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+int main(void)
+{
+char *data;
+long m,n;
+printf("%s%c%c\n",
+"Content-Type:text/html;charset=iso-8859-1",13,10);
+printf("&lt;TITLE&gt;Multiplication results&lt;/TITLE&gt;\n");
+printf("&lt;H3&gt;Multiplication results&lt;/H3&gt;\n");
+data = getenv("QUERY_STRING");
+if(data == NULL)
+  printf("&lt;P&gt;Error! Error in passing data from form to script.");
+else if(sscanf(data,"m=%ld&amp;n=%ld",&amp;m,&amp;n)!=2)
+  printf("&lt;P&gt;Error! Invalid data. Data must be numeric.");
+else
+  printf("&lt;P&gt;The product of %ld and %ld is %ld.",m,n,m*n);
+return 0;
+}
+</pre>
+
+
+<p>
+以下略。。。
+</p>
+</div>
+</div>
+
+      </div>
+    </div>
+    <div> 
+      <div class="post-meta">
+        <span title="post date" class="post-info">2010-09-15</span>
+        <span title="last modification date" class="post-info">2013-07-04</span>
+        <span title="tags" class="post-info"><a href="/tags/apache/">apache</a>, <a href="/tags/c/">c</a>, <a href="/tags/cgi/">cgi</a>, <a href="/tags/web/">web</a></span>
+        <span title="author" class="post-info">Gu Weigang</span>
+      </div>
+      <section>
+        <h1>Comments</h1>
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+          //var disqus_developer = 1;
+          var disqus_identifier = "/blog/2010/09/15/cgi-programs-written-in-c-language-getting-started-guide/";
+          var disqus_url = "http://guweigang.com/blog/2010/09/15/cgi-programs-written-in-c-language-getting-started-guide/";
+          var disqus_shortname = 'guweigang';
+          /* * * DON'T EDIT BELOW THIS LINE * * */
+          (function() {
+          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+          dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+          })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </section>
+      <div class="footer">
+        <p>Generated by <a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.3.1 (<a href="http://orgmode.org">Org</a> mode 8.0.3)</p>
+        <p> 
+          Copyright &copy; 2012 - 2013 <a href="mailto:guweigang &lt;at&gt; outlook &lt;dot&gt; com">Gu Weigang</a>
+          &nbsp;&nbsp;-&nbsp;&nbsp;
+          Powered by <a href="https://github.com/kelvinh/org-page" target="_blank">org-page</a>
+        </p>
+      </div>
+    </div>
+  </body>
+</html>

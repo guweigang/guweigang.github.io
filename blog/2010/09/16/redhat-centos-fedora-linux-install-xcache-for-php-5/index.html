@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <title>Redhat / CentOS / Fedora Linux Install XCache for PHP 5 - 闭眼听世界</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Gu Weigang" />
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <link rel="stylesheet" href="/media/css/main.css" type="text/css">
+  </head>
+  <body class="container">
+    <div> 
+      <header class="masthead">
+        <h1 class="masthead-title"><a href="/">闭眼听世界</a></h1>
+        <p>心如松静意无尘，气若浮萍了无痕！</p>
+        <ul>
+          <li><a href="/blog/">Blog</a></li>
+          <li><a href="/wiki/">Wiki</a></li>
+          <li><a href="/tags/">Tags</a></li>
+          <li><a href="/about/">About</a></li>
+          <li><a href="https://github.com/guweigang">GitHub</a></li>
+          <li><a href="https://google.com/search?q=site:guweigang.com">Search</a></li>
+        </ul>
+      </header>
+    </div>
+    <div> 
+      <div class="post">
+        <h1>Redhat / CentOS / Fedora Linux Install XCache for PHP 5</h1>
+        <p>
+转至<a href="http://www.cyberciti.biz/faq/howto-rhel-install-xcahce-php-opcode-cacher/"><a href="http://www.cyberciti.biz/faq/howto-rhel-install-xcahce-php-opcode-cacher/">http://www.cyberciti.biz/faq/howto-rhel-install-xcahce-php-opcode-cacher/</a></a>
+</p>
+
+
+<pre class="example">
+都是很简单的英文，我就不译了。为了装xcache，今天还装了gcc-g++, php-devel（因为要用到phpize），装完后php的效率真明显有改善。
+xcache所有发布版本都在这里，http://xcache.lighttpd.net/pub/Releases/，本人装的是最版，即1.3.0
+</pre>
+
+
+<p>
+How do I install Xcache opcode cacher for PHP 5 under RHEL / CentOS version 5.0 server?
+</p>
+
+<p>
+XCache is a open-source opcode cacher, which means that it accelerates the performance of PHP on servers. It optimizes performance by removing the compilation time of PHP scripts by caching the compiled state of PHP scripts into the shm (RAM) and uses the compiled version straight from the RAM. This will increase the rate of page generation time by up to 5 times as it also optimizes many other aspects of php scripts and reduce serverload.
+</p>
+
+
+
+
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1">Step # 1: Download xcahce source code</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+Use wget command to download latest stable release:
+=# cd /opt
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-2" class="outline-2">
+<h2 id="sec-2">Step # 2: Untar tar ball</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+Use tar command:
+=# tar -zxvf xcache-1.2.1.tar.gz
+</p>
+<p>
+=
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-3" class="outline-2">
+<h2 id="sec-3">Step # 2: Compile and install xcahce</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+Use phpize command to prepare xcache as a PHP extension for compiling:
+<code># phpize</code>
+Configure, compile and install xcache:
+=# ./configure --enable-xcache
+</p>
+</div>
+
+
+<div id="outline-container-sec-3-1" class="outline-3">
+<h3 id="sec-3-1">Default xcache.so installation location</h3>
+<div class="outline-text-3" id="text-3-1">
+<ul class="org-ul">
+<li>64 bit PHP module installed at */usr/lib64/php/modules/xcache.so*
+</li>
+<li>32 bit PHP module installed at */usr/lib/php/modules/xcache.so*
+</li>
+</ul>
+</div>
+</div>
+</div>
+
+
+
+<div id="outline-container-sec-4" class="outline-2">
+<h2 id="sec-4">Step # 3: Create xcache.ini file</h2>
+<div class="outline-text-2" id="text-4">
+<p>
+Under RHEL / CentOS, you place php modules configuration at <i>etc/php.d</i> directory:
+<code># cd /etc/php.d/</code>
+Create xcache.ini file:
+<code># vi xcache.ini</code>
+Append configuration directives:
+</p>
+
+
+<pre class="example">
+[xcache-common]
+; change me - 64 bit php =&gt; /usr/lib64/php/modules/xcache.so
+; 32 bit php =&gt; /usr/lib/php/modules/xcache.so
+zend_extension = /usr/lib64/php/modules/xcache.so
+
+[xcache.admin]
+xcache.admin.auth = On
+xcache.admin.user = "mOo"
+; xcache.admin.pass = md5($your_password)
+xcache.admin.pass = ""
+
+[xcache]
+xcache.shm_scheme =        "mmap"
+xcache.size  =               32M
+xcache.count =                 1
+xcache.slots =                8K
+xcache.ttl   =              3600
+xcache.gc_interval =         300
+
+; Same as aboves but for variable cache
+; If you don't know for sure that you need this, you probably don't
+xcache.var_size  =            0M
+xcache.var_count =             1
+xcache.var_slots =            8K
+xcache.var_ttl   =             0
+xcache.var_maxttl   =          0
+xcache.var_gc_interval =     300
+
+; N/A for /dev/zero
+xcache.readonly_protection = Off
+
+xcache.mmap_path =    "/dev/zero"
+
+xcache.cacher =               On
+xcache.stat   =               On
+</pre>
+
+
+<p>
+Save and close the file.
+</p>
+
+<p>
+Alternatively, you can also copy default xcache.ini to <i>etc/php.d</i>
+=# cp xcache.ini <i>etc/php.d</i>
+</p>
+<p>
+Restart your Apache web server:
+<code># service httpd restart</code>
+</p>
+
+<p>
+If you are using Lighttpd web server, enter:
+<code># service lighttpd restart</code>
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-5" class="outline-2">
+<h2 id="sec-5">Step # 4: Make sure xcache is working</h2>
+<div class="outline-text-2" id="text-5">
+<p>
+Type the following command for verification:
+<code>$ php -v</code>
+Output:
+</p>
+
+
+<pre class="example">
+PHP 5.1.6 (cli) (built: Nov 20 2007 11:11:52)
+Copyright (c) 1997-2006 The PHP Group
+Zend Engine v2.1.0, Copyright (c) 1998-2006 Zend Technologies
+    with XCache v1.2.1, Copyright (c) 2005-2007, by mOo
+</pre>
+
+
+<p>
+You should see line "XCache v1.2.1, Copyright (c) 2005-2007, by mOo"
+</p>
+</div>
+</div>
+
+      </div>
+    </div>
+    <div> 
+      <div class="post-meta">
+        <span title="post date" class="post-info">2010-09-16</span>
+        <span title="last modification date" class="post-info">2013-07-04</span>
+        <span title="tags" class="post-info"><a href="/tags/centos/">centos</a>, <a href="/tags/php5/">php5</a>, <a href="/tags/xcache/">xcache</a></span>
+        <span title="author" class="post-info">Gu Weigang</span>
+      </div>
+      <section>
+        <h1>Comments</h1>
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+          //var disqus_developer = 1;
+          var disqus_identifier = "/blog/2010/09/16/redhat-centos-fedora-linux-install-xcache-for-php-5/";
+          var disqus_url = "http://guweigang.com/blog/2010/09/16/redhat-centos-fedora-linux-install-xcache-for-php-5/";
+          var disqus_shortname = 'guweigang';
+          /* * * DON'T EDIT BELOW THIS LINE * * */
+          (function() {
+          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+          dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+          })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </section>
+      <div class="footer">
+        <p>Generated by <a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.3.1 (<a href="http://orgmode.org">Org</a> mode 8.0.3)</p>
+        <p> 
+          Copyright &copy; 2012 - 2013 <a href="mailto:guweigang &lt;at&gt; outlook &lt;dot&gt; com">Gu Weigang</a>
+          &nbsp;&nbsp;-&nbsp;&nbsp;
+          Powered by <a href="https://github.com/kelvinh/org-page" target="_blank">org-page</a>
+        </p>
+      </div>
+    </div>
+  </body>
+</html>

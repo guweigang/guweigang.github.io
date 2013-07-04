@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <title>Solar_Form与Solar_Filter相约鹊桥 - 闭眼听世界</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Gu Weigang" />
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <link rel="stylesheet" href="/media/css/main.css" type="text/css">
+  </head>
+  <body class="container">
+    <div> 
+      <header class="masthead">
+        <h1 class="masthead-title"><a href="/">闭眼听世界</a></h1>
+        <p>心如松静意无尘，气若浮萍了无痕！</p>
+        <ul>
+          <li><a href="/blog/">Blog</a></li>
+          <li><a href="/wiki/">Wiki</a></li>
+          <li><a href="/tags/">Tags</a></li>
+          <li><a href="/about/">About</a></li>
+          <li><a href="https://github.com/guweigang">GitHub</a></li>
+          <li><a href="https://google.com/search?q=site:guweigang.com">Search</a></li>
+        </ul>
+      </header>
+    </div>
+    <div> 
+      <div class="post">
+        <h1>Solar_Form与Solar_Filter相约鹊桥</h1>
+        <p>
+其实这个主题之前<a href="http://lifephp.com">@life</a>的<a href="http://lifephp.com/wp-content/uploads/solarphp/Solar_Model_Form_Filter.htm#id398933">一篇文章</a>中提到过，我在这里稍微补充一下。
+</p>
+
+<p>
+Solar的模型非常强大，比Zend的不知强多少。但模型不是万能的，有时候为了使数据库更优雅，不得不放弃使用模型。就和Ajax不是万能的一样，当用户禁用JS时必须有后备方案。
+</p>
+
+<p>
+前面我们讨论过<a href="http://roygu.com/?p=806">也说Solar自定义Filter</a>和<a href="http://roygu.com/?p=843">Solar\_Form、Solar\_Sql\_Model\_Record和Solar\_Filter三者交织在一起的复杂关系</a>了，今天我们就来讨论下Solar\_Form和Solar\_Filter这个话题，也是这一系列主题的完结篇。
+</p>
+
+<p>
+刚才我有说过有时候需要折中而放弃模型的使用，现在我就介绍一种应用场景，比如：全站的配置表，很多人会把它放文件中，写成数组的形式返回，也有人会做成<a href="http://www.yaml.org/">YAML</a>或XML，总之都是存文件，这没有什么不妥，不过我更喜欢存数据库。无论是使用文件还是数据库，数据结构是一致的，都是键－值对形式，而一般来说值都不只一个，
+如：配置全站的支付信息
+</p>
+
+
+<pre class="example">
+键为：pay
+值为：
+支付宝　   - alipay 
+财付通　   - tenpay
+网银在线　 - bankonline
+</pre>
+
+
+<p>
+所以一般来说这里的值会是XML字符串形式或是数组序列化后的形式。
+下面看下数据库设计：
+</p>
+
+
+<pre class="example">
+CREATE TABLE `systems` (
+  `id` int(11) NOT NULL auto_increment,
+  `key` varchar(16) NOT NULL COMMENT '键',
+  `value` text COMMENT '值',
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COMMENT='系统设置表 - 键、值'
+</pre>
+
+
+<p>
+相信很多人都会这么做，:) 我们继续上面这个例子，先建表单：
+</p>
+
+
+<pre class="example">
+$this-&gt;form = Solar::factory("Solar_Form",
+    array('filter' =&gt; Solar::factory('Admin_Filter')));
+// add payment elements
+$this-&gt;form-&gt;setElements(array(
+    'system[alipay_id]' =&gt; array('type'=&gt;'text', 'label'=&gt;'支付宝ID',),
+    'system[alipay_key]' =&gt; array('type'=&gt;'text', 'label'=&gt;'支付宝密钥',),
+    'system[alipay_email]' =&gt; array('type'=&gt;'text', 'label'=&gt; '支付宝邮箱',),
+    'system[bank_online_id]' =&gt; array('type'=&gt;'text', 'label'=&gt;'网银在线ID'),
+    'system[bank_online_key]' =&gt; array('type' =&gt; 'text', 'label'=&gt;'网解在线密钥'),
+    'system[tenpay_id]' =&gt; array('type' =&gt; 'text', 'label' =&gt; '财付通ID'),
+    'system[tenpay_key]' =&gt; array('type' =&gt; 'text', 'label' =&gt; '财付通密钥'),
+));
+</pre>
+
+
+<p>
+然后添加Filters
+</p>
+
+
+<pre class="example">
+//-------------------------------------------
+// add filters for form
+//-------------------------------------------
+$this-&gt;form-&gt;addFilter('system[alipay_id]', array('validateNotBlank'));
+$this-&gt;form-&gt;addFilter('system[alipay_key]', array('validateNotBlank'));
+$this-&gt;form-&gt;addFilters('system[alipay_email]',
+array('validateNotBlank', 'validateEmail', 'validateDiscount'));
+</pre>
+
+
+<p>
+当提交表单时，填充值并验证
+</p>
+
+
+<pre class="example">
+//-------------------------------------------
+// process save
+//-------------------------------------------
+if($this-&gt;_isProcess('save'))
+{
+    $this-&gt;form-&gt;populate();
+    if(!$this-&gt;form-&gt;validate())
+    {
+        var_dump($this-&gt;form-&gt;getInvalids());
+        exit;
+        $this-&gt;form-&gt;addInvalid('system[alipay_email]', '邮件格式不正确');
+        return ;
+    }
+    if($this-&gt;_systemSave('pay', $data, $item))
+    {
+        // if save success, redirect to this uri
+        $uri = '/'.$this-&gt;_controller.'/'.$this-&gt;_action;
+        return $this-&gt;_redirectNoCache($uri);
+    }
+}
+</pre>
+
+
+
+<p>
+这个工作也就完成了，呵呵，大家注意看$this-&gt;form-&gt;getInvalids()方法，这个方法是我加到Solar\_Form中的，为了更方便地获得invalid消息，看看它的代码：
+</p>
+
+
+<pre class="example">
+public function getInvalids($element = null)
+{
+    $valids = $this-&gt;_filter-&gt;getChainInvalid($element);
+    if(null === $element) {
+        $return = array();
+        foreach($valids as $_element =&gt; $_valid) {
+            $return[$_element] = $_valid[0];
+        }
+        return $return;
+    }
+    else
+        return $valids[0];
+}
+</pre>
+
+      </div>
+    </div>
+    <div> 
+      <div class="post-meta">
+        <span title="post date" class="post-info">2010-08-17</span>
+        <span title="last modification date" class="post-info">2013-07-04</span>
+        <span title="tags" class="post-info"><a href="/tags/solar_filter/">Solar_Filter</a>, <a href="/tags/solar/">solar</a>, <a href="/tags/solar-php/">solar php</a>, <a href="/tags/solar_form/">solar_form</a></span>
+        <span title="author" class="post-info">Gu Weigang</span>
+      </div>
+      <section>
+        <h1>Comments</h1>
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+          //var disqus_developer = 1;
+          var disqus_identifier = "/blog/2010/08/17/solar_form-with-solar_filter-meet-magpie/";
+          var disqus_url = "http://guweigang.com/blog/2010/08/17/solar_form-with-solar_filter-meet-magpie/";
+          var disqus_shortname = 'guweigang';
+          /* * * DON'T EDIT BELOW THIS LINE * * */
+          (function() {
+          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+          dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+          })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </section>
+      <div class="footer">
+        <p>Generated by <a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.3.1 (<a href="http://orgmode.org">Org</a> mode 8.0.3)</p>
+        <p> 
+          Copyright &copy; 2012 - 2013 <a href="mailto:guweigang &lt;at&gt; outlook &lt;dot&gt; com">Gu Weigang</a>
+          &nbsp;&nbsp;-&nbsp;&nbsp;
+          Powered by <a href="https://github.com/kelvinh/org-page" target="_blank">org-page</a>
+        </p>
+      </div>
+    </div>
+  </body>
+</html>

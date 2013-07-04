@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <title>solar for xp中的sync-vendor命令 - 闭眼听世界</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Gu Weigang" />
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <link rel="stylesheet" href="/media/css/main.css" type="text/css">
+  </head>
+  <body class="container">
+    <div> 
+      <header class="masthead">
+        <h1 class="masthead-title"><a href="/">闭眼听世界</a></h1>
+        <p>心如松静意无尘，气若浮萍了无痕！</p>
+        <ul>
+          <li><a href="/blog/">Blog</a></li>
+          <li><a href="/wiki/">Wiki</a></li>
+          <li><a href="/tags/">Tags</a></li>
+          <li><a href="/about/">About</a></li>
+          <li><a href="https://github.com/guweigang">GitHub</a></li>
+          <li><a href="https://google.com/search?q=site:guweigang.com">Search</a></li>
+        </ul>
+      </header>
+    </div>
+    <div> 
+      <div class="post">
+        <h1>solar for xp中的sync-vendor命令</h1>
+        <p>
+上次和<a href="http://lifephp.com">@life</a>讨论关于solar xp的事情，目前solar xp处于测试阶段，你可以在论坛中下载symlink.php及unlinkvendor.php两个文件覆盖 solar-system-1.1.1-win-0.2中相应的两个文件，<a href="http://solarphp.org.cn/viewtopic.php?f=6&t=104">下载请点这里</a>。
+</p>
+
+<p>
+在XP中只能使用copy的方式来同步文件，不过现在的版本仅当使用unlink-vendor命令时才会触发同步事件，把include/Vendor目录中的文件同步到/source/vendor/Vendor中。这种做法同时也会删除include/Vendor目录，且没有考虑/include/Test/Vendor等三个目录，也给solar xp用户带了很大的不便。所以现在考虑增加一个命令sync-vendor，这个命令只在windows xp, 2000或2003不技持Symlink的系统上使用，如果在windows vista或7中使用会提示“this command is only for windows below vista”。
+</p>
+
+<p>
+昨天晚上做了一个测试，代码如下：
+</p>
+
+
+<pre class="example">
+$vendor = 'Acme';
+$system = 'D:\\xampp\htdocs\solarlatest';
+$script = 'acme';
+
+// D:\xampp\htdocs\solarlatest\include\Acme\App\{$controller}\Public
+$dir = $system."\docroot\public\\$vendor\App";
+
+// D:\xampp\htdocs\solarlatest\include\{$vendor}\Controller\Bread\Public
+$dir_bread = $system."\docroot\public\\$vendor\Controller\Bread";
+$dir_include_bread = $system."\include\\$vendor\Controller\Bread\Public";
+echo $dir_include_bread." &lt;= ".$dir_bread;
+
+echo "\n";
+
+// D:\xampp\htdocs\solarlatest\include\{$vendor}\Controller\Page\Public
+$dir_page= $system."\docroot\public\\$vendor\Controller\Page";
+$dir_include_page = $system."\include\\$vendor\Controller\Page\Public";
+echo $dir_include_page." &lt;= ".$dir_bread;
+
+echo "\n";
+
+// D:\xampp\htdocs\solarlatest\include\Fixture\\$vendor =&gt; D:\xampp\htdocs\solarlatest\source\\$script\\tests\Fixture
+// D:\xampp\htdocs\solarlatest\include\Mock\\$vendor =&gt; D:\xampp\htdocs\solarlatest\source\\$script\\tests\Mock
+// D:\xampp\htdocs\solarlatest\include\Test\\$vendor =&gt; d:\xampp\htdocs\solarlatest\source\\$script\\tests\Test
+$dir_fixture = $system."\include\Fixture\\$vendor";
+$dir_source_fixture = $system.'\source\\'.$script.'\tests\Fixture';
+echo $dir_source_fixture. " &lt;= " . $dir_fixture;
+
+echo "\n";
+
+$dir_mock = $system."\include\Mock\\$vendor";
+$dir_source_mock = $system.'\source\\'.$script.'\tests\Mock';
+echo $dir_source_mock. " &lt;= " . $dir_mock;
+
+echo "\n";
+
+$dir_test = $system."\include\Test\\$vendor";
+$dir_source_test = $system.'\source\\'.$script.'\tests\Test';
+echo $dir_source_test. " &lt;= " . $dir_test;
+
+echo "\n";
+
+$dir_iterator = new DirectoryIterator($dir);
+
+foreach ($dir_iterator as $fileinfo) {
+    if(!$fileinfo-&gt;isDot()){
+        echo $system.'\include\\'.$vendor.'\App\\'.$fileinfo-&gt;getFilename().'\\Public'." &lt;= ";
+        echo $fileinfo-&gt;getPathname() . "\n";
+    }
+}
+</pre>
+
+
+
+
+<pre class="example">
+---------- Debug PHP 5.3.1 ----------
+D:\xampp\htdocs\solarlatest\include\Acme\Controller\Bread\Public &lt;= D:\xampp\htdocs\solarlatest\docroot\public\Acme\Controller\Bread
+D:\xampp\htdocs\solarlatest\include\Acme\Controller\Page\Public &lt;= D:\xampp\htdocs\solarlatest\docroot\public\Acme\Controller\Bread
+D:\xampp\htdocs\solarlatest\source\acme\tests\Fixture &lt;= D:\xampp\htdocs\solarlatest\include\Fixture\Acme
+D:\xampp\htdocs\solarlatest\source\acme\tests\Mock &lt;= D:\xampp\htdocs\solarlatest\include\Mock\Acme
+D:\xampp\htdocs\solarlatest\source\acme\tests\Test &lt;= D:\xampp\htdocs\solarlatest\include\Test\Acme
+D:\xampp\htdocs\solarlatest\include\Acme\App\Admin\Public &lt;= D:\xampp\htdocs\solarlatest\docroot\public\Acme\App\Admin
+D:\xampp\htdocs\solarlatest\include\Acme\App\Blog\Public &lt;= D:\xampp\htdocs\solarlatest\docroot\public\Acme\App\Blog
+D:\xampp\htdocs\solarlatest\include\Acme\App\Rss\Public &lt;= D:\xampp\htdocs\solarlatest\docroot\public\Acme\App\Rss
+D:\xampp\htdocs\solarlatest\include\Acme\App\Tom\Public &lt;= D:\xampp\htdocs\solarlatest\docroot\public\Acme\App\Tom
+
+Output completed (1 sec consumed) - Normal Termination
+</pre>
+
+      </div>
+    </div>
+    <div> 
+      <div class="post-meta">
+        <span title="post date" class="post-info">2010-07-16</span>
+        <span title="last modification date" class="post-info">2013-07-04</span>
+        <span title="tags" class="post-info"><a href="/tags/solar/">solar</a>, <a href="/tags/solar-php/">solar php</a>, <a href="/tags/sync-vendor/">sync-vendor</a>, <a href="/tags/xp/">xp</a></span>
+        <span title="author" class="post-info">Gu Weigang</span>
+      </div>
+      <section>
+        <h1>Comments</h1>
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+          //var disqus_developer = 1;
+          var disqus_identifier = "/blog/2010/07/16/solar-for-xp-in-sync-vendor-command/";
+          var disqus_url = "http://guweigang.com/blog/2010/07/16/solar-for-xp-in-sync-vendor-command/";
+          var disqus_shortname = 'guweigang';
+          /* * * DON'T EDIT BELOW THIS LINE * * */
+          (function() {
+          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+          dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+          })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </section>
+      <div class="footer">
+        <p>Generated by <a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.3.1 (<a href="http://orgmode.org">Org</a> mode 8.0.3)</p>
+        <p> 
+          Copyright &copy; 2012 - 2013 <a href="mailto:guweigang &lt;at&gt; outlook &lt;dot&gt; com">Gu Weigang</a>
+          &nbsp;&nbsp;-&nbsp;&nbsp;
+          Powered by <a href="https://github.com/kelvinh/org-page" target="_blank">org-page</a>
+        </p>
+      </div>
+    </div>
+  </body>
+</html>

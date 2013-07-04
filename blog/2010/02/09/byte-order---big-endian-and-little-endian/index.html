@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <title>[非原创]字节顺序:大端字节(big-endian)和小端字节(little-endian) - 闭眼听世界</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Gu Weigang" />
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <link rel="stylesheet" href="/media/css/main.css" type="text/css">
+  </head>
+  <body class="container">
+    <div> 
+      <header class="masthead">
+        <h1 class="masthead-title"><a href="/">闭眼听世界</a></h1>
+        <p>心如松静意无尘，气若浮萍了无痕！</p>
+        <ul>
+          <li><a href="/blog/">Blog</a></li>
+          <li><a href="/wiki/">Wiki</a></li>
+          <li><a href="/tags/">Tags</a></li>
+          <li><a href="/about/">About</a></li>
+          <li><a href="https://github.com/guweigang">GitHub</a></li>
+          <li><a href="https://google.com/search?q=site:guweigang.com">Search</a></li>
+        </ul>
+      </header>
+    </div>
+    <div> 
+      <div class="post">
+        <h1>[非原创]字节顺序:大端字节(big-endian)和小端字节(little-endian)</h1>
+        <p>
+原文链接: <a href="http://blog.csdn.net/suyouxin/archive/2006/06/01/767857.aspx"><a href="http://blog.csdn.net/suyouxin/archive/2006/06/01/767857.aspx">http://blog.csdn.net/suyouxin/archive/2006/06/01/767857.aspx</a></a>
+今天碰一个关于字节顺序的问题,虽然看起来很简单,但一直都没怎么完全明白这个东西,索性就找了下资料,把它弄清楚.
+因为现行的计算机都是以八位一个字节为存储单位,那么一个16位的整数,也就是C语言中的short,在内存中可能有两种存储顺序big-endian和 litte-endian.考虑一个short整数0x3132(0x32是低位,0x31是高位),把它赋值给一个short变量,那么它在内存中的存储可能有如下两种情况:
+大端字节(Big-endian):
+&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;内存地址增大方向
+short变量地址
+0x1000 0x1001
+\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+</p>
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col class="left"/>
+</colgroup>
+<tbody>
+<tr>
+<td class="left">                       </td>
+</tr>
+
+<tr>
+<td class="left">       0x31      </td>            0x32
+</tr>
+
+<tr>
+<td class="left">\_\_\_\_\_\_\_\_\_</td> \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+</tr>
+</tbody>
+</table>
+<p>
+高位字节在低位字节的前面,也就是高位在内存地址低的一端.可以这样记住(大端-&gt;高位-&gt;在前-&gt;正常的逻辑顺序)
+</p>
+
+<p>
+小端字节(little-endian):
+&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;内存地址增大方向
+short变量地址
+0x1000 0x1001
+\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+</p>
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col class="left"/>
+</colgroup>
+<tbody>
+<tr>
+<td class="left">                      </td>
+</tr>
+
+<tr>
+<td class="left">      0x32     </td>      0x31
+</tr>
+
+<tr>
+<td class="left">\_\_\_\_\_\_\_\_ </td> \_\_\_\_\_\_\_\_\_\_\_\_\_
+</tr>
+</tbody>
+</table>
+<p>
+低位字节在高位字节的前面,也就是低位在内存地址低的一端.可以这样记住(小端-&gt;低位-&gt;在前-&gt;与正常逻辑顺序相反)
+</p>
+
+<p>
+可以做个实验
+在windows上如下程序
+</p>
+
+
+<pre class="example">
+    #include 
+#include 
+void main( void )
+{
+        short test;
+        FILE* fp;
+        test = 0x3132;  //(31ASIIC码的’1’,32ASIIC码的’2’)
+        if ((fp = fopen ("c:\\test.txt", "wb")) == NULL)
+              assert(0);
+        fwrite(&amp;test, sizeof(short), 1, fp);
+        fclose(fp);
+}
+</pre>
+
+
+<p>
+然后在C盘下打开test.txt文件,可以看见内容是21,而test等于0x3132,可以明显的看出来x86的字节顺序是低位在前.如果我们把这段同样的代码放到(big-endian)的机器上执行,那么打出来的文件就是12.这在本机中使用是没有问题的.但当你把这个文件从一个big- endian机器复制到一个little-endian机器上,再直接将数据读到short变量时就出现问题了.
+如上述例子,我们在big-endian的机器上创建了这个test文件,把其复制到little-endian的机器上再用fread读到一个 short变量里面,我们得到的就不再是0x3132而是0x3231了,这样读到的数据与我们的本意不相符，是错误的,所以在两个字节顺序不一样的机器上交互数据时需要特别小心字节顺序,理解了字节顺序在可以帮助我们写出移植行更高的代码.
+正因为有字节顺序的差别,所以在网络传输的时候定义了所有字节顺序相关的数据都使用big-endian,BSD的代码中定义了四个宏来处理:
+</p>
+
+
+<pre class="example">
+    #define ntohs(n)     //网络字节顺序到主机字节顺序 n代表net, h代表host, s代表short
+#define htons(n)     //主机字节顺序到网络字节顺序 n代表net, h代表host, s代表short
+#define ntohl(n)      //网络字节顺序到主机字节顺序 n代表net, h代表host, l代表 long
+#define htonl(n)      //主机字节顺序到网络字节顺序 n代表net, h代表host, l代表 long
+</pre>
+
+
+<p>
+举例说明下这其中一个宏的实现:
+</p>
+
+
+<pre class="example">
+ #define sw16(x) \
+((short)( \
+    (((short)(x) &amp; (short)0x00ffU) &lt;&lt; 8) | \         (((short)(x) &amp; (short)0xff00U) &gt;&gt; 8) ))
+</pre>
+
+
+<p>
+这里实现的是一个交换两个字节顺序.其他几个宏类似.
+我们改写一下上面的程序
+</p>
+
+
+<pre class="example">
+    #include 
+#include 
+#define sw16(x) \
+    ((short)( \
+        (((short)(x) &amp; (short)0x00ffU) &lt;&lt; 8) | \         (((short)(x) &amp; (short)0xff00U) &gt;&gt; 8) ))
+// 因为x86下面是低位在前,需要交换一下变成网络字节顺序
+#define htons(x) sw16(x)
+void main( void )
+{
+        short test;
+        FILE* fp;
+        test = htons(0x3132); //(31ASIIC码的’1’,32ASIIC码的’2’)
+        if ((fp = fopen ("c:\\test.txt", "wb")) == NULL)
+              assert(0);
+        fwrite(&amp;test, sizeof(short), 1, fp);
+        fclose(fp);
+}
+</pre>
+
+
+<p>
+如果在高字节在前的机器上,由于与网络字节顺序一致,所以我们什么都不干就可以了,只需要把
+</p>
+
+
+<pre class="example">
+#define htons(x) sw16(x)
+</pre>
+
+
+<p>
+宏替换为
+</p>
+
+
+<pre class="example">
+#define htons(x) (x).
+</pre>
+
+
+<p>
+一开始我在理解这个问题时,总在想为什么其他数据不用交换字节顺序?比如说我们write一块buffer到文件,最后终于想明白了,因为都是以 unsigned char类型一个字节一个字节的写进去,这个顺序是固定的,不存在字节顺序的问题,只有对short或者int赋值时存在这个问题,t够笨啊..
+</p>
+
+      </div>
+    </div>
+    <div> 
+      <div class="post-meta">
+        <span title="post date" class="post-info">2010-02-09</span>
+        <span title="last modification date" class="post-info">2013-07-04</span>
+        <span title="tags" class="post-info"><a href="/tags/big-endian/">big-endian</a>, <a href="/tags/little-endian/">little-endian</a>, <a href="/tags/大端字节/">大端字节</a>, <a href="/tags/小端字节/">小端字节</a></span>
+        <span title="author" class="post-info">Gu Weigang</span>
+      </div>
+      <section>
+        <h1>Comments</h1>
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+          //var disqus_developer = 1;
+          var disqus_identifier = "/blog/2010/02/09/byte-order---big-endian-and-little-endian/";
+          var disqus_url = "http://guweigang.com/blog/2010/02/09/byte-order---big-endian-and-little-endian/";
+          var disqus_shortname = 'guweigang';
+          /* * * DON'T EDIT BELOW THIS LINE * * */
+          (function() {
+          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+          dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+          })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </section>
+      <div class="footer">
+        <p>Generated by <a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.3.1 (<a href="http://orgmode.org">Org</a> mode 8.0.3)</p>
+        <p> 
+          Copyright &copy; 2012 - 2013 <a href="mailto:guweigang &lt;at&gt; outlook &lt;dot&gt; com">Gu Weigang</a>
+          &nbsp;&nbsp;-&nbsp;&nbsp;
+          Powered by <a href="https://github.com/kelvinh/org-page" target="_blank">org-page</a>
+        </p>
+      </div>
+    </div>
+  </body>
+</html>

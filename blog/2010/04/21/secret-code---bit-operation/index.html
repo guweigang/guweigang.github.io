@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <title>代码揭秘：位操作 - 闭眼听世界</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Gu Weigang" />
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <link rel="stylesheet" href="/media/css/main.css" type="text/css">
+  </head>
+  <body class="container">
+    <div> 
+      <header class="masthead">
+        <h1 class="masthead-title"><a href="/">闭眼听世界</a></h1>
+        <p>心如松静意无尘，气若浮萍了无痕！</p>
+        <ul>
+          <li><a href="/blog/">Blog</a></li>
+          <li><a href="/wiki/">Wiki</a></li>
+          <li><a href="/tags/">Tags</a></li>
+          <li><a href="/about/">About</a></li>
+          <li><a href="https://github.com/guweigang">GitHub</a></li>
+          <li><a href="https://google.com/search?q=site:guweigang.com">Search</a></li>
+        </ul>
+      </header>
+    </div>
+    <div> 
+      <div class="post">
+        <h1>代码揭秘：位操作</h1>
+        <p>
+C/C++语言提供了位操作符用以实现二进制位操作，位操作符共6个：&amp; - 按位与，| - 按位或，\^ - 按位异或，~ - 取反，<a id="" name=""></a> - 右移。
+</p>
+
+<p>
+除了~是单目运算符以外，其他均为又目运算符。此外，位操作符所操作的数据类型只能是整型或者字符型数据。
+</p>
+
+
+<ol class="org-ol">
+<li>按位与( &amp; )
+</li>
+</ol>
+<p>
+“与”运算是一种基本逻辑运算，简单说来就是参与运算的双方都为1时，结果为1；否则结果为0.“与”运算可以实现以下一些特殊的功能。(1) “与”运算可以实现清零的功能。如果需要将一个单元清零，只需要将其全部二制进位与0做“与”运算即可。
+</p>
+
+
+<pre class="example">
+         int a = 18;
+ a &amp;= 0;
+ printf("%d\n", a);
+  std::cout &lt;&lt; "Press Enter or Return to exit:";
+std::cin.get();
+    return 0;
+</pre>
+
+
+<p>
+输出结果为0。
+(2) 通过“与”运算可以取出一个数中指定的某些位。
+</p>
+
+
+<pre class="example">
+       int a = 358;
+a &amp;= 0xFF;
+  printf("%d\n", a);
+  std::cout &lt;&lt; "Press Enter or Return to exit:";
+std::cin.get();
+    return 0;
+</pre>
+
+
+<p>
+输出结果是102.
+(3) 如果想把某个数中的某一位保存下来，那么就只需将该数与另外一个数做“与”运算，且另一个数在该位上取1即可。
+</p>
+
+<ol class="org-ol">
+<li>按位或(|)
+</li>
+</ol>
+<p>
+按位或也是一种基本的逻辑运算，其运算规则是只要参与运算的双方有一个为1,那么运算结果就为1；否则结果为0.
+“或”运算可以用来对位单元进行置1操作，其方法与使用“与”运算来进行清零操作类似。
+</p>
+<ol class="org-ol">
+<li>按位异或(\^)
+</li>
+</ol>
+<p>
+“异或”运算可以看作是由“或”运算和“取反”运算相结合而得到的一种逻辑运算。它的运算规则是如果参加运算的两个二进制位相同，则其计算结果为0；如果参加运算的两个二进制位不相同，那么计算结果就为1。
+“异或”运算可以通过将“或”运算和“取反”运算给合来实现，也可以通过“与”运算和“取反”运算组合来实现。下面3条语句的作用是等价的。
+</p>
+
+
+<pre class="example">
+a^b;
+(~a&amp;b)|(a&amp;~b);
+~(~(~a&amp;b)&amp;~(a&amp;~b));
+</pre>
+
+
+<p>
+“异或”是一个非常有用的位操作，用它可以实现很多有趣的功能。
+(1) 任何数与0做“异或”操作，该数将保持原值不变。
+(2) 任何“异或”操作可以对特定位进行翻转。
+例如，假设想把01100110的高4位进行翻转，就是0变1,1变0,低4位保持不变，只需要将其与11110000做“异或”操作即可。
+(3) 将两个变量的值交换，而不使用中间变量。
+通常，如果希望把两个变量的值对调，一般会使用一个中间变量来临时存储数值。例如：
+</p>
+
+
+<pre class="example">
+  int a = 5;
+   int b = 10;
+  int temp;
+temp = a;
+a = b;
+   b = temp;
+</pre>
+
+
+<p>
+但是如果不希望使用临时变量temp，上述代码片段该如何写呢？
+方法一（其中变量声明的部分同上）：
+</p>
+
+
+<pre class="example">
+a = a + b;
+b = a - b;
+a = a - b;
+</pre>
+
+
+<p>
+方法二：使用“异或”操作符
+</p>
+
+
+<pre class="example">
+a = a^b;
+b = b^a;
+a = a^b;
+</pre>
+
+
+<p>
+其中方法一可能出现溢出的情况，如a+b溢出会导致结果错误。
+</p>
+
+
+<ol class="org-ol">
+<li>取反(~)
+</li>
+</ol>
+<p>
+取反符　“~”是C/C++语言提供的所有位操作符中唯一的一个单目运算符。取反的作用是用来对一个二进制数按位取反，即0变1,1变0,它也是一种基本的逻辑运算。此外，取反符“~”的优先级要比其他所有的位运算符、算术运算符、关系运算符和逻辑运算符都高。
+</p>
+
+<ol class="org-ol">
+<li>左移(&lt;&lt;)
+</li>
+</ol>
+<p>
+左移操作符“&lt;&lt;”用来将一个数的各二进制位全部左移若干位。左移一位就相当于该数乘以２,左移两位就相当于该数乘以４,依此类推，不过有个条件，即只有左移时被溢出舍弃的高位中不含１的情况下，左移操作才等价于乘２操作。
+</p>
+
+<ol class="org-ol">
+<li>右移(&gt;&gt;)
+</li>
+</ol>
+<p>
+与左移操作相对，右移一们就相当于除以2.
+</p>
+
+
+
+<p>
+位操作是直接对内存进行的操作，因此速度非常快。
+</p>
+
+      </div>
+    </div>
+    <div> 
+      <div class="post-meta">
+        <span title="post date" class="post-info">2010-04-21</span>
+        <span title="last modification date" class="post-info">2013-07-04</span>
+        <span title="tags" class="post-info"><a href="/tags/位/">位</a>, <a href="/tags/位操作/">位操作</a>, <a href="/tags/位运算/">位运算</a></span>
+        <span title="author" class="post-info">Gu Weigang</span>
+      </div>
+      <section>
+        <h1>Comments</h1>
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+          //var disqus_developer = 1;
+          var disqus_identifier = "/blog/2010/04/21/secret-code---bit-operation/";
+          var disqus_url = "http://guweigang.com/blog/2010/04/21/secret-code---bit-operation/";
+          var disqus_shortname = 'guweigang';
+          /* * * DON'T EDIT BELOW THIS LINE * * */
+          (function() {
+          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+          dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+          })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </section>
+      <div class="footer">
+        <p>Generated by <a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.3.1 (<a href="http://orgmode.org">Org</a> mode 8.0.3)</p>
+        <p> 
+          Copyright &copy; 2012 - 2013 <a href="mailto:guweigang &lt;at&gt; outlook &lt;dot&gt; com">Gu Weigang</a>
+          &nbsp;&nbsp;-&nbsp;&nbsp;
+          Powered by <a href="https://github.com/kelvinh/org-page" target="_blank">org-page</a>
+        </p>
+      </div>
+    </div>
+  </body>
+</html>

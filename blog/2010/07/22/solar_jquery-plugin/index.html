@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <title>Solar_Jquery插件 - 闭眼听世界</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Gu Weigang" />
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <link rel="stylesheet" href="/media/css/main.css" type="text/css">
+  </head>
+  <body class="container">
+    <div> 
+      <header class="masthead">
+        <h1 class="masthead-title"><a href="/">闭眼听世界</a></h1>
+        <p>心如松静意无尘，气若浮萍了无痕！</p>
+        <ul>
+          <li><a href="/blog/">Blog</a></li>
+          <li><a href="/wiki/">Wiki</a></li>
+          <li><a href="/tags/">Tags</a></li>
+          <li><a href="/about/">About</a></li>
+          <li><a href="https://github.com/guweigang">GitHub</a></li>
+          <li><a href="https://google.com/search?q=site:guweigang.com">Search</a></li>
+        </ul>
+      </header>
+    </div>
+    <div> 
+      <div class="post">
+        <h1>Solar_Jquery插件</h1>
+        <p>
+昨天终于把Jquery集成进Solar了。之前一直在关注<a href="http://jquery.hohli.com/">JQuery PHP Library</a>的动态，且作者也发布了相应的Zend Framework插件，不过最新更新仍然是Mar 16, 2009，看来作者已经很久没有更新了。
+</p>
+
+<p>
+大体思路流程如下：
+<b>初始化</b>
+PHP: 需要 jQuery 库
+</p>
+
+
+<pre class="example">
+    require_once 'libraries/jQuery.php';
+// many actions
+// ...
+
+// get JSON response
+jQuery::getResponse();
+</pre>
+
+
+<p>
+HTML：加载JS类库jQuery和jQuery.php
+</p>
+
+
+<pre class="example">
+</pre>
+
+
+<p>
+JavaScript：
+</p>
+
+
+<pre class="example">
+    // do an ajax post request (example)
+jQuery.extend({
+   php: function (url, params) {
+      // do an ajax post request
+      $.ajax({
+          // AJAX-specified URL
+          url: url,
+          // JSON
+          type: "POST",
+          data: params,
+          dataType : "json"
+      })
+   }
+});
+</pre>
+
+
+<p>
+另外，可以通过addMessage，addError等函数添加Ajax回调函数。
+</p>
+
+<p>
+在Solar中，如何使用呢？首先下载下面的Solar\_Jquery Package（下载地址：<a href="http://solarphp.cn/download/packages/Solar\_Jquery.rar），直接拷到Solar目录下，i.e">http://solarphp.cn/download/packages/Solar\_Jquery.rar），直接拷到Solar目录下，i.e</a>., Jquery.php文件和Jquery文件夹放在Solar目录下，ajax.php放到Solar/View/Helper下，jquery.php.js放到Solar/View/Helper/Pagers/Public下。
+</p>
+
+<p>
+然后在动作中这样使用：
+</p>
+
+
+<pre class="example">
+    public function actionAjax() {
+    $jquery = Solar::factory('Solar_Jquery');
+    if($jquery-&gt;error())
+    {
+         echo '不是Ajax！';
+         exit;
+    }
+    $this-&gt;_response-&gt;setHeader('Content-Type', 'application/json');
+    $jquery-&gt;addQuery('#test0')-&gt;html('new content')-&gt;css('backgroundColor','#ffff00');
+    $jquery-&gt;addQuery('div.red')-&gt;html('Hello, roy!');
+    $jquery-&gt;addMessage('hello, world', 'test', 'ok')-&gt;fetch();
+    //$jquery-&gt;fetch();
+}
+</pre>
+
+
+<p>
+在视图中首先需要加载jquery类库，然后调用ajax辅助函数。
+</p>
+<ol class="org-ol">
+<li>首先引入jquery类库
+</li>
+</ol>
+
+
+<pre class="example">
+$this-&gt;head()-&gt;addScript('Acme/Controller/Page/jquery.js');
+</pre>
+
+
+<ol class="org-ol">
+<li>书写回调函数
+</li>
+</ol>
+
+
+<pre class="example">
+</pre>
+
+
+<p>
+3.使用ajax辅助函数
+使用view\_helper方法
+</p>
+
+
+<pre class="example">
+    $data = array('title'=&gt; 'i love you', 'content' =&gt; 'Thanks');
+echo $this-&gt;action('/blog/ajax', 'Roy',
+            $this-&gt;ajax('/blog/ajax', 'onclick', $data, array('class'=&gt; 'ajax'), false));?&gt;
+</pre>
+
+
+<p>
+手动书写
+</p>
+
+
+<pre class="example">
+Test Ajax
+</pre>
+
+
+<p>
+在标签里面使用：
+</p>
+
+
+<pre class="example">
+&lt;a href="http://solarphp.cn" &lt;?php echo $this-&gt;ajax('/blog/ajax', 'onMouseOver',array('title'=&gt; 'i love you', 'content' =&gt; 'Thanks'), array('class'=&gt; 'ajax', 'href'=&gt;'/blog/ajax'));?&gt; &gt;Solar PHP&lt;/a&gt;
+</pre>
+
+
+<p>
+试一下吧，呵呵~
+</p>
+
+      </div>
+    </div>
+    <div> 
+      <div class="post-meta">
+        <span title="post date" class="post-info">2010-07-22</span>
+        <span title="last modification date" class="post-info">2013-07-04</span>
+        <span title="tags" class="post-info"><a href="/tags/jquery/">jquery</a>, <a href="/tags/solar/">solar</a>, <a href="/tags/solar_jquery/">solar_jquery</a></span>
+        <span title="author" class="post-info">Gu Weigang</span>
+      </div>
+      <section>
+        <h1>Comments</h1>
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+          //var disqus_developer = 1;
+          var disqus_identifier = "/blog/2010/07/22/solar_jquery-plugin/";
+          var disqus_url = "http://guweigang.com/blog/2010/07/22/solar_jquery-plugin/";
+          var disqus_shortname = 'guweigang';
+          /* * * DON'T EDIT BELOW THIS LINE * * */
+          (function() {
+          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+          dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+          })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </section>
+      <div class="footer">
+        <p>Generated by <a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.3.1 (<a href="http://orgmode.org">Org</a> mode 8.0.3)</p>
+        <p> 
+          Copyright &copy; 2012 - 2013 <a href="mailto:guweigang &lt;at&gt; outlook &lt;dot&gt; com">Gu Weigang</a>
+          &nbsp;&nbsp;-&nbsp;&nbsp;
+          Powered by <a href="https://github.com/kelvinh/org-page" target="_blank">org-page</a>
+        </p>
+      </div>
+    </div>
+  </body>
+</html>

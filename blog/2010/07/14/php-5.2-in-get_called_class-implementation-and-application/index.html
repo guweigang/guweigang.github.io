@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <title>php 5.2中get_called_class的实现及应用 - 闭眼听世界</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Gu Weigang" />
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <link rel="stylesheet" href="/media/css/main.css" type="text/css">
+  </head>
+  <body class="container">
+    <div> 
+      <header class="masthead">
+        <h1 class="masthead-title"><a href="/">闭眼听世界</a></h1>
+        <p>心如松静意无尘，气若浮萍了无痕！</p>
+        <ul>
+          <li><a href="/blog/">Blog</a></li>
+          <li><a href="/wiki/">Wiki</a></li>
+          <li><a href="/tags/">Tags</a></li>
+          <li><a href="/about/">About</a></li>
+          <li><a href="https://github.com/guweigang">GitHub</a></li>
+          <li><a href="https://google.com/search?q=site:guweigang.com">Search</a></li>
+        </ul>
+      </header>
+    </div>
+    <div> 
+      <div class="post">
+        <h1>php 5.2中get_called_class的实现及应用</h1>
+        <p>
+在PHP5中，我们可以在类中通过self关键字或者\_\_CLASS\_\_来判断或调用当前类。但有一个问题，如果我们是在子类中调用，得到的结果将是父类。因为在继承父类的时候，静态成员就已经被绑定了。
+</p>
+
+
+
+<pre class="example">
+class A {
+    public static function who() {
+        echo __CLASS__;
+    }
+    public static function test() {
+        self::who();
+    }
+}
+
+class B extends A {
+    public static function who() {
+         echo __CLASS__;
+    }
+}
+B::test();
+</pre>
+
+
+
+
+<pre class="example">
+以上代码输出的结果是：
+A
+</pre>
+
+
+<p>
+这和我们的预期不同，我们原来想得到子类的相应结果。
+</p>
+
+<p>
+PHP 5.3.0中增加了一个static关键字来引用当前类，即实现了延迟静态绑定，同时PHP 5.3.0也实现get\_called\_class()函数用于查找当前被调用的类，而且允许使用变量作为类名调用静态属性或方法。那么在PHP 5.3.0中要实现上述功能有两种方法（可能不止两种）：
+</p>
+
+
+<pre class="example">
+class A {
+    public static $foo = array('A1');
+    public static function make() {
+        /*方法一，使用get_called_class()
+        $test = get_called_class(); //获取当前被调用的类
+        return $test::$foo; //使用变量作为类名调用静态成员属性
+        */
+        return static::$foo; //方法二，使用static关键字实现静态延迟绑定
+    }
+}
+class B extends A {
+    public static $foo = array('B1');
+
+}
+print_r(A::make());
+echo "\n";
+print_r(B::make());
+</pre>
+
+
+
+
+<pre class="example">
+结果如下：
+---------- Debug PHP ----------
+Array
+(
+    [0] =&gt; A1
+)
+
+Array
+(
+    [0] =&gt; A1
+)
+</pre>
+
+
+
+<p>
+那么在PHP5.3之前我们如何能实现这种功能呢？这几天研究了国外某论坛的某些代码，自己整理了一下：
+在PHP5.3之前，即不支持延迟静态绑定，也不支持变量作为类名调用静态属性或方法，更不支持get\_called\_class()函数。我们最好不要去改变PHP内核，所以唯一能做的就是实现get\_clalled\_class()函数，使在上下文中能获取正确的类名，最后用反射类来调用静态属性或方法。看代码：
+</p>
+
+
+<pre class="example">
+if(!function_exists('get_called_class')) {
+    class class_tools
+    {
+        private static $i = 0;
+        private static $fl = null;
+        public static function get_called_class()
+        {
+            $bt = debug_backtrace();
+            //使用call_user_func或call_user_func_array函数调用类方法，处理如下
+            if (array_key_exists(3, $bt)
+                &amp;&amp; array_key_exists('function', $bt[3])
+                &amp;&amp; in_array($bt[3]['function'], array('call_user_func', 'call_user_func_array'))
+               ) {
+                //如果参数是数组
+                if (is_array($bt[3]['args'][0])) {
+                    $toret = $bt[3]['args'][0][0];
+                    return $toret;
+                }else if(is_string($bt[3]['args'][0])) {//如果参数是字符串
+                //如果是字符串且字符串中包含::符号，则认为是正确的参数类型，计算并返回类名
+                    if(false !== strpos($bt[3]['args'][0], '::')) {
+                        $toret = explode('::', $bt[3]['args'][0]);
+                        return $toret[0];
+                    }
+                }
+            }
+            //使用正常途径调用类方法，如:A::make()
+            if(self::$fl == $bt[2]['file'].$bt[2]['line']) {
+                self::$i++;
+            } else {
+                self::$i = 0;
+                self::$fl = $bt[2]['file'].$bt[2]['line'];
+            }
+            $lines = file($bt[2]['file']);
+            preg_match_all('
+                /([a-zA-Z0-9\_]+)::'.$bt[2]['function'].'/',
+                $lines[$bt[2]['line']-1],
+                $matches
+            );
+            return $matches[1][self::$i];
+        }
+    }
+    function get_called_class()
+    {
+        return class_tools::get_called_class();
+    }
+}
+class A {
+    public static $foo = array('A1');
+    public static function make() {
+        $test = get_called_class();
+        $testRef = new ReflectionClass($test);
+        return $testRef-&gt;getStaticPropertyValue('foo');
+    }
+}
+class B extends A {
+    public static $foo = array('B1');
+
+}
+
+// -------------------------------
+
+/*test call_user_func function
+$testA = call_user_func(array('A', 'make'));
+var_dump($testA);
+echo "\n";
+*/
+// -------------------------------
+
+/*test call_user_func_array*/
+$testC = call_user_func_array(array('A', 'make'), array());
+var_dump($testC);
+
+// ---------------------------------
+
+/*now you can use call_user_func('B'.'::make');*/
+$testB = call_user_func('B'.'::make');
+var_dump($testB);
+echo "\n";
+
+
+// ----------------------------------
+
+/*test static function call directly
+print_r(A::make());
+echo "\n";
+print_r(B::make());
+*/
+</pre>
+
+      </div>
+    </div>
+    <div> 
+      <div class="post-meta">
+        <span title="post date" class="post-info">2010-07-14</span>
+        <span title="last modification date" class="post-info">2013-07-04</span>
+        <span title="tags" class="post-info"><a href="/tags/class/">class</a>, <a href="/tags/php/">php</a>, <a href="/tags/static/">static</a></span>
+        <span title="author" class="post-info">Gu Weigang</span>
+      </div>
+      <section>
+        <h1>Comments</h1>
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+          //var disqus_developer = 1;
+          var disqus_identifier = "/blog/2010/07/14/php-5.2-in-get_called_class-implementation-and-application/";
+          var disqus_url = "http://guweigang.com/blog/2010/07/14/php-5.2-in-get_called_class-implementation-and-application/";
+          var disqus_shortname = 'guweigang';
+          /* * * DON'T EDIT BELOW THIS LINE * * */
+          (function() {
+          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+          dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+          })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </section>
+      <div class="footer">
+        <p>Generated by <a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.3.1 (<a href="http://orgmode.org">Org</a> mode 8.0.3)</p>
+        <p> 
+          Copyright &copy; 2012 - 2013 <a href="mailto:guweigang &lt;at&gt; outlook &lt;dot&gt; com">Gu Weigang</a>
+          &nbsp;&nbsp;-&nbsp;&nbsp;
+          Powered by <a href="https://github.com/kelvinh/org-page" target="_blank">org-page</a>
+        </p>
+      </div>
+    </div>
+  </body>
+</html>

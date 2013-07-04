@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <title>也说Solar自定义Filter - 闭眼听世界</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Gu Weigang" />
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <link rel="stylesheet" href="/media/css/main.css" type="text/css">
+  </head>
+  <body class="container">
+    <div> 
+      <header class="masthead">
+        <h1 class="masthead-title"><a href="/">闭眼听世界</a></h1>
+        <p>心如松静意无尘，气若浮萍了无痕！</p>
+        <ul>
+          <li><a href="/blog/">Blog</a></li>
+          <li><a href="/wiki/">Wiki</a></li>
+          <li><a href="/tags/">Tags</a></li>
+          <li><a href="/about/">About</a></li>
+          <li><a href="https://github.com/guweigang">GitHub</a></li>
+          <li><a href="https://google.com/search?q=site:guweigang.com">Search</a></li>
+        </ul>
+      </header>
+    </div>
+    <div> 
+      <div class="post">
+        <h1>也说Solar自定义Filter</h1>
+        <p>
+<a href="http://lifephp.com">@life</a>在<a href="http://lifephp.com/?p=122">Solar自定义Filter过滤器</a>一文中讲述了如何在Solar中添加自己的过滤器，讲得很不错。呵呵:), <a href="http://lifephp.com">@life</a>和<a href="http://libears.com">@libear</a>加入<a href="http://solarphp.cn">Solar 中国</a>没多长时间，但贡献却非常突出，给<a href="http://solarphp.cn">Solar 中国</a>注入了更有活力的思想。
+</p>
+
+<p>
+回到正题，本文也是讨论在Solar中自定义Filter，那么为什么要写一篇同样主题的文章呢？看完你就知道了。
+</p>
+
+<p>
+讲这个之前我认为有必要先讲一下life提到的自定义Filter如何实现的。那么之前又还要再讲一下<a href="http://solarphp.cn/apidoc/Solar_Sql_Model/Solar_Sql_Model_Record.html">Solar\_Sql\_Model\_Record</a>这个类。
+关于这个类，相信大家不会陌生，当我们每次从对象注册表中获取模型目录对象后，再利用模型对象获取的就是Record对象。
+</p>
+
+
+<pre class="example">
+    $this-&gt;_model = Solar_Registry::get('model_catalog');
+// $this-&gt;item就是模型记录对象
+$this-&gt;item = $this-&gt;_model-&gt;currentProducts-&gt;fetchNew();
+$this-&gt;form = $this-&gt;item-&gt;newForm(array(
+          'digs_out' =&gt; array('label' =&gt; '请输入免单需顶数：',),
+           'discout' =&gt; array('label' =&gt; '请输入折扣：','invalid' =&gt; array('hello, libear', 'hello, life')),
+          'product_id' =&gt; array('type' =&gt; 'hidden',),
+         'period_id' =&gt; array('type' =&gt; 'hidden',),
+      ));
+</pre>
+
+
+<p>
+这就创建了大家非常熟悉的form对象，之后怎么做大家都知道的。那么filter是在什么时候验证的呢？如何保证Solar能找到我们自定义的Filter呢？
+</p>
+
+<p>
+filter事件是在$this-&gt;item-&gt;save()方法调用的时候触发的，来看代码：在<a href="http://solarphp.cn/apidoc/__filesource/fsource_Solar_Sql_Model__SolarSqlModelRecord.php.html#a519">Solar\_Sql\_Model\_Record::save()</a>方法又调用了<a href="http://solarphp.cn/apidoc/__filesource/fsource_Solar_Sql_Model__SolarSqlModelRecord.php.html#a627">Solar\_Sql\_Model\_Record::\_save()</a>方法，在\_save()方法中判断当前的保存操作是插入还是更新：
+</p>
+
+
+<pre class="example">
+    // insert or update based on newness
+if ($this-&gt;isNew()) {
+    $this-&gt;_insert();
+} else {
+    $this-&gt;_update();
+}
+</pre>
+
+
+<p>
+在<a href="http://solarphp.cn/apidoc/__filesource/fsource_Solar_Sql_Model__SolarSqlModelRecord.php.html#a686">Solar\_Sql\_Model\_Record::\_insert()</a>和<a href="http://solarphp.cn/apidoc/__filesource/fsource_Solar_Sql_Model__SolarSqlModelRecord.php.html#a821">Solar\_Sql\_Model\_Record::\_update()</a>方法中分别调用了<a href="http://solarphp.cn/apidoc/__filesource/fsource_Solar_Sql_Model__SolarSqlModelRecord.php.html#a1197">Solar\_Sql\_Model\_Record::filter()</a>方法。当参数为空时，filter方法直接调用<a href="http://solarphp.cn/apidoc/__filesource/fsource_Solar_Sql_Model__SolarSqlModelRecord.php.html#a1253">Solar\_Sql\_Model\_Record::newFilter()</a>方法，获得当前的filter对象，进行验证并准备好invalid消息：
+</p>
+
+
+<pre class="example">
+     // apply filters
+ $valid = $filter-&gt;applyChain($this);
+
+ // retain invalids
+ $invalid = $filter-&gt;getChainInvalid();
+
+// ...省略部分代码
+ // was it valid?
+ if (! $valid) {
+     // use custom validation messages per column when available
+     foreach ($invalid as $key =&gt; $old) {
+         $locale_key = "INVALID_" . strtoupper($key);
+         $new = $this-&gt;_model-&gt;locale($locale_key);
+         if ($new != $locale_key) {
+             $invalid[$key] = $new;
+         }
+     }
+
+     $this-&gt;_invalid = $invalid;
+     throw $this-&gt;_exception('ERR_INVALID', $this-&gt;_invalid);
+ }
+</pre>
+
+
+<p>
+那么Solar这样就能找到我们自定义的Filter么？还是不行，还要继续看<a href="http://solarphp.cn/apidoc/__filesource/fsource_Solar_Sql_Model__SolarSqlModelRecord.php.html#a1253">Solar\_Sql\_Model\_Record::newFilter()</a>方法, newFilter()方法的主要工作是实例化当前的Filter对象，
+</p>
+
+
+<pre class="example">
+    // create a filter object based on the model's filter class
+$filter = Solar::factory($this-&gt;_model-&gt;filter_class);
+</pre>
+
+
+<p>
+大家肯定想了解下$this-&gt;\_model-&gt;filter\_class的内容吧？:)　还要麻烦大家查看一下<a href="http://solarphp.cn/apidoc/__filesource/fsource_Solar_Sql_Model__SolarSqlModel.php.html#a2476">Solar\_Sql\_Model::\_fixFilterClass()</a>方法。这个方法设置了当前的Filter类。
+</p>
+
+
+<pre class="example">
+$this-&gt;_filter_class = $stack-&gt;load('Filter');
+</pre>
+
+
+<p>
+接着，<a href="http://solarphp.cn/apidoc/__filesource/fsource_Solar_Sql_Model__SolarSqlModelRecord.php.html#a1253">Solar\_Sql\_Model\_Record::newFilter()</a>把filter规则加入Filter对象，最后把本地字符串的对象设置为当前过滤器。filter规则来自几个方面：
+</p>
+<ol class="org-ol">
+<li>在模型文件中定义的, i.e., $this-&gt;\_addFilter()
+</li>
+<li>手动使用$this-&gt;addFilter定义的
+</li>
+<li>表中定义为非空的及自动增长的字段
+</li>
+</ol>
+
+
+<pre class="example">
+   // set filters as specified by the model
+foreach ($this-&gt;_model-&gt;filters as $key =&gt; $list) {
+    // skip table cols that are not part of the fetch cols
+    if (in_array($key, $skip)) {
+        continue;
+    }
+    $filter-&gt;addChainFilters($key, $list);
+}
+
+// set filters added to this record
+foreach ($this-&gt;_filters as $key =&gt; $list) {
+    $filter-&gt;addChainFilters($key, $list);
+}
+
+// set which elements are required by the table itself
+foreach ($this-&gt;_model-&gt;table_cols as $key =&gt; $info) {
+    if ($info['autoinc']) {
+        // autoinc are not required
+        $flag = false;
+    } elseif (in_array($key, $this-&gt;_model-&gt;sequence_cols)) {
+        // auto-sequence are not required
+        $flag = false;
+    } else {
+        // go with the col info
+        $flag = $info['require'];
+    }
+
+    // set the requirement flag
+    $filter-&gt;setChainRequire($key, $flag);
+}
+
+// tell the filter to use the model for locale strings
+$filter-&gt;setChainLocaleObject($this-&gt;_model);
+</pre>
+
+
+<p>
+这一部分算是讲完了，但是如果仅仅是这样处理的话当我们使用Solar\_Form创建表单并加入filter规则的时候，系统会提示找不到filter规则，因为Solar仅在Solar\_Filter\_名字空间下查找我们自定义的Filter对象，而我们自定义的Filter对象在Admin\_Filter\_名字空间下，也就是说系统根本没有实例化Admin\_Filter类。在上面的解决方案中，Solar\_Sql\_Model\_Record实例化了Admin\_Filter，并使用Admin\_Filter进行filter操作，因为这里没有用到模型，所以我们只能手动操作。
+</p>
+
+<p>
+首先，在config.php文件中加入Solar\_Filter的配置项，把Admin\_Filter\_名字空间加入Solar\_Filter::\_stack中：
+</p>
+
+
+<pre class="example">
+    $config['Solar_Filter'] = array(
+    'classes' =&gt; array('Admin_Filter'),
+);
+</pre>
+
+
+<p>
+这样的话系统就能找到我们自定义的filter了，不过local string仍然不行，我们还需要手动设置当前的filter local object，有两种方法：
+</p>
+<ol class="org-ol">
+<li>通过<a href="http://solarphp.cn/apidoc/__filesource/fsource_Solar_Form__SolarForm.php.html#a484">Solar\_Fomr::setFilterLocaleObject</a>方法手动设置filter local object
+</li>
+</ol>
+
+
+<pre class="example">
+    $filter = Solar::factory("Admin_Filter");
+$this-&gt;form-&gt;setFilterLocaleObject($filter);
+</pre>
+
+
+<ol class="org-ol">
+<li>在实例化Solar\_Form时指定local filter object
+</li>
+</ol>
+
+
+<pre class="example">
+$this-&gt;form = Solar::factory("Solar_Form",
+array('filter' =&gt; Solar::factory('Admin_Filter')));
+</pre>
+
+
+<p>
+可以看到不管用哪种方法都需要手动实例化Admin\_Filter类。
+</p>
+
+<p>
+下一篇讲讲Solar\_Form、Solar\_Sql\_Model\_Record和Solar\_Filter三者交织在一起的复杂关系。
+</p>
+
+      </div>
+    </div>
+    <div> 
+      <div class="post-meta">
+        <span title="post date" class="post-info">2010-08-09</span>
+        <span title="last modification date" class="post-info">2013-07-04</span>
+        <span title="tags" class="post-info"><a href="/tags/solar-filter/">solar filter</a>, <a href="/tags/solar-php/">solar php</a>, <a href="/tags/solar-record/">solar record</a></span>
+        <span title="author" class="post-info">Gu Weigang</span>
+      </div>
+      <section>
+        <h1>Comments</h1>
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+          //var disqus_developer = 1;
+          var disqus_identifier = "/blog/2010/08/09/also-said-solar-custom-filter/";
+          var disqus_url = "http://guweigang.com/blog/2010/08/09/also-said-solar-custom-filter/";
+          var disqus_shortname = 'guweigang';
+          /* * * DON'T EDIT BELOW THIS LINE * * */
+          (function() {
+          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+          dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+          })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </section>
+      <div class="footer">
+        <p>Generated by <a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.3.1 (<a href="http://orgmode.org">Org</a> mode 8.0.3)</p>
+        <p> 
+          Copyright &copy; 2012 - 2013 <a href="mailto:guweigang &lt;at&gt; outlook &lt;dot&gt; com">Gu Weigang</a>
+          &nbsp;&nbsp;-&nbsp;&nbsp;
+          Powered by <a href="https://github.com/kelvinh/org-page" target="_blank">org-page</a>
+        </p>
+      </div>
+    </div>
+  </body>
+</html>

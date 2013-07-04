@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <title>emacs+psvn - 闭眼听世界</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Gu Weigang" />
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <link rel="stylesheet" href="/media/css/main.css" type="text/css">
+  </head>
+  <body class="container">
+    <div> 
+      <header class="masthead">
+        <h1 class="masthead-title"><a href="/">闭眼听世界</a></h1>
+        <p>心如松静意无尘，气若浮萍了无痕！</p>
+        <ul>
+          <li><a href="/blog/">Blog</a></li>
+          <li><a href="/wiki/">Wiki</a></li>
+          <li><a href="/tags/">Tags</a></li>
+          <li><a href="/about/">About</a></li>
+          <li><a href="https://github.com/guweigang">GitHub</a></li>
+          <li><a href="https://google.com/search?q=site:guweigang.com">Search</a></li>
+        </ul>
+      </header>
+    </div>
+    <div> 
+      <div class="post">
+        <h1>emacs+psvn</h1>
+        <p>
+psvn：一个emacs的插件，官方有比较详细的介绍：<a href="http://www.xsteve.at/prg/vc_svn/"><a href="http://www.xsteve.at/prg/vc\_svn/">http://www.xsteve.at/prg/vc\_svn/</a></a>，不过是E文的。
+</p>
+
+<p>
+当然也可以看这里（中文的）：<a href="http://lifegoo.pluskid.org/wiki/EmacsSubversion.html"><a href="http://lifegoo.pluskid.org/wiki/EmacsSubversion.html">http://lifegoo.pluskid.org/wiki/EmacsSubversion.html</a></a>和<a href="http://emacser.com/svn-status-mode-line.htm"><a href="http://emacser.com/svn-status-mode-line.htm">http://emacser.com/svn-status-mode-line.htm</a></a>
+</p>
+
+<p>
+首先下载命令行的subversion，下载地址在这里（到官方下载还要注册。。。）：<a href="http://www.open.collab.net/files/documents/60/3564/CollabNetSubversion-client-1.6.12-1.win32.exe"><a href="http://www.open.collab.net/files/documents/60/3564/CollabNetSubversion-client-1.6.12-1.win32.exe">http://www.open.collab.net/files/documents/60/3564/CollabNetSubversion-client-1.6.12-1.win32.exe</a></a>，安装。
+</p>
+
+<p>
+然后到<a href="http://www.xsteve.at/prg/emacs/psvn.el">这里</a>下载psvn.el。
+</p>
+
+<p>
+最后在你的.emacs配置文件中加入下面一行：
+</p>
+
+
+<pre class="example">
+;; psvn
+(require 'psvn)
+</pre>
+
+
+
+<p>
+常用快捷方式：
+</p>
+
+
+
+
+
+<p>
+C-x v v
+</p>
+
+<p>
+提交代码
+</p>
+
+
+
+
+<p>
+C-c C-c
+</p>
+
+<p>
+确认提交
+</p>
+
+
+
+
+<p>
+C-x v =
+</p>
+
+<p>
+弹出一个 buffer 显示你自从上次 commit 之后所做的改变
+</p>
+
+
+
+
+<p>
+C-x v u
+</p>
+
+<p>
+丢弃上次更改
+</p>
+
+
+
+
+<p>
+C-x v d
+</p>
+
+<p>
+打开工作目录
+</p>
+
+
+
+
+<p>
+C-x v l
+</p>
+
+<p>
+查看修改日志
+</p>
+
+
+
+
+<p>
+C-u C-x v = RET RET RET
+</p>
+
+<p>
+查看两个版本之间的区别
+</p>
+
+
+
+
+<p>
+C-x v ~ 1 RET
+</p>
+
+<p>
+查看第一个版本
+</p>
+
+
+
+
+<p>
+M-p
+</p>
+
+<p>
+在写日志的时候显示上一次的日志
+</p>
+
+
+
+
+<p>
+M-x vc-update
+</p>
+
+<p>
+更新当前文件（从SVN中Update）
+</p>
+
+
+
+
+<p>
+M-x vc-resolve-conflicts
+</p>
+
+<p>
+消除冲突标记
+</p>
+
+
+
+
+
+
+
+<p>
+#+BEGIN_EXAMPLE
+</p>
+
+<p>
+用 M-x svn-status 来打开一个 svn-status 的 buffer，这个 buffer 处于 svn-status mode 中，可用的命令如下：
+</p>
+
+<p>
+g     - svn-status-update:               run 'svn status -v'
+M-s   - svn-status-update:               run 'svn status -v'
+C-u g - svn-status-update:               run 'svn status -vu'
+=     - svn-status-show-svn-diff         run 'svn diff'
+l     - svn-status-show-svn-log          run 'svn log'
+i     - svn-status-info                  run 'svn info'
+r     - svn-status-revert                run 'svn revert'
+X v   - svn-status-resolved              run 'svn resolved'
+U     - svn-status-update-cmd            run 'svn update'
+M-u   - svn-status-update-cmd            run 'svn update'
+c     - svn-status-commit                run 'svn commit'
+a     - svn-status-add-file              run 'svn add --non-recursive'
+A     - svn-status-add-file-recursively  run 'svn add'
+</p>
+<ul class="org-ul">
+<li>- svn-status-make-directory        run 'svn mkdir'
+</li>
+</ul>
+<p>
+R     - svn-status-mv                    run 'svn mv'
+D     - svn-status-rm                    run 'svn rm'
+M-c   - svn-status-cleanup               run 'svn cleanup'
+b     - svn-status-blame                 run 'svn blame'
+X e   - svn-status-export                run 'svn export'
+RET   - svn-status-find-file-or-examine-directory
+^     - svn-status-examine-parent
+~     - svn-status-get-specific-revision
+E     - svn-status-ediff-with-revision
+X X   - svn-status-resolve-conflicts
+s     - svn-status-show-process-buffer
+e     - svn-status-toggle-edit-cmd-flag
+?     - svn-status-toggle-hide-unknown
+_     - svn-status-toggle-hide-unmodified
+m     - svn-status-set-user-mark
+u     - svn-status-unset-user-mark
+$     - svn-status-toggle-elide
+w     - svn-status-copy-filename-as-kill
+DEL   - svn-status-unset-user-mark-backwards
+</p>
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1">!   - svn-status-unset-all-usermarks</h2>
+</div>
+<div id="outline-container-sec-2" class="outline-2">
+<h2 id="sec-2">?   - svn-status-mark-unknown</h2>
+</div>
+<div id="outline-container-sec-3" class="outline-2">
+<h2 id="sec-3">A   - svn-status-mark-added</h2>
+</div>
+<div id="outline-container-sec-4" class="outline-2">
+<h2 id="sec-4">M   - svn-status-mark-modified</h2>
+</div>
+<div id="outline-container-sec-5" class="outline-2">
+<h2 id="sec-5">D   - svn-status-mark-deleted</h2>
+</div>
+<div id="outline-container-sec-6" class="outline-2">
+<h2 id="sec-6">*   - svn-status-mark-changed</h2>
+<div class="outline-text-2" id="text-6">
+<p>
+.     - svn-status-goto-root-or-return
+f     - svn-status-find-file
+o     - svn-status-find-file-other-window
+v     - svn-status-view-file-other-window
+I     - svn-status-parse-info
+V     - svn-status-svnversion
+P l   - svn-status-property-list
+P s   - svn-status-property-set
+P d   - svn-status-property-delete
+P e   - svn-status-property-edit-one-entry
+P i   - svn-status-property-ignore-file
+P I   - svn-status-property-ignore-file-extension
+P C-i - svn-status-property-edit-svn-ignore
+P k   - svn-status-property-set-keyword-list
+P y   - svn-status-property-set-eol-style
+P x   - svn-status-property-set-executable
+h     - svn-status-use-history
+q     - svn-status-bury-buffer
+</p>
+
+<p>
+C-x C-j - svn-status-dired-jump
+</p>
+
+<p>
+#+END_EXAMPLE
+</p>
+
+
+<p>
+那么现在，一切都搞定了，看看截图吧。。。[[<img src="http://roygu.com/?attachment_id=973][[[http://roygu.com/wp-content/uploads/2010/09/emacs-psvn-640x150.jpg"  alt="emacs-psvn-640x150.jpg"/>]]]]
+</p>
+</div>
+</div>
+
+      </div>
+    </div>
+    <div> 
+      <div class="post-meta">
+        <span title="post date" class="post-info">2010-09-25</span>
+        <span title="last modification date" class="post-info">2013-07-04</span>
+        <span title="tags" class="post-info"><a href="/tags/emacs/">emacs</a>, <a href="/tags/psvn/">psvn</a>, <a href="/tags/svn/">svn</a></span>
+        <span title="author" class="post-info">Gu Weigang</span>
+      </div>
+      <section>
+        <h1>Comments</h1>
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+          //var disqus_developer = 1;
+          var disqus_identifier = "/blog/2010/09/25/emacs-+-psvn/";
+          var disqus_url = "http://guweigang.com/blog/2010/09/25/emacs-+-psvn/";
+          var disqus_shortname = 'guweigang';
+          /* * * DON'T EDIT BELOW THIS LINE * * */
+          (function() {
+          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+          dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+          })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </section>
+      <div class="footer">
+        <p>Generated by <a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.3.1 (<a href="http://orgmode.org">Org</a> mode 8.0.3)</p>
+        <p> 
+          Copyright &copy; 2012 - 2013 <a href="mailto:guweigang &lt;at&gt; outlook &lt;dot&gt; com">Gu Weigang</a>
+          &nbsp;&nbsp;-&nbsp;&nbsp;
+          Powered by <a href="https://github.com/kelvinh/org-page" target="_blank">org-page</a>
+        </p>
+      </div>
+    </div>
+  </body>
+</html>

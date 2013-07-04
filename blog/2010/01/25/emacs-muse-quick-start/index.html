@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <title>Emacs muse - Quick Start - 闭眼听世界</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Gu Weigang" />
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <link rel="stylesheet" href="/media/css/main.css" type="text/css">
+  </head>
+  <body class="container">
+    <div> 
+      <header class="masthead">
+        <h1 class="masthead-title"><a href="/">闭眼听世界</a></h1>
+        <p>心如松静意无尘，气若浮萍了无痕！</p>
+        <ul>
+          <li><a href="/blog/">Blog</a></li>
+          <li><a href="/wiki/">Wiki</a></li>
+          <li><a href="/tags/">Tags</a></li>
+          <li><a href="/about/">About</a></li>
+          <li><a href="https://github.com/guweigang">GitHub</a></li>
+          <li><a href="https://google.com/search?q=site:guweigang.com">Search</a></li>
+        </ul>
+      </header>
+    </div>
+    <div> 
+      <div class="post">
+        <h1>Emacs muse - Quick Start</h1>
+        <p>
+<i>关于本文档</i>
+</p>
+
+
+
+<p>
+<i>开始</i>
+</p>
+
+<p>
+<i>创建一个 Muse 项目</i>
+</p>
+
+<p>
+<i>标记规则</i>
+</p>
+
+<p>
+<i>段落</i>
+</p>
+
+<p>
+<i>段落居中和引用</i>
+</p>
+
+<p>
+<i>标题</i>
+</p>
+
+<p>
+<i>水平线</i>
+</p>
+
+<p>
+<i>强调文本</i>
+</p>
+
+<p>
+<i>添加脚注</i>
+</p>
+
+<p>
+<i>诗章</i>
+</p>
+
+<p>
+<i>抄录段落</i>
+</p>
+
+<p>
+<i>列表</i>
+</p>
+
+<p>
+<i>表</i>
+</p>
+
+<p>
+<i>锚和标记的链接</i>
+</p>
+
+<p>
+<i>URLs 和 E-mail 地址</i>
+</p>
+
+<p>
+<i>链接</i>
+</p>
+
+<p>
+<i>嵌入 lisp</i>
+</p>
+
+<p>
+<i>发布风格</i>
+</p>
+
+<p>
+<i>从一个存在的风格中派生</i>
+</p>
+
+<p>
+<i>重写一个存在的风格</i>
+</p>
+
+<p>
+<i>创造一个新的风格</i>
+</p>
+
+<p>
+Emacs Muse 是一个基于 Emacs 的写作和发布平台。它简化了文档编辑 过程，并且可以选择多种格式进行发布。
+</p>
+
+<p>
+Muse 包括两个主要部分：一个增强的 text 模式，用来编辑文档和在 Muse 工程中随意浏览文档；一组发布策略，用来产生各种不同的格式输出。
+</p>
+
+
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1">关于本文档</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+本文档提供一个 Muse 标记以及功能的例子作为一个 Muse 的快速指南。
+</p>
+
+<p>
+要查看本文档发布后的形式，输入 make examples。你就会获得一个 Info 文档， 一个 HTML 文档和一个 PDF 文档（假设你已经安装了 LaTeX，并带有必须的字体）。
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-2" class="outline-2">
+<h2 id="sec-2">开始</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+要使用 Muse，添加包含 Muse 文件的目录到你的 load-path 变量中，它一般在 你的 .emacs 文件中定义。然后，加载写作模式和你想要发布的文档风格。
+</p>
+
+
+<pre class="example">
+    (add-to-list 'load-path "
+")
+(require 'muse-mode)     ; load authoring mode
+(require 'muse-html)     ; load publishing styles I use
+(require 'muse-latex)
+(require 'muse-texinfo)
+(require 'muse-docbook)
+</pre>
+
+
+<p>
+一旦 Muse 模式被加载，命令 M-x muse-publish-this-file 将发布一个输入 文档为任意可用的风格。如果你想在一个 buffer 中启用 muse-mode ，那么 输入 M-x muse-mode ，它被绑定到 C-c C-t。
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-3" class="outline-2">
+<h2 id="sec-3">创建一个 Muse 项目</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+通常你希望自动将一个目录中的所有文件发布为一组特定的输出风格， 为此， Muse 允许创建“项目”。下面是一个定义在你的 .emacs 文件 中的项目范例。
+</p>
+
+
+<pre class="example">
+    (require 'muse-project)
+(setq muse-project-alist
+   '(("website"                      ; my various writings
+   ("~/Pages" :default "index")
+  (:base "html" :path "~/public_html")
+  (:base "pdf" :path "~/public_html/pdf"))))
+</pre>
+
+
+<p>
+上面定义了一个名为“website”的项目，该项目所有的文件都位于目录 ~/Pages 下，默认的访问页为 index。当该项目被发布时，每一页将会以 HTML 格式输出到 ~/public\_html 目录中，并以 PDF 格式输出到 ~/public\_html/pdf 目录中。在项目中的任一页中，你可以使用语法 <i>pagename</i> 创建到 其他页的链接。
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-4" class="outline-2">
+<h2 id="sec-4">标记规则</h2>
+<div class="outline-text-2" id="text-4">
+<p>
+一个 Muse 文档使用特别的、文脉上的标记规则来决定怎样格式化输出结果。 例如，如果一个段落被缩进了，Muse 就认为它应该被引用。
+</p>
+
+<p>
+并没有太多的标记规则，而且所有的标记规则力争简单以便让使用者更加 专注于文档创作，而不是格式。
+</p>
+</div>
+
+
+<div id="outline-container-sec-4-1" class="outline-3">
+<h3 id="sec-4-1">段落</h3>
+<div class="outline-text-3" id="text-4-1">
+<p>
+在 Muse 中段落必须通过一个空行来隔开。
+</p>
+
+<p>
+例如，本节的输入文本如下：
+</p>
+
+
+<pre class="example">
+    在 Muse 中段落必须通过一个空行来隔开。
+
+例如，本节的输入文本如下：
+</pre>
+</div>
+</div>
+
+
+
+<div id="outline-container-sec-4-2" class="outline-3">
+<h3 id="sec-4-2">段落居中和引用</h3>
+<div class="outline-text-3" id="text-4-2">
+<p>
+以六个或者更多的空白字元（Tab 或者空格）开始的一行表示一个 居中的段落。
+</p>
+
+<p>
+这一段居中
+</p>
+
+
+<blockquote>
+<p>
+但是如果一行以空白字元开始，但空白字元不足六个，这表示一个 引用的段落。
+</p>
+</blockquote>
+</div>
+</div>
+
+
+
+<div id="outline-container-sec-4-3" class="outline-3">
+<h3 id="sec-4-3">标题</h3>
+<div class="outline-text-3" id="text-4-3">
+<p>
+依赖于输出风格一个标题会成为打印输出的一章或者一节。以一个或 几个星号开始一个新的段落，后面跟一个空格和标题题目，来表示一 个标题。然后另起一段输入这部分的正文。
+</p>
+
+
+<p>
+#+BEGIN_EXAMPLE
+</p>
+<ul class="org-ul">
+<li>First level
+</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-5" class="outline-2">
+<h2 id="sec-5">Second level</h2>
+<div class="outline-text-2" id="text-5">
+</div><div id="outline-container-sec-5-1" class="outline-3">
+<h3 id="sec-5-1">Third level</h3>
+<div class="outline-text-3" id="text-5-1">
+<p>
+#+END_EXAMPLE
+</p>
+</div>
+</div>
+
+
+
+<div id="outline-container-sec-5-2" class="outline-3">
+<h3 id="sec-5-2">水平线</h3>
+<div class="outline-text-3" id="text-5-2">
+<p>
+四个或者更多的破折号（-）表示一个水平线。确保其前后都是空行， 否则它将被看作是前面或后面段落的一部分！
+</p>
+
+
+
+<hr/>
+
+<p>
+上面分隔符由下面的输入产生：
+</p>
+
+
+<pre class="example">
+----
+</pre>
+</div>
+</div>
+
+
+
+<div id="outline-container-sec-5-3" class="outline-3">
+<h3 id="sec-5-3">强调文本</h3>
+<div class="outline-text-3" id="text-5-3">
+<p>
+使用某些特别地认可的字符包围文本以强调文本：
+</p>
+
+
+<pre class="example">
+    *emphasis*
+**strong emphasis**
+***very strong emphasis***
+_underlined_
+=verbatim and monospace=
+</pre>
+
+
+<p>
+上面的列表生成：
+</p>
+
+
+<pre class="example">
+    emphasis
+strong emphasis
+very strong emphasis
+underlined
+verbatim and monospace
+</pre>
+</div>
+</div>
+
+
+
+<div id="outline-container-sec-5-4" class="outline-3">
+<h3 id="sec-5-4">添加脚注</h3>
+<div class="outline-text-3" id="text-5-4">
+<p>
+一个脚注引用就是简单的一个在方括号中的数字<sup><a id="fnr.1" name="fnr.1" class="footref" href="#fn.1">1</a></sup>，<i>1</i> 在你的文件底部放置脚注的注解来定义它。 footnote-mode 可以被用来非常 方便的生成这种脚注。
+</p>
+
+
+<pre class="example">
+    Footnotes:
+[1]  Footnotes are defined by the same number in brackets occurring at the beginning
+of a line.
+Use footnote-mode's C-c ! a command, to very easily insert footnotes
+ while typing.  Use C-x C-x to return to the point of insertion.
+</pre>
+</div>
+
+
+
+
+
+
+
+<div id="outline-container-sec-5-4-1" class="outline-4">
+<h4 id="sec-5-4-1">更详细请参考：</h4>
+</div>
+
+
+
+
+
+<div id="outline-container-sec-5-4-2" class="outline-4">
+<h4 id="sec-5-4-2"><a href="http://roygu.com/doc/muse/MuseQuickStart.html"><a href="http://roygu.com/doc/muse/MuseQuickStart.html">http://roygu.com/doc/muse/MuseQuickStart.html</a></a></h4>
+<div class="outline-text-4" id="text-5-4-2">
+<p>
+<a href="http://roygu.com/doc/muse/muse.html"><a href="http://roygu.com/doc/muse/muse.html">http://roygu.com/doc/muse/muse.html</a></a>
+</p>
+</div>
+</div>
+</div>
+</div>
+<div id="footnotes">
+<h2 class="footnotes">Footnotes: </h2>
+<div id="text-footnotes">
+
+<div class="footdef"><sup><a id="fn.1" name="fn.1" class="footnum" href="#fnr.1">1</a></sup> <p>DEFINITION NOT FOUND.</p></div>
+
+
+</div>
+</div>
+      </div>
+    </div>
+    <div> 
+      <div class="post-meta">
+        <span title="post date" class="post-info">2010-01-25</span>
+        <span title="last modification date" class="post-info">2013-07-04</span>
+        <span title="tags" class="post-info"></span>
+        <span title="author" class="post-info">Gu Weigang</span>
+      </div>
+      <section>
+        <h1>Comments</h1>
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+          //var disqus_developer = 1;
+          var disqus_identifier = "/blog/2010/01/25/emacs-muse-quick-start/";
+          var disqus_url = "http://guweigang.com/blog/2010/01/25/emacs-muse-quick-start/";
+          var disqus_shortname = 'guweigang';
+          /* * * DON'T EDIT BELOW THIS LINE * * */
+          (function() {
+          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+          dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+          })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </section>
+      <div class="footer">
+        <p>Generated by <a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.3.1 (<a href="http://orgmode.org">Org</a> mode 8.0.3)</p>
+        <p> 
+          Copyright &copy; 2012 - 2013 <a href="mailto:guweigang &lt;at&gt; outlook &lt;dot&gt; com">Gu Weigang</a>
+          &nbsp;&nbsp;-&nbsp;&nbsp;
+          Powered by <a href="https://github.com/kelvinh/org-page" target="_blank">org-page</a>
+        </p>
+      </div>
+    </div>
+  </body>
+</html>

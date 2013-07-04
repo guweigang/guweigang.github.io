@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <title>solar-system-1.0.0beta3发布 - 闭眼听世界</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Gu Weigang" />
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <link rel="stylesheet" href="/media/css/main.css" type="text/css">
+  </head>
+  <body class="container">
+    <div> 
+      <header class="masthead">
+        <h1 class="masthead-title"><a href="/">闭眼听世界</a></h1>
+        <p>心如松静意无尘，气若浮萍了无痕！</p>
+        <ul>
+          <li><a href="/blog/">Blog</a></li>
+          <li><a href="/wiki/">Wiki</a></li>
+          <li><a href="/tags/">Tags</a></li>
+          <li><a href="/about/">About</a></li>
+          <li><a href="https://github.com/guweigang">GitHub</a></li>
+          <li><a href="https://google.com/search?q=site:guweigang.com">Search</a></li>
+        </ul>
+      </header>
+    </div>
+    <div> 
+      <div class="post">
+        <h1>solar-system-1.0.0beta3发布</h1>
+        <p>
+距离上次更新已有一月，2010年2月2日，P.M.Jones终于发布了solar-system-1.0.0beta3。 
+具体更新如下：
+</p>
+
+
+<p>
+#+BEGIN_EXAMPLE
+</p>
+
+<p>
+General 
+</p>
+<hr/>
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1">[ADD] Localization files for de_DE on classes Solar_Auth_Adapter,</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+Solar_Controller_Page, Solar_Debug_Timer, Solar_Filter, Solar_Locale, 
+</p>
+
+
+<p>
+Solar_Sql_Adapter. (thanks kalkin, tobias nix; fixes #87) 
+</p>
+
+
+<p>
+Solar_Auth_Adapter 
+</p>
+<hr/>
+</div>
+</div>
+
+<div id="outline-container-sec-2" class="outline-2">
+<h2 id="sec-2">[FIX] Method processLogout() now calls 'logout_callback' (vice</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+'login_callback'). Thanks, Tomasz Holeksa, for the report. 
+</p>
+
+
+<p>
+Solar_Cli_MakeVendor 
+</p>
+<hr/>
+</div>
+</div>
+
+<div id="outline-container-sec-3" class="outline-2">
+<h2 id="sec-3">[FIX] Write a "config/run-tests.php" file, instead of a "tests/config.php"</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+file. 
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-4" class="outline-2">
+<h2 id="sec-4">[CHG] In Controller_Bread::actionSearch() skeleton, make search term</h2>
+<div class="outline-text-2" id="text-4">
+<p>
+wildcard on spaces, fully-qualify the column names, and force the terms to 
+lower-case for more generous matching. 
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-5" class="outline-2">
+<h2 id="sec-5">[ADD] Method _createFiles() now makes a default config file too.</h2>
+</div>
+
+
+<div id="outline-container-sec-6" class="outline-2">
+<h2 id="sec-6">[FIX] The search URI now honors the action-path prefix. Thanks, Jeff</h2>
+<div class="outline-text-2" id="text-6">
+<p>
+Surgeson, for the report. 
+</p>
+
+
+<p>
+Solar_Controller_Page 
+</p>
+<hr/>
+</div>
+</div>
+
+<div id="outline-container-sec-7" class="outline-2">
+<h2 id="sec-7">[CHG] Method _setContentType() is no longer called directly inside fetch();</h2>
+<div class="outline-text-2" id="text-7">
+<p>
+instead, it is now part of the _render() cycle, so that you can set 
+</p>
+
+
+<p>
+$_format in pre-render if you like. 
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-8" class="outline-2">
+<h2 id="sec-8">[CHG] Method _setContentType() now sets Content-Type in the response only</h2>
+<div class="outline-text-2" id="text-8">
+<p>
+if it has not already been set; this lets you have direct control over the 
+Content-Type of the response. 
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-9" class="outline-2">
+<h2 id="sec-9">[ADD] Method _fixViewObject() now sets the locale class and special</h2>
+<div class="outline-text-2" id="text-9">
+<p>
+variables in the view, instead of _preRender().  This means _preRender() 
+is now empty by default, just like all the other hook methods. 
+</p>
+
+
+<p>
+Solar_Docs_Apiref 
+</p>
+<hr/>
+</div>
+</div>
+
+<div id="outline-container-sec-10" class="outline-2">
+<h2 id="sec-10">[ADD] Ignore the PHP 5.3.1 Exception::getPrevious() method in documentation.</h2>
+<div class="outline-text-2" id="text-10">
+<p>
+Solar_Http_Request 
+</p>
+<hr/>
+</div>
+</div>
+
+<div id="outline-container-sec-11" class="outline-2">
+<h2 id="sec-11">[ADD] METHOD_* constants for all HTTP and WebDAV methods. (thanks kalkin)</h2>
+<div class="outline-text-2" id="text-11">
+<p>
+Solar_Http_Request_Adapter* 
+</p>
+<hr/>
+</div>
+</div>
+
+<div id="outline-container-sec-12" class="outline-2">
+<h2 id="sec-12">[CHG] Replaced all HTTP/WebDAV method name strings with constants. (thanks</h2>
+<div class="outline-text-2" id="text-12">
+<p>
+kalkin) 
+</p>
+
+
+<p>
+Solar_Http_Request_Adapter_Curl 
+</p>
+<hr/>
+</div>
+</div>
+
+<div id="outline-container-sec-13" class="outline-2">
+<h2 id="sec-13">[FIX] Method _preConfig() now checks to see if the curl extension is loaded,</h2>
+<div class="outline-text-2" id="text-13">
+<p>
+and throws an exception if not.  (thanks kalkin) 
+</p>
+
+
+<p>
+Solar_Mail_Message 
+</p>
+<hr/>
+</div>
+</div>
+
+<div id="outline-container-sec-14" class="outline-2">
+<h2 id="sec-14">[ADD] Method resetRcpt() to reset all recipients in To, Cc and Bcc. (thanks</h2>
+<div class="outline-text-2" id="text-14">
+<p>
+kalkin; fixes #125) 
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-15" class="outline-2">
+<h2 id="sec-15">[CHG] Method fetchHeaders() now adds a 'Date' header with the sending date.</h2>
+<div class="outline-text-2" id="text-15">
+<p>
+(thanks kalkin; fixes #229) 
+</p>
+
+
+<p>
+Solar_Sql_Model_Related 
+</p>
+<hr/>
+</div>
+</div>
+
+<div id="outline-container-sec-16" class="outline-2">
+<h2 id="sec-16">[FIX] Method _fetchIntoArrayAll(), when fetching natives by select, now</h2>
+<div class="outline-text-2" id="text-16">
+<p>
+properly casts the `_getNativeBySelect()` join conditions to array. 
+</p>
+
+
+<p>
+Solar_Sql_Model_Related_HasManyThrough 
+</p>
+<hr/>
+</div>
+</div>
+
+<div id="outline-container-sec-17" class="outline-2">
+<h2 id="sec-17">[FIX] Method _fetchIntoArrayAll(), when fetching natives by select, now</h2>
+<div class="outline-text-2" id="text-17">
+<p>
+properly casts the `_getNativeBySelect()` join conditions to array.
+</p>
+
+<p>
+#+END_EXAMPLE
+</p>
+</div>
+</div>
+
+      </div>
+    </div>
+    <div> 
+      <div class="post-meta">
+        <span title="post date" class="post-info">2010-02-05</span>
+        <span title="last modification date" class="post-info">2013-07-04</span>
+        <span title="tags" class="post-info"><a href="/tags/framework/">framework</a>, <a href="/tags/php/">php</a>, <a href="/tags/release/">release</a>, <a href="/tags/solar/">solar</a>, <a href="/tags/solarphp/">solarphp</a>, <a href="/tags/update/">update</a></span>
+        <span title="author" class="post-info">Gu Weigang</span>
+      </div>
+      <section>
+        <h1>Comments</h1>
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+          //var disqus_developer = 1;
+          var disqus_identifier = "/blog/2010/02/05/solar-system-1_0_0_beta3-released/";
+          var disqus_url = "http://guweigang.com/blog/2010/02/05/solar-system-1_0_0_beta3-released/";
+          var disqus_shortname = 'guweigang';
+          /* * * DON'T EDIT BELOW THIS LINE * * */
+          (function() {
+          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+          dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+          })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </section>
+      <div class="footer">
+        <p>Generated by <a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.3.1 (<a href="http://orgmode.org">Org</a> mode 8.0.3)</p>
+        <p> 
+          Copyright &copy; 2012 - 2013 <a href="mailto:guweigang &lt;at&gt; outlook &lt;dot&gt; com">Gu Weigang</a>
+          &nbsp;&nbsp;-&nbsp;&nbsp;
+          Powered by <a href="https://github.com/kelvinh/org-page" target="_blank">org-page</a>
+        </p>
+      </div>
+    </div>
+  </body>
+</html>
