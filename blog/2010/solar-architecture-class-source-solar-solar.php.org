@@ -1,0 +1,32 @@
+#+TITLE: Solar架构类/source/solar/Solar.php
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2010-09-03 Fri
+#+URI: /blog/2010/09/03/solar-architecture-class-source-solar-solar.php/
+#+KEYWORDS: 
+#+TAGS: 
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+整体上来说，*Solar*的*架构*做得还是相当不错的。[[http://roygu.com/?p=854][前面一篇文章]]讲过*Solar*的入口文件（引导文件），大家可以再看看，里面用到了[[http://solarphp.cn/apidoc/Solar/Solar.html][*Solar**架构**类*]]。
+
+
+#+BEGIN_EXAMPLE
+    // load Solar
+require_once 'Solar.php';
+
+// start Solar with system config file
+$config = "$system/config.php";
+Solar::start($config);
+#+END_EXAMPLE
+
+
+那么*Solar**架构**类*的作用是什么呢？主要完成什么工作呢？这就是本文的主要内容。
+
+先还是说说*Solar**架构*，入口文件　+　*Solar**架构**类* +　*Solar**类*库
+1. 入口文件：启动*Solar*；
+2. *Solar**架构**类*：准备*Solar*运行的一切基本条件，定义*Solar*的运行机制、调用*Solar**类*库；
+3. *Solar**类*库：*Solar*各项功能完成的库文件，这里必须提一下[[http://solarphp.cn/apidoc/Solar/Solar_Base.html][Solar\_Base*类*]]，它是规定*Solar**类*库中所有*类*代码规范、执行流程的基*类*。
+
+

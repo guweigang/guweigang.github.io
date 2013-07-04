@@ -1,0 +1,136 @@
+#+TITLE: Solar_Jquery插件
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2010-07-22 Thu
+#+URI: /blog/2010/07/22/solar_jquery-plugin/
+#+KEYWORDS: 
+#+TAGS: jquery, solar, solar_jquery
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+昨天终于把Jquery集成进Solar了。之前一直在关注[[http://jquery.hohli.com/][JQuery PHP Library]]的动态，且作者也发布了相应的Zend Framework插件，不过最新更新仍然是Mar 16, 2009，看来作者已经很久没有更新了。
+
+大体思路流程如下：
+*初始化*
+PHP: 需要 jQuery 库
+
+
+#+BEGIN_EXAMPLE
+    require_once 'libraries/jQuery.php';
+// many actions
+// ...
+
+// get JSON response
+jQuery::getResponse();
+
+#+END_EXAMPLE
+
+
+HTML：加载JS类库jQuery和jQuery.php
+
+
+#+BEGIN_EXAMPLE
+    
+
+#+END_EXAMPLE
+
+
+JavaScript：
+
+
+#+BEGIN_EXAMPLE
+    // do an ajax post request (example)
+jQuery.extend({
+   php: function (url, params) {
+      // do an ajax post request
+      $.ajax({
+          // AJAX-specified URL
+          url: url,
+          // JSON
+          type: "POST",
+          data: params,
+          dataType : "json"
+      })
+   }
+});
+
+#+END_EXAMPLE
+
+
+另外，可以通过addMessage，addError等函数添加Ajax回调函数。
+
+在Solar中，如何使用呢？首先下载下面的Solar\_Jquery Package（下载地址：http://solarphp.cn/download/packages/Solar\_Jquery.rar），直接拷到Solar目录下，i.e., Jquery.php文件和Jquery文件夹放在Solar目录下，ajax.php放到Solar/View/Helper下，jquery.php.js放到Solar/View/Helper/Pagers/Public下。
+
+然后在动作中这样使用：
+
+
+#+BEGIN_EXAMPLE
+       public function actionAjax() {
+       $jquery = Solar::factory('Solar_Jquery');
+       if($jquery->error())
+       {
+            echo '不是Ajax！';
+            exit;
+       }
+       $this->_response->setHeader('Content-Type', 'application/json');
+       $jquery->addQuery('#test0')->html('new content')->css('backgroundColor','#ffff00');
+       $jquery->addQuery('div.red')->html('Hello, roy!');
+       $jquery->addMessage('hello, world', 'test', 'ok')->fetch();
+       //$jquery->fetch();
+   }
+
+#+END_EXAMPLE
+
+
+在视图中首先需要加载jquery类库，然后调用ajax辅助函数。
+1. 首先引入jquery类库
+
+
+#+BEGIN_EXAMPLE
+    $this->head()->addScript('Acme/Controller/Page/jquery.js');
+
+#+END_EXAMPLE
+
+
+2. 书写回调函数
+
+
+#+BEGIN_EXAMPLE
+    
+
+#+END_EXAMPLE
+
+
+3.使用ajax辅助函数
+使用view\_helper方法
+
+
+#+BEGIN_EXAMPLE
+    $data = array('title'=> 'i love you', 'content' => 'Thanks');
+echo $this->action('/blog/ajax', 'Roy',
+            $this->ajax('/blog/ajax', 'onclick', $data, array('class'=> 'ajax'), false));?>
+
+#+END_EXAMPLE
+
+
+手动书写
+
+
+#+BEGIN_EXAMPLE
+    Test Ajax
+
+#+END_EXAMPLE
+
+
+在标签里面使用：
+
+
+#+BEGIN_EXAMPLE
+    <a href="http://solarphp.cn" <?php echo $this->ajax('/blog/ajax', 'onMouseOver',array('title'=> 'i love you', 'content' => 'Thanks'), array('class'=> 'ajax', 'href'=>'/blog/ajax'));?> >Solar PHP</a>
+#+END_EXAMPLE
+
+
+试一下吧，呵呵~
+
+

@@ -1,0 +1,31 @@
+#+TITLE: 最土团购站数据库分析
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2010-07-31 Sat
+#+URI: /blog/2010/07/31/best-buy-points-database-analysis-of-soil/
+#+KEYWORDS: 
+#+TAGS: database, zuitu
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+ask - 提问表
+card - 生成代金券
+category - 类别: 城市列表、团购分类、论坛版面、用户等级、快递公司
+coupon - 优惠券
+feedback - 反馈
+flow - 用户中心的资金流
+friendlink - 友情链接
+invite - 邀请
+order - 订单表
+paye - 页脚信息
+partner - 商户表
+pay - 
+smssubscribe - 短信订阅
+subscribe - 邮件订阅
+system - 系统设置 base64 encryption
+team - 每日一团表
+topic - 论坛发贴
+user - 用户表
+
+

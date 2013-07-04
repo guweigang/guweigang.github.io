@@ -1,0 +1,242 @@
+#+TITLE: Emacs muse - Quick Start
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2010-01-25 Mon
+#+URI: /blog/2010/01/25/emacs-muse-quick-start/
+#+KEYWORDS: 
+#+TAGS: 
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+[[#sec1][关于本文档]]
+
+
+
+[[#sec2][开始]]
+
+[[#sec3][创建一个 Muse 项目]]
+
+[[#sec4][标记规则]]
+
+[[#sec5][段落]]
+
+[[#sec6][段落居中和引用]]
+
+[[#sec7][标题]]
+
+[[#sec8][水平线]]
+
+[[#sec9][强调文本]]
+
+[[#sec10][添加脚注]]
+
+[[#sec11][诗章]]
+
+[[#sec12][抄录段落]]
+
+[[#sec13][列表]]
+
+[[#sec14][表]]
+
+[[#sec15][锚和标记的链接]]
+
+[[#sec16][URLs 和 E-mail 地址]]
+
+[[#sec17][链接]]
+
+[[#sec18][嵌入 lisp]]
+
+[[#sec19][发布风格]]
+
+[[#sec20][从一个存在的风格中派生]]
+
+[[#sec21][重写一个存在的风格]]
+
+[[#sec22][创造一个新的风格]]
+
+Emacs Muse 是一个基于 Emacs 的写作和发布平台。它简化了文档编辑 过程，并且可以选择多种格式进行发布。
+
+Muse 包括两个主要部分：一个增强的 text 模式，用来编辑文档和在 Muse 工程中随意浏览文档；一组发布策略，用来产生各种不同的格式输出。
+
+
+** 关于本文档
+
+
+本文档提供一个 Muse 标记以及功能的例子作为一个 Muse 的快速指南。
+
+要查看本文档发布后的形式，输入 make examples。你就会获得一个 Info 文档， 一个 HTML 文档和一个 PDF 文档（假设你已经安装了 LaTeX，并带有必须的字体）。
+
+
+** 开始
+
+
+要使用 Muse，添加包含 Muse 文件的目录到你的 load-path 变量中，它一般在 你的 .emacs 文件中定义。然后，加载写作模式和你想要发布的文档风格。
+
+
+#+BEGIN_EXAMPLE
+    (add-to-list 'load-path "
+")
+(require 'muse-mode)     ; load authoring mode
+(require 'muse-html)     ; load publishing styles I use
+(require 'muse-latex)
+(require 'muse-texinfo)
+(require 'muse-docbook)
+#+END_EXAMPLE
+
+
+一旦 Muse 模式被加载，命令 M-x muse-publish-this-file 将发布一个输入 文档为任意可用的风格。如果你想在一个 buffer 中启用 muse-mode ，那么 输入 M-x muse-mode ，它被绑定到 C-c C-t。
+
+
+** 创建一个 Muse 项目
+
+
+通常你希望自动将一个目录中的所有文件发布为一组特定的输出风格， 为此， Muse 允许创建“项目”。下面是一个定义在你的 .emacs 文件 中的项目范例。
+
+
+#+BEGIN_EXAMPLE
+    (require 'muse-project)
+(setq muse-project-alist
+   '(("website"                      ; my various writings
+   ("~/Pages" :default "index")
+  (:base "html" :path "~/public_html")
+  (:base "pdf" :path "~/public_html/pdf"))))
+#+END_EXAMPLE
+
+
+上面定义了一个名为“website”的项目，该项目所有的文件都位于目录 ~/Pages 下，默认的访问页为 index。当该项目被发布时，每一页将会以 HTML 格式输出到 ~/public\_html 目录中，并以 PDF 格式输出到 ~/public\_html/pdf 目录中。在项目中的任一页中，你可以使用语法 [[pagename]] 创建到 其他页的链接。
+
+
+** 标记规则
+
+
+一个 Muse 文档使用特别的、文脉上的标记规则来决定怎样格式化输出结果。 例如，如果一个段落被缩进了，Muse 就认为它应该被引用。
+
+并没有太多的标记规则，而且所有的标记规则力争简单以便让使用者更加 专注于文档创作，而不是格式。
+
+
+*** 段落
+
+
+在 Muse 中段落必须通过一个空行来隔开。
+
+例如，本节的输入文本如下：
+
+
+#+BEGIN_EXAMPLE
+    在 Muse 中段落必须通过一个空行来隔开。
+
+例如，本节的输入文本如下：
+#+END_EXAMPLE
+
+
+
+
+*** 段落居中和引用
+
+
+以六个或者更多的空白字元（Tab 或者空格）开始的一行表示一个 居中的段落。
+
+这一段居中
+
+
+#+BEGIN_QUOTE
+  但是如果一行以空白字元开始，但空白字元不足六个，这表示一个 引用的段落。
+#+END_QUOTE
+
+
+
+
+*** 标题
+
+
+依赖于输出风格一个标题会成为打印输出的一章或者一节。以一个或 几个星号开始一个新的段落，后面跟一个空格和标题题目，来表示一 个标题。然后另起一段输入这部分的正文。
+
+
+#+BEGIN_EXAMPLE
+    * First level
+** Second level
+*** Third level
+#+END_EXAMPLE
+
+
+
+
+*** 水平线
+
+
+四个或者更多的破折号（-）表示一个水平线。确保其前后都是空行， 否则它将被看作是前面或后面段落的一部分！
+
+
+
+--------------
+
+上面分隔符由下面的输入产生：
+
+
+#+BEGIN_EXAMPLE
+    ----
+#+END_EXAMPLE
+
+
+
+
+*** 强调文本
+
+
+使用某些特别地认可的字符包围文本以强调文本：
+
+
+#+BEGIN_EXAMPLE
+    *emphasis*
+**strong emphasis**
+***very strong emphasis***
+_underlined_
+=verbatim and monospace=
+#+END_EXAMPLE
+
+
+上面的列表生成：
+
+
+#+BEGIN_EXAMPLE
+    emphasis
+strong emphasis
+very strong emphasis
+underlined
+verbatim and monospace
+#+END_EXAMPLE
+
+
+
+
+*** 添加脚注
+
+
+一个脚注引用就是简单的一个在方括号中的数字[1]，[[#fn.1][1]] 在你的文件底部放置脚注的注解来定义它。 footnote-mode 可以被用来非常 方便的生成这种脚注。
+
+
+#+BEGIN_EXAMPLE
+    Footnotes:
+[1]  Footnotes are defined by the same number in brackets occurring at the beginning
+of a line.
+Use footnote-mode's C-c ! a command, to very easily insert footnotes
+ while typing.  Use C-x C-x to return to the point of insertion.
+#+END_EXAMPLE
+
+
+
+
+
+
+
+**** 更详细请参考：
+
+
+
+
+
+**** [[http://roygu.com/doc/muse/MuseQuickStart.html][http://roygu.com/doc/muse/MuseQuickStart.html]]
+[[http://roygu.com/doc/muse/muse.html][http://roygu.com/doc/muse/muse.html]]
+
+

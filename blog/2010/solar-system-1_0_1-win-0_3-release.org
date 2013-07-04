@@ -1,0 +1,71 @@
+#+TITLE: solar-system- 1.01-win-0.3发布
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2010-05-24 Mon
+#+URI: /blog/2010/05/24/solar-system-1_0_1-win-0_3-release/
+#+KEYWORDS: 
+#+TAGS: soalrphp, solar, solar php, solar win
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+为了能让更多人使用solar php，我一直在不停地做solar windows版本的工作，今天终于能够给大家带来一个好消息了，这个版本是solar-win的一个里程卑版本，在这个版本中，solar-win的行为已经和linux下面几乎一致了。
+
+用法请参考/README和/script/README。
+
+
+#+BEGIN_QUOTE
+  Solar-Win
+=========
+++++ 请确保您的系统版本是vista（含）以上 ++++
+
+[更新列表]
+
+修改的文件：
+1. script/solar
+2. source/solar/Solar/Dir.php
+3. source/solar/Solar/Symlink.php
+4. source/solar/Solar/Cli/LinkVendor.php
+5. source/solar/Solar/Cli/UnlinkVendor.php
+
+添加的文件：
+1. script/solar.bat
+2. script/phpenv.ini
+3. script/readme
+
+教程(虽然在windows下，请仍然注意大小写)
+=================================
+由于当前windows系统下不允许symlink复制，所以在windows下必须先初始化solar环境。
+
+1. 配置script/phpenv.ini，如何配置请参考script/README
+
+2. 以管理员身份打开CMD，换到solarwin目录下：
+C:\Users\ROY>d:
+D:\>cd wamp\www\solarwin\
+D:\wamp\www\solarwin>script\solar link-vendor Solar
+
+3. OK, 这一步完成后，请检查你的include/目录，
+
+
+  #+BEGIN_EXAMPLE
+      2010-05-24  12:12     .
+2010-05-24  12:12     ..
+2010-05-24  12:12     Fixture
+2010-05-24  12:12     Mock
+2010-05-23  12:25     Solar [..\source\solar\Solar]
+2010-05-23  12:26     Solar.php [..\source\solar\Solar.php]
+2010-05-24  12:12     Test
+  #+END_EXAMPLE
+
+  
+如果你include目录像上面这样，那说明环境初使化成功。
+
+4. 像在linux中一样使solar，具体参考script/README
+#+END_QUOTE
+
+
+下载地址：[[http://solarphp.cn/download/solar-system-1.01-win-0.3.rar][http://solarphp.cn/download/solar-system-1.01-win-0.3.rar]]
+
+当然，你总是可以从这里下载最新的版本：[[http://solarphp.cn/download/solar-system-1.01-win-latest.rar][http://solarphp.cn/download/solar-system-1.01-win-latest.rar]]
+
+

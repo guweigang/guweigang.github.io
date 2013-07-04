@@ -1,0 +1,126 @@
+#+TITLE: Solar manual 1.2. 下载并安装Solar
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2010-04-11 Sun
+#+URI: /blog/2010/04/11/solar-manual-1_2-download-and-install-solar/
+#+KEYWORDS: 
+#+TAGS: 
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+
+
+
+1. 下载Solar系统压缩包，你可以从这里下载
+2. 把系统包解压到网站根目录（例如：/var/www/htdocs 或 /etc/apache2/sites/default），在本示例中我们把该目录叫SYSTEM
+
+   
+
+   
+
+   
+
+   
+
+   [[http://roygu.com/wp-content/uploads/2010/04/warning.png][[[http://roygu.com/wp-content/uploads/2010/04/warning.png]]]]
+   
+
+   Warning
+   
+
+   
+
+   
+
+   请注意，这种做法是很不安全的；在实际项目中，你应该把系统包解压到网站根目录 之外，通过建立虚拟主机来指向SYSTEM/docroot目录
+   
+
+   
+
+   
+
+   
+
+3. 进入SYSTEM目录，你应 该会看到类似下面这样的文件目录：
+
+
+   #+BEGIN_EXAMPLE
+       $ cd SYSTEM
+$ ls -1F
+README
+config/
+config.php
+docroot/
+include/
+index.php
+script/
+source/
+sqlite/
+tmp/
+$
+   #+END_EXAMPLE
+
+   
+
+
+4. 更改tmp/和sqlite/目录的权限，以使web服务器对其具有可写权限
+
+
+   #+BEGIN_EXAMPLE
+       $ chmod -R 777 sqlite/ tmp/
+$
+
+   #+END_EXAMPLE
+
+   
+
+
+   
+
+
+   
+
+
+   
+
+
+   
+
+
+   [[../wp-content/uploads/2010/04/warning.png][[[../wp-content/uploads/2010/04/warning.png]]]]
+
+   
+
+
+   Warning
+
+   
+
+
+   
+
+
+   
+
+
+   请注意，对这些目录使用最大读/写权限是不安全的。在实际项目中，你应该把 sqlite/和tmp/的所有者改为web服务器。
+
+   
+
+
+   
+
+
+   
+
+
+   
+
+
+5. 现在你可以浏览http://localhost/index.php 并且可以看到Hello World!消息[[http://solarphp.cn/manual-new/figures/01-hello-world.png]]
+
+
+
+
+

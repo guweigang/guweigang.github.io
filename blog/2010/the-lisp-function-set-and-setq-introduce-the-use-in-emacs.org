@@ -1,0 +1,43 @@
+#+TITLE: Lisp的set和setq函数在emacs中的使用介绍
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2010-09-24 Fri
+#+URI: /blog/2010/09/24/the-lisp-function-set-and-setq-introduce-the-use-in-emacs/
+#+KEYWORDS: 
+#+TAGS: emacs, set, setq
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+转自：http://www.ksarea.com/articles/20070913\_introduce-lisp-set-setq-in-emacs.html
+
+set函数：
+为了将符号flowers的值设置为列表(rose violet daisy buttercup)，我们在emacs中使用如下列表：
+(set ‘flowers ‘(rose violet daisy buttercup));例一
+光标置于表达式之后，键入C-x C-e或者C-x-e，列表(rose violet daisy buttercup)将会出现在回显区。这是set函数的返回值，每个Lisp函数如果不产生错误消息，它将必须有一个返回值作为附带效果，而函数的附带效果有且仅有一个附带效果。
+
+我们已经为符号flowers赋值，那么我们可以对它进行求值：
+flowers
+光标置于它之后，键入C-x C-e或者C-x-e，回显区将显示列表(rose violet daisy buttercup)。我们也可以将flowers的值以字符串形式输出，这里使用到函数message：
+(message “%s” flowers);有点类似C语言里的printf
+同样键入C-x C-e或者C-x-e，回显区将以字符串“(rose violet daisy buttercup)”的形式显示flowers的值。
+
+这里还要说明注意一下，为什么set函数的两个参量之前都用了一个单引号？Lisp解释器是由内层列表往外层列表进行解释的，所以执行函数时，首先要对参量进行解释或者求值。而单引号位于列表或者变量之前，是为了告诉Lisp解释器不要对这个列表和变量进行求值操作。试想，如果例一中没有在两个参量前面添加一个单引号，那么在执行set函数之前首先要对flowers进行求值，而flowers此时是没有值的，自然要报错，而且如果列表(rose violet daisy buttercup)前面没有单引号，Lisp解释器会将列表中的第一个符号rose理解成要执行的命令即函数，但是没有帮定在符号rose上的函数，所以执行也要报错。但是如果有的参量值确实是可以求得的，那么还是可以不加单引号的：
+(set ‘flowers (+ 2 2));flowers的值将被赋予4
+
+setq函数：
+这个函数其实是set函数的一个扩充，因为在大多数情况下我们总是会在set函数的第一个参量前加单引号。既然set函数和其第一个带单引号的参量的组合如此常见，所以就产生了一个特殊的函数：setq（set+quote）。这个函数和set函数的功能类似，不同的是setq函数在执行的时候自动的在其第一个参量前带上单引号，而不必自己键入单引号。
+所以下面两个列表执行结果是一致的：
+(set ‘flowers ‘(rose violet daisy buttercup))
+(setq flowers ‘(rose violet daisy buttercup))
+
+当然，setq还被赋予了一个新的功能，给几个不同的变量赋予不同的值，如：
+(setq flowers ‘(rose violet daisy buttercup) trees ‘(pine fir oak maple))
+上述列表是将第一个参量指向第二个参量列表（赋值），第三个参量指向第四个参量列表（赋值）。
+
+利用setq，我们可以实现一个简单的计数器：
+(setq counter 0);初始化counter的值为0
+(setq counter (+ counter 1));Lisp首先对最内层列表求值，最终counter的值加1
+counter；对计数器进行求值
+
+

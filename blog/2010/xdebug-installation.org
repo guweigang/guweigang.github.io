@@ -1,0 +1,58 @@
+#+TITLE: xdebug的安装
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2010-06-24 Thu
+#+URI: /blog/2010/06/24/xdebug-installation/
+#+KEYWORDS: 
+#+TAGS: php, xdebug
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+一直以来觉得安装xdebug很简单，但是今天才发现安装xdebug还是花了很多时间，记录一下：
+在windows.php.net上看到(事实上我前面有一篇文章引用过[[http://roygu.com/?p=584][http://roygu.com/?p=584]])，windows下如果使用apache的话，PHP的版本是VC6，所以这里Xdebug都使用VC6。而PHP5.3与之前的挂载方式也有变化，在PHP5.3中，不管是NTS还是TS都使用zend\_extension方式挂载，而PHP5.3以前，TS使用zend\_extension\_ts方式挂载，NTS使用zend\_extension\_nts挂载。下面是示例：
+
+PHP5.3
+
+
+#+BEGIN_EXAMPLE
+    [XDebug]
+;; Only Zend OR (!) XDebug
+zend_extension="D:\wamp\bin\php\php5.3.0\ext\php_xdebug-2.0.5-5.3-vc6.dll"
+xdebug.auto_trace = On
+xdebug.show_exception_trace = On
+xdebug.remote_autostart = On
+xdebug.remote_enable = On
+xdebug.collect_vars = On
+xdebug.collect_return = On
+xdebug.collect_params = On
+xdebug.profiler_output_dir="D:\wamp\tmp"
+#+END_EXAMPLE
+
+
+PHP5.2.11
+
+
+#+BEGIN_EXAMPLE
+    [XDebug]
+;; Only Zend OR (!) XDebug
+zend_extension_ts="D:\wamp\bin\php\php5.2.11\ext\php_xdebug-2.0.5-5.2.dll"
+xdebug.auto_trace = On
+xdebug.show_exception_trace = On
+xdebug.remote_autostart = On
+xdebug.remote_enable = On
+xdebug.collect_vars = On
+xdebug.collect_return = On
+xdebug.collect_params = On
+xdebug.profiler_output_dir="D:\wamp\tmp"
+#+END_EXAMPLE
+
+
+
+add some thing here
+
+ VC6 is for Apache (VC9 is for IIS)
+ Thread safe is for running PHP as an Apache module (typical installation), non-thread safe is for CGI
+
+
+

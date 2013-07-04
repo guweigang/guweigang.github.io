@@ -1,0 +1,36 @@
+#+TITLE: SCW(Solar CLI for Windows)更新至1.1 
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2010-07-16 Fri
+#+URI: /blog/2010/07/16/scw-solar-cli-for-windows-updated-to-1_1/
+#+KEYWORDS: 
+#+TAGS: scw, solar, solar cli, windows
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+当make-vendor时，script目录下也会建立相应的bat文件和启动文件，但bat文件固定调用solar文件。举例如下：当 script\solar make-vendor Acme后，在script目录下会新建两个文件：一个是acme.bat，另一个是acme。按理说，当使用script\acme make-vendor Acmd时，acme.bat文件调用的是acme，但事实却不是如此。所以，当删除solar文件时，script\acme不再可用。
+
+此问题已修正，带来的好处是你可以定义自己的cli类，如：在Acme\_Cli\_Help类，在该类中加入以下代码：
+
+
+#+BEGIN_EXAMPLE
+    
+class Acme_Cli_Help extends Solar_Cli_Help
+{
+    protected function _setup()
+    {
+        $this->_outln("Hello, world!");
+    }
+}
+
+#+END_EXAMPLE
+
+
+再到命令行输入script\acme help命令
+[[http://roygu.com/?attachment_id=693][[[http://roygu.com/wp-content/uploads/2010/07/acme-cli-300x195.png]]]]
+
+了解详细信息请看这里：[[http://bug.solarphp.cn/view.php?id=10][# ticket 10]]
+
+
+

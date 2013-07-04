@@ -1,0 +1,74 @@
+#+TITLE: 算法学习第一天---递归
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2010-04-17 Sat
+#+URI: /blog/2010/04/17/recursive-algorithm-to-learn-the-first-day-/
+#+KEYWORDS: 
+#+TAGS: cpp, 算法
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+:D 今天如昨天计划一样，开始了第一天的算法学习，为了学习算法，我昨天特意把VS 2010下载下来，今天正好就派上用场了。VS2010改善了不少，UI更是好看了许多。
+
+今天学了递归，原来递归也这么难。。。真是后悔本科没有用功学习，都搞创业去了。
+
+递归最重要的是：把问题规模由n转化为n-1，依此类推，最好得出可求解的部分，这也是退出递归的条件。
+
+那么在递归算法上，最常用的两个示例是《汉诺塔》和《排列产生器》
+
+1. [汉诺塔]
+分析：假定圆盘数目为n。为把最大的圆盘置于塔B的底部，需要将其余的n-1个圆盘移动到塔C，然后将最大的圆盘移动到塔B。现在剩下的的任务是将圆盘从塔C移动到塔B。完成该任务后，塔A和塔B可用。塔B上已经有一个圆盘，但是可以忽略，因为该圆盘是最大的。
+那么这个问题就可以转化为两个n-1的问题来解决了。
+
+
+#+BEGIN_EXAMPLE
+    enum tower {A='A', B='B', C='C'};
+void move(tower x, tower y, tower z, int n)
+{
+    if(1 == n)
+    {
+     std::cout << "Move a disk from " << char(x) << " to " << char(y) << std::endl;
+  }
+ else
+  {
+     move(x, z, y, n-1);
+       std::cout << "Move a disk from " << char(x) << " to " << char(y) << std::endl;
+      move(z, y, x, n-1);
+   }
+}
+
+#+END_EXAMPLE
+
+
+2. [排列产生器] 给定n（n >=1）个元素的集合，要求输出该集合所有可能的排列。
+分析：例如，该集合为{a, b ,c}，那么排列为{(a, b, c), (a, c, b), (b, a, c), (b, c, a), (c, a, b), (c, b, a)}。可以很容易看出给定n个元素，有 n! 个不同的排列。假设现在有一个4个元素的集合{a, b, c, d}，可能得到一个简单的算法：
+(1). a 加上(b, c, d)的所有排列
+(2). b 加上(a, c, d)的所有排列
+(3). c 加上(a, b, d)的所有排列
+(4). d 加上(a, b, c)的所有排列
+这就是说，n=4的问题转化为n=3的问题了。。。这就是递归的讯息。
+
+
+#+BEGIN_EXAMPLE
+    void Perm(int a[], int k, int n)
+{
+   if(k == n){
+       for(int i =0; i < n; ++i) std::cout << a[i] << " ";
+        std::cout << std::endl;
+ }
+ else
+  {
+     for(int i = k-1; i <= n-1; ++i)
+        {
+         int t = a[k-1]; a[k-1] = a[i]; a[i] = t;
+          Perm(a, k+1, n);
+          t = a[k-1]; a[k-1] = a[i]; a[i] = t;
+      }
+ }
+}
+
+#+END_EXAMPLE
+
+
+

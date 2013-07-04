@@ -1,0 +1,52 @@
+#+TITLE: 域名泛解析
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2010-03-20 Sat
+#+URI: /blog/2010/03/20/pan-resolve-domain-name/
+#+KEYWORDS: 
+#+TAGS: 域名, 域名泛解析, 泛解析
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+首先进入域名控制面板，增加一条A记录
+
+
+#+BEGIN_EXAMPLE
+    
+*.xxx.com  => IP地址(xxx.xxx.xxx.xxx)
+
+#+END_EXAMPLE
+
+
+成功后，在CMD中随意ping一下，比如：
+
+
+#+BEGIN_EXAMPLE
+    
+ping gwf.xxx.com
+
+#+END_EXAMPLE
+
+
+看看是否已指向xxx.xxx.xxx.xxx，如果成功说明域名已配置好
+接着打开Apache的配置文件，做如下设置
+
+
+#+BEGIN_EXAMPLE
+    
+
+    ServerAdmin xxx@xxx.com
+    DocumentRoot /var/www/html/xxx
+    ServerAlias www.xxx.cn *.xxx.cn
+    ServerName xxx.cn
+    ErrorLog logs/dummy-xxx.cn-error_log
+    CustomLog logs/dummy-xxx.cn-access_log common
+
+
+#+END_EXAMPLE
+
+
+OK，已搞定
+
+

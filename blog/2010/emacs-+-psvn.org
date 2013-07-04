@@ -1,0 +1,187 @@
+#+TITLE: emacs+psvn
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2010-09-25 Sat
+#+URI: /blog/2010/09/25/emacs-+-psvn/
+#+KEYWORDS: 
+#+TAGS: emacs, psvn, svn
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+psvn：一个emacs的插件，官方有比较详细的介绍：[[http://www.xsteve.at/prg/vc_svn/][http://www.xsteve.at/prg/vc\_svn/]]，不过是E文的。
+
+当然也可以看这里（中文的）：[[http://lifegoo.pluskid.org/wiki/EmacsSubversion.html][http://lifegoo.pluskid.org/wiki/EmacsSubversion.html]]和[[http://emacser.com/svn-status-mode-line.htm][http://emacser.com/svn-status-mode-line.htm]]
+
+首先下载命令行的subversion，下载地址在这里（到官方下载还要注册。。。）：[[http://www.open.collab.net/files/documents/60/3564/CollabNetSubversion-client-1.6.12-1.win32.exe][http://www.open.collab.net/files/documents/60/3564/CollabNetSubversion-client-1.6.12-1.win32.exe]]，安装。
+
+然后到[[http://www.xsteve.at/prg/emacs/psvn.el][这里]]下载psvn.el。
+
+最后在你的.emacs配置文件中加入下面一行：
+
+
+#+BEGIN_EXAMPLE
+    
+;; psvn
+(require 'psvn)
+
+#+END_EXAMPLE
+
+
+
+常用快捷方式：
+
+
+
+
+
+C-x v v
+
+提交代码
+
+
+
+
+C-c C-c
+
+确认提交
+
+
+
+
+C-x v =
+
+弹出一个 buffer 显示你自从上次 commit 之后所做的改变
+
+
+
+
+C-x v u
+
+丢弃上次更改
+
+
+
+
+C-x v d
+
+打开工作目录
+
+
+
+
+C-x v l
+
+查看修改日志
+
+
+
+
+C-u C-x v = RET RET RET
+
+查看两个版本之间的区别
+
+
+
+
+C-x v ~ 1 RET
+
+查看第一个版本
+
+
+
+
+M-p
+
+在写日志的时候显示上一次的日志
+
+
+
+
+M-x vc-update
+
+更新当前文件（从SVN中Update）
+
+
+
+
+M-x vc-resolve-conflicts
+
+消除冲突标记
+
+
+
+
+
+
+
+#+BEGIN_EXAMPLE
+    
+用 M-x svn-status 来打开一个 svn-status 的 buffer，这个 buffer 处于 svn-status mode 中，可用的命令如下：
+
+g     - svn-status-update:               run 'svn status -v'
+M-s   - svn-status-update:               run 'svn status -v'
+C-u g - svn-status-update:               run 'svn status -vu'
+=     - svn-status-show-svn-diff         run 'svn diff'
+l     - svn-status-show-svn-log          run 'svn log'
+i     - svn-status-info                  run 'svn info'
+r     - svn-status-revert                run 'svn revert'
+X v   - svn-status-resolved              run 'svn resolved'
+U     - svn-status-update-cmd            run 'svn update'
+M-u   - svn-status-update-cmd            run 'svn update'
+c     - svn-status-commit                run 'svn commit'
+a     - svn-status-add-file              run 'svn add --non-recursive'
+A     - svn-status-add-file-recursively  run 'svn add'
++     - svn-status-make-directory        run 'svn mkdir'
+R     - svn-status-mv                    run 'svn mv'
+D     - svn-status-rm                    run 'svn rm'
+M-c   - svn-status-cleanup               run 'svn cleanup'
+b     - svn-status-blame                 run 'svn blame'
+X e   - svn-status-export                run 'svn export'
+RET   - svn-status-find-file-or-examine-directory
+^     - svn-status-examine-parent
+~     - svn-status-get-specific-revision
+E     - svn-status-ediff-with-revision
+X X   - svn-status-resolve-conflicts
+s     - svn-status-show-process-buffer
+e     - svn-status-toggle-edit-cmd-flag
+?     - svn-status-toggle-hide-unknown
+_     - svn-status-toggle-hide-unmodified
+m     - svn-status-set-user-mark
+u     - svn-status-unset-user-mark
+$     - svn-status-toggle-elide
+w     - svn-status-copy-filename-as-kill
+DEL   - svn-status-unset-user-mark-backwards
+* !   - svn-status-unset-all-usermarks
+* ?   - svn-status-mark-unknown
+* A   - svn-status-mark-added
+* M   - svn-status-mark-modified
+* D   - svn-status-mark-deleted
+* *   - svn-status-mark-changed
+.     - svn-status-goto-root-or-return
+f     - svn-status-find-file
+o     - svn-status-find-file-other-window
+v     - svn-status-view-file-other-window
+I     - svn-status-parse-info
+V     - svn-status-svnversion
+P l   - svn-status-property-list
+P s   - svn-status-property-set
+P d   - svn-status-property-delete
+P e   - svn-status-property-edit-one-entry
+P i   - svn-status-property-ignore-file
+P I   - svn-status-property-ignore-file-extension
+P C-i - svn-status-property-edit-svn-ignore
+P k   - svn-status-property-set-keyword-list
+P y   - svn-status-property-set-eol-style
+P x   - svn-status-property-set-executable
+h     - svn-status-use-history
+q     - svn-status-bury-buffer
+
+C-x C-j - svn-status-dired-jump
+
+#+END_EXAMPLE
+
+
+那么现在，一切都搞定了，看看截图吧。。。[[http://roygu.com/?attachment_id=973][[[http://roygu.com/wp-content/uploads/2010/09/emacs-psvn-640x150.jpg]]]]
+
+

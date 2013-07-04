@@ -1,0 +1,64 @@
+#+TITLE: php字符递增问题
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2010-08-14 Sat
+#+URI: /blog/2010/08/14/php-character-increment-problem/
+#+KEYWORDS: 
+#+TAGS: char, php, string
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+最近在做项目的时候碰到了这个问题，从A输出到Z。原本以为可以这样写：
+
+
+#+BEGIN_EXAMPLE
+    
+ for($i = 'A'; $i <= 'Z'; ++$i) {
+     echo $i;
+ }
+
+#+END_EXAMPLE
+
+
+结果输出是：
+
+
+#+BEGIN_EXAMPLE
+    
+ABCDEFGHIJKLMNOPQRSTUVWXYZAAABACADAEAFAGAHAIAJAKAL...
+
+#+END_EXAMPLE
+
+
+想了好久不明白是为什么，最后不得不考虑用他们的ascii码值：
+
+
+#+BEGIN_EXAMPLE
+    
+ for ($i = ord('A'); $i <= ord('Z'); ++$i)
+ {
+     echo chr($i);
+ }
+
+#+END_EXAMPLE
+
+
+
+这样就可以正确执行了。百思不得其解，难道for循环中中$i<=Z条件错误，以致于循环不能结束？遂进行如下测试：
+
+输出竟然是'AA'。。。这确实让人意外，最后在[[http://www.laruence.com/2010/07/30/1682.html][laruence的博客]]中找到了解释，原来当$i = Z时，条件仍然成立，当Z+1时，结果为AA，仍然小于Z，最后一直到YZ，ZA才大于Z，才停止循环。在laruence的文章评论中，有一位@胖子总结了一句话，觉得确实挺有道理：
+
+
+#+BEGIN_EXAMPLE
+    
+其实说明了另一个问题：PHP中没有字符，即使用chr,返回的也是一个长度为1的字符串
+如：
+var_dump(chr(90));
+得到：
+string ‘Z’ (length=1)
+
+#+END_EXAMPLE
+
+
+

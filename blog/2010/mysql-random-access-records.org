@@ -1,0 +1,49 @@
+#+TITLE: Mysql随机访问记录
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2010-01-03 Sun
+#+URI: /blog/2010/01/03/mysql-random-access-records/
+#+KEYWORDS: 
+#+TAGS: mysql, rand
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+之前有朋友问过我这个问题，不过我当时的想法是很拙劣的，很费劲的！
+
+到网上找了下才知道Mysql有这个功能：
+
+
+#+BEGIN_EXAMPLE
+    
+SELECT * FROM `one7_category` ORDER BY RAND() LIMIT 5;
+
+#+END_EXAMPLE
+
+
+不过，又在群里问了下朋友，说这个效率不高，又google了下，终于在[[http://jnote.cn/][老蒋记事本]]找到了该文章
+[[http://jnote.cn/blog/mysql/mysql-rand-efficiency.html][mysql使用rand随机查询记录效率测试]]
+
+
+#+BEGIN_EXAMPLE
+    
+SELECT * FROM `table`
+WHERE id >= (SELECT floor( RAND() * ((SELECT MAX(id) FROM `table`)-(SELECT MIN(id) FROM `table`)) + (SELECT MIN(id) FROM `table`))) 
+ORDER BY id LIMIT 1;
+
+#+END_EXAMPLE
+
+
+
+
+#+BEGIN_EXAMPLE
+    
+SELECT *
+FROM `table` AS t1 JOIN (SELECT ROUND(RAND() * ((SELECT MAX(id) FROM `table`)-(SELECT MIN(id) FROM `table`))+(SELECT MIN(id) FROM `table`)) AS id) AS t2
+WHERE t1.id >= t2.id
+ORDER BY t1.id LIMIT 1;
+
+#+END_EXAMPLE
+
+
+

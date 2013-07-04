@@ -1,0 +1,38 @@
+#+TITLE: 分数化简算法
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2010-02-05 Fri
+#+URI: /blog/2010/02/05/score-simplification/
+#+KEYWORDS: 
+#+TAGS: c, cpp, 分数化简, 算法
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+#+BEGIN_EXAMPLE
+    
+// @param denominator 分母
+// @param numerator 分子
+// 化分母为正数
+if (denominator < 0)
+{
+    numerator = -numerator;
+    denominator = - denominator;
+}
+
+int a = abs(numerator);
+int b = abs(denominator);
+
+while( b>0 )
+{
+    int t  = a % b;
+    a = b;
+    b = t;
+}
+numerator /= a;
+denominator /= a;
+
+#+END_EXAMPLE
+
+
+

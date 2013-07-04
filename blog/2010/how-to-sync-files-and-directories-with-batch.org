@@ -1,0 +1,38 @@
+#+TITLE: how to sync files and directories with batch?
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2010-09-28 Tue
+#+URI: /blog/2010/09/28/how-to-sync-files-and-directories-with-batch/
+#+KEYWORDS: 
+#+TAGS: bat, jar, solar, sync
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+今天终于找到了一款可以在windows平台同步目录和文件的工具 - Sync，可以在batch中调用，不过是用java编写的，所以需要jre环境，而且必须是jre 6。官方地址在这里：[[http://sync9.software.informer.com/][http://sync9.software.informer.com/]]
+
+主要的处理过程都在一个jar文件中，作者提供了源码。那么要在batch文件中使用，只需要通过一个Bat文件调用它就行了，如（假设sync.jar和sync.bat在同一级目录）：
+
+
+#+BEGIN_EXAMPLE
+    @echo off
+rem -------------------------------------------------------------
+rem  sync.bat - Windows batch file for convenient execution of Sync
+rem  use force default
+rem  Author: roy - roy@solarphp.cn - http://roygu.com
+rem  copyright (c) 2010 - http://solarphp.cn - http://solarphp.org.cn
+rem -------------------------------------------------------------
+
+@setlocal
+rem --set bin path
+set BIN_PATH=%~dp0
+
+rem --run it
+java -jar "%BIN_PATH%sync.jar"  --force %*
+@endlocal
+#+END_EXAMPLE
+
+
+这样就可以了，也就是说，我们不久就可以在windows xp、2000、2003中自由地使用solar了。
+
+

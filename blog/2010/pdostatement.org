@@ -1,0 +1,42 @@
+#+TITLE: PDOStatement
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2010-01-01 Fri
+#+URI: /blog/2010/01/01/pdostatement/
+#+KEYWORDS: 
+#+TAGS: PDOStatement
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+#+BEGIN_EXAMPLE
+    
+PDOStatement implements Traversable {
+/* Properties */
+readonlystring $queryString;
+/* Methods */
+bool bindColumn ( mixed $column , mixed &$param [, int $type [, int $maxlen [, mixed $driverdata ]]] )
+bool bindParam ( mixed $parameter , mixed &$variable [, int $data_type = PDO::PARAM_STR [, int $length [, mixed $driver_options ]]] )
+bool bindValue ( mixed $parameter , mixed $value [, int $data_type = PDO::PARAM_STR ] )
+bool closeCursor ( void )
+int columnCount ( void )
+bool debugDumpParams ( void )
+string errorCode ( void )
+array errorInfo ( void )
+bool execute ([ array $input_parameters = array() ] )
+mixed fetch ([ int $fetch_style = PDO::FETCH_BOTH [, int $cursor_orientation = PDO::FETCH_ORI_NEXT [, int $cursor_offset = 0 ]]] )
+array fetchAll ([ int $fetch_style = PDO::FETCH_BOTH [, int $column_index = 0 [, array $ctor_args = array() ]]] )
+string fetchColumn ([ int $column_number = 0 ] )
+mixed fetchObject ([ string $class_name = "stdClass" [, array $ctor_args ]] )
+mixed getAttribute ( int $attribute )
+array getColumnMeta ( int $column )
+bool nextRowset ( void )
+int rowCount ( void )
+bool setAttribute ( int $attribute , mixed $value )
+bool setFetchMode ( int $mode )
+}
+
+#+END_EXAMPLE
+
+
+

@@ -1,0 +1,29 @@
+#+TITLE: What is mysqlnd?
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2010-08-11 Wed
+#+URI: /blog/2010/08/11/what-is-mysqlnd/
+#+KEYWORDS: 
+#+TAGS: mysql, mysqlnd
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+mysqlnd is the MySQL Native Driver for PHP. What does this mean? For those who are already very familiar with PHP's MySQL support, a single sentence should explain it: mysqlnd is a replacement for libmysql, distributed under the terms of the PHP license and tightly integrated into PHP at the C level. This means you no longer need to have MySQL installed on a machine if you merely want to use PHP to access a MySQL server that's on a different machine. Those of you who would not call yourselves C-level PHP hackers should read on.
+[[http://roygu.com/?attachment_id=828][[[http://roygu.com/wp-content/uploads/2010/08/memorylimitsupport-300x150.png]]]]
+
+
+
+-  “native”: This doesn't mean “written in PHP”; that would be too slow. PHP itself is a program written in C. Therefore “native” means this driver is written in C and tightly integrated into PHP at the C level. This allows the driver to achieve maximum performance (just like libmysql).
+-  “driver”: This is not a new programming API or PHP extension; there are already three APIs (ext/mysql, ext/mysqli, PDO/MySQL) and three extensions, so there is no need for more. Rather, mysqlnd is a library that implements the MySQL low-level communication protocol. This library can be used by the existing extensions. Currently ext/mysql and ext/mysqli have been modified so they can optionally use mysqlnd instead of libmysql, and PDO/MySQL will be modified later.
+-  “for PHP”: This is nothing new in the sense that libmysql is also for PHP. But mysqlnd is published under the terms of the PHP license whereas libmysql was not. Therefore, unlike with libmysql, there is no need for the FLOSS License Exception to make the license compatible with that of PHP. Those who recall the (partly heated) discussions about the exception might be especially happy to hear about this.
+
+
+
+
+*** mysqlnd performance
+
+
+First benchmarks showed that mysqlnd seems to be roughly as fast as libmysql. Sometimes it is a little faster, sometimes libmysql seems to be slightly ahead of mysqlnd. There are a few differences between mysqlnd and libmysql. For example, mysqlnd needs to hold no extra copies of rows when fetching data. Therefore it can be a little bit more efficient using memory. However, you must never forget that the database layer is only a small piece in the whole game, if you look at PHP from a higher view and consider the whole web request which includes accepting the HTTP request, starting PHP, parsing PHP code, running PHP, spending a few milliseconds in the database layer itself, spending time transferring data from the database server via the network to PHP, processing the data in PHP and finally serving a response to the web client. Don't raise that high expectations.
+
+

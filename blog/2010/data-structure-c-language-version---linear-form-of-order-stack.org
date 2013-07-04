@@ -1,0 +1,126 @@
+#+TITLE: 数据结构C语言版：线性表之顺序栈
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2010-04-22 Thu
+#+URI: /blog/2010/04/22/data-structure-c-language-version---linear-form-of-order-stack/
+#+KEYWORDS: 
+#+TAGS: 栈, 线性表, 顺序栈
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+栈是一种特殊的[[http://zh.wikipedia.org/zh/%E7%BA%BF%E6%80%A7%E8%A1%A8][线性表]]。
+栈是一种数据结构，是只能在某一端插入和删除的特殊线性表。它按照后进先出的原则存储数据，先进入的数据被压入栈底，最后的数据在栈顶，需要读数据的时候从栈顶开始弹出数据（最后一个数据被第一个读出来）。
+栈是允许在同一端进行插入和删除操作的特殊线性表。允许进行插入和删除操作的一端称为栈顶 (top)，另一端为栈底(bottom)；栈底固定，而栈顶浮动；栈中元素个数为零时称为空栈。插入一般称为进栈（PUSH），删除则称为退栈（POP）。 栈也称为后进先出表（LIFO--Last IN First Out表）。
+
+顺序栈的类型描述如下：
+ADT sequence\_stack{
+数据集合 K: K={k(1), k(2), ...,k(n)}, n >=0, K中的地素是datatype类型;
+数据关系 R: R={r}
+r={ | i=1, 2, ..., n-1}
+操作集合:
+(1) void init(sequence\_stack *st);栈的初始化---置空栈
+(2) int empty(sequence\_stack st);判断栈是否为空
+(3) datatype read(sequence\_stack st);读栈顶节点值
+(4) void push(sequence\_stack *st, datatype x);栈的插入操作
+(5) void pop(sequence\_stack *st);栈的删除操作
+(6) void display(sequence\_stack st);栈打印操作（假定类型为int）
+}ADT sequence\_stack;
+
+下面用C代码实现：
+csequstack.h
+
+
+#+BEGIN_EXAMPLE
+    
+#define MAXSIZE 100
+typedef int datatype;
+typedef struct
+{
+   datatype a[MAXSIZE];
+  int top;
+}sequence_stack;
+void init(sequence_stack *st);
+int empty(sequence_stack st);
+datatype read(sequence_stack st);
+void push(sequence_stack *st, datatype x);
+void pop(sequence_stack *st);
+void display(sequence_stack st);
+
+#+END_EXAMPLE
+
+
+csequstack.cpp
+
+
+#+BEGIN_EXAMPLE
+    
+#include "stdafx.h"
+#include < stdlib.h >
+#include "csequstack.h"
+void init(sequence_stack *st)
+{
+   st->top = 0;
+}
+int empty(sequence_stack st)
+{
+  return (st.top ? 0 : 1);
+}
+datatype read(sequence_stack st)
+{
+  if(empty(st))
+ {
+     printf("\nThe sequence stack is empty!"); exit(1);
+    }
+ else
+  {
+     return st.a[st.top-1];
+    }
+}
+void push(sequence_stack *st, datatype x)
+{
+    if(st->top == MAXSIZE)
+    {
+     printf("\nThe sequence stack is full.");exit(1);
+  }
+ st->a[st->top] = x;
+   ++st->top;
+}
+void pop(sequence_stack *st)
+{
+    if(0 == st->top)
+  {
+     printf("\nThe sequence is empty!");exit(1);
+   }
+ --st->top;
+}
+void display(sequence_stack st)
+{
+ if(0 == st.top)
+   {
+     printf("\nThe sequence is empty!");exit(1);
+   }
+ for(int i = 0; i < st.top; ++i)
+   {
+     printf("%d ", st.a[i]);
+   }
+}
+
+#+END_EXAMPLE
+
+
+main.cpp
+
+
+#+BEGIN_EXAMPLE
+    
+   sequence_stack st;
+    init(&st);
+    push(&st, 5);
+ push(&st, 8);
+ display(st);
+
+#+END_EXAMPLE
+
+
+

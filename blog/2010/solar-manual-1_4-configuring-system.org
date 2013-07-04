@@ -1,0 +1,249 @@
+#+TITLE: Solar manual 1.4. 配置系统
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2010-04-13 Tue
+#+URI: /blog/2010/04/13/solar-manual-1_4-configuring-system/
+#+KEYWORDS: 
+#+TAGS: manual, solar, solar manual
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+
+
+
+1. 打开SYSTEM/config.php文 件，在该文件末尾的return语句之前，给文件中的$config数组添加新键值。
+2. 查找前端控制器配置项，并通过修改“classes”键指向的值来指定应用类名的前缀。
+
+
+   #+BEGIN_EXAMPLE
+       <?php
+// front controller
+$config['Solar_Controller_Front'] = array(
+    'classes' => array('Acme_App', 'Solar_App'),
+    // ...
+    'explain' => true,
+);
+   #+END_EXAMPLE
+
+   
+
+
+   
+
+
+   
+
+
+   
+
+
+   
+
+
+   [[file:///C:/Program%20Files/Oxygen%20XML%20Editor%2011/frameworks/docbook/xsl/images/note.png]]
+
+   
+
+
+   Note
+
+   
+
+
+   
+
+
+   
+
+
+   把Solar\_App也压入应用类栈中，这使Solar在第一次定位应用时，不 仅会查找Acme\_App，而且也会查找Solar\_App。
+
+   
+
+
+   
+
+
+   
+
+
+   
+
+
+3. 查找模型目录配置项，并指定应用类名的前缀。
+
+
+   #+BEGIN_EXAMPLE
+       <?php
+// model catalog
+$config['Solar_Sql_Model_Catalog']['classes'] = array('Acme_Model');
+   #+END_EXAMPLE
+
+   
+
+
+4. 给$config数组添加新元素，指定应用所使用的SQL适配器，并做相关配置。对于SQLite，使用下面这种配置：
+
+
+   #+BEGIN_EXAMPLE
+       <?php
+// the SQL adapter class to use
+$config['Solar_Sql']['adapter'] = 'Solar_Sql_Adapter_Sqlite';
+
+// configure the SQL adapter class
+$config['Solar_Sql_Adapter_Sqlite'] = array(
+    'name' => "$system/sqlite/acme.sq3",  // the database file to use
+);
+   #+END_EXAMPLE
+
+   
+
+
+   
+
+
+   
+
+
+   
+
+
+   
+
+
+   [[file:///C:/Program%20Files/Oxygen%20XML%20Editor%2011/frameworks/docbook/xsl/images/note.png]]
+
+   
+
+
+   Note
+
+   
+
+
+   
+
+
+   
+
+
+   变量$system在SYSTEM/config.php文件中定义，它的值是 SYSTEM目录。
+
+   
+
+
+   
+
+
+   
+
+
+   
+
+
+   
+对于MySQL，使用下面这种配置：
+
+
+   #+BEGIN_EXAMPLE
+       <?php
+// the SQL adapter class to use
+$config['Solar_Sql']['adapter'] = 'Solar_Sql_Adapter_Mysql';
+
+// configure the SQL adapter class
+$config['Solar_Sql_Adapter_Mysql'] = array(
+    'host' => 'localhost', // the database server host
+    'name' => 'database',  // the database name
+    'user' => 'username',  // authenticate as this user
+    'pass' => 'password',  // authenticate with this password
+);
+   #+END_EXAMPLE
+
+   
+
+
+   
+
+
+   
+
+
+   
+
+
+   
+
+
+   [[file:///C:/Program%20Files/Oxygen%20XML%20Editor%2011/frameworks/docbook/xsl/images/note.png]]
+
+   
+
+
+   Note
+
+   
+
+
+   
+
+
+   
+
+
+   对于PostgreSQL，用Solar\_Sql\_Adapter\_Pgsql 替换适配器名及配置项的键名。
+
+   
+
+
+   
+
+
+   
+
+
+   
+
+
+
+
+
+
+最后，配置文件的最后一部分应该像这样：
+
+
+#+BEGIN_EXAMPLE
+    <?php
+/**
+ * project overrides
+ */
+
+// front controller
+$config['Solar_Controller_Front'] = array(
+    'classes' => array('Acme_App', 'Solar_App'),
+    'disable' => array(),
+    'default' => 'hello',
+    'rewrite' => array(),
+    'routing' => array(),
+    'explain' => true,
+);
+
+// model catalog
+$config['Solar_Sql_Model_Catalog']['classes'] = array('Acme_Model');
+
+// the SQL adapter class to use
+$config['Solar_Sql']['adapter'] = 'Solar_Sql_Adapter_Sqlite';
+
+// configure the SQL adapter class
+$config['Solar_Sql_Adapter_Sqlite'] = array(
+    'name' => "$system/sqlite/acme.sq3",  // the database file to use
+);
+
+/**
+ * done!
+ */
+return $config;
+#+END_EXAMPLE
+
+
+

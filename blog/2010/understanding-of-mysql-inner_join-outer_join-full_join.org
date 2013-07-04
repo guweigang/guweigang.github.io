@@ -1,0 +1,91 @@
+#+TITLE: 理解MySQL的inner join, outer join(left join, right join, full join)
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2010-08-09 Mon
+#+URI: /blog/2010/08/09/understanding-of-mysql-inner_join-outer_join-full_join/
+#+KEYWORDS: 
+#+TAGS: join, left join, mysql
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+MySQL支持以下JOIN语法。这些语法用于SELECT语句的table\_references部分和多表DELETE和UPDATE语句：
+
+
+#+BEGIN_EXAMPLE
+    
+table_references:
+    table_reference [, table_reference] …
+
+table_reference:
+    table_factor
+  | join_table
+
+table_factor:
+    tbl_name [[AS] alias]
+        [{USE|IGNORE|FORCE} INDEX (key_list)]
+  | ( table_references )
+  | { OJ table_reference LEFT OUTER JOIN table_reference
+        ON conditional_expr }
+
+join_table:
+    table_reference [INNER | CROSS] JOIN table_factor [join_condition]
+  | table_reference STRAIGHT_JOIN table_factor
+  | table_reference STRAIGHT_JOIN table_factor ON condition
+  | table_reference LEFT [OUTER] JOIN table_reference join_condition
+  | table_reference NATURAL [LEFT [OUTER]] JOIN table_factor
+  | table_reference RIGHT [OUTER] JOIN table_reference join_condition
+  | table_reference NATURAL [RIGHT [OUTER]] JOIN table_factor
+
+join_condition:
+    ON conditional_expr
+  | USING (column_list)
+
+#+END_EXAMPLE
+
+
+
+与SQL标准相比，table\_factor的语法被扩展了。SQL标准只接受table\_reference，而不是圆括号内的一系列条目。
+
+如果我们把一系列table\_reference条目中的每个逗号都看作相当于一个内部联合，则这是一个稳妥的扩展。例如：
+
+
+#+BEGIN_EXAMPLE
+    
+SELECT * FROM t1 LEFT JOIN (t2, t3, t4)
+                 ON (t2.a=t1.a AND t3.b=t1.b AND t4.c=t1.c)
+
+#+END_EXAMPLE
+
+
+相当于：
+
+
+#+BEGIN_EXAMPLE
+    
+SELECT * FROM t1 LEFT JOIN (t2 CROSS JOIN t3 CROSS JOIN t4)
+                 ON (t2.a=t1.a AND t3.b=t1.b AND t4.c=t1.c)
+
+#+END_EXAMPLE
+
+
+在MySQL中，CROSS JOIN从语法上说与INNER JOIN等同（两者可以互相替换。在标准SQL中，两者是不等同的。INNER JOIN与ON子句同时使用，CROSS JOIN以其它方式使用。
+
+ON条件句是可以被用于WHERE子句的格式的任何条件表达式。
+
+USING(column\_list)子句用于为一系列的列进行命名。这些列必须同时在两个表中存在。如果表a和表b都包含列c1, c2和c3，则以下联合会对比来自两个表的对应的列：
+
+
+#+BEGIN_EXAMPLE
+    
+a LEFT JOIN b USING (c1,c2,c3)
+
+#+END_EXAMPLE
+
+
+
+具体可以看下这里：[[http://phpweby.com/tutorials/mysql/32][http://phpweby.com/tutorials/mysql/32]]和手册
+[[http://dev.mysql.com/doc/refman/5.0/en/left-join-optimization.html][http://dev.mysql.com/doc/refman/5.0/en/left-join-optimization.htmlhttp://www.ccvita.com/207.html]]
+
+
+

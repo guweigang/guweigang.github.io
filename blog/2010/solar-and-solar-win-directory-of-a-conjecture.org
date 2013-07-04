@@ -1,0 +1,58 @@
+#+TITLE: Solar目录分析及Solar-Win的一个猜想
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2010-05-23 Sun
+#+URI: /blog/2010/05/23/solar-and-solar-win-directory-of-a-conjecture/
+#+KEYWORDS: 
+#+TAGS: solar php, solar win
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+1. /include目录
+[root@localhost include]# ls -l
+total 8
+Acme -> ../source/acme/Acme
+Example -> ../source/example/Example
+Mock
+Solar -> ../source/solar/Solar
+Solar.php -> ../source/solar/Solar.php
+Test
+
+从上面可以看出，/include目录里面只有Mock和Test两个目录，其余的都为symlink（符号链接），那我们再来看看Mock和Test目录：
+1.1 首先是/include/Mock目录
+[root@localhost Mock]# ll
+total 0
+Acme -> ../../source/acme/tests/Mock/Acme
+Example -> ../../source/example/tests/Mock/Example
+Solar -> ../../source/solar/tests/Mock/Solar
+1.2 接着是/include/Test目录
+[root@localhost Test]# ll
+total 0
+Acme -> ../../source/acme/tests/Test/Acme
+Example -> ../../source/example/tests/Test/Example
+Solar -> ../../source/solar/tests/Test/Solar
+Solar.php -> ../../source/solar/tests/Test/Solar.php
+可以看出，/include/Mock和/include/Test的内容也都是符号链接
+
+2. 再来看/script目录
+[root@localhost script]# ll -l
+total 0
+acme -> ../source/solar/script/solar
+example -> ../source/solar/script/solar
+solar -> ../source/solar/script/solar
+也都是符号链接
+3. /docroot目录
+[root@localhost docroot]# ll
+total 56
+index.php
+info.php
+public
+两个文件一个目录，这是solar官方推荐的网站入口，附件资源一般都放public目录下。来看看public
+3.1 /docroot/public/
+此目录是按照vendor组织的链接到各个App Public目录符号链接。
+
+据此可以看出，只要把这些符号链接弄好了，那么在windows下正式使用solar不再是遥不可及的事情，而是真实的摆在眼前的事情。
+
+
+

@@ -1,0 +1,45 @@
+#+TITLE: Solar manual 1.1. 简介
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2010-04-11 Sun
+#+URI: /blog/2010/04/11/solar-manual-1_1-introduction/
+#+KEYWORDS: 
+#+TAGS: manual, solar, solar manual
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+本章是使用Solar创建博客的教程，几乎所有框架都会有这样一个示例。请注意，本示例没有考虑安全方面的问题， 仅用于演示，而且它只反映Solar很小一部分特性。要深入了解Solar，务必阅读其他部分手册。
+
+在本示例中，你将会学会：
+
+
+
+
+
+-  下载并安装一个新的Solar系统
+-  创建一个工作区
+-  配置系统
+-  从数据表创建模型
+-  创建基本的应用
+-  添加应用动作和视图
+
+   
+
+
+   -  查看所有公开文章
+   -  查看一篇文章
+   -  查看所有草稿
+   -  编辑一篇文章
+   -  添加一篇新文章
+   -  删除一篇文章
+
+   
+
+-  为应用选择本地化字符
+-  使用虚拟主机，建立简洁的URI
+
+
+
+
+

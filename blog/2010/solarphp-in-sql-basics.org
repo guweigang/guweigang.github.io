@@ -1,0 +1,123 @@
+#+TITLE: solarphp中SQL基础
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2010-01-02 Sat
+#+URI: /blog/2010/01/02/solarphp-in-sql-basics/
+#+KEYWORDS: 
+#+TAGS: Solar_Sql, solarphp
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+主要涉及到Solar\_Sql包
+[[http://godpress.cn/?p=243][上篇文章中我们有提到solar初始化时会自动注册Solar\_Sql类]]，所以我们只需要使用Solar\_Registry，就可以实例化Solar\_Sql类。
+
+
+#+BEGIN_EXAMPLE
+    $sql = Solar_Registry::get('sql');
+
+#+END_EXAMPLE
+
+
+Solar\_Sql是基于PDO的，能够适用MySQL, PostgreSQL, SQLite，而对于使用者来讲只需要使用Sloar\_Sql的功能，不用关心各种不同数据库的细节。
+配置Sloar\_Sql对象
+
+
+#+BEGIN_EXAMPLE
+    $config['Solar_Sql']['adapter'] = 'Solar_Sql_Adapter_Mysql';
+$config['Solar_Sql_Adapter_Mysql'] = array(
+    'host' => 'localhost',
+    'user' => 'root',
+    'pass' => '123456',
+    'name' => 'solar',
+);
+#+END_EXAMPLE
+
+
+那么你就可以像这样使用它了：
+
+
+#+BEGIN_EXAMPLE
+    $rs = $sql->query("select * from message");
+$this->arr = $rs->fetchAll();
+
+#+END_EXAMPLE
+
+
+查旬的结果是[[http://godpress.cn/?p=250][pdoStatement格式]]，获取数据可以用下面这些方式：
+
+
+#+BEGIN_EXAMPLE
+    Solar_Sql_Adapter::fetchAll() //returns a sequential array of all rows. The rows themselves are associative arrays (keys are the column names).
+Solar_Sql_Adapter::fetchAssoc() //returns an associative array of all rows (key is the first column).
+Solar_Sql_Adapter::fetchCol() //returns a sequential array of all values in the first column.
+Solar_Sql_Adapter::fetchOne() //returns the first row as an associative array (keys are the column names).
+Solar_Sql_Adapter::fetchPairs() //returns an associative array where each key is the first column and each value is the second column.
+Solar_Sql_Adapter::fetchValue() //returns the value of the first row in the first column.
+#+END_EXAMPLE
+
+
+To quote values so they can be used safely in SQL commands, use ...
+
+
+-  [[http://solarphp.com/class/Solar_Sql_Adapter/quote%28%29][Solar\_Sql\_Adapter::quote()]]
+-  [[http://solarphp.com/class/Solar_Sql_Adapter/quoteInto%28%29][Solar\_Sql\_Adapter::quoteInto()]]
+-  [[http://solarphp.com/class/Solar_Sql_Adapter/quoteMulti%28%29][Solar\_Sql\_Adapter::quoteMulti()]]
+
+
+For direct-execution of commands, use...
+
+
+-  [[http://solarphp.com/class/Solar_Sql_Adapter/query%28%29][Solar\_Sql\_Adapter::query()]]
+
+
+To fetch results, use ...
+
+
+-  [[http://solarphp.com/class/Solar_Sql_Adapter/fetchAll%28%29][Solar\_Sql\_Adapter::fetchAll()]]
+-  [[http://solarphp.com/class/Solar_Sql_Adapter/fetchAssoc%28%29][Solar\_Sql\_Adapter::fetchAssoc()]]
+-  [[http://solarphp.com/class/Solar_Sql_Adapter/fetchCol%28%29][Solar\_Sql\_Adapter::fetchCol()]]
+-  [[http://solarphp.com/class/Solar_Sql_Adapter/fetchOne%28%29][Solar\_Sql\_Adapter::fetchOne()]]
+-  [[http://solarphp.com/class/Solar_Sql_Adapter/fetchPairs%28%29][Solar\_Sql\_Adapter::fetchPairs()]]
+-  [[http://solarphp.com/class/Solar_Sql_Adapter/fetchPdo%28%29][Solar\_Sql\_Adapter::fetchPdo()]]
+-  [[http://solarphp.com/class/Solar_Sql_Adapter/fetchSql%28%29][Solar\_Sql\_Adapter::fetchSql()]]
+-  [[http://solarphp.com/class/Solar_Sql_Adapter/fetchValue%28%29][Solar\_Sql\_Adapter::fetchValue()]]
+
+
+To conveniently manipulate data in individual tables, use...
+
+
+-  [[http://solarphp.com/class/Solar_Sql_Adapter/insert%28%29][Solar\_Sql\_Adapter::insert()]]
+-  [[http://solarphp.com/class/Solar_Sql_Adapter/update%28%29][Solar\_Sql\_Adapter::update()]]
+-  [[http://solarphp.com/class/Solar_Sql_Adapter/delete%28%29][Solar\_Sql\_Adapter::delete()]]
+
+
+For auto-increment values and database-portable sequences, use...
+
+
+-  [[http://solarphp.com/class/Solar_Sql_Adapter/lastInsertId%28%29][Solar\_Sql\_Adapter::lastInsertId()]]
+-  [[http://solarphp.com/class/Solar_Sql_Adapter/createSequence%28%29][Solar\_Sql\_Adapter::createSequence()]]
+-  [[http://solarphp.com/class/Solar_Sql_Adapter/dropSequence%28%29][Solar\_Sql\_Adapter::dropSequence()]]
+-  [[http://solarphp.com/class/Solar_Sql_Adapter/nextSequence%28%29][Solar\_Sql\_Adapter::nextSequence()]]
+
+
+For database-portable transactions, use...
+
+
+-  [[http://solarphp.com/class/Solar_Sql_Adapter/begin%28%29][Solar\_Sql\_Adapter::begin()]]
+-  [[http://solarphp.com/class/Solar_Sql_Adapter/commit%28%29][Solar\_Sql\_Adapter::commit()]]
+-  [[http://solarphp.com/class/Solar_Sql_Adapter/rollback%28%29][Solar\_Sql\_Adapter::rollback()]]
+
+
+For database-portable table/column/index modification, use...
+
+
+-  [[http://solarphp.com/class/Solar_Sql_Adapter/createTable%28%29][Solar\_Sql\_Adapter::createTable()]]
+-  [[http://solarphp.com/class/Solar_Sql_Adapter/dropTable%28%29][Solar\_Sql\_Adapter::dropTable()]]
+-  [[http://solarphp.com/class/Solar_Sql_Adapter/addColumn%28%29][Solar\_Sql\_Adapter::addColumn()]]
+-  [[http://solarphp.com/class/Solar_Sql_Adapter/dropColumn%28%29][Solar\_Sql\_Adapter::dropColumn()]]
+-  [[http://solarphp.com/class/Solar_Sql_Adapter/createIndex%28%29][Solar\_Sql\_Adapter::createIndex()]]
+-  [[http://solarphp.com/class/Solar_Sql_Adapter/dropIndex%28%29][Solar\_Sql\_Adapter::dropIndex()]]
+
+
+

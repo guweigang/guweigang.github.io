@@ -1,0 +1,56 @@
+#+TITLE: 时隔三月，发布solar-system-win-1.1.1-0.4版并更新solar离线文档！
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2010-11-06 Sat
+#+URI: /blog/2010/11/06/after-a-lapse-of-march-released-solar-system-win-1_1_1-0_4-version-and-update-the-solar-offline-documentation/
+#+KEYWORDS: 
+#+TAGS: solar, version released
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+时隔三月，终发布solar-win-1.1.1的第四个版本，这段时间非常忙碌，和林军、熊正理、刘修宏一起创办公司（长沙市尤盛网络科技有限公司），和李铁一起共事。期间领导团队帮助名师网开发暑期选课系统、开发免单社区站(http://miandan.net)。
+
+紧接着就是毕业生找工作，一直就没有停止过，也一直沉不下心来做事情。所幸我已基本脱离这种状态，又回来了！
+
+闲话不多说了，新版本主要解决上一个版本中的Bug:
+1. 在link-vendor时，无论是否存在vendor，都会在script目录下建立vendor.bat和vendor的链接
+2. 在windows xp, 2000, 2003下，sync-vendor命令仍然存在很多问题，经常出现代码丢失等现象。
+另外，新的离线文档更新了Package部分的格式，更清晰明了。
+
+*Solar下载地址：*下载地址：[[http://solarphp.cn/download/solar-system-1.1.1-win-0.4.rar][http://solarphp.cn/download/solar-system-1.1.1-win-0.4.rar]]
+当然，你也可以到这里下载，[[http://solarphp.cn/download/solar-system-win-latest.rar][http://solarphp.cn/download/solar-system-win-latest.rar]]
+这是目前的最新版，可能是当前发布版，也可能有下一个版本的某些新功能。
+*文档下载地址：*[[http://solarphp.cn/download/solar_manual_offline_v1.3.chm][http://solarphp.cn/download/solar\_manual\_offline\_v1.3.chm]]
+不过过去的三个月并非无进展：
+一、 我们建立了[[http://demo.solarphp.cn][solar功能演示站]]
+1. Ajax演示 - Roy
+(1)http://demo.solarphp.cn/ajax/
+(2)http://demo.solarphp.cn/ajax/form
+2. 图片处理演示 - Roy
+(1) http://demo.solarphp.cn/image/magick
+(2) http://demo.solarphp.cn/image/gd
+3. 支付演示 - Roy
+(1) http://demo.solarphp.cn/pay/alipay
+4. 上传演示 - Roy
+(1) 附件上传：http://demo.solarphp.cn/upload/attachment
+(2) 图片上传：http://demo.solarphp.cn/upload/image
+5. 验证码演示 - Life
+(1) http://demo.solarphp.cn/captcha/index
+6. 购物车演示 - Roy
+(1) http://demo.solarphp.cn/cart/index
+7. 代码高亮演示 - Roy
+(1) 在每个演示中都有代码显示，不过这个插件主要是由Libear完成的，Life提出了很好的建议，由Roy修改，现为版本0.2
+二、我们开发了相当多的类库并将继续开发
+(1) Web Service: XML-RPC, Json-RPC, Soap
+(2) Pay: Alipay(已完成), 财付通, 百付宝, 网银在线
+(3) 购物车(已完成)
+(4) Ajax(已完成)
+(5) 文件上传 - Upload(已完成)
+(6) 图片处理 - Image(已完成)
+(7) 验证码 - Captcha(已完成)
+(8) 代码高亮 - Geshi(已完成)
+
+在接下来的日子里，我会继续努力，为开源社区贡献自己的力量。
+
+

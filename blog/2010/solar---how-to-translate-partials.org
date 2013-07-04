@@ -1,0 +1,14 @@
+#+TITLE: Solar: “Partials”还真不知道怎么译
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2010-04-16 Fri
+#+URI: /blog/2010/04/16/solar:how-to-translate-partials/
+#+KEYWORDS: 
+#+TAGS: solar
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+Solar手册的5.3节“[[http://solarphp.com/manual/views.nested][Nested Views and Partials]]”，这个真不知道怎么译。。。partial的字典意思是：局部的，部分的，部分。总不能译成嵌套视图和局部视图吧？ :) ，按照文档的意思，partial是局部视图的意思，因为用partial方法加载的视图不能使用主视图的变量或属性，如果要传数据给它，必须通过partial方法的第二个参数（可选）。所以我干脆先不译了，直接用英文算了。中文文档看[[http://solarphp.cn/manual-new/ch05s03.html][这里]]。
+
+

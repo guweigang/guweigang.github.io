@@ -1,0 +1,14 @@
+#+TITLE: solar manual 里程碑: 正文部分今天全部译完
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2010-04-20 Tue
+#+URI: /blog/2010/04/20/solar-manual-milestones---all-body-parts-translated-ends-today/
+#+KEYWORDS: 
+#+TAGS: solar, solar manual, solar php
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+今天终于译完了Solar手册正文部分，对我而言，这具有里程碑式意义。从开始着手到现在不知不觉2个多月已经过去了，其中产生过多少次动摇，感谢部分网友的支持和鼓励，希望我的工作能让你们更方便地使用solar。当然本人能力有限，所做的工作也只是起到抛砖引玉的作用，且这是第一版，难免出现错译、漏译或是译得不够准确的地方，希望更多的朋友参与校对，手册地址是：[[http://solarphp.cn/manual-new/index.html][http://solarphp.cn/manual-new/index.html]]。当然也希望更多的开发者使用Solar。手册只剩下两章附录，计划在2周之内译完。
+
+

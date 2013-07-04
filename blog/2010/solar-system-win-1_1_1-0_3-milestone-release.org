@@ -1,0 +1,99 @@
+#+TITLE: solar-system-win-1.1.1-0.3，里程碑版本发布
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2010-07-19 Mon
+#+URI: /blog/2010/07/19/solar-system-win-1_1_1-0_3-milestone-release/
+#+KEYWORDS: 
+#+TAGS: solar, solarphp
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+伴随着Solar Deployment Soluton on WindowsXP, 2000 and 2003-0.1的发布，solar-system-win-1.1.1也迎来了她的第三个版本，在此版本中解决了多个bug，以及解决了在windows xp平台的使用问题（至少是布署问题），所以这也是solar-win的一个里程碑版本。
+
+solar在XP平台上是采用复制文件的方式来同步文件的，复制文件是存在风险的，为什么这么说呢？因为现在的做法是先删除已存在的文件然后再复制过去，如果删除完毕但是复制出问题的话，文件会丢失。所以还需要探索更好的方法。
+下址地址：[[http://solarphp.cn/download/solar-system-win-latest.rar][http://solarphp.cn/download/solar-system-win-latest.rar]]
+
+主要的更新如下：
+
+
+#+BEGIN_EXAMPLE
+    
+2010-07-14
+====================
+@ /script/solar
+* line 16 
+add a property $this->_script to indicate which script is current one
+
+* line 58
+get current script name
+
+* line 76
+prepare directory - windows-style dir with separator before
+
+* line 87
+add two elements into array $dirs
+
+@ /script/solar.bat
+* line 18
+get current script name
+
+* line 28
+change param of PHP_COMMAND
+
+@ /source/solar/Solar/Cli/LinkVendor.php
+* line 122
+romove links for script/vendor
+
+
+2010-07-15
+====================
+@ /index.php
+* line 19
+fix include path, if solar can not find "/include/Solar" dir and "/include/Solar.php" file, it will include "/source/solar" dir automatically as its core library. Warning: This is just for the first-time demo.it can browse "hello,world" sample without any config or command. You still need link solar vendor after that.
+
+
+@ /docroot/index.php
+* line 8
+fix include path, if solar can not find "/include/Solar" dir and "/include/Solar.php" file, it will include "/source/solar" dir automatically as its core library. Warning: This is just for the first-time demo.it can browse "hello,world" sample without any config or command. You still need link solar vendor after that.
+
+
+2010-07-18
+=============
+
+@ /source/solar/Solar/Cli/SyncVendor.php and /source/solar/Solar/Cli/SyncVendor
+* add file and directories
+
+add this file and directory to add new command "sync-vendor"
+
+@ /source/solar/Solar/Symlink.php
+* line 84
+this change is to determine, if you use make-app or make-model, and if already exists app or model ,it will override the exist app or model
+
+fixed: remove the if-condition, remove directories in syncvendor step
+-
+* line 101
+add a condition to determine which nt version is. according to that, use different method to process files and directories
+-
+* line 231
+add a new method here to copy/overwrite files on windows xp, 2000 and 2003
+-
+* line 247
+add a new method here to copy/override directories on windows xp, 2000 and 2003
+
+@ /source/solar/Solar/Cli/UnlinkVendor.php
+* line 91
+add a condition to determine which nt version is. according to that, use sync-vendor command sync files and directories between /include/Vendor and /source/script/Vendor
+-
+* line 103
+unlink directoies that not empty, you can not use unlink function. on windows xp, 2000 and 2003, we must use rmdir command to remove directories that not empty.
+
+enjoy~
+
+#+END_EXAMPLE
+
+
+
+具体请查看solar-bug站的变更日志：[[http://bug.solarphp.cn/changelog_page.php][http://bug.solarphp.cn/changelog\_page.php]]
+
+

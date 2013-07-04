@@ -1,0 +1,48 @@
+#+TITLE: 写给初学者：windows下使用Solar
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2010-05-11 Tue
+#+URI: /blog/2010/05/11/written-for-beginners---windows-using-solar/
+#+KEYWORDS: 
+#+TAGS: solar, solar php, solar windows
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+
+
+
+#+BEGIN_QUOTE
+  
+
+  必须是vista（含）以上的 windows版本
+#+END_QUOTE
+
+
+1. 把PHP执行文件的路径加入系统环境变量，按下图操作
+
+
+-  [[http://solarphp.org.cn/download/file.php?id=15]] :: /php-environment-setting/
+
+
+2. 打开CMD，并按下图操作
+
+
+-  [[http://solarphp.org.cn/download/file.php?id=16]] :: /solar-win-snapsho/
+
+
+
+3. 在火狐中运行并查看效果
+
+
+-  [[http://solarphp.org.cn/download/file.php?id=17]] :: /solar-win-helloworld-firefox/
+
+
+4. 其他请查看[[http://solarphp.org.cn/viewtopic.php?f=11&t=4][Solar 有两个入口文件index.php，到底哪个才是真的？]]
+
+下载：
+[[../download/solar-system-win1.01.rar][http://roygu.com/download/solar-system-win1.01.rar]]
+
+
+
+

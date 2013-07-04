@@ -1,0 +1,26 @@
+#+TITLE: solar-win的推广文章
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2010-05-28 Fri
+#+URI: /blog/2010/05/28/solar-win-promotion-articles/
+#+KEYWORDS: 
+#+TAGS: solar, solar php, version released
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+Solar框架（官方提供的）是基于linux平台的，直接用于windows平台会有很多问题，因为Solar中大量用到了Symlink：
+1. windows在vista(含)后才开始支持symlink。
+2. windows下的symlink尚不能复制、拷贝。
+
+这个问题确实比较棘手，我们希望大家能够在win下开发和布署，也希望大家能够在win下开发在linux下布署，所以发布solar for windows是非常有意义的，让一部分不熟悉linux的开发者同样可以自如地使用solar.
+
+今天终于能够给大家带来一个好消息了，此版本是solar-win的一个里程卑版本，在本版本中，solar-win的行为已经和linux平台下几乎一 致了。
+当然这仍然需要你的windows版本在vista（含）以上，要详细了解，请下载solar-win，并查看其中的README及 script/README。
+
+下载地址：[[http://solarphp.cn/download/solar-system-1.01-win-latest.rar][http://solarphp.cn/download/solar-system-1.01-win-0.3.rar]]
+当然，你总是可以从这里下载最新的版本：[[http://solarphp.cn/download/solar-system-1.01-win-latest.rar][http://solarphp.cn/download/solar-system-1.01-win-latest.rar]]
+
+Solar PHP中文官网：[[http://solarphp.cn/][http://solarphp.cn]] Solar PHP中文论坛：[[http://solarphp.org.cn/][http://solarphp.org.cn]]
+
+

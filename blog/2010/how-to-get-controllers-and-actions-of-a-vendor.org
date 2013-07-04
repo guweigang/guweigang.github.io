@@ -1,0 +1,51 @@
+#+TITLE: how to get controllers and actions of a vendor?
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2010-08-01 Sun
+#+URI: /blog/2010/08/01/how-to-get-controllers-and-actions-of-a-vendor/
+#+KEYWORDS: 
+#+TAGS: solar, solar php, vendor
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+solar php中获取某vendor下所有控制器和动作的方法。
+
+
+#+BEGIN_EXAMPLE
+    /*
+ * 获取Admin/App/下所有类和方法
+ * @return array $classes 二维数组：class => array(action1, action2)
+ */
+ protected  function _getClasses()
+ {
+ $system = Solar::$system;
+ $class_prefix = 'Admin_App_';
+ $dir = $system.'/include/Admin/App';
+ $inflect = Solar_Registry::get("inflect");
+ //初始化目眼尖迭代器
+ $dir_iterator = new DirectoryIterator($dir);
+ $classes = array();
+ //遍历迭代器
+ foreach ($dir_iterator as $fileinfo) {
+ //如果不是..或.而且是文件, i.e., 非目录
+ if(!$fileinfo->isDot() && $fileinfo->isFile()){
+ $name = $class_prefix.basename($fileinfo->getFilename(), '.php'); //获取类名
+ $ref = new ReflectionClass($name);    //初始化类迭代器
+ $methods = $ref->getMethods();    //获取类方法集
+ foreach($methods as $method) {    //遍历方法
+ //如果方法修饰符是public且不是构造函数
+ if($method->isPublic() && !$method->isConstructor())
+ // 只获取动作，过滤其他方法
+ if('action' == substr($method->name, 0, 6))
+ $classes[$name][] = $inflect->camelToDashes(substr($method->name, 6));//装入二维数组 class => array(action1, action2)
+ }
+
+ }
+ }
+ return $classes;
+ }
+#+END_EXAMPLE
+
+
+

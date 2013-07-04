@@ -1,0 +1,33 @@
+#+TITLE: Git is saying LF will be replaced by CRLF
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2010-07-27 Tue
+#+URI: /blog/2010/07/27/git-is-saying-lf-will-be-replaced-by-crlf/
+#+KEYWORDS: 
+#+TAGS: git, version control
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+source link: [[http://stackoverflow.com/questions/1967370/git-is-saying-lf-will-be-replaced-by-crlf][
+http://stackoverflow.com/questions/1967370/git-is-saying-lf-will-be-replaced-by-crlf]]
+Git has two modes of how it treats line endings:
+
+
+#+BEGIN_EXAMPLE
+    
+$ git config core.autocrlf
+# that command will print either "true" or "false"
+
+#+END_EXAMPLE
+
+
+You can set the mode to use by adding an additional parameter of true or false to the above command line.
+
+If core.autocrlf is set to true, that means that any time you add a file to the git repo that git thinks is a text file, it will turn all CRLF line endings to just LF before it stores it in the commit. Whenever you git checkout something, all text files automatically will have their LF line endings converted to CRLF endings. This allows development of a project across platforms that use different line-ending styles without commits being very noisy because each editor changes the line ending style as the line ending style is always consistently LF.
+
+The side-effect of this convenient conversion, and this is what the warning you're seeing is about, is that if a text file you authored originally had LF endings instead of CRLF, it will be stored with LF as usual, but when checked out later it will have CRLF endings. For normal text files this is usually just fine. The warning is a "for your information" in this case, but in case git incorrectly assesses a binary file to be a text file, it is an important warning because git would then be corrupting your binary file.
+
+If core.autocrlf is set to false, no line-ending conversion is ever performed, so text files are checked in as-is. This usually works ok, as long as all your developers are either on Linux or all on Windows. But in my experience I still tend to get text files with mixed line endings that end up causing problems.
+
+

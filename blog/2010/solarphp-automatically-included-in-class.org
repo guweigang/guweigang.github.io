@@ -1,0 +1,43 @@
+#+TITLE: solarphp自动包含的类
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2010-01-01 Fri
+#+URI: /blog/2010/01/01/solarphp-automatically-included-in-class/
+#+KEYWORDS: 
+#+TAGS: autoload, solarphp
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+$system/include/Solar.php
+
+
+#+BEGIN_EXAMPLE
+    
+// make sure these classes are loaded
+        $list = array(
+            'Base',
+            'Class',
+            'Config',
+            'File',
+        );
+
+#+END_EXAMPLE
+
+
+
+
+当找不到类时，就通过
+
+
+#+BEGIN_EXAMPLE
+    
+// register autoloader
+        spl_autoload_register(array('Solar_Class', 'autoload'));
+
+#+END_EXAMPLE
+
+
+进行查找。
+
+

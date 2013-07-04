@@ -1,0 +1,27 @@
+#+TITLE: PHP5.3才支持的lcfirst()
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2010-01-30 Sat
+#+URI: /blog/2010/01/30/lcfirst-was-supported-from-php5_3/
+#+KEYWORDS: 
+#+TAGS: lcword, php, php 5.3
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+PHP字符串处理，可能大家早就知道ucwords()和ucfirst()这两个函数，但是并没有“首字母小写”的函数，PHP 5.3中增加了该函数: lcfirst()
+但是，大部分主机仍是<=5.2.11，我们可以引用下面这段代码来增加该函数，又不改变升级到5.3后使用习惯。
+
+
+#+BEGIN_EXAMPLE
+    
+if(!function_exists("lcfirst")) {
+    function lcfirst($string) {
+       return substr_replace($string, strtolower($string{0}), 0, 1);
+    }
+}
+
+#+END_EXAMPLE
+
+
+

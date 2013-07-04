@@ -1,0 +1,94 @@
+#+TITLE: Windows下设置Emacs的HOME目录
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2010-09-24 Fri
+#+URI: /blog/2010/09/24/set-the-emacs-under-windows-home-directory/
+#+KEYWORDS: 
+#+TAGS: emacs, gnu
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+转自：http://emacser.com/windows-emacs-home.htm
+
+总的来说，Emacs的默认配置文件放在变量HOME所指的路径下，所以，只要我们把.emacs扔到HOME所指向的目录就可以了，下面就简单介绍一下在Windows下设置home目录的几种方法，并进行简单的对比。
+
+第一种方法，改变home环境变量的值。
+
+这种方法，改变了$home变量，也会影响Cygwin或是其他一些应用程序，因为有一些程序会根据Windows的home环境变量来寻找数据存放的路径。
+
+第二种方法，不改变Windows默认的home值，设置默认的.emacs文件读取你自己的Emacs配置文件，并重新设定Emacs的home目录。
+
+你可以在Emacs中输入C-x C-f，然后打开路径~（即当前的home环境变量所指的路径，一般来说是这样的路径（windows vista或7可能不一样）：C:/Documents and Settings/water/Application Data）。
+
+看看显示的是哪个目录，如果此目录下没有.emacs，可以创建一个.emacs或\_emacs，然后在这个.emacs文件里，加入如下语句：
+
+
+#+BEGIN_EXAMPLE
+    
+(load-file "E:/emacs/.emacs")
+
+#+END_EXAMPLE
+
+
+文件 E:/emacs/.emacs 才是我们真正的Emacs配置文件，我们可以在这个真正的配置文件里用如下语句设置我们的home目录：
+
+
+#+BEGIN_EXAMPLE
+    
+(setenv "HOME" "E:/emacs")
+;;set the default file path
+(setq default-directory "~/")
+(add-to-list 'load-path "~/emacs/site-lisp")
+
+#+END_EXAMPLE
+
+
+这个方法的优点是比较简单同样也方便对.emacs文件备份，不会对其它应用程序产生任何影响。
+
+第三种方法，修改注册表，在注册表中进行如下设置：
+HKEY\_LOCAL\_MACHINE\SOFTWARE\GNU\Emacs\HOME=%emacs\_dir%
+以上三种方法都可以设置好Emacs的Home目录，但是，系统是按什么顺序来解析它们的呢？大体上的顺序是这样的：
+
+如果设置了环境变量HOME，则使用HOME指定的目录。
+如果设置了注册表里的值HKCU\SOFTWARE\GNU\Emacs\HOME，则使用这个值所指定的目录作为home目录。并不是太推荐使用这种方法，因为会导致用户共享一个home目录。
+如果 C:\.emacs 文件存在，则使用 C:\.emacs 这个文件。这个是为了向低版本的Emacs兼容，因为低版本的Emacs就是默认用这个文件作为配置文件。
+把用户的AppData目录作为home目录（通常来说，就是类似这样的目录 C:/Documents and Settings/water/Application Data ），这个用户的数据目录根据Windows版本的不同而有所不同。
+我个人比较喜欢用第二种方法，即简单又方便备份。
+
+其实，如果你只是想要Emacs能找到你的.emacs的话，也可以不用管HOME目录的，写个批处理文件emacs.bat:
+
+
+#+BEGIN_EXAMPLE
+    
+path-of-emacs.exe -q -l path-of-your.emacs
+
+#+END_EXAMPLE
+
+
+以后执行这个批处理文件就可以用你的配置打开Emacs了。
+
+网友回复：
+
+
+
+
+#+BEGIN_QUOTE
+  
+第二种方法会产生一个问题，会打不开原来home目录下的文件，需要再 (setq abbreviated-home-dir nil) 一下才行，后续这个变量会在call abbreviate-file-name 时设置正确的。
+
+
+  #+BEGIN_QUOTE
+    
+@x,
+确实按第二种方法就不能打开原来的$HOME目录了，
+用x 介绍的(setq abbreviated-home-dir nil)才行，不过不知道这个设置还有别的影响不？
+
+  #+END_QUOTE
+
+  
+
+#+END_QUOTE
+
+
+

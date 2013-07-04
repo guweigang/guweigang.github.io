@@ -1,0 +1,18 @@
+#+TITLE: slickedit - the most powerful and expensive editor
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2010-07-27 Tue
+#+URI: /blog/2010/07/27/slickedit-the-most-powerful-and-expensive-editor/
+#+KEYWORDS: 
+#+TAGS: program, slickedit
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+今天接触了slickedit，真的很强大，呵呵，只是界面有点丑，但是其强大的功能一下子就吸引了我。上个图吧：
+
+[[http://roygu.com/?attachment_id=770][[[http://roygu.com/wp-content/uploads/2010/07/helloworld-300x39.gif]]]]
+
+[[http://roygu.com/?attachment_id=771][[[http://roygu.com/wp-content/uploads/2010/07/2010-07-27-22-28-31-300x190.png]]]]
+
+

@@ -1,0 +1,33 @@
+#+TITLE: 两个SQL写了一个小时
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2010-06-06 Sun
+#+URI: /blog/2010/06/06/two-sql-wrote-one-hour/
+#+KEYWORDS: 
+#+TAGS: find_in_set, group by, group_concat, mysql
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+这三天在名师网帮忙做卡号生成系统和学校、专业查询系统。。。中间碰到了两个复杂的ＳＱＬ问题，记录一下！
+
+
+#+BEGIN_EXAMPLE
+    
+SELECT us.universityid AS uid, s.id AS sid,GROUP_CONCAT(s.id) AS sids,  GROUP_CONCAT(s.name) AS snames,sc.id AS classid, sc.name AS classname 
+FROM common_specialty s LEFT JOIN common_specialty_class sc ON s.classid = sc.id LEFT JOIN  common_university_specialty us ON FIND_IN_SET(s.id, us.specialtyid) 
+WHERE  us.universityid=1 GROUP BY classname;
+
+#+END_EXAMPLE
+
+
+
+
+#+BEGIN_EXAMPLE
+    
+SELECT p.id AS pid, p.name AS pname,GROUP_CONCAT(u.id) AS uid ,GROUP_CONCAT(u.name) AS uname FROM common_university_specialty us LEFT JOIN common_university u ON u.id=us.universityid LEFT JOIN common_province p ON p.id = u.provinceid WHERE FIND_IN_SET('2', us.specialtyid) GROUP BY p.id
+
+#+END_EXAMPLE
+
+
+

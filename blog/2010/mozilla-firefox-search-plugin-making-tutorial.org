@@ -1,0 +1,198 @@
+#+TITLE: Mozilla Firefox搜索插件制作教程
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2010-06-16 Wed
+#+URI: /blog/2010/06/16/mozilla-firefox-search-plugin-making-tutorial/
+#+KEYWORDS: 
+#+TAGS: firefox, search plugin
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+原文：http://blog.sina.com.cn/s/blog\_439ff9c20100eeng.html
+现在网络上，Firefox变得越来越流行，越来越多的网友开始使用Firefox作为自己主要网络浏览器。不过，随着使用率的增加，Firefox自带的几个搜索引擎可能已经不可以满足网友在使用中的需求。不过，会有网友说可以上Mozilla插件分享网站(https://addon.mozilla.org/zh-cn/firefox) 去下载其他的搜索插件啊。但是，如果某些插件并没有网友将之制作并分享到Mozilla插件分享网站上，那又该怎么办呢？
+
+其实， 想解决这个问题的办法其实很简单，我们可以自己动手制作网站的搜索引擎文件啊！
+
+
+
+好了，下面就开始学习如何自己动手制作Firefox搜索引擎文件：
+
+首先，我们需要到Firefox安装目录（通常会在X:\Program Files\Mozilla Firefox\searchplugins）下的searchplugins文件夹中，找一个已经制作好的搜索引擎XML文件作为参考。
+
+在这里我就选择在国内大名鼎鼎的“百度”作为我这次教程的示例。我们可以使用记事本打开这个名为baidu.xml文件，我们将会看到一下文本信息，接下来就让我们来了解一些该文件结构。
+
+大家请注意/说明/符号中间的文本是用来说明之前标记作用的注释，在实际制作过程中不需要出现。
+
+<?xml version="1.0" ?>
+
+<SearchPlugin xmlns="http://www.mozilla.org/2006/browser/search/"> /这里是用来声明该搜索应请使用的协议信息，一般情况下不需要修改/
+<ShortName> 百度</ShortName> /搜索引擎的名称，根据实际需要制作的搜索引擎来填写/
+<Description>百度网页搜索</Description> /该搜索引擎的更多描述信息，根据实际需要制作的搜索引擎来填写/
+<InputEncoding>GB2312</InputEncoding> /搜索时候所使用到的编码格式|我们国内的网站使用的就只有GB2312、UTF-8这几种，关于跟多编码格式可以参考：百度百科编码词条/
+<Image width="16" height="16">data:image/x-icon;base64,AAABAAIAEBAAAAEACABoBQAAJgAAABAQAAABACAAaAQAAI4FAAAoAAAAEAAAACAAAAABAAgAAAAAAAABAAAAAAAAAAAAAAABAAAAAQAAAAAAAL8UFQCYMwAAmjQAAJ06AAChPQAAuSQaANkOGQDBFBQAwBIeAMAfHwDaEBoA2hMdAMARIwDEHiwA2xYgANoYIgDbGiQA2x4nANwcJgDbHigAwyUlAMMsKwDcJSoA3SMtAN0kLQDeKzQA3i82AMUzMADBOTYAxDA8AN4wNwDfMDkA3zU9AKNBAAClQwAApkQAAKhHAACqSQAArU0AAK9QAACyVAAAtFcAALhaAAC5XgAAvWEAAL9lAADCaAAAxGsAAMZuAADIcgAAy3QAAM12AADPeQAA0HoAANJ+AADEOkMA4DpBAOE+RgDCRUYAzUpHAM1LSwDQQlEA0E9VAMJTUwDNU1IAx19aANFXVADQWFgA4UFHAOJESwDiRk0A4klQAOJNUgDjS1QA41FYAORTWQDkV10A5VpgAOVeZQDUbWsA2HJvAMx2dgDFf38A13F0ANR3fQDbfHoA5WBnAOZjaQDnZmwA52tvAOdscQDpcXYA6XR4ANOAAADVggAA336BAOp8ggDUgoAA3YaEAN2IhwDqgYYA7IeLAOuJjQDtj5MA7ZKWAOGWmADmo6AA56ilAOelqwDlqaoA6q6rAPCipgDwpaoA8amsAPGsrgDus64A6K2zAOe2tgDqubQA87K1APS9wADrxsQA7MvIAPbIygDxzs4A/8zMAPXRxAD11MkA+NbLAPfS0wDz1NAA+NHTAPjS1AD41NUA9NjWAPbf3AD42doA+dvdAPnd3gD+6dQA/u3bAPrg4QD75ucA/u/hAPvo6QD87+gA/O7vAP7y5gD68+wA/ff3AP748gD++vYA/vf4AP75+QD//v4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA////ACEhISEhISEhISEhISEhISEh//////////////////8hIf//jlk6SmhoORpXkf//ISH//2UHCwsHBwsLEXD//yEh//9hDw8RDxERDxh5//8hIf//hUYREQ8RDxlOi///ISH//5aLShERDxFLi3n//yEh//9yaYtGFBhNi0pKi/8hIf98IUp4i1lai2YaEXz/ISH/cREhhf+W//+LTU2O/yEh/45OWf9nhf9ycnyO//8hIf//k/9cIU58IUV8////ISH/////XBhOiyFHi////yEh/////4llgv+Li/////8hIf//////////////////ISEhISEhISEhISEhISEhISEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAKAAAABAAAAAgAAAAAQAgAAAAAABABAAAAAAAAAAAAAAAAAAAAAAAALhbAP+0VwD/slQA/69RAP+tTgD/q0oA/6hHAP+mRAD/o0IA/6I+AP+gPAD/njoA/5w4AP+bNgD/mjQA/5gzAP+6XgD////////////////+////zP///8b////G////xv///8b////G////xv///8z///////////////+aNQD/vWEA////////////+uDh/+dlbP/hPkb/40tU/+2Pk//tj5P/4DtD/94rNP/lYGf/++jp////////////mzYA/79lAP////////7+/+uBh/7aDxn+2hAa/9oQG/7ZDhn+2g8Z/9oTHv7aEx3+2xkj//Cipv7//////////504AP/CaAD////////+/v/qfIL+2xYg/tsXIf/bGCL/2xgi/9sYIv/bGCL/2xYg/t0jLf/0vcD+//////////+eOwD/xGsA////////////+NLU/+JES//cHCb/2xgi/9sYIv/bGCL/2xgi/90lL//lWmH/+dzd////////////oD0A/8dvAP////////////339//5293/4khQ/9seKP7bGCL/2xgi/9sYIv/jUFj++dvd//S+wf7//v///////6NAAP/JcwD////////8/P/xqaz+7ZKW/vnb3f/iR0/+2x4n/t0kLP/kV13++dvd/+JOU//iSlH++d7f/v////+lQwD/zHUA///////2yMr/3zQ8/+NMUv/zsrX/+dvd/+Zjaf/nbHH/+dvd/+yHi//eMDf/2xok//bIy/7/////qEcA/853AP//////8KWq/9oYIf7fNz7+//////nb3f/+9/j////////////5293/5FNZ/+NSWf775uf//////6pJAP/QegD///////rg4f/lXmT+52ds/vGsrv/mX2b/7ZKW///////tkpb/7ZKW//bIy//64eL///////////+tTQD/0n0A/////////////O7v///////pcXb/3zA5/+ZfZv/2yMv/3i82/+FBR//2yMv/////////////////r1AA/9N/AP/////////////////++fn/6XR4/9wlKv7lW2D++dvd/+A6QP7iRkz++dvd/////////////////7JUAP/VgQD///////////////////////jZ2v7qgYX+99LT/v/////42tv++dvd/v////////////////////+0VwD/1oMA////////////////////////////////////////////////////////////////////////////uFoA/9aDAP/WgwD/1YEA/9OAAP/TfgD/0HsA/895AP/NdgD/y3QA/8hxAP/GbQD/xGsA/8JoAP+/ZQD/vWEA/7leAP8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA</Image> /这里是该搜索引擎在Firefox中会出现图标与其编码信息，这里信息的获取方法会在之后的说明中提及/
+<Url type="text/html" method="GET" template="http://www.baidu.com/baidu"> /这里就是搜索引擎的核心内容：搜索地址信息模板/
+<Param name="wd" value="{searchTerms}"/> /搜索关键词信息，这里的 {searchTerms}就是指代实际搜索中关键字的位置，所以通常只要给关键字的value附上{searchTerms}属性就可以了/
+</Url>
+<SearchForm>http://www.baidu.com/</SearchForm> /该处的地址是用于在没有填写搜索内容情况下，直接搜索会访问的地址/
+</SearchPlugin>
+
+了解了文件结构后，我们在这里详细分析一下搜索地址信息的内容。搜先我们可以直接透过Firefox，在我们要制作搜索引擎的网站中搜索一下。
+
+比如：我在百度中搜索了“网页”这一关键字，我们可以在浏览器地址栏中得到以下地址信息“http://www.baidu.com/s?wd=%E7%BD%91%E9%A1%B5”。我们就可以根据这里搜索得到的信息，来填写搜索地址栏的信息。这里我们可以将地址中?符号出现的内容作为整个搜索的模板，即：http://www.baidu.com/s，我们就可以将这里的信息填入 template="" 中；
+
+然后我们可以看一下？之后的内容 wd=%E7%BD%91%E9%A1%B5 ，这里的信息就是需要安排在Param name=""中间的内容。
+
+首先说明一下 <Param name="wd" value="{searchTerms}"/>这句语句，其中name就是搜索连中需要知道的项目名称，比如百度关键字项目名称就是 wd 。而之后的value是该项目名称所需要使用的变量信息，一般关键字只需要使用{searchTerms}这个变量就可以了。
+
+下面说明一下wd这个项目，我们会看到wd=之后会有很多数字、字母和%的组合，这些内容其实就是搜索时候使用的关键字。这里的内容就需要填写到< Param name="wd" value="{searchTerms}"/>栏中。
+
+然后，将上面的到的信息填入<Url type"......>中，如下：
+
+<Url type="text/html" method="GET" template="http://www.baidu.com/s">
+<Param name="wd" value="{searchTerms}"/>
+</Url>
+<SearchForm>http://www.baidu.com/</SearchForm>
+
+但有时候?符号之后的信息，并不只有一项。例如这个地址：http://www.google.com/search?hl=zh-CN&lr=&ei=tTCKSojDCpeGkAWGqNku&sa=X&oi=pinyin&resnum=0&ct=result&cd=1&q=%E7%BD%91%E9%A1%B5&spell=1
+
+这里的信息可能会有很多个，那有应该如何区分不同信息内容呢？我们可以通过&符号来确定，就比如上面的地址，我们可以从之前了解到信息中得知，q=这项目就是搜索的关键字项目。而例如hl=zh-cn则是用来说明所搜索的语言种类。
+
+下面就是谷歌搜索引擎制作示范：
+
+<Url type="text/html" method="GET" template="http://www.google.com/search">
+<Param name="hl" value="zh-CN"/>
+
+<Param name="ei" value="tTCKSojDCpeGkAWGqNku"/>
+
+<Param name="sa" value="X"/>
+
+<Param name="oi" value="pinyin"/>
+
+<Param name="ct" value="result"/>
+
+<Param name="cd" value="1"/>
+
+<Param name="q" value="{searchTerms}"/>
+
+<Param name="spell" value="1"/>
+</Url>
+<SearchForm>http://www.google.com/</SearchForm>
+
+不过，制作完成后大家可能会发现怎么这个搜索地址信息栏会这么长啊？其实在这里面有很多信息，并不一定需要编入搜索信息中。所以在这里我个大家一个建议：一般制作引擎文件时候，只需要制作关键字这一个部分就可以了。不过，如果在测试时无法正常使用这个引擎，我们才需要考虑将搜索地址栏中其他信息编入。所以，简化制作后可以得到以下内容，它同样可以实现搜索的功能：
+来源：(http://blog.sina.com.cn/s/blog\_439ff9c20100eeng.html) - Mozilla Firefox搜索插件制作教程\_red\_vee\_新浪博客
+
+<Url type="text/html" method="GET" template="http://www.google.com/search">
+<Param name="q" value="{searchTerms}"/>
+</Url>
+<SearchForm>http://www.google.com/</SearchForm>
+
+在完成线面提及的信息的更改之后我们就可以保存这个搜索引擎文件，我们可以在写字板中选中文件==>另存为==>文件类型改为 所有文件==>编码 改为 UTF-8==>文件名输入自己想取的名字.xml==>保存就可以得到一个搜索引擎的XML文件了。
+
+之后就需要测试了，在测试之前请将Firefox关闭，并将自己制作好的XML文件，复制到之前的到参考搜索引擎的searchplugins文件夹中，然后启动Firefox。之后就可以在搜索栏中选中自己制作的搜索引擎，并进行测试！
+
+如果启动Firefox后没有找到自己制作的搜索引擎的话，可能会有以下几种原因：
+
+1）你制作的搜索引擎的名称和Firefox之前已有的引擎同名，所以无法加载。解决这个问题的办法有：
+
+i.重新设定<ShortName>XX</ShortName>中的名称，然后在按照之前提到方法重启Firefox即可。
+
+ii.点击搜索栏上图标，选择管理搜索引擎。然后选中需要更新的那个搜索引擎，再点击“移除”按钮。之后就再次重启Firefox即可。
+
+2）可能程序没有刷新出新的搜索引擎，出现这个问题可以通过点击搜索栏上图标，选择管理搜索引擎。然后，先随便删除一个已有的搜索引擎。再重启 Firefox，从管理搜索引擎中选择“恢复默认值”这个按钮。通过此法，可能可以刷新出搜索引擎。
+
+3）你安装的搜索引擎太多了，解决这个的办法可以同2）中的删除法来解决。
+
+关于搜索引擎的图标制作：
+
+代码中  <Image width="16" height="16">是制定图像的长宽，使用的单位是像素，建议就保持16X16这么大；而之后的代码是以base64形式表述的图像文件信息，例如这里的data:image/x-icon;base64,AAABA......，其中image/x-icon是指代文件类型，base64是一种文件压缩代码。（关于base64可以参考这里）
+
+那又如何获取这里的base64压缩信息？我们可以通过使用电子邮件发送软件Outlook来封装图片（这里的图片大小建议不要太大，否则会影响制作完成的XML文件的大小。一般32X32像素大小的图片比较合适），将图片写入一封电子邮件中，然后保存为eml文件，再使用写字板打开该文件，寻找到类似 data:image/x-icon;base64,AAABA......表述形式文件，将他们复制到自己制作的XML文件中就可以了。
+
+关于分享自己的搜索引擎文件：
+
+在制作好XML搜索引擎文件之后，我们可以到https://addon.mozilla.org/zh-cn/firefox 网站上去注册一个用户，并将它上传上去，提供给大家一同“享用”。
+
+好了，我的教程就讲到这里。可能在这里面还会有一些小小的问题，不过我想通过它大家还是可以开始自己搜索引擎的制作。也希望通过这个教程可以有更多的网友加入到其中，分享好用的搜索插件！
+
+在此，我还想给大家一些建议：其实在制作的时候可能会遇到一些问题，不过可以通过网络来获取帮助信息。同时，我们也可以通过查看其他制作完毕的XML引擎文件来学习制作方法。相信只要多多尝试，一定可以制作出好用的搜索引擎文件！
+
+“捷报一条”
+
+我还有个好消息要同大家分享，我之前制作的一个卓越亚马逊的搜索引擎文件（https://addons.mozilla.org/zh-CN/firefox/addon/13145），已经在8/17晚上成功通过Mozilla版主检查，成为正式插件。
+
+===============================================================
+其他参考资料：
+
+其实，在网上还有其他网友也将他们制作XML文件的方法分享出来，在此我就引用一篇同大家分享。说不定你可以在这发现一些在我的教程中所没有提及信息！
+
+以下资料源引自：http://wiki.mozcn.org/index.php/Firefox:%E8%87%AA%E5%88%B6%E6%90%9C%E7%B4%A2%E6%8F%92%E4%BB%B6
+
+ff自带了数个搜索引擎～但是都是en搜索引擎～即便是官网提供的搜索引擎中也唯独缺少了中文搜索引擎～～其实搜索引擎插件很简单～不过是简单的将搜索栏中的关键字加上几个控制字串组织一下发送给指定网址罢了以如下google为例：在软件安装目录下的searchplugins目录内存放了已有的搜索引擎建立文件GoogleChina.src 图片可以借用已有的google.gif改名为googleChina.gif即可用emeditor一类的文本编辑软件打开 googleChina.src如下表用记事本～记事本打开的话就都粘在一堆看都看不清楚了我用的是emeditor，其他类似可以替代记事本的工具很多～随便选一个吧个人推荐emeditor
+
+代码:
+
+<SEARCH
+version = "7.1"
+name="Google China"定义搜索引擎名称
+description="Google Search China"描述信息
+method="GET"
+action="http://www.google.com/search"搜索页面地址
+queryEncoding="UTF-8"
+queryCharset="UTF-8"
+>
+
+<input name="hl" value="zh-CN">hl控制符指明搜索引擎为简体中文搜索引擎
+<input name="ie" value="UTF-8">ie控制符指明搜索关键字的编码格式，
+<input name="oe" value="UTF-8">这个我不清楚～以前用sleipnir时并无用到此关键字，猜测应该是现实结果字符的编码
+<input name="lr" value="lang\_zh-CN%7Clang\_zh-TW">lr控制符是指定搜索栏关键字的语言～例中是繁体和简体
+<input name="inlang" value="zh-CN">关键字 inlang是指在何种语言中搜索（google首页不是有在所有语言、简体、繁体三种选择么～）可以设为zh-cn中文
+
+# There are several bugs in the code for the Next and Previous buttons; therefore, they are disabled
+#<inputnext name="start" factor="20">
+#<inputprev name="start" factor="20">
+
+<input name="q" user>
+<input name="sourceid" value="mozilla-search">
+
+<interpret
+browserResultType="result"
+resultListStart="<!--a-->"
+resultListEnd="<!--z-->"
+resultItemStart="<!--m-->"
+resultItemEnd="<!--n-->"
+charset = "UTF-8"
+>
+</search>
+
+<BROWSER
+alsomatch=""
+update=""
+updateicon=""
+updatecheckdays="3"
+>
+
+很简单吧！ yahoo等也是类似道理。只要用记事本把拿一个现有的搜索引擎打开对照一看，就可以很容易摸索出来了。而且真正变的都是input name那一段～～其他地方只有少数比如搜索页面地址需要改动
+
+vliqi:
+
+补充几点技巧：如果不懂HTML的人很难找到搜索页的地址和参数，可以用以下方法找到，以baidu图片搜索为例
+
+1. 进入baidu的图片搜索页：http://image.baidu.com/
+2. 输入"张那拉”，开始搜索
+3. 在地址栏出现如下地址：http://image.baidu.com/i?z=&s=1& ct=201326592&cl=2&lm=-1&tn=baiduimage&word=%D5%C5%C4%C7 %C0%AD&pic=1 其中?前面的http://image.baidu.com/i 就是src，?后面的就是参数，等号前面的是参数名，后面的是参数值
+
+参数描述就是：
+
+<input name="z" value="">
+<input name="s" value="1">
+<input name="ct" value="201326592">
+<input name="cl" value="2">
+<input name="lm" value="-1">
+<input name="tn" value="baiduimage">
+<input name="word" user>
+<input name="pic" value="1">
+
+user表示从搜索栏中输入，一般如果搜索汉字，含%的一串字符就是搜索关键字的参数值，前面的就是参数名了
+
+

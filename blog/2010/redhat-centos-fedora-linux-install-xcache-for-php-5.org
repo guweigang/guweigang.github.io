@@ -1,0 +1,151 @@
+#+TITLE: Redhat / CentOS / Fedora Linux Install XCache for PHP 5
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2010-09-16 Thu
+#+URI: /blog/2010/09/16/redhat-centos-fedora-linux-install-xcache-for-php-5/
+#+KEYWORDS: 
+#+TAGS: centos, php5, xcache
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+转至[[转至http://www.cyberciti.biz/faq/howto-rhel-install-xcahce-php-opcode-cacher/][http://www.cyberciti.biz/faq/howto-rhel-install-xcahce-php-opcode-cacher/]]
+
+
+#+BEGIN_EXAMPLE
+    
+都是很简单的英文，我就不译了。为了装xcache，今天还装了gcc-g++, php-devel（因为要用到phpize），装完后php的效率真明显有改善。
+xcache所有发布版本都在这里，http://xcache.lighttpd.net/pub/Releases/，本人装的是最版，即1.3.0
+
+#+END_EXAMPLE
+
+
+How do I install Xcache opcode cacher for PHP 5 under RHEL / CentOS version 5.0 server?
+
+XCache is a open-source opcode cacher, which means that it accelerates the performance of PHP on servers. It optimizes performance by removing the compilation time of PHP scripts by caching the compiled state of PHP scripts into the shm (RAM) and uses the compiled version straight from the RAM. This will increase the rate of page generation time by up to 5 times as it also optimizes many other aspects of php scripts and reduce serverload.
+
+
+
+
+** Step # 1: Download xcahce source code
+
+
+Use wget command to download latest stable release:
+=# cd /opt
+# wget http://xcache.lighttpd.net/pub/Releases/1.2.1/xcache-1.2.1.tar.gz=
+
+
+** Step # 2: Untar tar ball
+
+
+Use tar command:
+=# tar -zxvf xcache-1.2.1.tar.gz
+# cd xcache-1.2.1
+=
+
+
+** Step # 2: Compile and install xcahce
+
+
+Use phpize command to prepare xcache as a PHP extension for compiling:
+=# phpize=
+Configure, compile and install xcache:
+=# ./configure --enable-xcache
+# make
+# make install=
+
+
+*** Default xcache.so installation location
+
+
+
+
+-  64 bit PHP module installed at */usr/lib64/php/modules/xcache.so*
+-  32 bit PHP module installed at */usr/lib/php/modules/xcache.so*
+
+
+
+
+** Step # 3: Create xcache.ini file
+
+
+Under RHEL / CentOS, you place php modules configuration at /etc/php.d/ directory:
+=# cd /etc/php.d/=
+Create xcache.ini file:
+=# vi xcache.ini=
+Append configuration directives:
+
+
+#+BEGIN_EXAMPLE
+    
+[xcache-common]
+; change me - 64 bit php => /usr/lib64/php/modules/xcache.so
+; 32 bit php => /usr/lib/php/modules/xcache.so
+zend_extension = /usr/lib64/php/modules/xcache.so
+
+[xcache.admin]
+xcache.admin.auth = On
+xcache.admin.user = "mOo"
+; xcache.admin.pass = md5($your_password)
+xcache.admin.pass = ""
+
+[xcache]
+xcache.shm_scheme =        "mmap"
+xcache.size  =               32M
+xcache.count =                 1
+xcache.slots =                8K
+xcache.ttl   =              3600
+xcache.gc_interval =         300
+
+; Same as aboves but for variable cache
+; If you don't know for sure that you need this, you probably don't
+xcache.var_size  =            0M
+xcache.var_count =             1
+xcache.var_slots =            8K
+xcache.var_ttl   =             0
+xcache.var_maxttl   =          0
+xcache.var_gc_interval =     300
+
+; N/A for /dev/zero
+xcache.readonly_protection = Off
+
+xcache.mmap_path =    "/dev/zero"
+
+xcache.cacher =               On
+xcache.stat   =               On
+#+END_EXAMPLE
+
+
+Save and close the file.
+
+Alternatively, you can also copy default xcache.ini to /etc/php.d/
+=# cp xcache.ini /etc/php.d/
+# vi /etc/php.d/xcache.ini=
+
+Restart your Apache web server:
+=# service httpd restart=
+
+If you are using Lighttpd web server, enter:
+=# service lighttpd restart=
+
+
+** Step # 4: Make sure xcache is working
+
+
+Type the following command for verification:
+=$ php -v=
+Output:
+
+
+#+BEGIN_EXAMPLE
+    
+PHP 5.1.6 (cli) (built: Nov 20 2007 11:11:52)
+Copyright (c) 1997-2006 The PHP Group
+Zend Engine v2.1.0, Copyright (c) 1998-2006 Zend Technologies
+    with XCache v1.2.1, Copyright (c) 2005-2007, by mOo
+#+END_EXAMPLE
+
+
+You should see line "XCache v1.2.1, Copyright (c) 2005-2007, by mOo"
+
+

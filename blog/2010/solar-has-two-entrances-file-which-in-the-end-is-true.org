@@ -1,0 +1,68 @@
+#+TITLE: Solar有两个入口文件，到底哪个才是真的？
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2010-08-19 Thu
+#+URI: /blog/2010/08/19/solar-has-two-entrances-file-which-in-the-end-is-true/
+#+KEYWORDS: 
+#+TAGS: index.php, solar, solarphp
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+其实这篇文章我最早在[[http://solarphp.org.cn][论坛]]里发过，原文地址是：[[http://solarphp.org.cn/viewtopic.php?f=11&t=4][http://solarphp.org.cn/viewtopic.php?f=11&t=4]]，今天把它引用过来，目的是为下一步的写作开个头，下一步将讨论Solar架构类及保证Solar运行必须的类库:)。
+
+其实Solar有两个入口文件，一个是/index.php，别一个是/docroot/index.php。那么为什么要设置两个呢，究竟哪个才是真的入口文件？
+假设及前提：
+1.linux下的apache根目录为/var/www/html
+2.solar的目录是/var/www/html/solar
+3.有域名已经指向该服务器，假设域名为：www.exmaple.com
+原因：为了让用户更快、更简单地体验Solar（也为了让用户更快有成就感），Solar允许直接把域名指向/var/www/html/solar目录，并用此域名访问，但是在实际项目布署中这是极其不安全的，更好的做法是把域名指向/var/www/html/solar/docroot。
+
+所以我们只看/docroot/index.php：
+
+
+#+BEGIN_EXAMPLE
+     <?php
+ // Solar system directory
+ // 定义当前目录的上级目录为solar的系统目录
+ // 也就是说当目录为/docroot，它的上级目录即为：/
+ $system = dirname(dirname(__FILE__));
+
+ // set the include-path
+ // 在php的include路径中增加$system/include目录，之后再使用require或include的时候会更方便。
+ set_include_path("$system/include");
+
+ // load Solar
+ // 加载Solar.php文件
+ require_once 'Solar.php';
+
+ // start Solar with system config file
+ // 载入配置文件并启动Solar
+ $config = "$system/config.php";
+ Solar::start($config);
+
+ // instantiate and run the front controller、
+ // 通过延迟加载的方式获取front控制器的实例，并把处理结果输出到浏览器（渲染视图）
+ $front = Solar_Registry::get('controller_front');
+ $front->display();
+
+ // Done!
+ // 完成！
+ Solar::stop();
+#+END_EXAMPLE
+
+
+引导文件中，特别要注意的就是dirname()函数的嵌套使用：
+
+
+#+BEGIN_EXAMPLE
+    dirname(dirname(__FILE__));
+假设__FILE__为 /var/www/html/solar/docroot/index.php
+上面的方法输出为 /var/www/html/solar
+dirname(dirname(__FILE__));得到的是文件上一层目录名
+dirname(__FILE__);得到的是文件所在层目录名
+
+#+END_EXAMPLE
+
+
+

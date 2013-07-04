@@ -1,0 +1,112 @@
+#+TITLE: 几个常用的PHP方法或语句
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2010-08-07 Sat
+#+URI: /blog/2010/08/07/several-commonly-used-methods-or-statements-php/
+#+KEYWORDS: 
+#+TAGS: php
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+PHP匹配 UTF-8 中文的正则
+
+
+#+BEGIN_EXAMPLE
+    preg_match('@[\x{4e00}-\x{9fa5}]+@u', $string, $tmp);
+
+#+END_EXAMPLE
+
+
+删除非空文件夹
+
+
+#+BEGIN_EXAMPLE
+    function remove_directory($dir) {
+ if ($handle = opendir("$dir")) {
+ while (false !== ($item = readdir($handle))) {
+ if ($item != "." && $item != "..") {
+ if (is_dir("$dir/$item")) {
+ remove_directory("$dir/$item");
+ } else {
+ unlink("$dir/$item");
+ echo " removing $dir/$item<br>\n";
+ }
+ }
+ }
+ closedir($handle);
+ rmdir($dir);
+ echo "removing $dir<br>\n";
+ }
+}
+#+END_EXAMPLE
+
+
+PHP 获取文件扩展名正确的方法
+
+
+#+BEGIN_EXAMPLE
+    echo pathinfo('/www/htdocs/your_image.jpg', PATHINFO_EXTENSION);
+
+#+END_EXAMPLE
+
+
+具体看下：
+
+
+#+BEGIN_EXAMPLE
+    <?php
+$file_path = pathinfo('/htdocs/roy_image.jpg');
+
+echo "$file_path ['dirname']\n";
+echo "$file_path ['basename']\n";
+echo "$file_path ['extension']\n";
+echo "$file_path ['filename']\n"; // only in PHP 5.2+
+?>
+#+END_EXAMPLE
+
+
+一次性获取字符串中的需要的子串
+
+
+#+BEGIN_EXAMPLE
+    $str = 'foo,bar,zip';
+list(,,$var) = explode(',', $str);
+echo $var;
+
+#+END_EXAMPLE
+
+
+使用sscanf函数
+
+
+#+BEGIN_EXAMPLE
+    $mandate = "January 01 2000";
+list($month, $day, $year) = sscanf($mandate, "%s %d %d");
+
+#+END_EXAMPLE
+
+
+php匹配中文
+
+
+#+BEGIN_EXAMPLE
+    
+$str = '中华人民共和国';
+preg_match('/^[\x{4e00}-\x{9fa5}]+$/u',$str);
+
+#+END_EXAMPLE
+
+
+全角转半角
+
+
+#+BEGIN_EXAMPLE
+    
+$str = preg_replace('/\xa3([\xa1-\xfe])/e', 'chr(ord(\1)-0x80)', $str);   
+echo $str; 
+
+#+END_EXAMPLE
+
+
+

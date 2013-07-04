@@ -1,0 +1,50 @@
+#+TITLE: 使用Solar_Geshi对代码进行高亮显示！
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2010-11-08 Mon
+#+URI: /blog/2010/11/08/use-solar_geshi-the-code-highlighted!/
+#+KEYWORDS: 
+#+TAGS: solar, solar_geshi, solarphp
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+Solar Demo站中使用了Solar\_Geshi进行代码高亮，效果演示：[[http://demo.solarphp.cn/pay/alipay][http://demo.solarphp.cn/pay/alipay]]
+其实很简单，只需要在视图中写上以下代码即可：
+
+
+#+BEGIN_EXAMPLE
+    geshi()
+           ->append($this->code, $language)
+            ->fetch();
+?>
+#+END_EXAMPLE
+
+
+$this->code在action中定义，Deom站中最频繁的操作是获得某个控制器中某个动作的代码：
+
+
+#+BEGIN_EXAMPLE
+        protected function _getMethodSource(ReflectionMethod $method)
+    {
+        $path = $method->getFileName();
+        $lines = @file($path);
+        $from = $method->getStartLine();
+        $to = $method->getEndLine();
+        $len = $to - $from + 1;
+        return implode(array_slice($lines, $from-1, $len));
+    }
+#+END_EXAMPLE
+
+
+调用代码如下，你应该都懂的，不用多解释：
+
+
+#+BEGIN_EXAMPLE
+            $class = new ReflectionClass('Demo_App_Image');
+        $method = $class->getMethod('actionGd');
+        $this->code = $this->_getMethodSource($method);
+#+END_EXAMPLE
+
+
+

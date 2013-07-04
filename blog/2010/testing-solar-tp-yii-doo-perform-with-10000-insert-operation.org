@@ -1,0 +1,48 @@
+#+TITLE: 测试Solar/TP/YII/DOO执行10000次插入操作
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2010-09-13 Mon
+#+URI: /blog/2010/09/13/testing-solar-tp-yii-doo-perform-with-10000-insert-operation/
+#+KEYWORDS: 
+#+TAGS: solar, solar php, solar test
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+和[[http://luoxun.sinaapp.com/][袜子]]一起测试了下Solar/TP/YII/DOO四个框架执行10000次数据库插入操作所需要的时间，当然这里要用到ORM了，我主要负责测试Solar的测试工作。
+
+直接看结果：
+
+以下有两种环境，下面分别列出两种环境下的配置:
+
+windows 7 ：在windows7自带的性能评分中的分数：
+
+处理器：7.2，内存 7.4，图形 7.2 ，游戏图形 7.2 ，主硬盘 5.9
+
+Linux VPS：BurstNet 512M内存， CPU 1G、单核
+
+Solar
+
+在windows 7上，Solar 执行1w次插入所需要时间大约稳定在22秒
+在linux vps上，Solar 执行1w次插入所需时间大约稳定在12.5秒
+
+TP
+
+在windows 7上，TP执行1w次插入所需要时间不稳定，出现过3.8秒，4.0秒，4.2秒，4.5 秒，5.2秒
+在linux vps上未测
+
+YII
+
+在windows 7上，YII执行1w次插入所需要时间大约稳定在5秒
+在linux vps上未测
+
+DOO
+
+在windows 7上，DOO执行1w次插入所需要时间大约稳定在3秒
+在linux vps上未测
+
+原生PHP
+
+在windows 7上，原生PHP执行1w次插入所需要时间大约稳定在2.6秒
+
+

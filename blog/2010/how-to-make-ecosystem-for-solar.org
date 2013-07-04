@@ -1,0 +1,38 @@
+#+TITLE: How to make  ecosystem for Solar?
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2010-07-17 Sat
+#+URI: /blog/2010/07/17/how-to-make-ecosystem-for-solar/
+#+KEYWORDS: 
+#+TAGS: ecosystem, solar
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+Recently, Solar Team in China accepts two new members, [[http://libears.com][libear]] and [[http://www.lifephp.com][life]]. So welcome both of you. Hope that you will learn more here and be a Solar Mainstay Contributor (SMC).
+
+By the way, I will announce Solar plans and tell you where we are now. 
+
+In my plans, Solar will go these steps which will make ecosystem for solar:
+
+
+#+BEGIN_EXAMPLE
+    
+1.Translate manual                    done.
+2.Make official site in China            done.
+3.Make Chinese forum                 done.
+4.Support Windows VISTA , 7 , 2008       done.
+5.Support Windows 2000, XP, 2003         developing.
+6.Make Chinese API document of packages        to plan.    
+7.Make a forge site for Solar packages        to plan.
+8.Make Solar widespread in company and developers to plan.
+9.Make a job site for Solarer         to plan.
+
+#+END_EXAMPLE
+
+
+
+Cheer~
+
+
+

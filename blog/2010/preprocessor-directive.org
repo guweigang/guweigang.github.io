@@ -1,0 +1,36 @@
+#+TITLE: 预处理指令
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2010-02-09 Tue
+#+URI: /blog/2010/02/09/preprocessor-directive/
+#+KEYWORDS: 
+#+TAGS: 
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+预处理指令是一些供编译器使用的特殊指令代码。它们不是C或C++代码。它们并不精确遵守C++的语法规则，这些指令通常放在文件的最开始，出现在任何函数之前。
+
+预处理指令的种类有很多，但在C++中最常见的是#include。#include命令有两种基本语法：
+
+
+#+BEGIN_EXAMPLE
+    
+#include 
+
+#+END_EXAMPLE
+
+
+或
+
+
+#+BEGIN_EXAMPLE
+    
+#include "somefile.h"
+
+#+END_EXAMPLE
+
+
+在第一种语法里，头文件的名字出现在一对尖括号里，它告诉编译器应该到当前编程环境的默认位置去检索相应的函数库。在第二种语法里，头文件的名了出现在一对双引号里，编译器将到一个相对于当前文件的子目录里去寻找相应的函数库。
+
+

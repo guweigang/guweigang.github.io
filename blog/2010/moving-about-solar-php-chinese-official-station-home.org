@@ -1,0 +1,14 @@
+#+TITLE: 动一下solar php中文官方站首页
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2010-05-28 Fri
+#+URI: /blog/2010/05/28/moving-about-solar-php-chinese-official-station-home/
+#+KEYWORDS: 
+#+TAGS: chinese, official, solar
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+终于决定动态化官方首页了，一直都蛮忙的（算借口吧），且因为solar在国内的发展速度，一直也没有想到去改变一下，这次借solar-win-0.3版本发布这个机会，终于把中文官方首页改成动态的了，现在它和论坛紧密相连。来看看吧，猛击[[http://solarphp.cn][这里]]。
+
+

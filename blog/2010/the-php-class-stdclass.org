@@ -1,0 +1,163 @@
+#+TITLE: PHP的stdClass类
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2010-08-08 Sun
+#+URI: /blog/2010/08/08/the-php-class-stdclass/
+#+KEYWORDS: 
+#+TAGS: php, stdClass
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+stdClass在PHP5才开始被流行。而stdClass也是zend的一个保留类。stdClass是PHP的一个基类，所有的类几乎都继承这个 类，所以任何时候都可以被new，可以让这个变量成为一个object。同时，这个基类又有一个特殊的地方，就是没有方法。凡是用new stdClass()的变量，都不可能会出现$a->foo()这种方式的使用。
+
+PHP5的对象的独特性，对象在任何地方被调用，都是引用地址型 的，所以相对消耗的资源会少一点。在其它页面为它赋值时是直接修改，而不是引用一个拷贝。
+
+
+来看看如何使用，先给个简单的示例，
+
+
+#+BEGIN_EXAMPLE
+    <?php
+$user = new stdClass();
+$user->name = 'roy';
+$user->email = 'roy@solarphp.cn';
+$user->sex = 'Male';
+
+// 可以使用foreach遍历
+foreach ($user as $_u) {
+ echo $_u."\n";
+}
+
+// 如果要获取当前有多少属性，需要强制转成数组
+echo count((array)$user)."\n";
+// 当然也可以通过get_object_vars获取对象所有属性
+// echo count(get_object_vars($user));
+#+END_EXAMPLE
+
+
+结果如下：
+
+
+#+BEGIN_EXAMPLE
+    ---------- Debug PHP 5.3.1 ----------
+roy
+roy@solarphp.cn
+Male
+3
+
+Output completed (0 sec consumed) - Normal Termination
+#+END_EXAMPLE
+
+
+那么这个stdClass有什么具体应用么？呵呵，讲到正题了，当然有，把数组转为对象就是它的一个典型应用，直接看代码吧：
+
+
+#+BEGIN_EXAMPLE
+    <?php
+class Array_Tools
+{
+ public static function toObject($array)
+ {
+ if(!is_array($array)) {
+ return $array;
+ }
+ $object = new stdClass();
+
+ if (is_array($array) && count($array) > 0)
+ {
+ foreach ($array as $_name => $_value)
+ {
+ $name = strtolower(trim($_name));
+
+ if (!empty($_name))
+ {
+ $object->$_name = self::toObject($_value);
+ }
+ }
+ return $object;
+ }
+ else
+ {
+ return FALSE;
+ }
+ }
+}
+
+$arr = array('foo' => array('a' => 'aFoo', 'b' =>'bFoo'),
+ 'bar' => array('a'=> 'aBar', 'b'=>'bBar'),
+ 'solar' => 'php',
+
+ );
+
+$obj = Array_Tools::toObject($arr);
+
+echo $obj->foo->b;
+
+echo "\n";
+
+echo $obj->solar;
+#+END_EXAMPLE
+
+
+结果如下：
+
+
+#+BEGIN_EXAMPLE
+    ---------- Debug PHP 5.3.1 ----------
+bFoo
+php
+Output completed (0 sec consumed) - Normal Termination
+
+#+END_EXAMPLE
+
+
+toObject方法递归地处理了多维数组，所以可以使用$obj->foo->b这种方式来获取值。
+
+那么如果使用PHP的强制对象转换呢？结果会如何？来看看这个示例：
+
+
+#+BEGIN_EXAMPLE
+    <?php
+$arr = array('foo' => array('a' => 'aFoo', 'b' =>'bFoo'),
+ 'bar' => array('a'=> 'aBar', 'b'=>'bBar'),
+ 'solar' => 'php',
+ );
+
+$a = (object) $arr;
+
+var_dump($a);
+#+END_EXAMPLE
+
+
+结果是：
+
+
+#+BEGIN_EXAMPLE
+    ---------- Debug PHP 5.3.1 ----------
+object(stdClass)#1 (3) {
+ ["foo"]=>
+ array(2) {
+ ["a"]=>
+ string(4) "aFoo"
+ ["b"]=>
+ string(4) "bFoo"
+ }
+ ["bar"]=>
+ array(2) {
+ ["a"]=>
+ string(4) "aBar"
+ ["b"]=>
+ string(4) "bBar"
+ }
+ ["solar"]=>
+ string(3) "php"
+}
+
+Output completed (1 sec consumed) - Normal Termination
+#+END_EXAMPLE
+
+
+呵呵，很可惜，只能处理一维的情况。
+
+

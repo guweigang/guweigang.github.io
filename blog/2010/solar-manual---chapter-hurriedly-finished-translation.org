@@ -1,0 +1,20 @@
+#+TITLE: Solar manual: 匆匆译完第五章
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2010-04-17 Sat
+#+URI: /blog/2010/04/17/solar-manual---chapter-hurriedly-finished-translation/
+#+KEYWORDS: 
+#+TAGS: solar, solar manual, solarphp
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+:!:匆匆译完第五章了，文档质量应该好不到哪里去，因为最近在谈一个大项目，写项目方案、报价、了解需求占用了我很多时间。而文档的进度又不能落下，所以只能匆匆地译完它，每天熬到12点左右。。。
+
+这一章主要讲layouts（布局），也就是通常讲的两步视图，布局的概念让我们可以模块化地组织页面，页面的各个子视图相互独立，互不影响，且可以最大程度的复用视图，这给我们带来了极大的方便。
+
+最值得一提的是，针对某个特殊应用，Solar允许你覆盖布局中的某个页面元素来更改主视图中的一小部分
+
+是不是很方便、很强大？文档就移步到[[http://solarphp.cn/manual-new/ch05.html][这里]]。
+
+

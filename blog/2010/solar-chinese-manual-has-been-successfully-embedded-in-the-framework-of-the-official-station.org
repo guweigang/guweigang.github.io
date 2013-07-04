@@ -1,0 +1,255 @@
+#+TITLE: Solar中文手册已成功嵌入官方站框架！
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2010-11-15 Mon
+#+URI: /blog/2010/11/15/solar-chinese-manual-has-been-successfully-embedded-in-the-framework-of-the-official-station/
+#+KEYWORDS: 
+#+TAGS: solar manual
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+有人反映solar中文手册的界面太丑了，不过我认为手册最主要的是访问速度快，越快越好；只要结构清晰，越简洁越好。
+
+为了满足部分人的需求，所以今早把手册嵌入到网站框架中了。原来的仍能访问。
+
+新版地址入口：　[[http://solarphp.cn/manual-new/][http://solarphp.cn/manual-new/]]
+旧版地址入口： [[http://solarphp.cn/manual/][http://solarphp.cn/manual/]]
+
+那么我是怎么做的呢？为了赶快放上去，我用editplus把这将近100个文件一次性打开，然后统一替换其中的某些文本符。这是傻瓜式做法，为了方便以后更快地把手册嵌入到官方站框架中，特意写了这个脚本：
+
+
+
+#+BEGIN_EXAMPLE
+    // html.php
+$argv = empty($_SERVER['argv'])? array(0 => '') : $_SERVER['argv'];
+
+if (2 > count($argv)) {
+    echo "wront param count.";
+    exit(1);
+}
+
+$dir = $argv[1];
+
+if(array_key_exists(2, $argv))
+{
+    $tgt = $argv[2];
+} else {
+    $tgt = $dir;
+}
+
+// strip \ from right of the string
+// keep string with \ in end.
+$tgt = rtrim($tgt, '\\').'\\';
+$dir = rtrim($dir, '\\').'\\';
+
+if(!file_exists($dir) || !is_dir($dir))
+{
+    echo "illeagel directory.";
+    exit(1);
+}
+
+if(!file_exists($tgt) || !is_dir($tgt))
+{
+    echo "illeagel directory.";
+    exit(1);
+}
+
+$dh = opendir($dir);
+
+$search = array(
+    // head
+    '',
+    // layout css
+    '
+',
+    // header
+    '',
+
+    // footer
+    '',
+
+);
+
+$replace = array(
+
+    // head
+    '',
+
+    // layout css
+    '
+
+',
+
+    // header
+    '
+
+
+
+SOLAR1.1.2
+Framework for PHP 5
+
+
+
+
+
+  首　页 
+  Solar 项目 
+  用户手册
+ 开发者社区
+   Bug 跟踪
+  Contributor
+ API 文档
+   Solar Demo
+
+
+
+
+
+    
+
+  
+',
+
+    // footer
+    '
+
+  
+
+
+Copyright © 2010 Solar For PHP 5 In China, All Rights Reserved.
+
+    
+
+
+Powered By  Roy Gu    
+
+
+
+        
+
+',
+);
+
+while (($file = readdir($dh)) !== false) {
+    if(is_file($dir.$file)) {
+        if ('html' == pathinfo($dir.$file, PATHINFO_EXTENSION)) {
+            echo " *Processing $dir.$file ...";
+            $html = file_get_contents($dir. $file);
+            $html1 = str_replace($search, $replace, $html);
+            $fp = fopen($tgt. $file, 'w');
+            fwrite($fp, $html1);
+            fclose($fp);
+            echo " ~~~done.\n";
+        }
+    }
+}
+#+END_EXAMPLE
+
+
+调用方法如下：
+
+
+#+BEGIN_EXAMPLE
+    php html.php /path/to/html [target]
+#+END_EXAMPLE
+
+
+当你省略第二个参数时，会覆盖原文件！
+运行后的效果：
+
+
+#+BEGIN_EXAMPLE
+    D:\solar\solar-manual>php html.php .\chunks .\html
+ *Processing .\chunks\.apa.html ... ~~~done.
+ *Processing .\chunks\.apas01.html ... ~~~done.
+ *Processing .\chunks\.apas02.html ... ~~~done.
+ *Processing .\chunks\.apas03.html ... ~~~done.
+ *Processing .\chunks\.apas04.html ... ~~~done.
+ *Processing .\chunks\.apas05.html ... ~~~done.
+ *Processing .\chunks\.apas06.html ... ~~~done.
+ *Processing .\chunks\.apb.html ... ~~~done.
+ *Processing .\chunks\.apbs01.html ... ~~~done.
+ *Processing .\chunks\.apbs02.html ... ~~~done.
+ *Processing .\chunks\.apbs03.html ... ~~~done.
+ *Processing .\chunks\.apbs04.html ... ~~~done.
+ *Processing .\chunks\.apbs05.html ... ~~~done.
+ *Processing .\chunks\.apbs06.html ... ~~~done.
+ *Processing .\chunks\.apbs07.html ... ~~~done.
+ *Processing .\chunks\.apbs08.html ... ~~~done.
+ *Processing .\chunks\.apbs09.html ... ~~~done.
+ *Processing .\chunks\.apbs10.html ... ~~~done.
+ *Processing .\chunks\.ar01s01.html ... ~~~done.
+ *Processing .\chunks\.ch01.html ... ~~~done.
+ *Processing .\chunks\.ch01s01.html ... ~~~done.
+ *Processing .\chunks\.ch01s02.html ... ~~~done.
+ *Processing .\chunks\.ch01s03.html ... ~~~done.
+ *Processing .\chunks\.ch01s04.html ... ~~~done.
+ *Processing .\chunks\.ch01s05.html ... ~~~done.
+ *Processing .\chunks\.ch01s06.html ... ~~~done.
+ *Processing .\chunks\.ch01s07.html ... ~~~done.
+ *Processing .\chunks\.ch01s08.html ... ~~~done.
+ *Processing .\chunks\.ch01s09.html ... ~~~done.
+ *Processing .\chunks\.ch01s10.html ... ~~~done.
+ *Processing .\chunks\.ch01s11.html ... ~~~done.
+ *Processing .\chunks\.ch01s12.html ... ~~~done.
+ *Processing .\chunks\.ch01s13.html ... ~~~done.
+ *Processing .\chunks\.ch01s14.html ... ~~~done.
+ *Processing .\chunks\.ch01s15.html ... ~~~done.
+ *Processing .\chunks\.ch02.html ... ~~~done.
+ *Processing .\chunks\.ch02s01.html ... ~~~done.
+ *Processing .\chunks\.ch02s02.html ... ~~~done.
+ *Processing .\chunks\.ch02s03.html ... ~~~done.
+ *Processing .\chunks\.ch02s04.html ... ~~~done.
+ *Processing .\chunks\.ch03.html ... ~~~done.
+ *Processing .\chunks\.ch03s01.html ... ~~~done.
+ *Processing .\chunks\.ch03s02.html ... ~~~done.
+ *Processing .\chunks\.ch03s03.html ... ~~~done.
+ *Processing .\chunks\.ch03s04.html ... ~~~done.
+ *Processing .\chunks\.ch03s05.html ... ~~~done.
+ *Processing .\chunks\.ch03s06.html ... ~~~done.
+ *Processing .\chunks\.ch03s07.html ... ~~~done.
+ *Processing .\chunks\.ch03s08.html ... ~~~done.
+ *Processing .\chunks\.ch03s09.html ... ~~~done.
+ *Processing .\chunks\.ch04.html ... ~~~done.
+ *Processing .\chunks\.ch04s01.html ... ~~~done.
+ *Processing .\chunks\.ch04s02.html ... ~~~done.
+ *Processing .\chunks\.ch04s03.html ... ~~~done.
+ *Processing .\chunks\.ch04s04.html ... ~~~done.
+ *Processing .\chunks\.ch04s05.html ... ~~~done.
+ *Processing .\chunks\.ch04s06.html ... ~~~done.
+ *Processing .\chunks\.ch04s07.html ... ~~~done.
+ *Processing .\chunks\.ch04s08.html ... ~~~done.
+ *Processing .\chunks\.ch05.html ... ~~~done.
+ *Processing .\chunks\.ch05s01.html ... ~~~done.
+ *Processing .\chunks\.ch05s02.html ... ~~~done.
+ *Processing .\chunks\.ch05s03.html ... ~~~done.
+ *Processing .\chunks\.ch05s04.html ... ~~~done.
+ *Processing .\chunks\.ch05s05.html ... ~~~done.
+ *Processing .\chunks\.ch05s06.html ... ~~~done.
+ *Processing .\chunks\.ch06.html ... ~~~done.
+ *Processing .\chunks\.ch06s01.html ... ~~~done.
+ *Processing .\chunks\.ch06s02.html ... ~~~done.
+ *Processing .\chunks\.ch06s03.html ... ~~~done.
+ *Processing .\chunks\.ch06s04.html ... ~~~done.
+ *Processing .\chunks\.ch06s05.html ... ~~~done.
+ *Processing .\chunks\.ch06s06.html ... ~~~done.
+ *Processing .\chunks\.ch06s07.html ... ~~~done.
+ *Processing .\chunks\.ch06s08.html ... ~~~done.
+ *Processing .\chunks\.ch06s09.html ... ~~~done.
+ *Processing .\chunks\.ch07.html ... ~~~done.
+ *Processing .\chunks\.ch07s01.html ... ~~~done.
+ *Processing .\chunks\.ch07s02.html ... ~~~done.
+ *Processing .\chunks\.ch07s03.html ... ~~~done.
+ *Processing .\chunks\.ch07s04.html ... ~~~done.
+ *Processing .\chunks\.ch07s05.html ... ~~~done.
+ *Processing .\chunks\.ch07s06.html ... ~~~done.
+ *Processing .\chunks\.ch07s07.html ... ~~~done.
+ *Processing .\chunks\.ch07s08.html ... ~~~done.
+ *Processing .\chunks\.index.html ... ~~~done.
+ *Processing .\chunks\.pt01.html ... ~~~done.
+ *Processing .\chunks\.pt02.html ... ~~~done.
+#+END_EXAMPLE
+
+
+

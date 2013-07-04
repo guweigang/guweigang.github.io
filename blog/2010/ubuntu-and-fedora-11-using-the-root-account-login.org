@@ -1,0 +1,44 @@
+#+TITLE: Ubuntu、fedora 11使用root帐户登陆
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2010-03-10 Wed
+#+URI: /blog/2010/03/10/ubuntu-and-fedora-11-using-the-root-account-login/
+#+KEYWORDS: 
+#+TAGS: fedora, login, root, ubuntu
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+由于Ubuntu root用户在默认情况下是禁用的，不允许用root登陆,而有很多时候的操作又需要有root用户的权限。要使用root帐户登陆，遵循以下步骤：
+
+1、首先设置root密码，利用现有管理员帐户登陆Ubutu，在终端执行命令：sudo passwd root，接着输入密码和root密码，重复密码。再重新启动就可以用root登陆。
+
+2、默认情况是不允许用root帐号直接登陆图形界面的。这可以通过修改/etc/gdm/gdm.conf文件来允许root直接登陆，在该文件中找到 AllowRoot＝false 将其改为 AllowRoot=true 切换用户就可以了。
+
+注：gdm.conf默认是只读属性，修改前请先使用sudo chmod 777 /etc/gdm/gdm.conf 将文件权限设置为为777。
+
+今天在研究LVM的时候遇到的问题，下载的fedora11不能以root用户登录gui，普通用户权限还不够，最后在网上找到了此文章供大家参考！
+
+继fedora10之后fedora11仍然不让root用户登陆GUI，照着fedora 10的方法做过之后仍然不行。
+
+其实解决方法还是差不多的：
+
+为了用root登入，就先用普通用户登陆，打开系统工具-终端
+
+输入命令：su -
+
+输入root密码（此时密码不显示，直接输入）
+
+输入命令:gedit /etc/pam.d/gdm&
+
+在 文本编辑器中注释掉"auth required pam\_succeed\_if.so user != root quiet"这一行（在这一行前面加上"#",即改成#auth required pam\_succeed\_if.so user != root quiet）
+
+保存后继续输入命令:gedit /etc/pam.d/gdm-password&
+
+同样地注释掉"auth required pam\_succeed\_if.so user != root quiet"这一行。
+
+保存后退出
+
+现在就能使用root登录了
+
+

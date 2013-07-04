@@ -1,0 +1,133 @@
+#+TITLE: Mantis Bug Tracker
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2010-07-01 Thu
+#+URI: /blog/2010/07/01/mantis-bug-tracker/
+#+KEYWORDS: 
+#+TAGS: bug tracker, config, mantis
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+Mantis是一个基于PHP技术的轻量级的开源缺陷跟踪系统，其功能与JIRA系统类似，都是以Web操作的形式提供项目管理及缺陷跟踪服务。在功能上 可能没有JIRA那么专业，界面也没有JIRA漂亮，但在实用性上足以满足中小型项目的管理及跟踪。
+
+
+** *使用及配置*
+
+
+复制config\_inc.php.sample，并改名为config\_inc.php 然后更具你的数据库修改config.inc。
+Mantis 的设置是这样保存的：在config\_defaults\_inc.php中保存Mantis的默认设置，用户自己的设置信息保存在 config\_inc.php中。如果某个选项在config\_inc.php中有设置，则系统使用config\_inc.php中的设置，否则使用 config\_defaults\_inc.php的系统默认设置；config\_inc.php.sample则是Mantis给出的一个用户设置文件例 子。
+
+我们需要修改config\_inc.php文件中的设置，设置很简单，各个参数的意义可以参见 config\_defaults\_inc.php，这里对每个参数都有详细的解释；Sample中给出的一些设置是一定需要修改的，比如MySQL数据库 的连接参数，管理员的邮箱的；其他的要根据你的实际情况进行修改。
+
+
+*** *一些常用的设置*
+
+**
+
+
+
+
+**** 数据库配置
+
+
+$g\_hostname = "localhost";
+
+$g\_db\_username = "root";
+
+$g\_db\_password = "";
+
+$g\_database\_name = "bugtracker";
+
+
+**** 其他配置
+
+
+$g\_use\_iis                                                = ON;                                                 # 使用IIS
+
+$g\_show\_version                                     = OFF;                                                # 不在页面下部显示 Mantis的版本号
+
+$g\_default\_language                                 = 'chinese\_simplified';                          # 默认语言为简体中文
+
+$g\_show\_project\_menu\_bar                    = ON;                                                 # 显示项目选择栏
+
+$g\_show\_queries\_count                           = OFF;                                               # 在页脚不显示执行的查询次数
+
+$g\_default\_new\_account\_access\_level     = DEVELOPER;                                 # 默认用户级别
+
+
+$g\_window\_title                                      = 'Mantis Bug 跟踪管理系统';           # 浏览器标题
+$g\_page\_title                                           = 'Mantis Bug 跟踪管理系统';           # 页面标题栏
+$g\_enable\_email\_notification                    = ON;                                                # 开通邮件通知
+
+
+
+
+1. 文件上传设置：
+默认为上传到数据库，你可以修改为上传到网站空间上，当然前提是你设置项目的时候给他一个可以上传的目录，比如在根目录 下增加一个upload文件给他写权限。
+
+
+
+
+$g\_file\_upload\_method                          = DISK;            # 保存到服务器空间
+$g\_max\_file\_size                                    = 5000000;       # mantis允许上传尺寸，前提是<=php.ini文件中上传允许的尺寸。
+
+
+
+
+时间格式：
+$g\_short\_date\_format                           = 'Y-m-d';           # 短日期格式，Y 大写表示 4 位年
+$g\_normal\_date\_format                        = 'Y-m-d H:i';      # 普通日期格式
+$g\_complete\_date\_format                    = 'Y-m-d H:i:s';    # 完整日期格式
+
+
+
+
+2. Mantis的初步安全设置
+(1) 在Mantis目录下有一个admin目录，如果你在IE中打开这个目录下的index.php查看，你就会知道这个目录是进行Mantis Administration的，使用这个模块可以检查你的Mantis是否安装完全，对旧版本的Mantis进行升级，对Mantis的页面CSS文件 进行修改；使用这个管理模块是不需要用户名和密码的，因此任何人都可以通过这个管理模块查看你的Mantis系统信息，而且由于有升级模块，在这里还可以 直接对数据库进行修改；因此如果被未授权的人打开，结果会是什么样不用我多说；最好因此按照系统的建议，在配置完成后将这个admin目录删除；注意一定 是删除而不是改名！改名后仍然是可以访问的！
+(2)在添加一个管理员用户后，删除系统默认的administrator用户。
+
+
+
+
+3.mantis主要功能配置
+(1)设置使用PHPMailer发送邮件
+默认情况下，Mantis使用内置的Mailto() 函数进行邮件的发送，包括新用户注册发送密码、Bug改变提醒、重设密码等邮件的发送都使用MailTo()来完成。不过实际使用中发现，MailTo函 数好像不支持需要校验的邮件服务器。
+如果你想使用比如163邮箱，就需要使用PHPMailer模块，mantis 1.0.3已经集成了PHPMailer，放在mantis的core目录下面。
+
+
+
+
+在config\_inc.php文件中添加
+
+
+
+
+$g\_smtp\_host                                 = 'smtp.mail.net';                   # SMTP 服务器
+$g\_smtp\_username                         = 'mailuser';                          # 邮箱登录用户名
+$g\_smtp\_password                        = 'mailpwd';                          # 邮箱登录密码
+$g\_use\_phpMailer                          = ON;                                  # 使用 PHPMailer 发送邮件
+$g\_phpMailer\_path                        = './core/phpmailer/';             # PHPMailer 的存放路径
+$g\_phpMailer\_method                   = 2;                                      # PHPMailer 以 SMTP 方式发送 Email
+
+
+
+
+查找$g\_return\_path\_email,将后面的邮件地址改为有效的地址,如[[mailto:yourusername@163.com][yourusername@solarphp.cn]],这一点非常重要,不然将无 法正常发送激活注册的邮件.
+config\_inc.php其它邮件地址最好也改为有效的地址.
+
+
+$g\_smtp\_username,$g\_smtp\_password在服务器需要验证时用,不需验证时不用加,或设为
+$g\_smtp\_username=''
+$g\_smtp\_password=''
+现 在你可以注册新用户,并使用发送邮件功能了。
+
+
+** 特别地
+
+
+*变更日志（Changelog）：*是已经修改好了问题的日志，需要给项目添加版本号，并且在添加/解决问题时都指定了相应的修正版本号，才会显示。
+
+*路线图（Roadmap）：*是计划在某个版本修改某些问题的日志，需要给问题指定“目标版本”才能显示。（提示：指定“目标版本”，应该进入“高级更新”功能修改，或者在报关问题时，进入“高级报告”功能）。
+
+

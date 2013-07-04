@@ -1,0 +1,19 @@
+#+TITLE: 一个用PHP开发的Web IM
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2010-04-19 Mon
+#+URI: /blog/2010/04/19/one-developed-in-php-web-im/
+#+KEYWORDS: 
+#+TAGS: im, php web im, web im, webim
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+在网上瞎逛，这也是我每天早上习惯性的行为，发现了这个web im，好像真的不错，我试过了。
+[[http://mibew.org/demo.php][http://mibew.org/demo.php]]
+
+[[http://mibew.org/images/style_simplicity_tn.png]]
+[[http://mibew.org/images/style_original_tn.png]]
+[[http://mibew.org/images/style_default_tn.png]]
+
+

@@ -1,0 +1,52 @@
+#+TITLE: mysql: how to get  tables' count?
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2010-07-30 Fri
+#+URI: /blog/2010/07/30/mysql---how-to-get-tables/
+#+KEYWORDS: 
+#+TAGS: mysql, sql, table count
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+用MySQL这么久，从来不曾想过查询这个东西，呵呵。。。表多了数不过来了:)
+
+
+#+BEGIN_EXAMPLE
+    
+mysql> SELECT COUNT(*)  tbls, table_schema dbs FROM information_schema.TABLES GROUP BY table_schema;
++------+--------------------+
+| tbls | dbs                |
++------+--------------------+
+|    1 | cdcol              |
+|   28 | information_schema |
+|  112 | ipboard            |
+|   29 | miandan            |
+|   23 | mysql              |
+|    8 | phpmyadmin         |
+|    6 | pzblog             |
+|    2 | test               |
+|   10 | usions             |
++------+--------------------+
+9 rows in set (0.02 sec)
+
+#+END_EXAMPLE
+
+
+
+
+
+#+BEGIN_EXAMPLE
+    
+mysql> SELECT COUNT(*)  tbls, table_schema dbs FROM information_schema.TABLES WHERE table_schema = 'miandan';
++------+---------+
+| tbls | dbs     |
++------+---------+
+|   29 | miandan |
++------+---------+
+1 row in set (0.00 sec)
+
+#+END_EXAMPLE
+
+
+

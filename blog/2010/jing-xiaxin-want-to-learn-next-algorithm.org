@@ -1,0 +1,14 @@
+#+TITLE: 想静下心学习下算法
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2010-04-16 Fri
+#+URI: /blog/2010/04/16/jing-xiaxin-want-to-learn-next-algorithm/
+#+KEYWORDS: 
+#+TAGS: 
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+明天开始有时间看看算法吧，再不看可能来不及了，书已经买好了《计算机算法C++版》。
+
+

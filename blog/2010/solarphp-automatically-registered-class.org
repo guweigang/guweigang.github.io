@@ -1,0 +1,56 @@
+#+TITLE: solarphp自动注册的类
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2010-01-01 Fri
+#+URI: /blog/2010/01/01/solarphp-automatically-registered-class/
+#+KEYWORDS: 
+#+TAGS: auto registry, solarphp
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+1. $system/include/Solar.php
+
+
+#+BEGIN_EXAMPLE
+    
+array(
+'inflect'  =>  'Solar_Inflect',
+'locale'   =>  'Solar_Locale',
+'request'  =>  'Solar_Request',
+'response' =>  'Solar_Http_Response',
+)
+
+#+END_EXAMPLE
+
+
+
+2. $system/source/solar/config/default.php
+
+
+#+BEGIN_EXAMPLE
+    
+$config['Solar']['registry_set'] = array(
+    'sql'              => 'Solar_Sql',
+    'user'             => 'Solar_User',
+    'model_catalog'    => 'Solar_Sql_Model_Catalog',
+    'mail_transport'   => 'Solar_Mail_Transport',
+    'controller_front' => 'Solar_Controller_Front',
+);
+
+#+END_EXAMPLE
+
+
+
+要实例化这些类，直接使用
+
+
+
+#+BEGIN_EXAMPLE
+    
+Solar_Registry::get('controller_front');
+
+#+END_EXAMPLE
+
+
+

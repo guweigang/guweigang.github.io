@@ -1,0 +1,46 @@
+#+TITLE: 丢弃输入数据
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2010-02-09 Tue
+#+URI: /blog/2010/02/09/discard-input-data/
+#+KEYWORDS: 
+#+TAGS: cin, ignore
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+cin对象从控制台读取输入，控制台通常就是键盘。当用户按下回车键时，用户已经敲入的东西将一次性地被发送到C++程序（不是用户每敲入一个字符就读入一个字符）。在程序收到输入数据后，cin将把输入数据赋值给指定的变量，假设输入数据能够匹配那个变量的类型。比如：你可能按下Y并按下回车键，程序把Y赋给answer变量，但是那个回车还留在输入流里。这样一来，当执行到cin.get()行时，它将立刻读入那个回车而不是等你再次按回车键。
+
+这种安排在程序需要多项输入数据时会造成更大的问题。比如：假设某个程序先问一个“是/否”问题，再问另外一个问题。那么，如果用户在回答第一个问题时键入了Yes，第二个问题将被赋值为e。针对这个问题的解决方案之一是及时清除多余的（保存在缓冲区里的）输入数据。丢弃输入数据（从缓冲区里删除它，不对它做任何处理）可以使用ignore函数：
+
+
+#+BEGIN_EXAMPLE
+    
+std::cin.ignore(3);
+// 该程序将丢弃3个字符，如果不使用参数表示只丢弃单个字符
+
+#+END_EXAMPLE
+
+
+另一种做法是提供另一个参数，它代表停止字符，其作用是告诉ignore()函数在读到什么字符时停止执行。下面这行代码将丢弃10个字符或直到它遇到一个换行符--------看哪件事先发生：
+
+
+#+BEGIN_EXAMPLE
+    
+std::cin.ignore(10, '\n');
+
+#+END_EXAMPLE
+
+
+
+如果想删除整个缓冲区而不仅限于特定数量的字符，可以利用gcount()函数，它将返回缓冲区里的字符个数。
+
+
+#+BEGIN_EXAMPLE
+    
+std::cin.ignore(std::cin.gcount()+1);
+
+#+END_EXAMPLE
+
+
+

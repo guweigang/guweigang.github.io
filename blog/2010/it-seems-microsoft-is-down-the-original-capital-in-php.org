@@ -1,0 +1,23 @@
+#+TITLE: 看来微软在PHP上下了血本
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2010-05-16 Sun
+#+URI: /blog/2010/05/16/it-seems-microsoft-is-down-the-original-capital-in-php/
+#+KEYWORDS: 
+#+TAGS: php, windows, windows php
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+首先是PHP官方建立windows专栏：[[http://windows.php.net/][http://windows.php.net/]]
+其次是，微软的各个产品都开始支持PHP，而且支持得非常好，如：IIS, Silverlight, SQL Server ...
+
+*[[http://www.slideshare.net/maartenba/php-on-windows-4003807][PHP on Windows]]*
+View more [[http://www.slideshare.net/][presentations]] from [[http://www.slideshare.net/maartenba][Maarten Balliauw]].
+
+
+
+*[[http://www.slideshare.net/maartenba/php-and-silverlight][PHP and Silverlight]]*
+View more [[http://www.slideshare.net/][presentations]] from [[http://www.slideshare.net/maartenba][Maarten Balliauw]].
+
+

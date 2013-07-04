@@ -1,0 +1,97 @@
+#+TITLE: C++模板
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2010-02-06 Sat
+#+URI: /blog/2010/02/06/c-+-+-template/
+#+KEYWORDS: 
+#+TAGS: 
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+泛型编程技术支持程序员创建函数和类的蓝图（即模板，template），而不是具体的函数和类。
+
+语法如下：
+
+
+#+BEGIN_EXAMPLE
+    // 两种方式都可以
+template 
+template 
+
+#+END_EXAMPLE
+
+
+从程序员的角度看，使用模板是一件很简单的事情，但需要编译器做的事情大大增加了，当编译器遇到一个模板时、（比如：swap()函数）时：
+
+
+#+BEGIN_EXAMPLE
+    
+template void swap(T &a, T &b)
+{
+    T tmp = a;
+    a = b;
+    b = tmp;
+}
+
+#+END_EXAMPLE
+
+
+它不会立刻生成代码，只会检查语法错误并记住“有个名为swap的函数包含着不确定的类型”这个事实。
+当你第一次使用某种具体的数据类型来调用这个函数时：
+
+
+#+BEGIN_EXAMPLE
+    
+int i1 = 42;
+int i2 = 13;
+swap(i1, i2);
+
+#+END_EXAMPLE
+
+
+编译器将注意到这是一个函数模板，但这个模板还没有一个针对int类型的实现，于是它将swap()函数模板的源代码里的T全部替换成int， 其结果是得到一个如下所示的函数：
+
+
+#+BEGIN_EXAMPLE
+    
+void swap(int &a, int &b)
+{
+    int tmp = a;
+    a = b;
+    b = tmp;
+}
+
+#+END_EXAMPLE
+
+
+这是一个可以编译的函数。
+需要注意几点：
+1. template 中的class并不是指T是一个类
+2. 不要把函数模板分成原型和实现两个部分。如果编译器看不到模板的完整代码，它就无法正确地生成代码。
+3. 为了明确表示swap是一个函数模板，还可以使用swap(i1, i2)语法
+4. 区分什么时候用模板什么时候用重载
+5. C++并没有限制只能胀一个类型占位符，如果类模板需要一种以上的类型，根据具体情况可多使用几个占位符：
+
+
+#+BEGIN_EXAMPLE
+    
+template class MyClass
+{
+    // ...
+}
+
+#+END_EXAMPLE
+
+
+这样，在对类进行实例化时，需要在尖括号里以逗号作为分隔符把不同的占位符分别替换为相应的具体类型：
+
+
+#+BEGIN_EXAMPLE
+    
+MyClass myClass;
+
+#+END_EXAMPLE
+
+
+

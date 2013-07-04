@@ -1,0 +1,53 @@
+#+TITLE: filetool完美解决VC6.0与WIN7不兼容问题[转]
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2010-09-13 Mon
+#+URI: /blog/2010/09/13/filetool-perfect-solution-vc6.0-incompatibility-issues-with-win7-[rpm]/
+#+KEYWORDS: 
+#+TAGS: crash, filetool, open file, vc6.0
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+转自：[[http://alg.we2y.com/?p=65][http://alg.we2y.com/?p=65]]
+
+上次自己在google上搜到过一次，但是这次解决又花了我一个小时，郁闷 ，这次一定要记录下来，Fuck.
+
+今天打开VC6.0突然出现一个问题，不能点击“打开”，一点打开就出现错误，然后VC自动关闭，重新安装还是不行，我是win7系统，于是就想到可能是和系统不兼容造成的，毕竟6.0还是xp之前出来的，十几年了，但是不用不行啊，用习惯了，虽然TC比VC标准，但是这么多年都是VC，哎，不得不说微软有多恐怖啊。。。。好了，于是就从这个下手，去微软官网找补丁，没想到还真有补丁，微软网站描述的问题和我遇到的一样：
+
+
+
+
+
+Access Violation (0xC0000005) in DEVSHL.DLL at 0×5003eaed.
+DevShl.Dll referenced memory at 0×0000000. The memory could not be read.
+
+
+
+
+
+出现这个错误，他们提供一个补丁[[http://download.microsoft.com/download/vc60ent/s1/6.0/w9xnt4/en-us/filetool.exe][filetool]]（点击直接下载），并提供解决步骤：
+
+
+*** nstalling the Add-In
+
+
+
+
+1. Run FileTool.Exe to extract the Visual C++ 6.0 project.
+2. Build the project in Visual C++ in *Release* or *Debug* configuration.
+3. In Visual C++, click *Customize* from the *Tools* menu.
+4. In the *Customize* dialog box, click the *Add-Ins and Macro Files* tab.
+5. Click the *Browse* button and locate the FileTool.dll file that was built in step 2.
+6. Click *OK* to save the settings.
+
+
+按照直接翻译的步骤估计是弄不好，不知道老外是怎么思考问题的.....
+
+1.首先将下载的filetool这个文件解压，要学好路径，选在桌面就行了；
+
+2.用VC6.0的打开工作空间（注意，一般情况下是打开不能用，但是打开工作空间还是可以用的），打开刚才解压的文件里面的Filetool.dsw文件，然后编译，在debug文件夹里面会出现一个Filetool.dll的库文件（其实就是微软给了你源代码然后让你自己编译生成需要的东西，不知道微软为什么不直接提供dll文件，可能是跟用户具体软件配置有关吧）；
+
+3.工具->定制->附加宏或宏文件选项卡，浏览，选择上一步生成的dll文件，然后打开，过上几秒钟这个宏就自动加进去了，然后关闭对话框，这时会看到界面上多了一个菜单条，A就是add file to project，O就是OPEN，代替原来相应的操作。
+
+

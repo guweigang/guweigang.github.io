@@ -1,0 +1,121 @@
+#+TITLE: [非原创]字节顺序:大端字节(big-endian)和小端字节(little-endian)
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2010-02-09 Tue
+#+URI: /blog/2010/02/09/byte-order---big-endian-and-little-endian/
+#+KEYWORDS: 
+#+TAGS: big-endian, little-endian, 大端字节, 小端字节
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+原文链接: [[http://blog.csdn.net/suyouxin/archive/2006/06/01/767857.aspx][http://blog.csdn.net/suyouxin/archive/2006/06/01/767857.aspx]]
+今天碰一个关于字节顺序的问题,虽然看起来很简单,但一直都没怎么完全明白这个东西,索性就找了下资料,把它弄清楚.
+因为现行的计算机都是以八位一个字节为存储单位,那么一个16位的整数,也就是C语言中的short,在内存中可能有两种存储顺序big-endian和 litte-endian.考虑一个short整数0x3132(0x32是低位,0x31是高位),把它赋值给一个short变量,那么它在内存中的存储可能有如下两种情况:
+大端字节(Big-endian):
+>>>>>>>>>>>>>>>>>>>>>>>>>>内存地址增大方向
+short变量地址
+0x1000 0x1001
+\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+|                        |
+|       0x31       |            0x32
+|\_\_\_\_\_\_\_\_\_ | \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+高位字节在低位字节的前面,也就是高位在内存地址低的一端.可以这样记住(大端->高位->在前->正常的逻辑顺序)
+
+小端字节(little-endian):
+>>>>>>>>>>>>>>>>>>>>>>>内存地址增大方向
+short变量地址
+0x1000 0x1001
+\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+|                       |
+|      0x32      |      0x31
+|\_\_\_\_\_\_\_\_  | \_\_\_\_\_\_\_\_\_\_\_\_\_
+低位字节在高位字节的前面,也就是低位在内存地址低的一端.可以这样记住(小端->低位->在前->与正常逻辑顺序相反)
+
+可以做个实验
+在windows上如下程序
+
+
+#+BEGIN_EXAMPLE
+    #include 
+#include 
+void main( void )
+{
+        short test;
+        FILE* fp;
+        test = 0x3132;  //(31ASIIC码的’1’,32ASIIC码的’2’)
+        if ((fp = fopen ("c:\\test.txt", "wb")) == NULL)
+              assert(0);
+        fwrite(&test, sizeof(short), 1, fp);
+        fclose(fp);
+}
+#+END_EXAMPLE
+
+
+然后在C盘下打开test.txt文件,可以看见内容是21,而test等于0x3132,可以明显的看出来x86的字节顺序是低位在前.如果我们把这段同样的代码放到(big-endian)的机器上执行,那么打出来的文件就是12.这在本机中使用是没有问题的.但当你把这个文件从一个big- endian机器复制到一个little-endian机器上,再直接将数据读到short变量时就出现问题了.
+如上述例子,我们在big-endian的机器上创建了这个test文件,把其复制到little-endian的机器上再用fread读到一个 short变量里面,我们得到的就不再是0x3132而是0x3231了,这样读到的数据与我们的本意不相符，是错误的,所以在两个字节顺序不一样的机器上交互数据时需要特别小心字节顺序,理解了字节顺序在可以帮助我们写出移植行更高的代码.
+正因为有字节顺序的差别,所以在网络传输的时候定义了所有字节顺序相关的数据都使用big-endian,BSD的代码中定义了四个宏来处理:
+
+
+#+BEGIN_EXAMPLE
+    #define ntohs(n)     //网络字节顺序到主机字节顺序 n代表net, h代表host, s代表short
+#define htons(n)     //主机字节顺序到网络字节顺序 n代表net, h代表host, s代表short
+#define ntohl(n)      //网络字节顺序到主机字节顺序 n代表net, h代表host, l代表 long
+#define htonl(n)      //主机字节顺序到网络字节顺序 n代表net, h代表host, l代表 long
+#+END_EXAMPLE
+
+
+举例说明下这其中一个宏的实现:
+
+
+#+BEGIN_EXAMPLE
+     #define sw16(x) \
+    ((short)( \
+        (((short)(x) & (short)0x00ffU) << 8) | \         (((short)(x) & (short)0xff00U) >> 8) ))
+#+END_EXAMPLE
+
+
+这里实现的是一个交换两个字节顺序.其他几个宏类似.
+我们改写一下上面的程序
+
+
+#+BEGIN_EXAMPLE
+    #include 
+#include 
+#define sw16(x) \
+    ((short)( \
+        (((short)(x) & (short)0x00ffU) << 8) | \         (((short)(x) & (short)0xff00U) >> 8) ))
+// 因为x86下面是低位在前,需要交换一下变成网络字节顺序
+#define htons(x) sw16(x)
+void main( void )
+{
+        short test;
+        FILE* fp;
+        test = htons(0x3132); //(31ASIIC码的’1’,32ASIIC码的’2’)
+        if ((fp = fopen ("c:\\test.txt", "wb")) == NULL)
+              assert(0);
+        fwrite(&test, sizeof(short), 1, fp);
+        fclose(fp);
+}
+#+END_EXAMPLE
+
+
+如果在高字节在前的机器上,由于与网络字节顺序一致,所以我们什么都不干就可以了,只需要把
+
+
+#+BEGIN_EXAMPLE
+    #define htons(x) sw16(x)
+#+END_EXAMPLE
+
+
+宏替换为
+
+
+#+BEGIN_EXAMPLE
+    #define htons(x) (x).
+#+END_EXAMPLE
+
+
+一开始我在理解这个问题时,总在想为什么其他数据不用交换字节顺序?比如说我们write一块buffer到文件,最后终于想明白了,因为都是以 unsigned char类型一个字节一个字节的写进去,这个顺序是固定的,不存在字节顺序的问题,只有对short或者int赋值时存在这个问题,t够笨啊..
+
+
