@@ -1,0 +1,76 @@
+#+TITLE: Solar中跨控制器引用视图！
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2010-11-08 Mon
+#+URI: /blog/2010/11/08/solar-refers-to-the-view-across-the-controller/
+#+KEYWORDS: 
+#+TAGS: solar, solar_view, view
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+我们都知道，使用Solar视图时，我们可以在一张视图中嵌入另一张视图，有两种方法，
+方法一：使用Solar\_View::template()方法
+示例：
+
+
+#+BEGIN_EXAMPLE
+    
+Example Page
+template('_list'); // adding the .php extension is optional
+?>
+#+END_EXAMPLE
+
+
+方法二：使用Solar\_View::partial()方法
+示例：
+
+
+#+BEGIN_EXAMPLE
+    
+Example Page
+partial('_list', $this->list); // adding the .php extension is optional
+?>
+#+END_EXAMPLE
+
+
+那么partial和template在哪里寻找视图呢？在视图中写入如下代码：
+
+
+
+#+BEGIN_EXAMPLE
+    var_dump($this->template('随便写什么，最好是不存在的视图'));
+#+END_EXAMPLE
+
+
+执行该视图，会在页面上出现调试信息，请注意看这个数组：
+
+
+#+BEGIN_EXAMPLE
+    information array (
+  'name' => 'gd.php',
+  'path' =>
+  array (
+    0 => 'Demo\\App\\Hello\\View\\',
+    1 => 'Demo\\Controller\\Page\\View\\',
+    2 => 'Solar\\Controller\\Page\\View\\',
+  ),
+)
+#+END_EXAMPLE
+
+
+这说明我们正在找的是gd.php视图，搜索路径有三个，本控制器(APP)，本工作区(Vendor)，Solar工作区。所以只要存在于这三个路径下的视图，我们都可以重用。
+
+但是如果我想要重用不同控制器(APP)下视图呢？比如我们常见的最热帖子、最热商品，这些元素可能在多个地方会引用到，那么重用这类信息就显得非常重要了。其实方法很简单：
+
+
+#+BEGIN_EXAMPLE
+    $front = Solar_Registry::get('controller_front');
+echo $front->fetch('/ajax/sample');
+// $front->display('/ajax/sample');
+#+END_EXAMPLE
+
+
+这样就可以了，使用这种方法可以在任意视图中显示任何其他的控制器的视图。
+
+

@@ -1,0 +1,49 @@
+#+TITLE: 从Google地图上获取经纬度的方法
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2010-10-22 Fri
+#+URI: /blog/2010/10/22/get-latitude-and-longitude-from-google-maps-on-the-way/
+#+KEYWORDS: 
+#+TAGS: google map
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+转自：[[http://www.bailim.com/post/119.html][http://www.bailim.com/post/119.html]]
+前天想知到一个地方的经纬度。
+
+什么？问我什么是经纬度？？？？麻烦你百度，谷歌可能不屑回答你的问题！！！
+
+记得以前看到过Google地图上有的，所以打开了Google地图，但没有发现经纬度。想了想，以前是在第三方嵌入的Google地图上看到的。我试过当时那个嵌入的Google地图是可以显示任意位置及其相应经纬度信息的。很明显，那个人不可能自己给每个地方标上相应经纬度坐标。看来从Google地图上能取得相应坐标。
+
+Google了一下“google地图 显示经纬度”。找到了《让Google地图乖乖显示出经纬度》。
+
+
+
+*** 1. 第一种方法
+
+
+首先打开Google地图，在上面寻找一个地址，然后上下左右移动地图，让这个地址正好处于地图的正中心位置，当您想寻找坐标位置已经处于地图的中心位置的时候，拷贝并粘贴以下代码到你的浏览器地址栏，然后回车。
+
+
+
+#+BEGIN_EXAMPLE
+    javascript:void(prompt('',gApplication.getMap().getCenter()));
+#+END_EXAMPLE
+
+
+这时，你将得到一个弹出式的坐标，这个坐标就是你需要找的经度和纬度。
+
+
+
+*** 第二种方法
+
+
+另外还有一个自己琢磨的方法：
+打开google地图，对需要获取经纬度的点用鼠标右键，弹出一个菜单，点“这儿是什么？”
+[[http://roygu.com/wp-content/uploads/2010/10/这儿是什么.jpg]]
+然后就可以从地图搜索栏找到经纬度了！
+[[http://roygu.com/wp-content/uploads/2010/10/Googl经纬度.jpg]]
+
+
+

@@ -1,0 +1,73 @@
+#+TITLE: 数据结构C语言版：栈的应用之括号匹配
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2010-04-22 Thu
+#+URI: /blog/2010/04/22/data-structure-c-language-version---the-application-stack-of-matching-brackets/
+#+KEYWORDS: 
+#+TAGS: 括号匹配, 栈, 线性表
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+[[http://roygu.com/?p=496][上一篇]]我实现了一个栈，可以看出栈很简单，但是栈的应用却很广，而且学知识如果不知道它有什么用的话学起来是非常枯燥的，这也是为个么当你碰到一个问题时，会有惊人的学习速度。不多说了，上代码：
+match\_kuohao
+
+
+#+BEGIN_EXAMPLE
+    
+int match_kuohao(char c[])
+{
+  int i = 0;
+    sequence_stack st;
+    init(&st);
+    while(c[i] != '#')
+    {
+     switch(c[i])
+      {
+     case '{':
+     case '[':
+     case '(':
+         push(&st, c[i]); break;
+       case '}':
+         if(!empty(st) && read(st) == '{')
+         {
+             pop(&st); break;
+          }
+         else 
+             return 0;
+     case ']':
+         if(!empty(st) && read(st) == '[')
+         {
+             pop(&st); break;
+          }
+         else 
+             return 0;
+     case ')':
+         if(!empty(st) && read(st) == '(')
+         {
+             pop(&st); break;
+          }
+         else 
+             return 0;
+     }
+     ++i;
+  }
+ return (empty(st));
+}
+
+#+END_EXAMPLE
+
+
+main.cpp
+
+
+#+BEGIN_EXAMPLE
+    
+   char s[] = "today (my name] is roy{ok}#";
+ if(!match_kuohao(s)) printf("there is something wrong in you string!");
+   else printf("Good job, guy!");
+
+#+END_EXAMPLE
+
+
+

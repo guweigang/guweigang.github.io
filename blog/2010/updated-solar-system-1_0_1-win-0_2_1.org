@@ -1,0 +1,28 @@
+#+TITLE: 更新：solar-system-1.01-win-0.2.1
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2010-05-14 Fri
+#+URI: /blog/2010/05/14/updated-solar-system-1_0_1-win-0_2_1/
+#+KEYWORDS: 
+#+TAGS: solar, solar php, solar update
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+这是一个修订版，解决了上一版中的一个bug，上一版中，你必须切换至/script目录下，才能使用solar make-vendor命令，如果你在/目录下使用：script\solar make-vendor，会提示无法找到phpenv.ini文件，这是因为在solar.bat中没有指定phpenv.ini的目录。
+那么现在你可以随心所欲了，操作感觉和linux下面差不多了，只要再装个vim，加一个ls for windows。
+
+上几个图吧：
+[[http://roygu.com/wp-content/uploads/2010/05/ls-for-windows.png][[[http://roygu.com/wp-content/uploads/2010/05/ls-for-windows.png]]]]
+
+[[http://roygu.com/wp-content/uploads/2010/05/vim-for-windows.png][[[http://roygu.com/wp-content/uploads/2010/05/vim-for-windows.png]]]]
+
+[[http://roygu.com/wp-content/uploads/2010/05/solar-cli-for-windows.png][[[http://roygu.com/wp-content/uploads/2010/05/solar-cli-for-windows.png]]]]
+
+
+下载地址：[[http://solarphp.cn/download/solar-system-1.01-win-0.2.1.rar][http://solarphp.cn/download/solar-system-1.01-win-0.2.1.rar]]
+
+
+当然，你总是可以从这里下载最新的版本：[[http://solarphp.cn/download/solar-system-1.01-win-latest.rar][http://solarphp.cn/download/solar-system-1.01-win-latest.rar]]
+
+

@@ -1,0 +1,142 @@
+#+TITLE: C++中逐位复制所引发的问题
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2010-02-05 Fri
+#+URI: /blog/2010/02/05/in-c-+-+-by-bit-copy-of-the-issues-raised/
+#+KEYWORDS: 
+#+TAGS: c, cpp, 副本构造器, 逐位复制
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+我们可以把一个对象赋值给一个类型与之相同的变量。编译器将生成必要的代码把“源”对象各属性的值分别赋值给“目标”对象的成员。这种赋值行为称为逐位复制。这种行为在绝大多数场合都没有问题，但如果某些成员变量是指针的话，问题就来了。对类成员进行逐位复制的结果是你将拥有两个一模一样的实例，而这两个副本里的同名指针会指向相同的地址。于是，当删除其中一个对象时，它包含的指针也将被删除，但万一此时另一个副本（对象）还在引用这个指针，就会出问题。另外，当删除第二个副本（对名脚）时，也会出问题，因为这是在试图第二次释放同一块内存（这会到导程序崩溃）。
+
+如何才能解决这个问题？要是程序员在当初进行对象“复制”时能够精确地表明应该复制些什么和如何复制，那就理想了。好在C++语言的发明者早就预见了这个问题，并为它准备了一个解决方案，但这个解决方案有点儿复杂。
+
+
+
+#+BEGIN_EXAMPLE
+    MyClass obj1;
+MyClass obj2;
+obj2 = obj1;
+
+#+END_EXAMPLE
+
+
+前两行代码很简明，它们创建出了两个MyClass类的实例obj1和obj2。第三行代码把obj1的值赋值给obj2，这里可能会埋下我们刚才提到的与指针有关的隐患。那么，怎样才能截获这个赋值操作并告诉它应该如何处理那些指针呢？答案是对操作符进行重载！
+
+
+#+BEGIN_EXAMPLE
+    MyClass &operator = (const MyClass &rhs);
+
+#+END_EXAMPLE
+
+
+这个签名可以告诉我们以下事情：
+1. 这个方法预期的输入参数是MyClass类型的、不可改变的引用。
+2. 这个方法将返回一个引用，该引用指向一个MyClass类的对象。这通常没有必要，但却是一种好习惯。让这个方法返回一个引用的好处是程序员可以把一组赋值操作串联起来（如：a = b = c)，就像和C++基本数据类型打交道那样。
+
+令人遗憾的是，只对赋值操作符进行重载还不能完美地解决问题。正如刚才所述，C++的发明者把这件事弄得有点儿复杂，把刚才那三行代码改写一下，看究竟怎么回事：
+
+
+#+BEGIN_EXAMPLE
+    MyClass obj1;
+MyClass obj2 = obj2;
+
+#+END_EXAMPLE
+
+
+这与刚才那三行的区别很细微。刚才是先创建两个对象，然后再把obj1赋值给obj2；现在是先创建obj1，然后在创建实例obj2的同时用obj1的值对它进行初始化。虽然这看起来像是一个简单的赋值操作，但编译器将生成完全不同的代码：编译器将在MyClass在里寻找一个副本构造器(copy constructor)，如果找不到，它会自行创建一个。问题是即使人们已经对赋值操作符进行了重载，由编译器创建的副本构造器仍将以“逐位复制”方式把obj1赋值obj2。换句话说，如果遇到上面这样的代码，即使已经在这个类里重载了赋值操作符，暗藏着隐患的“逐位复制”行为还是会发生。要想躲开这个隐患，还需要定义一个副本构造器：
+
+
+#+BEGIN_EXAMPLE
+    MyClass(const MyClass &rhs);
+
+#+END_EXAMPLE
+
+
+这个构造器需要一个固定不变（const）的MyClass类型的引用作为输入参数，就像赋值操作符那样。因为它是一个构造器，所以没有返回类型。
+
+看详细代码：
+
+
+#+BEGIN_EXAMPLE
+    #include 
+#include 
+class MyClass
+{
+public:
+  MyClass(int *p);
+  MyClass(const MyClass &rhs);
+  virtual ~MyClass();
+  MyClass &operator=(const MyClass &rhs);
+private:
+  int *ptr;
+};
+MyClass::MyClass(int *p)
+{
+  std::cout << "Entering regular constructor of object " << this << "\n";
+  ptr = p;
+  std::cout << "Leaving regular constructor of object " << this << "\n";
+}
+MyClass::MyClass(const MyClass &rhs)
+{
+  std::cout << "Entering copy constructor of object " << this << "\n";
+  std::cout << "rhs is object " << &rhs << "\n";
+  *this = rhs;
+  std::cout << "Leaving copy constructor of object " << this << "\n";
+}
+MyClass::~MyClass()
+{
+  std::cout << "Entering destructor of object " << this << "\n";
+  delete ptr;
+  std::cout << "Leaving destructor of object " << this << "\n";
+}
+MyClass &MyClass::operator=(const MyClass &rhs)
+{
+  std::cout << "Entering assignment operator of objectt " << this << "\n";
+  std::cout << "rhs is object " << &rhs << "\n";
+  if(this != &rhs)
+    {
+      std::cout << "deleting this->ptr \n";
+      delete ptr;
+      std::cout << "allocate a new int and assign value of *rhs.ptr\n";
+      ptr = new int;
+      *ptr = *rhs.ptr;
+    }
+  else
+    {
+      std::cout << "this and rhs are thd same object, we're dong noting!\n";
+    }
+
+  std::cout << "Leaving assigment operator of object " << this << "\n";
+  return *this;
+}
+int main(int argc, char *argv[])
+{
+  std::cout << "------------------------------------\n";
+  {
+    MyClass obj1(new int(1));
+    MyClass obj2(new int(2));
+    obj2 = obj1;
+  }
+  std::cout << "------------------------------------\n";
+  {
+    MyClass obj3(new int(1));
+    MyClass obj4 = obj3;
+  }
+  std::cout << "------------------------------------\n";
+  {
+    MyClass obj5(new int(1));
+    obj5 = obj5;
+  }
+  std::cout << "------------------------------------\n";
+  std::cout << "Press Enter or Return to continue.";
+  std::cin.get();
+  return 0;
+}
+
+#+END_EXAMPLE
+
+
+

@@ -1,0 +1,21 @@
+#+TITLE: solar_manual_offline_v1.0(preview2)发布
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2010-04-27 Tue
+#+URI: /blog/2010/04/27/solar-manual-offline-1_0_preview2-released/
+#+KEYWORDS: 
+#+TAGS: chm, solar, solar manual
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+solar文档v1.0预览第二版，更新情况：
+1. 和官方一致的样式
+2. 图片显示
+3. 格式与官方也一致了
+
+
+-  [[http://solarphp.org.cn/styles/prosilver/imageset/icon_topic_attach.gif]] [[http://solarphp.org.cn/download/file.php?id=14][solar\_manual\_v1.0(preview2).rar]] :: /solar文档v1.0预览第二版/
+
+
+

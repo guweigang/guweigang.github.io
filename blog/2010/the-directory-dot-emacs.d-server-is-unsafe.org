@@ -1,0 +1,26 @@
+#+TITLE: The directory ~/.emacs.d/server is unsafe
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2010-07-11 Sun
+#+URI: /blog/2010/07/11/the-directory-dot-emacs.d-server-is-unsafe/
+#+KEYWORDS: 
+#+TAGS: emacs
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+在windows 7下安装emacs 23.2.1的时候总是提示“The directory ~/.emacs.d/server is unsafe”。
+
+所幸在stackoverflow上找到了答案，记录一下：
+原文地址为：http://stackoverflow.com/questions/885793/emacs-error-when-calling-server-start
+大意是：要把~/.emacs.d目录所有者改为你当前登陆的用户。这个操作很简单，你知道的。
+
+"The problem is the ownership of the directory ~/.emacs.d/server when you also have “Administrators” rights on your account. Create the directory ~/.emacs.d/server and set the owner of this directory to your login name and the problem is gone. As I have a “Dutch” version of Windows 7 I don't know the English terms exactly but here's the procedure:
+
+Click R-mouse on ~/.emacs.d/server and select “Properties” (last item in menu). From Properties select the Tab “Security” and then select the button “Advanced”. Then select the Tab “Owner” and change the owner from “Administrators (\Administrators)” into “ (\”. Now the server code will accept this directory as secure because you are the owner.
+
+Hope this helps for all you guys, it solved the problem for me anyway.
+
+W.K.R. Reutefleut"
+
+

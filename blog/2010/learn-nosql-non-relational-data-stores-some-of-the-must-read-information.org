@@ -1,0 +1,27 @@
+#+TITLE: 了解NoSQL 非关系型数据存储的一些必读资料
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2010-01-14 Thu
+#+URI: /blog/2010/01/14/learn-nosql-non-relational-data-stores-some-of-the-must-read-information/
+#+KEYWORDS: 
+#+TAGS: ACID, nosql, 数据存储, 非关系型
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+NoSQL 是非关系型数据存储的广义定义。它打破了长久以来关系型数据库与 [[http://en.wikipedia.org/wiki/ACID][ACID]] 理论大一统的局面。NoSQL 数据存储不需要固定的表结构，通常也不存在[[http://en.wikipedia.org/wiki/Join_%28SQL%29][连接]]操作。在大数据存取上具备关系型数据库无法比拟的性能优势。该术语在 2009 年初得到了广泛认同。
+当今的应用体系结构需要数据存储在[[http://en.wikipedia.org/wiki/Scalability][横向伸缩性]]上能够满足需求。而 NoSQL 存储就是为了实现这个需求。Google 的 [[http://en.wikipedia.org/wiki/BigTable][BigTable]]与 [[http://en.wikipedia.org/wiki/Amazon][Amazon]] 的 [[http://en.wikipedia.org/wiki/Dynamo_%28storage_system%29][Dynamo]]是非常成功的商业 NoSQL 实现。一些开源的 NoSQL 体系，如Facebook 的 [[http://en.wikipedia.org/wiki/Cassandra_%28database%29][Cassandra]]， Apache 的[[http://en.wikipedia.org/wiki/HBase][HBase]]，也得到了广泛认同。
+如果您刚接触 NoSQL，那有必要学习一些背景知识。下列资料是Kas Thomas，一位国外的[[http://asserttrue.blogspot.com/][技术分析师]]认为非常有价值的 NoSQL 相关必读资料：
+[[http://s3.amazonaws.com/AllThingsDistributed/sosp/amazon-dynamo-sosp2007.pdf][Amazon Dynamo 论文]]。几乎所有懂 NoSQL 的人都阅读过它。
+Google 的 [[http://labs.google.com/papers/bigtable.html][Bigtable 论文]]。 也许您已经耳熟能详。
+Werner Vogels 的 [[http://www.allthingsdistributed.com/2008/12/eventually_consistent.html][Eventually Consistent]] （发布于 [[http://delivery.acm.org/10.1145/1470000/1466448/p14-vogels.pdf?key1=1466448key2=8241830621coll=GUIDEdl=GUIDECFID=65986758CFTOKEN=76261788][ACM Queue]]）。如果您对最终一致性不是非常清晰，请阅读这篇文章。
+Brewer 的 CAP 理论（可伸缩性的基础）在[[http://www.julianbrowne.com/article/viewer/brewers-cap-theorem][这里]]可以找到非常好的诠释。也可以看看 2000 7 月 PODC 上 Brewer的[[http://www.cs.berkeley.edu/%7Ebrewer/cs262b-2004/PODC-keynote.pdf][原始幻灯片]]。
+[[http://blog.oskarsson.nu/2009/06/nosql-debrief.html][在 2009 年 6 月在 SFO 的 NoSQL 见面会的幻灯片]]。这些资料可以用经典的、关键的、将影响巨大的、值得纪念的来形容。
+[[http://adam.blog.heroku.com/past/2009/7/6/sql_databases_dont_scale/][SQL Databases Don't Scale]] 是一篇简短、基础、直切问题的文章。除非您是一位在伸缩性问题上身经百战的数据库管理员，否则，这篇文章讲述的内容对于您可能是非常关键的。
+[[http://twitter.com/spyced][Jonathan Ellis]] 的文章 [[http://www.rackspacecloud.com/blog/2009/11/09/nosql-ecosystem/][NoSQL Ecosystem]] 以表格的方式对当今主流的分布式数据库做了比较。类似的比较还有 [[http://themindstorms.blogspot.com/2009/05/quick-reference-to-alternative-data.html][Quick Reference to Alternative data storages]]。Ellis 的文章除了表格对比外对于想了解 NoSQL 生态的人来说是非常值得一读的，该文章内涵丰富，短小精悍；而 [[http://themindstorms.blogspot.com/2009/05/quick-reference-to-alternative-data.html][Quick Reference to Alternative data storages]] 主要是表格，这些表格对比的内容又比 Ellis 的完整。
+*【相关国外资源】*
+[[http://nosql-databases.org/][http://nosql-databases.org/]] 该站点的标语是：非关系型世界的终结向导！，该站点非常确信自己是：在互联网上拥有 NoSQL 相关链接最多的网站。总之，该网站值得关注。
+另外，作为 NoSQL 极客（geeks），请 follow [[http://twitter.com/nosqlupdate][@nosqlupdate]]。另外，请 follow [[http://twitter.com/al3xandru][@al3xandru]] （[[http://nosql.mypopescu.com/][MyNoSQL blog]] 与 [[http://nosql.mypopescu.com/post/272903545/nosql-week-review-part-1][NoSQL Week in Review]] 的创建者）。[[http://nosql.mypopescu.com/post/272903545/nosql-week-review-part-1][NoSQL Week in Review]] 比较新，希望能保持正常更新，因为它确实很棒！
+当然，您还可以看看 Ricky Ho 最近的博文，他总结了一些分布式数据存储技术关键点。他的博文中有两篇非常值得一看的文章：[[http://horicky.blogspot.com/2009/11/query-processing-for-nosql-db.html][Query Processing for NoSQL Databases]]，还有 [[http://horicky.blogspot.com/2009/11/nosql-patterns.html][NoSQL Design Patterns]]（《程序员》杂志有译文）。
+
+

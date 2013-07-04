@@ -1,0 +1,44 @@
+#+TITLE: How to remove www from your URL with mod_rewrite
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2010-10-10 Sun
+#+URI: /blog/2010/10/10/how-to-remove-www-from-your-url-with-mod_rewrite/
+#+KEYWORDS: 
+#+TAGS: apache, htaccess, mod_rewrite
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+source link: [[http://yoast.com/how-to-remove-www-from-your-url-with-mod_rewrite/][http://yoast.com/how-to-remove-www-from-your-url-with-mod\_rewrite/]]
+I got a hit today for the following search query: how do you get rid of the www in url .
+
+Here's the code to 301 redirect the www version of your site to the non-www version using Apache's mod\_rewrite:
+
+
+#+BEGIN_EXAMPLE
+    
+RewriteEngine On
+RewriteCond %{HTTP_HOST} ^www.example.com$ [NC]
+RewriteRule ^(.*)$ http://example.com/$1 [R=301,L] 
+
+#+END_EXAMPLE
+
+
+
+
+*** Adding the www instead of removing it
+
+
+And, as requested in the comments, the code to add www to your domain name:
+
+
+#+BEGIN_EXAMPLE
+    
+RewriteEngine On
+RewriteCond %{HTTP_HOST} ^example.com$
+RewriteRule (.*) http://www.example.com$1 [R=301]
+
+#+END_EXAMPLE
+
+
+

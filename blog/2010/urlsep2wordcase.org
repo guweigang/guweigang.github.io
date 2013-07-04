@@ -1,0 +1,33 @@
+#+TITLE: urlSep2WordCase
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2010-02-03 Wed
+#+URI: /blog/2010/02/03/urlsep2wordcase/
+#+KEYWORDS: 
+#+TAGS: lower case, php, separate, upper case
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+#+BEGIN_EXAMPLE
+    
+  /**
+   * 把以某字符/符号分隔开的字符串，根据需要完成大小写转变
+   * @param $search_sep 查找分隔符
+   * @param $replace_sep 替换分隔符
+   * @param $function 用以处理分隔后各个子串的函数
+   * @param $str 操作字符串
+   * @param $return 操作后字符串值
+   * @return array 返回操作完成后的数组
+   */
+  public static function urlSep2WordCase($search_sep, $replace_sep, $function, $str, &$return){
+        $str_arr = explode($search_sep, $str);
+        array_walk($str_arr, create_function('&$value, $key, $function', '$value = $function($value);'), $function);
+        $return = implode($replace_sep, $str_arr);
+        return $str_arr;
+  }
+
+#+END_EXAMPLE
+
+
+

@@ -1,0 +1,108 @@
+#+TITLE: 算法第2天：基本数据结构---栈
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2010-04-18 Sun
+#+URI: /blog/2010/04/18/algorithm-day-2---basic-data-structures-stacks/
+#+KEYWORDS: 
+#+TAGS: cpp, 栈, 线性表, 队列
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+线性表是最基本、最简单、也是最常用的一种数据结构。线性表中数据元素之间的关系是一对一的关系，即除了第一个和最后一个数据元素之外，其它数据元素都是首尾相接的。线性表的逻辑结构简单，便于实现和操作。因此，线性表这种数据结构在实际应用中是广泛采用的一种数据结构。
+
+在实际应用中，线性表都是以栈、队列、字符串、数组等特殊线性表的形式来使用的。
+
+栈：它按照先进后出的原则存储数据，先进入的数据被压入栈底，最后的数据在栈顶，需要读数据的时候从栈顶开始弹出数据（最后一个数据被第一个读出来）。 栈也称为后进先出表（LIFO表）。
+Stack.php
+
+
+#+BEGIN_EXAMPLE
+    
+#include < iostream >
+template< class Type>
+class Stack
+{
+private:
+    int top, MaxSize;
+ Type *stack;
+public:
+ Stack(int MSize): MaxSize(MSize)
+  {
+     stack = new Type[MaxSize]; 
+       top = -1;
+ }
+ ~Stack()
+  {
+     delete [] stack;
+  }
+ inline bool Add(const Type item)
+  {
+     if(StackFull())
+       {
+         std::cout << "Stack is full"; return false;
+       }
+     else
+      {
+         stack[++top] = item; return true;
+     }
+ }
+ inline bool Delete(Type& item)
+    {
+     if(StackEmpty())
+      {
+         std::cout << "Stack is empty"; return false;
+      }
+     else
+      {
+         item = stack[top--]; return true;
+     }
+ }
+ inline bool StackEmpty()
+  {
+     if(top < 0) return true;
+      else return false;
+    }
+ inline bool StackFull()
+   {
+     if(top >= (MaxSize-1)) return  true;
+      else return false;
+    }
+ inline void display()
+ {
+     for(int i = 0; i <= top; ++i)
+     {
+         std::cout << stack[i] << " ";
+     }
+     std::cout << std::endl;
+   }
+};
+
+#+END_EXAMPLE
+
+
+main.cpp
+
+
+#+BEGIN_EXAMPLE
+    
+#include "Stack.cpp"
+int main(int argc, char* argv[])
+{ 
+  int item = 0;
+ Stack< int > s(6);
+    s.Add(5);
+ s.Add(10);
+    s.Add(12);
+    s.Delete(item);
+   s.display();
+  std::cout << item << std::endl;
+   std::cout << "Press enter or return to continue.";
+    std::cin.get();
+   return 0;
+}
+
+#+END_EXAMPLE
+
+
+

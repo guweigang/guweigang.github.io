@@ -1,0 +1,14 @@
+#+TITLE: 网易也推出了免费的企业邮箱
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2010-05-21 Fri
+#+URI: /blog/2010/05/21/netease-also-launched-a-free-e-mail/
+#+KEYWORDS: 
+#+TAGS: free enterprise mail, netease
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+不大不小的惊喜，网易算是国内最早做邮箱的吧，呵呵，免费邮箱倒是做了N年了，企业邮箱都是要收费的，今天看到这个消息还不敢相信呢，这真的不符合网易的价值观，不知是不是由于腾讯开放了免费企业邮箱，给网易带来了很大的压力，所以网易才被动免费。不管怎么说，有竞争就有服务。申请地址是：[[http://ym.163.com/][http://ym.163.com/]]
+
+

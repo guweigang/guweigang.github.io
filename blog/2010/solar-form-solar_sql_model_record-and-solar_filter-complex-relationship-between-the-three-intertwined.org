@@ -1,0 +1,146 @@
+#+TITLE: Solar_Form、Solar_Sql_Model_Record和Solar_Filter三者交织在一起的复杂关系
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2010-08-16 Mon
+#+URI: /blog/2010/08/16/solar-form-solar_sql_model_record-and-solar_filter-complex-relationship-between-the-three-intertwined/
+#+KEYWORDS: 
+#+TAGS: solar, solar filter, solar_form, solar_sql_model_record, solarphp
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+[[http://roygu.com/?p=806][上一篇中我们聊到了Solar\_Filter]]，那么今天我们聊一下[[http://solarphp.cn/apidoc/Solar_Form/Solar_Form.html][Solar\_Form]]、[[http://solarphp.cn/apidoc/Solar_Sql_Model/Solar_Sql_Model_Record.html][Solar\_Sql\_Model\_Record]]和[[http://solarphp.cn/apidoc/Solar_Filter/Solar_Filter.html][Solar\_Filter]]。
+
+谈到[[http://solarphp.cn/apidoc/Solar_Form/Solar_Form.html][Solar\_Form]]就不得不谈谈[[http://solarphp.cn/apidoc/Solar_Sql_Model/Solar_Sql_Model_Record.html][Solar\_Sql\_Model\_Record]]和[[http://solarphp.cn/apidoc/Solar_Filter/Solar_Filter.html][Solar\_Filter]]了，大家在用的时候可能已经有这个疑问了：提交表单后，为什么Solar\_Form会显示那些invalid消息，而且效果跟Ajax一样，都不跳转页面的？我们今天就来解开谜题。
+
+其这本质上是Solar\_Sql\_Model\_Record通过newForm()方法定制Solar\_Form，根据模型生成表单，然后根据提交过来的数据利用Solar\_Filter进行验证。为什么说是定制Solar\_Form呢？因为Solar\_Form在Solar System中是一个独立的Package，它不依赖于Record，所有它应当是自完备的，但Record的关心的重点都是从模型角度出发的，所以它只关心value, field等属性。所以你在newForm()方法中给表单域传入value或是invalids或是filters属性都是毫无意义的，因为这些工作Record可以完成并且必须由它完成（因为你是通过Record来生成Form）。
+
+这就引入了一个新话题，那么不用Record，只用Solar\_Form和Solar\_Filter是否可以完成验证表单、提交等工作，以及幕后发生的事情是什么？我的回答是当然可以，不过这个等到下一篇文章来讲。
+
+先放一段代码：
+
+
+#+BEGIN_EXAMPLE
+    public function actionAdd() {
+       $this->item = $this->_model->blogs->fetchNew();
+       if($this->_isProcess('save')){
+           $data = $this->_request->post('blog');
+           $this->item->load($data);
+           $tags = explode(',', $data['tags']);
+           $tag_all = $this->_model->tags->fetchAll();
+           foreach($tags as $tag){
+               $tag_r = $tag_all->appendNew(array(
+                    'name' => trim($tag),
+                ));
+
+                $this->item->tags[] = $tag_r;
+           }
+           if($this->item->save()){
+               $uri = "{$this->_controller}/edit/{$this->item->id}";
+               return $this->_redirectNoCache($uri);
+           }
+       }
+
+       $this->form = $this->item->newForm(array(
+          'status' => array(
+                'label' => '状态',
+           ),
+          'title' => array(
+                'label' => '标题',
+           ),
+          'body' => array(
+                'type' => 'textarea',
+                'label' => '内容',
+                'attribs' => array(
+                    'style' => 'border:solid 1px black;',
+                    'cols'  => '60',
+                    'rows'  =>  '10',
+                ),
+            ),
+           'author_id' => array(
+                'label'  =>  '作者',
+                'attribs' => array(
+                    'style' => 'border:solid 1px red;',
+                    ),
+           ),
+           'tags' => array(
+                'label' => '标签',
+                'descr' => '以逗号分隔',
+           ),
+       ));
+
+       $this->_response->setNoCache();
+   }
+
+#+END_EXAMPLE
+
+
+上面这段代码的操作是：
+
+
+-  
+
+
+   
+
+
+   
+
+
+   
+
+
+   
+
+
+
+newForm()方法是无论如何都会执行的。那么何以提交前何表单的状态会变化呢？来看下newForm()的源码你肯定就会知道了。
+
+
+#+BEGIN_EXAMPLE
+    
+public function newForm($cols = null)
+    {
+        // put into this array in the form
+        $array_name = $this->_model->array_name;
+        
+        // build the form
+        $form = Solar::factory('Solar_Form');
+        $form->load('Solar_Form_Load_Model', $this->_model, $cols, $array_name);
+        $form->setValues($this, $array_name);
+        $form->addInvalids($this->_invalid, $array_name);
+        
+        // set the form status. if the record is invalid, always set the
+        // form to failure.  if the record is valid, only set the form to
+        // success when the form has not already been set to success.
+        if ($this->isInvalid()) {
+            
+            // set the form to "failure"
+            $form->setStatus(Solar_Form::STATUS_FAILURE);
+            
+        } elseif ($form->getStatus() !== Solar_Form::STATUS_FAILURE) {
+            
+            // set the form to "success" on these SQL statuses
+            $success = array(
+                self::SQL_STATUS_INSERTED,
+                self::SQL_STATUS_UPDATED,
+                self::SQL_STATUS_UNCHANGED,
+            );
+            
+            if (in_array($this->getSqlStatus(), $success)) {
+                $form->setStatus(Solar_Form::STATUS_SUCCESS);
+            }
+            
+        }
+        
+        return $form;
+    }
+#+END_EXAMPLE
+
+
+
+注意看，首先实例化Solar\_Form，接着导入模型，然后对应模型给表单赋值，接着给表单添加invalid消息（如果有的话），如果确有invlid值，那么把Solar\_Form的状态标记为“失败”，并返回Solar\_Form对象。
+
+那么对于Solar\_Form的显示，可以查看[[http://solarphp.cn/apidoc/Solar_View_Helper_Form/Solar_View_Helper_Form.html][Solar\_View\_Helper\_Form]]，它会显示Solar\_Form的所有信息，包括feed\_back、invalids及values。
+
+

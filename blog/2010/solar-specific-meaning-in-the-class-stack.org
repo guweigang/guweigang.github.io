@@ -1,0 +1,14 @@
+#+TITLE: Solar中class stack的具体含义
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2010-04-16 Fri
+#+URI: /blog/2010/04/16/solar-specific-meaning-in-the-class-stack/
+#+KEYWORDS: 
+#+TAGS: solar
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+Solar手册中多次提到class stack，直观上说是“类栈”的含义。其实类栈是Solar用于查找文件/类时的栈。栈顶的文件/类优先级最高，如果在栈顶找到了相关文件，那么Solar就停止查找；如果栈顶的文件/类不是Solar想要的文件/类，Solar会执行出栈操作，再次检测此时的栈顶文件/类是否符合要求。。。依此类推。
+
+

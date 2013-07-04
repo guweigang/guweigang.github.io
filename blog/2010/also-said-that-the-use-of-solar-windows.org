@@ -1,0 +1,86 @@
+#+TITLE: 也说windows下使用Solar
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2010-04-21 Wed
+#+URI: /blog/2010/04/21/also-said-that-the-use-of-solar-windows/
+#+KEYWORDS: 
+#+TAGS: solar, solar php, windows
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+出于方便及安全考虑，Solar中用了很多[[http://en.wikipedia.org/wiki/Symbolic_link][symlink]]，这也是Solar一直在windows下安装使用不成功的原因。
+
+mail-list里面有人提出了一种解决方案，但是只能运行代码，如果一定要做开发的话所有文件都要手动建立，这就失去了Solar快速开发的优势。要在windows下面运行Solar其实很简单，因为Solar对include目录做了symlink，所以我们现在只要在入口文件/docroot/index.php中加载这个目录就行了，代码如下：
+
+
+#+BEGIN_EXAMPLE
+    
+if (strtolower(substr(PHP_OS, 0, 3)) == 'win') {
+   // windows doesn't like the default symlinks
+   set_include_path("$system/include;$system/source/solar");
+} else {
+   // unix
+   set_include_path("$system/include");
+}
+
+#+END_EXAMPLE
+
+
+
+就目前来说，在windows下运行solar代码并做开发是不明智的，还是等官方更新吧。我也在mail-list给出了自己的意见和想法，仅供各位参考。
+
+
+
+#+BEGIN_QUOTE
+  
+i tried "php -f script/solar make-vendor Acme " command, but i got the same
+eroor --- "command not found".
+
+And this time ,i found that the result of function getcwd() is very
+interesting. if you are under the /solar directory in CLI, then the result
+of that function will be /solar; if under the /solar/script directory, the
+result will be /solar/script
+
+something more:
+i found codes below in /script/solar, it use an instance of
+Solar\_Controller\_Console:
+
+
+  #+BEGIN_EXAMPLE
+      
+//...
+$console = Solar::factory('Solar_Controller_Console', $config);
+//...
+$console->exec();
+Solar::stop();
+
+  #+END_EXAMPLE
+
+  
+
+so then i switch to file Solar/Controller/Console, i found codes below:
+
+
+  #+BEGIN_EXAMPLE
+      
+if (! $class) {
+       return $this->_notFound($command);
+}
+
+  #+END_EXAMPLE
+
+  
+
+maybe there's still something wrong about include\_path on windows....can
+anyone solve?
+
+Thanks.
+
+#+END_QUOTE
+
+
+
+
+
+

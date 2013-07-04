@@ -1,0 +1,180 @@
+#+TITLE: PHP框架 Solar 1.1.2发布！
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2010-11-15 Mon
+#+URI: /blog/2010/11/15/php-framework-solar-1_1_2-released!/
+#+KEYWORDS: 
+#+TAGS: solar, solarphp
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+伴随着冬天的到来，Solar迎来了她的1.1.2版本，并更新手册2章（Command-line tools及Mail），请移步英文官方站查看：
+http://solarphp.com/。2010-11-09，Paul在Mail-list上发贴，宣布Solar 1.1.2已经发布。代码比之前更精练，所以仍有必要尽快升级。而且Paul做了很多针对Windows 平台的工作，可惜仍有一些兼容问题，仍不支持Windows Xp，所以修改源码仍有必要。Solar Demo站(http://demo.solarphp.cn)已更新至1.1.2，且运行在windows 2003平台。
+这是一个Bug修复版，更新如下：
+
+
+
+#+BEGIN_EXAMPLE
+    script/solar
+------------
+
+* [FIX] Make more Win-friendly by using DIRECTORY_SEPARATOR and PATH_SEPARATOR in appropriate locations.
+
+Solar_Auth_Adapter
+------------------
+
+* [FIX] Method reset() now uses the true flag when regeerating the session ID.
+
+Solar_Cache_Adapter_*
+---------------------
+
+* [FIX] In all increment() methods, fix logic so that the incremented keys don't get double-prefixed.
+
+Solar_Cache_Adapter_Memcache
+----------------------------
+
+* [FIX] Method increment() no longer double-prefixes the incremented key. Thanks, Eric Parent, for the report and patch.
+
+Solar_Cli_MakeTests
+-------------------
+
+* [FIX] In method _exec(), when adding classes, pass the file name of the class.
+
+Solar_Cli_LinkVendor
+--------------------
+
+* [FIX] Convert slashes to DIRECTORY_SEPARATOR to soothe Windows.
+
+Solar_Cli_UnlinkVendor
+----------------------
+
+* [FIX] Convert slashes to DIRECTORY_SEPARATOR to soothe Windows.
+
+* [CHG] When removing symlinks, use Solar_Symlink::remove() instead of PHP unlink().
+
+Solar_Log_Adapter_Firephp
+-------------------------
+
+* [CHG] Update to latest standards. Thanks, Richard Thomas.
+
+Solar_Sql_Adapter_Mysql
+-----------------------
+
+* [FIX] Native "timestamp" type should map to "timestamp", not "int". Thanks, Kalkin, for the report.
+
+Solar_Sql_Model
+---------------
+
+* [FIX] In method insert(), clear the cache *after* retrieving the last insert ID. Thanks, Richard Thomas, for the patch.
+
+Solar_Symlink
+-------------
+
+* [FIX] In methods _makeWinDir() and _makeWinFile(), use the proper argument order (the opposite of what it is in Unix).
+
+* [FIX] The mklink command on Windows returns a message even on success; change the Windows methods to account for this.
+
+* [ADD] Method remove() to remove symlinks. Need this because Windows uses "rd" to remove a directory symlink, and "del" to remove a file symlink. (Unix uses "rm" for both.)
+
+Solar_Vt100
+-----------
+
+* [FIX] Method write() now checks to see if posix_isatty() is available. Thanks, Jeff Surgeson and Roy Gu, for the report and patch.
+
+Solar_View_Helper_Form
+----------------------
+
+* [FIX] Method addElements() now adds elements in the order they appear in the whitelist, not the order they appear in the form object.
+#+END_EXAMPLE
+
+
+Solar中国更新如下：
+
+
+#+BEGIN_EXAMPLE
+    [1] bootstrap: /index.php及docroot/index.php
+line 5
+在windows系统解压Solar时，在include目录中默认没有Solar内核的symlink，尽管1.1.2版本中作者给出了winfix.bat文件用于解决此问题，但是在windows xp, 2000, 2003中无法适用，所以在此判断/include目录下是否存在symlink，如果不存在，则直接引用/source/solar/Solar。
+On windows platform, there doesn't exist Solar Core in /include dir when you uncompress tarball. Although Paul gives winfix.bat in version 1.1.2, but it does not work in windows xp, 2000 and 2003. So here i make a judgement to check if solar core exists in include/ dir. if not , i will set include path as /source/solar/Solar.
+
+[2] /script/solar
+line 115
+和[1]中原因一样，当未在/include找到Solar内核时，直接到/source/solar下找
+
+line 64
+改变查找solar文件的路径：$dir，使得用户可以自定义cli行为
+
+line 50 and line 13
+添加$this->_script属性，并为其赋值
+
+[3] /source/solar/Solar/Symlink.php
+line 52 and line 70
+$src and $tgt should use "\" instead of "/"，
+So I use str_replace('/', DIRECTORY_SEPARATOR, $src) to change this.
+
+line 253
+if it is file, use unlink to delete
+if it is dir, use rmdir to delete
+
+line 28 添加一个静态属性，用于指示现在调用的是哪个命令，目前仅用于sync-vendor命令
+
+line 91 做一个判断，如果是sync-vendor命令，则不对目标做任何检查
+
+line 105 处理windows xp, 2000, 2003系统时的命令调用
+
+line 257 and 286 添加_makeXP和_makeXPDir方法，用于处理windows xp的文件和目录
+并删除mkdir命令
+
+[4] /source/solar/Solar/Cli/LinkVendor.php
+line 102
+链接Vendor时，添加必要的link文件，如：vendor.bat
+且当Vendor为Solar时，作特殊处理
+
+[5] /source/solar/Solar/Cli/UnlinkVendor.php
+line 85
+删除Vendor时，删除必要的link文件，如：vendor.bat
+且当Vendor为Solar时，作特殊处理
+
+line 95
+如果是windows xp, 2000, 2003 则使用同步工具，同步目录和文档
+
+[6] /source/solar/Solar/Sql/Adapter/Mysql.php
+line 120
+可以在config.php中配置数据库编码。
+
+[7] /source/solar/Solar.php
+line 277
+添加函数supportSymlink
+
+[8] /source/solar/Solar/Cli/LinkPublic.php
+line 99
+改成绝对路径，否则在不同的路径下使用命令行将影响结果。
+
+[9] /source/solar/Solar/Dir.php
+line 269
+添加函数 rmvdir();用于递归删除非空文件夹
+
+line 251
+添加对window xp, 2000, 2003的支持，如果不能使用rmdir删除不了，直接运行系统命令rmdir
+
+[10] 添加/script/solar.bat和/script/phpenv.ini
+
+[11] 添加/source/Cli/SyncVendor.php和/source/Cli/SyncVendor文件夹
+#+END_EXAMPLE
+
+
+下载地址：[[http://solarphp.cn/download/solar-system-1.1.2-win-0.1.rar][http://solarphp.cn/download/solar-system-1.1.2-win-0.1.rar]]
+当然，你也可以到这里下载，[[http://solarphp.cn/download/solar-system-win-latest.rar][http://solarphp.cn/download/solar-system-win-latest.rar]]
+这是目前的最新版，可能是当前发布版，也可能有下一个版本的某些新功能，但可能包含不稳定代码。
+
+另外，本次也更新了Solar APIDOC，请移步[[http://solarphp.cn/apidoc][http://solarphp.cn/apidoc]]查看。
+此次，我们也提供apidoc的下载：
+html版：[[http://solarphp.cn/download/apidoc.rar][http://solarphp.cn/download/apidoc.rar]]
+chm版：[[http://solarphp.cn/download/apidoc.chm][http://solarphp.cn/download/apidoc.chm]]
+请注意，chm版仍在修改中。。。
+
+欢迎大家提交Bug： [[http://bug.solarphp.cn][http://bug.solarphp.cn]]
+更多信息请移步Solar中国：[[http://solarphp.cn][http://solarphp.cn]]，我们一直在努力！
+
+

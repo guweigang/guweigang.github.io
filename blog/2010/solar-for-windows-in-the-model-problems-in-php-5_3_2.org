@@ -1,0 +1,38 @@
+#+TITLE: solar for windows在php 5.3.2中模型问题
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2010-08-01 Sun
+#+URI: /blog/2010/08/01/solar-for-windows-in-the-model-problems-in-php-5_3_2/
+#+KEYWORDS: 
+#+TAGS: php version, solar, solar php
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+昨天[[http://www.miandan.net][life]]在做[[http://www.miandan.net][免单站]]前台用户登陆的时候碰到了极大的问题，因为免单站以社区为基础，所以涉及到用户之前的操作及关系相当地多，请看模型中的关系：
+
+
+#+BEGIN_EXAMPLE
+     $this->_hasOne('user_detail');
+ $this->_hasOne('balance');
+ $this->_hasMany('friends');
+ $this->_hasMany('suggestions');
+ $this->_hasMany('groups');
+ $this->_hasMany('flows');
+ $this->_hasMany('user_expresses');
+ $this->_hasMany('orders');
+ $this->_hasMany('message_products');
+ $this->_hasMany('roles');
+ $this->_hasMany('relations');
+ $this->_hasMany('wishes');
+ $this->_hasMany('message_users');
+ $this->_hasMany('accesses');
+#+END_EXAMPLE
+
+
+
+在用户注册同时要初始化balance和user\_detail模型，结果是可以成功插入users模型，但是users模型的主键却不能插入到balance和user\_detail中，每次都是0值，调试了一下午，最后我在自己本本上也做了测试，不过在我这里很正常，把代码都给他，还是不行，最后我开始怀疑MySQ版本，life开始怀疑PHP版本。。。最后是PHP版本的问题，他的PHP版本是5.3.2，我的是5.3.1。。。
+
+所以写篇博文mark一下，目前要使用solar for windows的话，PHP不要升级到5.3.2.
+
+

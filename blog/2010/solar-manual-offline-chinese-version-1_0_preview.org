@@ -1,0 +1,18 @@
+#+TITLE: solar manual离线中文版V1.0（预览版）
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2010-04-25 Sun
+#+URI: /blog/2010/04/25/solar-manual-offline-chinese-version-1_0_preview/
+#+KEYWORDS: 
+#+TAGS: chm, solar, solar manual
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+solar手册第一版工作已于前天全部完成，手册地址是：http://solarphp.cn/manual-new/。历时三个月，终于把第一版译完了。
+
+为了更方便大家，我现在上传离线版本的手册（预览版），我昨天刚学会如何打包，所有可能会有很多问题，请大家务必跟帖指出 :D 。
+
+下载地址：[[http://solarphp.org.cn/viewtopic.php?f=7&t=67&start=0][http://solarphp.org.cn/viewtopic.php?f=7&t=67&start=0]]
+
+

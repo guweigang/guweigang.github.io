@@ -1,0 +1,44 @@
+#+TITLE: solar- system-1.1.1-win-0.2发布
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2010-06-30 Wed
+#+URI: /blog/2010/06/30/solar-system-1_1_1-win-0_2-release/
+#+KEYWORDS: 
+#+TAGS: solar, solar php
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+在[[http://libears.com/][@libear]]的测试、帮助下，发现了 solar-system-1.1.1-win-0.1的三个Bug，描述如下：
+1.创建Public Symlink时，即使创建成功也会提示failed消息
+2.如果进入script目录使用solar命令，那么将无法找到相应的Public目录
+3.unlink目录提示无权限删除相应符号链接
+
+Here, we are pleased to release the second version of solar-system-1.1.1-win. The three bugs mentioned above have been fixed. More information, Please read README2.
+
+You can download it from here: http://solarphp.cn/download/solar-system-1.1.1-win-0.2.rar
+You can always download the latest version for solar-system-1.1.1-win here: http://solarphp.cn/download/solar-system-1.1.1-win-latest.rar
+
+Enjoy~
+
+ [8] link public
+ @ /source/solar/Solar/Cli/LinkPublic.php [update]
+ # line 97
+ you should alway use absolute path information here
+ -
+ * add $system before relative path
+ -----
+ #line 101
+ wrong message tips,if exec("mklink tgt src") success, it returns
+ "symbolic link created for foo.php <<===>> bar.php"
+ -
+ * change it to "complete".
+
+ [9] unlink vendor
+ @ /source/solar/Solar/Cli/UnlinkVendor.php [update]
+ # line 90
+ on windows platform, you can only use unlink for files, not for directories.
+ -
+ * make a conditon to judge resource type befor processing
+
+

@@ -1,0 +1,108 @@
+#+TITLE: centos的ssh原来这么简单。。。
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2010-05-21 Fri
+#+URI: /blog/2010/05/21/centos/
+#+KEYWORDS: 
+#+TAGS: centos, linux, ssh
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+转自：[[http://www.blogjava.net/chenlb/archive/2008/05/01/197630.html][http://www.blogjava.net/chenlb/archive/2008/05/01/197630.html]]
+在VMware安装一个CentOS的Sever版，终端里的内容不可滚动，不方便。在win下远程登录不错（win下有个Xshell）。默认安装 ssh是有的。只是hosts访问问题。
+
+1.在hosts.deny文件尾添加sshd:ALL
+意思是允许所有访问请求
+
+
+#+BEGIN_EXAMPLE
+    
+[root@localhost ~]# vi /etc/hosts.deny
+
+#+END_EXAMPLE
+
+
+修改后看起来如下：
+
+
+#+BEGIN_EXAMPLE
+    
+#
+# hosts.deny    This file describes the names of the hosts which are
+#               *not* allowed to use the local INET services, as decided
+#               by the '/usr/sbin/tcpd' server.
+#
+# The portmap line is redundant, but it is left to remind you that
+# the new secure portmap uses hosts.deny and hosts.allow.  In particular
+# you should know that NFS uses portmap!
+sshd:ALL
+
+#+END_EXAMPLE
+
+
+
+2.在hosts.allow文件尾添加sshd:192.168.0.
+意思是允许192.168.0.1 到254的主机，内网。
+
+
+#+BEGIN_EXAMPLE
+    
+[root@localhost ~]# vi /etc/hosts.allow 
+#
+# hosts.allow   This file describes the names of the hosts which are
+#               allowed to use the local INET services, as decided
+#               by the '/usr/sbin/tcpd' server.
+#
+sshd:192.168.0.
+
+#+END_EXAMPLE
+
+
+
+3.重启ssh
+
+
+#+BEGIN_EXAMPLE
+    
+[root@localhost ~]# /etc/rc.d/init.d/sshd restart
+停止 sshd：                                                [  确定  ]
+启动 sshd                                                  [  确定  ]
+
+#+END_EXAMPLE
+
+
+好了，用putty和Xshell(Xmanager)可以登录了。\^\_\^
+4.ssh增强配置
+
+
+#+BEGIN_EXAMPLE
+    
+[root@localhost ~]# vi /etc/ssh/sshd_config　 ← 用vi打开SSH的配置文件
+
+#Protocol 2,1　← 找到此行将行头“#”删除，再将行末的“,1”删除，只允许SSH2方式的连接
+　
+Protocol 2　← 修改后变为此状态，仅使用SSH2
+
+#ServerKeyBits 768　← 找到这一行，将行首的“#”去掉，并将768改为1024
+　
+ServerKeyBits 1024　← 修改后变为此状态，将ServerKey强度改为1024比特
+
+#PermitRootLogin yes 　← 找到这一行，将行首的“#”去掉，并将yes改为no
+　
+PermitRootLogin no 　← 修改后变为此状态，不允许用root进行登录
+
+#PasswordAuthentication yes　← 找到这一行，将yes改为no
+　
+PasswordAuthentication no　← 修改后变为此状态，不允许密码方式的登录
+
+#PermitEmptyPasswords no　 ← 找到此行将行头的“#”删除，不允许空密码登录
+　
+PermitEmptyPasswords no　 ← 修改后变为此状态，禁止空密码进行登录
+
+#+END_EXAMPLE
+
+
+参考：http://www.centospub.com/make/sshd.html
+
+

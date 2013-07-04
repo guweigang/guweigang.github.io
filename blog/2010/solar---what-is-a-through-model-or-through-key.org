@@ -1,0 +1,27 @@
+#+TITLE: Solar: what is a "Through" model, "Through" key?
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2010-04-16 Fri
+#+URI: /blog/2010/04/16/solar---what-is-a-through-model-or-through-key/
+#+KEYWORDS: 
+#+TAGS: solar
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+在Solar手册4.6节中，介绍了关系模型的“Native Model "Has Many" Related Foreign Records "Through" An Association”。英文文档点[[http://solarphp.com/manual/related.has-many-through][这里]]，中文文档点[[http://solarphp.cn/manual-new/ch04s06.html][这里]]。
+
+
+
+
+因为这种关系不是直接的，而是通过某个关联获得的，所以我定义它为“间接有多关系”，那么"Through" model就是中间模型，"Through" key就是中间键了。。。
+
+
+
+
+就拿博客来说，比如：一篇博文有多个标签，一个标签又可能有多篇博文。那么必然存在中间表联系博文和标签，相应的也就有中间模型的存在了，中间表也有主键，那么中间键也就顺理成章了。
+
+
+
+
+

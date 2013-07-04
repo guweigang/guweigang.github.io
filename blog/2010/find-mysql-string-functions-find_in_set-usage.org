@@ -1,0 +1,18 @@
+#+TITLE: mysql中查找字符串函数FIND_IN_SET用法
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2010-02-05 Fri
+#+URI: /blog/2010/02/05/find-mysql-string-functions-find_in_set-usage/
+#+KEYWORDS: 
+#+TAGS: find_in_set, mysql
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+mysql中查找字符串函数FIND\_IN\_SET用法:
+函数原型:
+FIND\_IN\_SET(str,strlist)
+如果字符串str 在由N个子串组成的字符串列表strlist中，则返回值的范围在 1 到 N 之间 。一个字符串列表就是一个由一些被‘,'符号分开的子串组成的字符串。如果第一个参数是一个常数字符串，而第二个是type SET列，则 FIND\_IN\_SET() 函数被优化，使用比特计算。如果str不在strlist 或strlist 为空字符串，则返回值为 0 。如任意一个参数为NULL，则返回值为 NULL。这个函数在第一个参数包含一个逗号(‘,')时将无法正常运行。
+mysql> SELECT FIND\_IN\_SET('b','a,b,c,d');
+
+

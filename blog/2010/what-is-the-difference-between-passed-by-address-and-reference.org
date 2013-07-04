@@ -1,0 +1,91 @@
+#+TITLE: 以“地址传递” VS “引用传递”方式向函数传递参数
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2010-02-05 Fri
+#+URI: /blog/2010/02/05/what's-the-difference-between-passed-by-address-and-reference/
+#+KEYWORDS: 
+#+TAGS: cpp, 值传递, 地址传递, 引用, 引用传递
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+一、“地址传递”参数
+绕开“值传递”问题的第一种办法是向函数传递变量的地址而不是它的值。要想获得某个变量的地址，只要在它的名字前加一个“取地址”操作符(&)就行了。于是，如果想要把一个地址传递给某个函数，相应的语句如下：
+
+
+#+BEGIN_EXAMPLE
+    
+int main() {
+    int myNum = 20;
+    changeVar(&myNum, 90);
+}
+
+#+END_EXAMPLE
+
+
+现在，myNum变量的地址将被发送到函数到函数并被赋值给第一个参数。因为只有一种数据类型可以用来保存地址，所以第一个输入参数必须是一个指针。又因为指针的类型必须与由它保存其地址的变量的类型一致，所以changVar()函数的原型为：
+
+
+#+BEGIN_EXAMPLE
+    
+void changeVar(int *myVar, int newValue);
+
+#+END_EXAMPLE
+
+
+在函数里，当需要改变这个变量的值时，另忘了对指针进行解引用：
+
+
+#+BEGIN_EXAMPLE
+    
+void changeVar(int *myVar, int newValue) 
+{
+     *myVar = newValue;
+}
+
+#+END_EXAMPLE
+
+
+
+二、“引用传递”参数
+正如刚看到的好样，在某些场合，以“地址传递”方式把值传递给函数是必要和唯一的选择。这个办法在C和C++里都可以使用。但正如那些高人们想的那样，既然像这样来使用地址是一种很好的思路，让这个概念更加完善岂不是更好？如果事先就知道某个函数只能接受一个地址，能不能按照某种套路来编写有关的代码以便在调用该函数时不需要使用特殊的语法呢？于是，以“引用传递”方式传递输入参数的概念诞生了。
+
+目的相同，还是把地址传递给函数，但语法可就大不一样了，仍以changeVar()函数为例，它在新思路下的原型变成了下面这样：
+
+
+#+BEGIN_EXAMPLE
+    
+void changeVar(int &myVar, int newValue);
+
+#+END_EXAMPLE
+
+
+这个函数的第一个输入参数myVar，不是一个指针，它是那个将被传递给这个函数的原始变量的一个别名。在changeVar()函数里对这个参数变量进行的任何操作都将反映在changeVar()函数外的那个原始变量上。这意味着可以在changeVar()函数里用下面这些代码完成和原来一样的任务：
+
+
+#+BEGIN_EXAMPLE
+    
+void changeVar(int &myVar, int newValue)
+{
+    myVar = newValue;
+}
+
+#+END_EXAMPLE
+
+
+这使得这个函数更容易被调用 ---- 只需提供一个变量名：
+
+
+#+BEGIN_EXAMPLE
+    
+int main(void)
+{
+   int myNum = 20;
+   changeVar(myNum, 90);
+   // ...
+}
+
+#+END_EXAMPLE
+
+
+

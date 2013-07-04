@@ -1,0 +1,113 @@
+#+TITLE: PHP转义字符
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2010-05-30 Sun
+#+URI: /blog/2010/05/30/php-escape-character/
+#+KEYWORDS: 
+#+TAGS: php
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+
+
+
+
+
+
+序列
+
+
+含义
+
+
+
+
+
+
+
+
+
+
+=\n=
+
+
+换行（LF 或 ASCII 字符 0×0A（10））
+
+
+
+
+
+
+=\r=
+
+
+回车（CR 或 ASCII 字符 0×0D（13））
+
+
+
+
+
+
+=\t=
+
+
+水平制表符（HT 或 ASCII 字符 0×09（9））
+
+
+
+
+
+
+=\\=
+
+
+反斜线
+
+
+
+
+
+
+=\$=
+
+
+美元符号
+
+
+
+
+
+
+=\"=
+
+
+双引号
+
+
+
+
+
+
+=\[0-7]{1,3}=
+
+
+此正则表达式序列匹配一个用八进制符号表示的字符
+
+
+
+
+
+
+=\x[0-9A-Fa-f]{1,2}=
+
+
+此正则表达式序列匹配一个用十六进制符号表示的字符
+
+
+
+
+
+
+
+

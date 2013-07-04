@@ -1,0 +1,95 @@
+#+TITLE: solar for xp中的sync-vendor命令
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2010-07-16 Fri
+#+URI: /blog/2010/07/16/solar-for-xp-in-sync-vendor-command/
+#+KEYWORDS: 
+#+TAGS: solar, solar php, sync-vendor, xp
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+上次和[[http://lifephp.com][@life]]讨论关于solar xp的事情，目前solar xp处于测试阶段，你可以在论坛中下载symlink.php及unlinkvendor.php两个文件覆盖 solar-system-1.1.1-win-0.2中相应的两个文件，[[http://solarphp.org.cn/viewtopic.php?f=6&t=104][下载请点这里]]。
+
+在XP中只能使用copy的方式来同步文件，不过现在的版本仅当使用unlink-vendor命令时才会触发同步事件，把include/Vendor目录中的文件同步到/source/vendor/Vendor中。这种做法同时也会删除include/Vendor目录，且没有考虑/include/Test/Vendor等三个目录，也给solar xp用户带了很大的不便。所以现在考虑增加一个命令sync-vendor，这个命令只在windows xp, 2000或2003不技持Symlink的系统上使用，如果在windows vista或7中使用会提示“this command is only for windows below vista”。
+
+昨天晚上做了一个测试，代码如下：
+
+
+#+BEGIN_EXAMPLE
+    
+$vendor = 'Acme';
+$system = 'D:\\xampp\htdocs\solarlatest';
+$script = 'acme';
+
+// D:\xampp\htdocs\solarlatest\include\Acme\App\{$controller}\Public
+$dir = $system."\docroot\public\\$vendor\App";
+
+// D:\xampp\htdocs\solarlatest\include\{$vendor}\Controller\Bread\Public
+$dir_bread = $system."\docroot\public\\$vendor\Controller\Bread";
+$dir_include_bread = $system."\include\\$vendor\Controller\Bread\Public";
+echo $dir_include_bread." <= ".$dir_bread;
+
+echo "\n";
+
+// D:\xampp\htdocs\solarlatest\include\{$vendor}\Controller\Page\Public
+$dir_page= $system."\docroot\public\\$vendor\Controller\Page";
+$dir_include_page = $system."\include\\$vendor\Controller\Page\Public";
+echo $dir_include_page." <= ".$dir_bread;
+
+echo "\n";
+
+// D:\xampp\htdocs\solarlatest\include\Fixture\\$vendor => D:\xampp\htdocs\solarlatest\source\\$script\\tests\Fixture
+// D:\xampp\htdocs\solarlatest\include\Mock\\$vendor => D:\xampp\htdocs\solarlatest\source\\$script\\tests\Mock
+// D:\xampp\htdocs\solarlatest\include\Test\\$vendor => d:\xampp\htdocs\solarlatest\source\\$script\\tests\Test
+$dir_fixture = $system."\include\Fixture\\$vendor";
+$dir_source_fixture = $system.'\source\\'.$script.'\tests\Fixture';
+echo $dir_source_fixture. " <= " . $dir_fixture;
+
+echo "\n";
+
+$dir_mock = $system."\include\Mock\\$vendor";
+$dir_source_mock = $system.'\source\\'.$script.'\tests\Mock';
+echo $dir_source_mock. " <= " . $dir_mock;
+
+echo "\n";
+
+$dir_test = $system."\include\Test\\$vendor";
+$dir_source_test = $system.'\source\\'.$script.'\tests\Test';
+echo $dir_source_test. " <= " . $dir_test;
+
+echo "\n";
+
+$dir_iterator = new DirectoryIterator($dir);
+
+foreach ($dir_iterator as $fileinfo) {
+    if(!$fileinfo->isDot()){
+        echo $system.'\include\\'.$vendor.'\App\\'.$fileinfo->getFilename().'\\Public'." <= ";
+        echo $fileinfo->getPathname() . "\n";
+    }
+}
+
+#+END_EXAMPLE
+
+
+
+
+#+BEGIN_EXAMPLE
+    
+---------- Debug PHP 5.3.1 ----------
+D:\xampp\htdocs\solarlatest\include\Acme\Controller\Bread\Public <= D:\xampp\htdocs\solarlatest\docroot\public\Acme\Controller\Bread
+D:\xampp\htdocs\solarlatest\include\Acme\Controller\Page\Public <= D:\xampp\htdocs\solarlatest\docroot\public\Acme\Controller\Bread
+D:\xampp\htdocs\solarlatest\source\acme\tests\Fixture <= D:\xampp\htdocs\solarlatest\include\Fixture\Acme
+D:\xampp\htdocs\solarlatest\source\acme\tests\Mock <= D:\xampp\htdocs\solarlatest\include\Mock\Acme
+D:\xampp\htdocs\solarlatest\source\acme\tests\Test <= D:\xampp\htdocs\solarlatest\include\Test\Acme
+D:\xampp\htdocs\solarlatest\include\Acme\App\Admin\Public <= D:\xampp\htdocs\solarlatest\docroot\public\Acme\App\Admin
+D:\xampp\htdocs\solarlatest\include\Acme\App\Blog\Public <= D:\xampp\htdocs\solarlatest\docroot\public\Acme\App\Blog
+D:\xampp\htdocs\solarlatest\include\Acme\App\Rss\Public <= D:\xampp\htdocs\solarlatest\docroot\public\Acme\App\Rss
+D:\xampp\htdocs\solarlatest\include\Acme\App\Tom\Public <= D:\xampp\htdocs\solarlatest\docroot\public\Acme\App\Tom
+
+Output completed (1 sec consumed) - Normal Termination
+
+#+END_EXAMPLE
+
+
+

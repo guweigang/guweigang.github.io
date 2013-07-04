@@ -1,0 +1,86 @@
+#+TITLE: 今天基本配好了emacs了！
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2010-09-24 Fri
+#+URI: /blog/2010/09/24/today-with-a-good-basic-emacs-up/
+#+KEYWORDS: 
+#+TAGS: auto-complete, cedet, ecb, emacs, yasnippet
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+终于看到ecb和cedet正式版了，今天把YASnippet、ECB、Cedet、Auto-complete都装好了。真是不容易。我用的是Windows平台。
+不过装好之后仍有个问题，总提示：
+
+
+#+BEGIN_EXAMPLE
+    Warning: cedet-called-interactively-p called with 0 arguments, but requires 1
+#+END_EXAMPLE
+
+
+在网上找了很久都未果，看来仍和平台或emacs版本有关，只能继续期待官方更新了。。。，不过并不影写使用。
+上个图：
+[[http://roygu.com/?attachment_id=960][[[http://roygu.com/wp-content/uploads/2010/09/SNAG_Program-00003.png]]]]
+
+1. YASnippet安装
+下载地址：[[http://code.google.com/p/yasnippet/][http://code.google.com/p/yasnippet/]]
+安装：
+下载后解压到某目录下，然后在.emacs中添加
+
+
+#+BEGIN_EXAMPLE
+    ; yasnippet
+ (add-to-list 'load-path
+                  "~/.emacs.d/plugins/yasnippet-0.6.1c")
+    (require 'yasnippet) ;; not yasnippet-bundle
+    (yas/initialize)
+    (yas/load-directory "~/.emacs.d/plugins/yasnippet-0.6.1c/snippets")
+#+END_EXAMPLE
+
+
+2. Auto-complete安装
+下载地址：[[http://cx4a.org/software/auto-complete/index.html][http://cx4a.org/software/auto-complete/index.html]]
+[[http://cx4a.org/software/auto-complete/ac-fuzzy.png]]
+安装（因为在windows下，所以选择这种方式安装）：
+
+
+#+BEGIN_EXAMPLE
+    Type M-x load-file RET in the running Emacs or newly launched Emacs. Note that if you want to upgrade auto-complete-mode, you have to install in a newly launched Emacs with -q option. Then input a file name to load which is a path string with adding /etc/install.el to the package directory. For example, if the package directory is ~/tmp/auto-complete-1.2, the file name will be ~/tmp/auto-complete-1.2/etc/install.el.
+
+Then input a directory where Auto Complete will be installed. You need to add a directory to load-path later if load-path doesn't include the directory. The directory is to be ~/.emacs.d by default.
+
+Finally type RET to start installation. After installation, you may see the following buffer and follow instructions to edit .emacs.
+#+END_EXAMPLE
+
+
+3. Cedet安装
+下载地址：[[http://cedet.sourceforge.net/][http://cedet.sourceforge.net/]]
+[[http://cedet.sourceforge.net/img-gen/symref.png]]
+安装：
+
+
+#+BEGIN_EXAMPLE
+    If you are on Windows, and or don't have make for some reason, you can use CEDET's built in project management system to force CEDET to bootstrap itself. You can initiate the build process like this:
+cd cedet-1.0pre6
+  emacs -Q -l cedet-build.el -f cedet-build
+#+END_EXAMPLE
+
+
+
+
+
+4. ECB安装
+下载地址：[[http://ecb.sourceforge.net/][http://ecb.sourceforge.net/]]
+[[http://cedet.sourceforge.net/img-gen/ecb.png]]
+安装：
+
+
+#+BEGIN_EXAMPLE
+    ; ecb
+(add-to-list 'load-path "~/.emacs.d/plugins/ecb-2.40")
+;(require 'ecb)
+(require 'ecb-autoloads)
+#+END_EXAMPLE
+
+
+

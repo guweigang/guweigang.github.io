@@ -1,0 +1,21 @@
+#+TITLE: 百度开放搜索平台
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2010-02-06 Sat
+#+URI: /blog/2010/02/06/baidu-open-search-platform/
+#+KEYWORDS: 
+#+TAGS: baidu, 火车票, 火车票查询, 百度, 百度搜索平台开放
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+刚在百度上搜火车票信息，才发现百度已经开放了搜索平台
+[[http://open.baidu.com/][http://open.baidu.com/]]
+
+看来百度确实也在改变，在做更多服务。
+
+以后可以到下面这个网址搜火车票信息了：
+
+[[http://open.baidu.com/train/search.php][http://open.baidu.com/train/search.php]]
+
+

@@ -1,0 +1,25 @@
+#+TITLE: 打开windows powershell时总提示脚本不能运行
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2010-07-14 Wed
+#+URI: /blog/2010/07/14/open-windows-powershell-script-does-not-run-when-they-suggested/
+#+KEYWORDS: 
+#+TAGS: powershell, windows
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+Let's start with running scripts from within Windows PowerShell itself. (Which, truth be told, is probably the most common way to run Windows PowerShell scripts.) Why do you get weird error messages when you try to run a script? That's easy. The security settings built into Windows PowerShell include something called the “execution policy;” the execution policy determines how (or if) PowerShell runs scripts. By default, PowerShell's execution policy is set to Restricted; that means that scripts - including those you write yourself - won't run. Period.
+
+You can verify the settings for your execution policy by typing the following at the PowerShell command prompt and then pressing ENTER:
+
+Get-ExecutionPolicy
+
+Now, admittedly, this might seem a bit severe. After all, what's the point of having a scripting environment if you can't even run scripts with it? But that's OK. If you don't like the default execution policy (and you probably won't) then just go ahead and change it. For example, suppose you want to configure PowerShell to run - without question - any scripts that you write yourself, but to run scripts downloaded from the Internet only if those scripts have been signed by a trusted publisher. In that case, use this command to set your execution policy to RemoteSigned:
+
+Set-ExecutionPolicy RemoteSigned
+
+Alternatively, you can set the execution policy to AllSigned (all scripts, including those you write yourself, must be signed by a trusted publisher) or Unrestricted (all scripts will run, regardless of where they come from and whether or not they've been signed). 
+
+
+

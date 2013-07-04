@@ -1,0 +1,166 @@
+#+TITLE: Solar 连接数据库的编码问题和网页的编码问题？
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2010-05-19 Wed
+#+URI: /blog/2010/05/19/solar-coding-problems-connecting-to-the-database-and-web-coding-problem/
+#+KEYWORDS: 
+#+TAGS: charset, database, solar, solar database, solar php
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+这篇文章已同步发表到论坛：[[http://solarphp.org.cn/viewtopic.php?f=2&t=83][http://solarphp.org.cn/viewtopic.php?f=2&t=83]]
+今天在群里面【普通人】问到数据库的编码问题和网页的编码问题，我在这里一并回答了。注：这里使用Acme作为默认vendor 8-) 。
+*首先，Solar并没有准备数据库编码的配置，不过这很容易完成，大家都知道， :lol: Solar是一个极易扩展的框架。下面说说解决方案：*
+方法一、修改/source /solar/Solar/Sql/Adapter/Mysql.php文件
+注意：Solar在数据库上选择的是PDO。/source /solar/Solar/Sql/Adapter目录下所有的文件都继承自/source/solar/Solar/Sql/Adapter.php，数据库连接的代码在/source/solar/Solar/Sql/Adapter.php文件中（第456行）：
+
+
+
+#+BEGIN_EXAMPLE
+    
+        public function connect()
+        {
+            // if we already have a PDO object, no need to re-connect.
+            if ($this->_pdo) {
+                return;
+            }
+
+            // start profile time
+            $time = microtime(true);
+
+            // attempt the connection
+            $this->_pdo = new PDO(
+                $this->_dsn,
+                $this->_config['user'],
+                $this->_config['pass']
+            );
+
+            // retain connection info
+            $this->_pdo->solar_conn = array(
+                'dsn'  => $this->_dsn,
+                'user' => $this->_config['user'],
+                'pass' => $this->_config['pass'],
+                'type' => 'single',
+                'key'  => null,
+            );
+            // post-connection tasks
+            $this->_postConnect();
+
+            // retain the profile data?
+            $this->_addProfile($time, '__CONNECT');
+        }
+
+#+END_EXAMPLE
+
+
+
+当然，我们不能直接修改这个文件，因为不同的数据库设置编码的方式不一样，我们应该在 /source/solar/Solar/Sql/Adapter/Mysql.php文件中覆盖父类的connect方法，因此只需在/source /solar/Solar/Sql/Adapter/Mysql.php文件中加入以下代码：
+
+
+
+#+BEGIN_EXAMPLE
+    
+        public function connect()
+        {
+            parent::connect();
+            if(isset($this->_config['charset'])) {
+                $this->_pdo->exec('SET NAMES ' . $this->_config['charset']);
+            }
+        }
+
+#+END_EXAMPLE
+
+
+
+然后，在配置文件/config.php中加入数据库编码选项，如下：
+
+
+
+#+BEGIN_EXAMPLE
+    
+    $config['Solar_Sql_Adapter_Mysql'] = array(
+        'host' => 'localhost', // the database server host
+        'name' => 'pzblog',  // the database name
+        'user' => 'root',  // authenticate as this user
+        'pass' => '123456',  // authenticate with this password
+        'charset' => 'utf8', //注意，此处是utf8，而不是utf-8
+    );
+
+#+END_EXAMPLE
+
+
+
+方法二、为了不改变官方的源码，方便升级，写一个自己的数据库类继承Solar\_Sql\_Adapter\_Mysql类即可。
+在哪建文件呢，这里又存在linux和windows的区别了，先说linux：请建立文件/source/acme/Acme/Sql/Adapter/Mysql.php，再说windows：请建立文件 /include/Acme/Sql/Adapter/Mysql.php。（注：上面提到的目录如果不存在就新建该目录）
+内容是：
+
+
+
+#+BEGIN_EXAMPLE
+    
+    class Acme_Sql_Adapter_Mysql extends Solar_Sql_Adapter_Mysql {
+        /**
+         *
+         * Creates a PDO object and connects to the database.
+         * Set the character collation, if defined.
+         *
+         * @return void
+         *
+         */
+        public function connect()
+        {
+            parent::connect();
+            if(isset($this->_config['charset'])) {
+                $this->_pdo->exec('SET NAMES ' . $this->_config['charset']);
+            }
+        }
+    }
+
+#+END_EXAMPLE
+
+
+
+我这里也提供一份，下载后解压放到 /include/Acme目录下即可。下载地址请移步到[[http://solarphp.org.cn/viewtopic.php?f=2&t=83][论坛]]
+此时，配置文件要相应的改成：
+
+
+
+#+BEGIN_EXAMPLE
+    
+    $config['Solar_Sql']['adapter'] = 'Acme_Sql_Adapter_Mysql';
+    // configure the SQL adapter class
+    $config['Acme_Sql_Adapter_Mysql'] = array(
+        'host' => 'localhost', // the database server host
+        'name' => 'pzblog',  // the database name
+        'user' => 'root',  // authenticate as this user
+        'pass' => '123456',  // authenticate with this password
+        'charset' => 'utf8', //注意，此处是utf8，而不是utf-8
+    );
+
+#+END_EXAMPLE
+
+
+
+
+试一下，成功了吧？呵呵。。。
+
+*其次是网页编码问题，这个其实官方的文档中有，希望各位童鞋多查资料，打开/include/Acme/App /Blog/View/index.php文件，对应加入相关代码：*
+
+
+
+#+BEGIN_EXAMPLE
+    
+        $this->head()
+            ->setTitle($title)
+            ->addStyleBase('Acme/style.css')
+            ->addMetaHttp('Content-Type', 'text/html; charset=utf-8')
+            ->fetch();
+
+#+END_EXAMPLE
+
+
+
+具体用法请参考：[[http://solarphp.com/class/Solar_View_Helper_Head/addMetaHttp%28%29][http://solarphp.com/class/Solar\_View\_Helper\_Head/addMetaHttp%28%29]]
+
+

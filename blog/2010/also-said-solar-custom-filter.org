@@ -1,0 +1,180 @@
+#+TITLE: 也说Solar自定义Filter
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2010-08-09 Mon
+#+URI: /blog/2010/08/09/also-said-solar-custom-filter/
+#+KEYWORDS: 
+#+TAGS: solar filter, solar php, solar record
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+[[http://lifephp.com][@life]]在[[http://lifephp.com/?p=122][Solar自定义Filter过滤器]]一文中讲述了如何在Solar中添加自己的过滤器，讲得很不错。呵呵:), [[http://lifephp.com][@life]]和[[http://libears.com][@libear]]加入[[http://solarphp.cn][Solar 中国]]没多长时间，但贡献却非常突出，给[[http://solarphp.cn][Solar 中国]]注入了更有活力的思想。
+
+回到正题，本文也是讨论在Solar中自定义Filter，那么为什么要写一篇同样主题的文章呢？看完你就知道了。
+
+讲这个之前我认为有必要先讲一下life提到的自定义Filter如何实现的。那么之前又还要再讲一下[[http://solarphp.cn/apidoc/Solar_Sql_Model/Solar_Sql_Model_Record.html][Solar\_Sql\_Model\_Record]]这个类。
+关于这个类，相信大家不会陌生，当我们每次从对象注册表中获取模型目录对象后，再利用模型对象获取的就是Record对象。
+
+
+#+BEGIN_EXAMPLE
+    $this->_model = Solar_Registry::get('model_catalog');
+// $this->item就是模型记录对象
+$this->item = $this->_model->currentProducts->fetchNew();
+$this->form = $this->item->newForm(array(
+          'digs_out' => array('label' => '请输入免单需顶数：',),
+           'discout' => array('label' => '请输入折扣：','invalid' => array('hello, libear', 'hello, life')),
+          'product_id' => array('type' => 'hidden',),
+         'period_id' => array('type' => 'hidden',),
+      ));
+
+#+END_EXAMPLE
+
+
+这就创建了大家非常熟悉的form对象，之后怎么做大家都知道的。那么filter是在什么时候验证的呢？如何保证Solar能找到我们自定义的Filter呢？
+
+filter事件是在$this->item->save()方法调用的时候触发的，来看代码：在[[http://solarphp.cn/apidoc/__filesource/fsource_Solar_Sql_Model__SolarSqlModelRecord.php.html#a519][Solar\_Sql\_Model\_Record::save()]]方法又调用了[[http://solarphp.cn/apidoc/__filesource/fsource_Solar_Sql_Model__SolarSqlModelRecord.php.html#a627][Solar\_Sql\_Model\_Record::\_save()]]方法，在\_save()方法中判断当前的保存操作是插入还是更新：
+
+
+#+BEGIN_EXAMPLE
+                // insert or update based on newness
+            if ($this->isNew()) {
+                $this->_insert();
+            } else {
+                $this->_update();
+            }
+
+#+END_EXAMPLE
+
+
+在[[http://solarphp.cn/apidoc/__filesource/fsource_Solar_Sql_Model__SolarSqlModelRecord.php.html#a686][Solar\_Sql\_Model\_Record::\_insert()]]和[[http://solarphp.cn/apidoc/__filesource/fsource_Solar_Sql_Model__SolarSqlModelRecord.php.html#a821][Solar\_Sql\_Model\_Record::\_update()]]方法中分别调用了[[http://solarphp.cn/apidoc/__filesource/fsource_Solar_Sql_Model__SolarSqlModelRecord.php.html#a1197][Solar\_Sql\_Model\_Record::filter()]]方法。当参数为空时，filter方法直接调用[[http://solarphp.cn/apidoc/__filesource/fsource_Solar_Sql_Model__SolarSqlModelRecord.php.html#a1253][Solar\_Sql\_Model\_Record::newFilter()]]方法，获得当前的filter对象，进行验证并准备好invalid消息：
+
+
+#+BEGIN_EXAMPLE
+            // apply filters
+        $valid = $filter->applyChain($this);
+
+        // retain invalids
+        $invalid = $filter->getChainInvalid();
+
+       // ...省略部分代码
+        // was it valid?
+        if (! $valid) {
+            // use custom validation messages per column when available
+            foreach ($invalid as $key => $old) {
+                $locale_key = "INVALID_" . strtoupper($key);
+                $new = $this->_model->locale($locale_key);
+                if ($new != $locale_key) {
+                    $invalid[$key] = $new;
+                }
+            }
+
+            $this->_invalid = $invalid;
+            throw $this->_exception('ERR_INVALID', $this->_invalid);
+        }
+
+#+END_EXAMPLE
+
+
+那么Solar这样就能找到我们自定义的Filter么？还是不行，还要继续看[[http://solarphp.cn/apidoc/__filesource/fsource_Solar_Sql_Model__SolarSqlModelRecord.php.html#a1253][Solar\_Sql\_Model\_Record::newFilter()]]方法, newFilter()方法的主要工作是实例化当前的Filter对象，
+
+
+#+BEGIN_EXAMPLE
+            // create a filter object based on the model's filter class
+        $filter = Solar::factory($this->_model->filter_class);
+
+#+END_EXAMPLE
+
+
+大家肯定想了解下$this->\_model->filter\_class的内容吧？:)　还要麻烦大家查看一下[[http://solarphp.cn/apidoc/__filesource/fsource_Solar_Sql_Model__SolarSqlModel.php.html#a2476][Solar\_Sql\_Model::\_fixFilterClass()]]方法。这个方法设置了当前的Filter类。
+
+
+#+BEGIN_EXAMPLE
+    $this->_filter_class = $stack->load('Filter');
+
+#+END_EXAMPLE
+
+
+接着，[[http://solarphp.cn/apidoc/__filesource/fsource_Solar_Sql_Model__SolarSqlModelRecord.php.html#a1253][Solar\_Sql\_Model\_Record::newFilter()]]把filter规则加入Filter对象，最后把本地字符串的对象设置为当前过滤器。filter规则来自几个方面：
+1. 在模型文件中定义的, i.e., $this->\_addFilter()
+2. 手动使用$this->addFilter定义的
+3. 表中定义为非空的及自动增长的字段
+
+
+#+BEGIN_EXAMPLE
+           // set filters as specified by the model
+        foreach ($this->_model->filters as $key => $list) {
+            // skip table cols that are not part of the fetch cols
+            if (in_array($key, $skip)) {
+                continue;
+            }
+            $filter->addChainFilters($key, $list);
+        }
+
+        // set filters added to this record
+        foreach ($this->_filters as $key => $list) {
+            $filter->addChainFilters($key, $list);
+        }
+
+        // set which elements are required by the table itself
+        foreach ($this->_model->table_cols as $key => $info) {
+            if ($info['autoinc']) {
+                // autoinc are not required
+                $flag = false;
+            } elseif (in_array($key, $this->_model->sequence_cols)) {
+                // auto-sequence are not required
+                $flag = false;
+            } else {
+                // go with the col info
+                $flag = $info['require'];
+            }
+
+            // set the requirement flag
+            $filter->setChainRequire($key, $flag);
+        }
+
+        // tell the filter to use the model for locale strings
+        $filter->setChainLocaleObject($this->_model);
+
+#+END_EXAMPLE
+
+
+这一部分算是讲完了，但是如果仅仅是这样处理的话当我们使用Solar\_Form创建表单并加入filter规则的时候，系统会提示找不到filter规则，因为Solar仅在Solar\_Filter\_名字空间下查找我们自定义的Filter对象，而我们自定义的Filter对象在Admin\_Filter\_名字空间下，也就是说系统根本没有实例化Admin\_Filter类。在上面的解决方案中，Solar\_Sql\_Model\_Record实例化了Admin\_Filter，并使用Admin\_Filter进行filter操作，因为这里没有用到模型，所以我们只能手动操作。
+
+首先，在config.php文件中加入Solar\_Filter的配置项，把Admin\_Filter\_名字空间加入Solar\_Filter::\_stack中：
+
+
+#+BEGIN_EXAMPLE
+    $config['Solar_Filter'] = array(
+    'classes' => array('Admin_Filter'),
+);
+
+#+END_EXAMPLE
+
+
+这样的话系统就能找到我们自定义的filter了，不过local string仍然不行，我们还需要手动设置当前的filter local object，有两种方法：
+1. 通过[[http://solarphp.cn/apidoc/__filesource/fsource_Solar_Form__SolarForm.php.html#a484][Solar\_Fomr::setFilterLocaleObject]]方法手动设置filter local object
+
+
+#+BEGIN_EXAMPLE
+    $filter = Solar::factory("Admin_Filter");
+$this->form->setFilterLocaleObject($filter);
+
+#+END_EXAMPLE
+
+
+2. 在实例化Solar\_Form时指定local filter object
+
+
+#+BEGIN_EXAMPLE
+            $this->form = Solar::factory("Solar_Form",
+            array('filter' => Solar::factory('Admin_Filter')));
+
+#+END_EXAMPLE
+
+
+可以看到不管用哪种方法都需要手动实例化Admin\_Filter类。
+
+下一篇讲讲Solar\_Form、Solar\_Sql\_Model\_Record和Solar\_Filter三者交织在一起的复杂关系。
+
+

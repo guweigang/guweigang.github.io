@@ -1,0 +1,25 @@
+#+TITLE: Solar manual: 昨天已全部完成！
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2010-04-24 Sat
+#+URI: /blog/2010/04/24/solar-manual---yesterday-has-been-completed/
+#+KEYWORDS: 
+#+TAGS: solar, solar manual, solarphp
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+原计划两周内完成的，由于之后两周仍有其他工作安排，所以提前完成了Solar文档v1.0版，并于刚才发布了。文档地址是：[[http://solarphp.cn/manual-new/][http://solarphp.cn/manual-new/]]。将来的工作：
+
+
+
+
+1. 完善文档，校稿
+2. 继续翻译官方的Classes和Packages
+3. 大力发展社区，普及Solar在中国的应用
+4. 开发Solar中国官方站
+
+
+
+
+

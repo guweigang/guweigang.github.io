@@ -1,0 +1,17 @@
+#+TITLE: solar_manual_offline_v1.0(preview3)发布 
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2010-05-20 Thu
+#+URI: /blog/2010/05/20/solar-manual-offline-1_0_preview3-released/
+#+KEYWORDS: 
+#+TAGS: offline doc, solar, solar manual
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+本博文已同步发表到论坛：[[http://solarphp.org.cn/viewtopic.php?f=7&t=84][http://solarphp.org.cn/viewtopic.php?f=7&t=84]]
+
+solar文档跑离[[http://roygu.com/?p=528][上次]]更新已有很久了，忙于杂事，耽误了许多时间，这次更新也没有太大的惊喜，主要是更新了下文档的目录结构，不再以ch01s01.html形式命名，而是以该页面标题命名，并增加了内容的层次结构，更方便阅读和查找。
+[[http://solarphp.org.cn/download/file.php?id=22]]
+
+

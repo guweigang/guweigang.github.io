@@ -1,0 +1,16 @@
+#+TITLE: Solar文档译完第四章
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2010-04-15 Thu
+#+URI: /blog/2010/04/15/solar-document-translation-finished-fourth-chapter/
+#+KEYWORDS: 
+#+TAGS: solar, solarphp
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+终于把Solar文档的第四章译完了，恐怕这也是最难的一章。而且感觉这一章写得不如前几章，严重怀疑这章作者的英文水平。。。额，我是边猜边译，终于译完了。。。效果肯定一般。
+
+请移步[[http://solarphp.cn/manual-new/ch04.html][http://solarphp.cn/manual-new/ch04.html]]查看第四章的文档。
+
+

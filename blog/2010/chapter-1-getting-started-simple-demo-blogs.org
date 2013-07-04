@@ -1,0 +1,105 @@
+#+TITLE: Chapter 1. 快速入门---简单博 客演示
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2010-04-11 Sun
+#+URI: /blog/2010/04/11/chapter-1-getting-started-simple-demo-blogs/
+#+KEYWORDS: 
+#+TAGS: manual, solar, solar manual
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+
+
+*Table of Contents*
+
+
+
+[[http://solarphp.cn/manual-new/ch01.html#d4e14][1.1. 简介]]
+
+[[http://solarphp.cn/manual-new/ch01s02.html][1.2. 下载并安装Solar]]
+
+[[http://solarphp.cn/manual-new/ch01s03.html][1.3. 创建工作区]]
+
+[[http://solarphp.cn/manual-new/ch01s04.html][1.4. 配置系统]]
+
+[[http://solarphp.cn/manual-new/ch01s05.html][1.5. 从数据表创建模型]]
+
+[[http://solarphp.cn/manual-new/ch01s06.html][1.6. 创建一个基本应用]]
+
+[[http://solarphp.cn/manual-new/ch01s07.html][1.7. 建立一个基本应用]]
+
+[[http://solarphp.cn/manual-new/ch01s08.html][1.8. 浏览所有公开的文章]]
+
+[[http://solarphp.cn/manual-new/ch01s08.html#d4e163][1.8.1 “Index”方法]]
+
+[[http://solarphp.cn/manual-new/ch01s08.html#d4e178][1.8.2 “Index”视图代码]]
+
+[[http://solarphp.cn/manual-new/ch01s09.html][1.9. 阅读一篇文章]]
+
+[[http://solarphp.cn/manual-new/ch01s09.html#d4e203][1.9.1 “Read”方法]]
+
+[[http://solarphp.cn/manual-new/ch01s09.html#d4e212][1.9.2 “Read”视图文件]]
+
+[[http://solarphp.cn/manual-new/ch01s10.html][1.10. 浏览所有草稿]]
+
+[[http://solarphp.cn/manual-new/ch01s10.html#d4e222][1.10.1 “Drafts”方法]]
+
+[[http://solarphp.cn/manual-new/ch01s10.html#d4e228][1.10.2 “Drafts”视图文件]]
+
+[[http://solarphp.cn/manual-new/ch01s11.html][1.11. 编辑文章]]
+
+[[http://solarphp.cn/manual-new/ch01s11.html#d4e239][1.11.1 “Edit”Action方法]]
+
+[[http://solarphp.cn/manual-new/ch01s11.html#d4e257][1.11.2 "Edit"视图文件]]
+
+[[http://solarphp.cn/manual-new/ch01s12.html][1.12 添加新文章]]
+
+[[http://solarphp.cn/manual-new/ch01s12.html#d4e273][1.12.1 “Add” Action方法]]
+
+[[http://solarphp.cn/manual-new/ch01s12.html#d4e283][1.12.2 “Add”视图文件]]
+
+[[http://solarphp.cn/manual-new/ch01s13.html][1.13 删除文章]]
+
+[[http://solarphp.cn/manual-new/ch01s13.html#d4e294][1.13.1 “Delete” Action方法]]
+
+[[http://solarphp.cn/manual-new/ch01s13.html#d4e310][1.13.2 “Delete”视图文件]]
+
+[[http://solarphp.cn/manual-new/ch01s14.html][1.14 设置本地化字符串]]
+
+[[http://solarphp.cn/manual-new/ch01s14.html#d4e326][1.14.1 关于本地文件和方法]]
+
+[[http://solarphp.cn/manual-new/ch01s14.html#d4e332][1.14.2 修改本地化文件]]
+
+[[http://solarphp.cn/manual-new/ch01s15.html][1.15 在虚拟主机中使用简洁的URIS]]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+** 
+
+
+
+
+
+
+
+
+
+
+
+
+
+

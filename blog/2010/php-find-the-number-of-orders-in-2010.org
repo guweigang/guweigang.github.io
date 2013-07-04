@@ -1,0 +1,39 @@
+#+TITLE: php － 求2010年的订单数
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2010-09-23 Thu
+#+URI: /blog/2010/09/23/php-find-the-number-of-orders-in-2010/
+#+KEYWORDS: 
+#+TAGS: days, php, unix timestamp, year
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+今天碰到一个问题，要求2010年的订单数，呵呵，也不算是什么大问题了，只是为了Mark一下。
+
+
+#+BEGIN_EXAMPLE
+    
+//求得年份
+$year = @date("Y",time());
+// 测试
+// echo $year;
+
+//一年有多少天
+$days = ($year % 4 == 0 && $year % 100 != 0 || $year % 400 == 0) ? 366 : 365;
+
+//今年第一天的时间戳
+$first = strtotime("$year-01-01");
+
+// 测试
+// echo date("Y-m-d H:i:s", $first);
+
+//今年最后一天的时间戳
+$last = strtotime("+ $days days", $first);
+// 测试
+echo date("Y-m-d H:i:s", $last);
+
+#+END_EXAMPLE
+
+
+

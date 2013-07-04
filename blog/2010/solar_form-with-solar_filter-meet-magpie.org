@@ -1,0 +1,138 @@
+#+TITLE: Solar_Form与Solar_Filter相约鹊桥
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2010-08-17 Tue
+#+URI: /blog/2010/08/17/solar_form-with-solar_filter-meet-magpie/
+#+KEYWORDS: 
+#+TAGS: Solar_Filter, solar, solar php, solar_form
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+其实这个主题之前[[http://lifephp.com][@life]]的[[http://lifephp.com/wp-content/uploads/solarphp/Solar_Model_Form_Filter.htm#id398933][一篇文章]]中提到过，我在这里稍微补充一下。
+
+Solar的模型非常强大，比Zend的不知强多少。但模型不是万能的，有时候为了使数据库更优雅，不得不放弃使用模型。就和Ajax不是万能的一样，当用户禁用JS时必须有后备方案。
+
+前面我们讨论过[[http://roygu.com/?p=806][也说Solar自定义Filter]]和[[http://roygu.com/?p=843][Solar\_Form、Solar\_Sql\_Model\_Record和Solar\_Filter三者交织在一起的复杂关系]]了，今天我们就来讨论下Solar\_Form和Solar\_Filter这个话题，也是这一系列主题的完结篇。
+
+刚才我有说过有时候需要折中而放弃模型的使用，现在我就介绍一种应用场景，比如：全站的配置表，很多人会把它放文件中，写成数组的形式返回，也有人会做成[[http://www.yaml.org/][YAML]]或XML，总之都是存文件，这没有什么不妥，不过我更喜欢存数据库。无论是使用文件还是数据库，数据结构是一致的，都是键－值对形式，而一般来说值都不只一个，
+如：配置全站的支付信息
+
+
+#+BEGIN_EXAMPLE
+    
+键为：pay
+值为：
+支付宝　   - alipay 
+财付通　   - tenpay
+网银在线　 - bankonline
+
+#+END_EXAMPLE
+
+
+所以一般来说这里的值会是XML字符串形式或是数组序列化后的形式。
+下面看下数据库设计：
+
+
+#+BEGIN_EXAMPLE
+    
+CREATE TABLE `systems` (
+  `id` int(11) NOT NULL auto_increment,
+  `key` varchar(16) NOT NULL COMMENT '键',
+  `value` text COMMENT '值',
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COMMENT='系统设置表 - 键、值'
+
+#+END_EXAMPLE
+
+
+相信很多人都会这么做，:) 我们继续上面这个例子，先建表单：
+
+
+#+BEGIN_EXAMPLE
+    
+        $this->form = Solar::factory("Solar_Form",
+            array('filter' => Solar::factory('Admin_Filter')));
+        // add payment elements
+        $this->form->setElements(array(
+            'system[alipay_id]' => array('type'=>'text', 'label'=>'支付宝ID',),
+            'system[alipay_key]' => array('type'=>'text', 'label'=>'支付宝密钥',),
+            'system[alipay_email]' => array('type'=>'text', 'label'=> '支付宝邮箱',),
+            'system[bank_online_id]' => array('type'=>'text', 'label'=>'网银在线ID'),
+            'system[bank_online_key]' => array('type' => 'text', 'label'=>'网解在线密钥'),
+            'system[tenpay_id]' => array('type' => 'text', 'label' => '财付通ID'),
+            'system[tenpay_key]' => array('type' => 'text', 'label' => '财付通密钥'),
+        ));
+
+#+END_EXAMPLE
+
+
+然后添加Filters
+
+
+#+BEGIN_EXAMPLE
+    
+        //-------------------------------------------
+        // add filters for form
+        //-------------------------------------------
+        $this->form->addFilter('system[alipay_id]', array('validateNotBlank'));
+        $this->form->addFilter('system[alipay_key]', array('validateNotBlank'));
+        $this->form->addFilters('system[alipay_email]',
+        array('validateNotBlank', 'validateEmail', 'validateDiscount'));
+
+#+END_EXAMPLE
+
+
+当提交表单时，填充值并验证
+
+
+#+BEGIN_EXAMPLE
+    
+        //-------------------------------------------
+        // process save
+        //-------------------------------------------
+        if($this->_isProcess('save'))
+        {
+            $this->form->populate();
+            if(!$this->form->validate())
+            {
+                var_dump($this->form->getInvalids());
+                exit;
+                $this->form->addInvalid('system[alipay_email]', '邮件格式不正确');
+                return ;
+            }
+            if($this->_systemSave('pay', $data, $item))
+            {
+                // if save success, redirect to this uri
+                $uri = '/'.$this->_controller.'/'.$this->_action;
+                return $this->_redirectNoCache($uri);
+            }
+        }
+
+#+END_EXAMPLE
+
+
+
+这个工作也就完成了，呵呵，大家注意看$this->form->getInvalids()方法，这个方法是我加到Solar\_Form中的，为了更方便地获得invalid消息，看看它的代码：
+
+
+#+BEGIN_EXAMPLE
+    
+    public function getInvalids($element = null)
+    {
+        $valids = $this->_filter->getChainInvalid($element);
+        if(null === $element) {
+            $return = array();
+            foreach($valids as $_element => $_valid) {
+                $return[$_element] = $_valid[0];
+            }
+            return $return;
+        }
+        else
+            return $valids[0];
+    }
+
+#+END_EXAMPLE
+
+
+

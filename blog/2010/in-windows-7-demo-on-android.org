@@ -1,0 +1,21 @@
+#+TITLE: 在windows 7上试玩Android！
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2010-09-20 Mon
+#+URI: /blog/2010/09/20/in-windows-7-demo-on-android/
+#+KEYWORDS: 
+#+TAGS: android
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+其实本人刚已经入手MOTO 里程碑，这次试玩只是想体验下，PC机上模拟的效果，真的很不错，看截图吧。
+
+[[http://roygu.com/?attachment_id=923][[[http://roygu.com/wp-content/uploads/2010/09/android6-640x150.jpg]]]]
+[[http://roygu.com/?attachment_id=922][[[http://roygu.com/wp-content/uploads/2010/09/android5-640x150.jpg]]]]
+[[http://roygu.com/?attachment_id=921][[[http://roygu.com/wp-content/uploads/2010/09/android4-640x150.jpg]]]]
+[[http://roygu.com/?attachment_id=920][[[http://roygu.com/wp-content/uploads/2010/09/android3-640x150.jpg]]]]
+[[http://roygu.com/?attachment_id=919][[[http://roygu.com/wp-content/uploads/2010/09/android2-640x150.jpg]]]]
+[[http://roygu.com/?attachment_id=918][[[http://roygu.com/wp-content/uploads/2010/09/android1-640x150.jpg]]]]
+
+
