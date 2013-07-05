@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <title>开源视窗在本期推荐项目中推荐SOLAR PHP - 闭眼听世界</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Gu Weigang" />
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <link rel="stylesheet" href="/media/css/main.css" type="text/css">
+  </head>
+  <body class="container">
+    <div> 
+      <header class="masthead">
+        <h1 class="masthead-title"><a href="/">闭眼听世界</a></h1>
+        <p>心如松静意无尘，气若浮萍了无痕！</p>
+        <ul>
+          <li><a href="/blog/">Blog</a></li>
+          <li><a href="/wiki/">Wiki</a></li>
+          <li><a href="/tags/">Tags</a></li>
+          <li><a href="/about/">About</a></li>
+          <li><a href="https://github.com/guweigang">GitHub</a></li>
+          <li><a href="https://google.com/search?q=site:guweigang.com">Search</a></li>
+        </ul>
+      </header>
+    </div>
+    <div> 
+      <div class="post">
+        <h1>开源视窗在本期推荐项目中推荐SOLAR PHP</h1>
+        <p>
+<code>==========================</code>
+<b>Solar简介</b>
+<code>==========================</code>
+Solar（Simple Object Library and Application Repository的缩写）是基于PHP 5的web应用框架。她继承了Savant模板系统、DB\_Table对象-关系管理包以及PEAR组织结构的优良特性及先进思想。
+Solar由Paul M. Jones创办，他也是Solar系统的“独裁者”。其他开发人员主要为标准项目分发包开发组件，所有这些代码和分发包都遵守New BSD协议。
+<code>==========================</code>
+<b>Solar特点</b>
+<code>==========================</code>
+</p>
+<ol class="org-ol">
+<li>优雅和一致的：代码库本身是很容易理解的，坚持文档友好的命名规则，并有很强的概念完整性。
+</li>
+<li>完整的名字空间： Solar类库有它们自己的PHP5.2名字空间 ，并且Solar中的vendor同样有自己的名字空间。这样一来，混合其他组件和框架也不是什么难事了，因为他们不会产生名字冲突。
+</li>
+<li>配置是可继承的：在配置文件配置好某个类，该类的所有子类都会默认继承该配置。
+</li>
+<li>本地化是可继承的：设置某个类的本地化字符串，该类的所有子类都会继承那些本地化字符串。
+</li>
+<li>针对SQL注入，跨站点脚本的攻击和其他常见的攻击有非常容易使用的防卸体系。
+</li>
+<li>验证和查审有户输入，有健壮和可扩展的数据过滤体系。
+</li>
+<li>用于LDAP、TypeKey、数据库htpasswd及其他源的验证适配器。
+</li>
+<li>用于memcache、APC、XCache及其他系统的缓存适配器。
+</li>
+<li>用于超链接, 图像, 样式, 本地化文本, 表单生成等的视图辅助类。
+</li>
+<li>健全和强大的模型系统 ，让你可以使用记录对象自动生成表单。
+</li>
+<li>充分集成企业的开发模式，例如：
+</li>
+</ol>
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1">数据映射</h2>
+</div>
+<div id="outline-container-sec-2" class="outline-2">
+<h2 id="sec-2">依赖注入和服务定位器</h2>
+</div>
+<div id="outline-container-sec-3" class="outline-2">
+<h2 id="sec-3">延迟加载</h2>
+</div>
+<div id="outline-container-sec-4" class="outline-2">
+<h2 id="sec-4">MVC 模式</h2>
+<div class="outline-text-2" id="text-4">
+<p>
+o Front 控制器
+o Page 控制器
+o Table Module和Active Record
+o 模板视图
+o 两步视图
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-5" class="outline-2">
+<h2 id="sec-5">查询对象</h2>
+</div>
+<div id="outline-container-sec-6" class="outline-2">
+<h2 id="sec-6">注册表</h2>
+</div>
+<div id="outline-container-sec-7" class="outline-2">
+<h2 id="sec-7">服务器会话状态</h2>
+<div class="outline-text-2" id="text-7">
+<p>
+<code>==========================</code>
+<b>Solar 理解</b>
+<code>==========================</code>
+Paul <a href="http://paul-m-jones.com">http://paul-m-jones.com</a> 把 Solar 设计得足够好了，整个 Solar 是一个系统，你可以把它理解为操作系统，它由 Solar 内核和辅助工具组成，我们在 Solar 上开发应用就相当于在操作系统上开发软件一样，这个比喻应该好理解而且不过分。一般来说，我们有两种途径访问 Solar：一种是从浏览器访问，这个时候入口文件是 /docroot/index.php 或 /index.php；一种是从 CLI（命令行）访问，这个时候入口文件是 /script/solar。这两个文件都通过 Solar 的架构类 /source/solar/Solar.php 来使用 Solar 内核。
+</p>
+
+<p>
+在 Solar 上开发应用是以 vendor 为单位的，你开发的应用的所有代码都是高度集中的，事实上一个 vendor 是一个文件夹。这就是说你在部署代码时，只需要部署 vendor 就行了，非常简单高效。
+<code>==========================</code>
+<b>Solar 入门</b>
+<code>==========================</code>
+Solar入门相比国内的ThinkPHP, FleaPHP及国外的CodeIgniter框架来说要稍微难一些，但背后隐藏的是优雅的代码和优秀的设计。恩，刚开始接触Solar可能会让你有点晕的感觉（\^\^不要瞎想），即便如此，也挡不住我们继续学习Solar的决心。
+</p>
+
+<p>
+Solar对操作系统有一定要求，从Solar的角度来看，操作系统分为以下3类：
+</p>
+<ol class="org-ol">
+<li>Linux/Unix
+</li>
+<li>Win NT 6以后（也即Win Vista之后的系统，支持Symlink）
+</li>
+<li>Win NT 6以前（也即Win Xp, Win 2000, Win 2003等，不支持Symlink）
+</li>
+</ol>
+<p>
+<code>==========================</code>
+打断一下，这里插入一个话题：为什么要区分操作系统？
+</p>
+
+
+
+
+<blockquote>
+<p>
+这个问题确实让我们没办法回避，事实上这可能也是Solar目前尚不流行的原因，许多人看到这里肯定会问：“ PHP 不是跨平台的么，为何一个PHP框架不是跨平台的呢？”恩，这个问题我现在可以回答你。不错，PHP是跨平台的，但是PHP在两个平台下肯定有不同的实现。Solar也一样，Solar 出生在 Linux 家庭。其实Solar可以直接在WIN下运行(只要有WAMP环境)，但是Solar CLI（命令行工具）要用到文件系统的 Symlink 特性，所以其实是 Solar CLI不能很好地在 WIN 下工作。命令行工具是帮助我们快速开发的得力助手，我们当然不允许它不能使用。
+</p>
+</blockquote>
+
+
+
+
+<p>
+<code>==========================</code>
+看到这里觉得很复杂？呵呵，不用担心，现在已经有很成熟的方案处理所有这些问题，读读我们的手册，你一定会大有收获。中文手册地址：<a href="http://solarphp.cn/manual-new"><a href="http://solarphp.cn/manual-new">http://solarphp.cn/manual-new</a></a>，英文手册地址：<a href="http://www.solarphp.com/manual/"><a href="http://www.solarphp.com/manual/">http://www.solarphp.com/manual/</a></a>
+</p>
+</div>
+</div>
+
+      </div>
+    </div>
+    <div> 
+      <div class="post-meta">
+        <span title="post date" class="post-info">2011-04-24</span>
+        <span title="last modification date" class="post-info">2013-07-05</span>
+        <span title="tags" class="post-info"><a href="/tags/oseye/">oseye</a>, <a href="/tags/solar/">solar</a>, <a href="/tags/solar-php/">solar php</a></span>
+        <span title="author" class="post-info">Gu Weigang</span>
+      </div>
+      <section>
+        <h1>Comments</h1>
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+          //var disqus_developer = 1;
+          var disqus_identifier = "/blog/2011/04/24/open-windows-in-the-current-project-recommended-solar-php-recommended/";
+          var disqus_url = "http://guweigang.com/blog/2011/04/24/open-windows-in-the-current-project-recommended-solar-php-recommended/";
+          var disqus_shortname = 'guweigang';
+          /* * * DON'T EDIT BELOW THIS LINE * * */
+          (function() {
+          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+          dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+          })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </section>
+      <div class="footer">
+        <p>Generated by <a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.3.1 (<a href="http://orgmode.org">Org</a> mode 8.0.3)</p>
+        <p> 
+          Copyright &copy; 2012 - 2013 <a href="mailto:guweigang &lt;at&gt; outlook &lt;dot&gt; com">Gu Weigang</a>
+          &nbsp;&nbsp;-&nbsp;&nbsp;
+          Powered by <a href="https://github.com/kelvinh/org-page" target="_blank">org-page</a>
+        </p>
+      </div>
+    </div>
+  </body>
+</html>

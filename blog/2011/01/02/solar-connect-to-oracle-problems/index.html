@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <title>Solar连接Oracle存在的问题！ - 闭眼听世界</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Gu Weigang" />
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <link rel="stylesheet" href="/media/css/main.css" type="text/css">
+  </head>
+  <body class="container">
+    <div> 
+      <header class="masthead">
+        <h1 class="masthead-title"><a href="/">闭眼听世界</a></h1>
+        <p>心如松静意无尘，气若浮萍了无痕！</p>
+        <ul>
+          <li><a href="/blog/">Blog</a></li>
+          <li><a href="/wiki/">Wiki</a></li>
+          <li><a href="/tags/">Tags</a></li>
+          <li><a href="/about/">About</a></li>
+          <li><a href="https://github.com/guweigang">GitHub</a></li>
+          <li><a href="https://google.com/search?q=site:guweigang.com">Search</a></li>
+        </ul>
+      </header>
+    </div>
+    <div> 
+      <div class="post">
+        <h1>Solar连接Oracle存在的问题！</h1>
+        <p>
+前段时间朋友@东疯 使用Solar连接Oracle，死活都连不上，搞了好久天，所以我也找时间研究了下。看这里：<a href="http://wiki.oracle.com/page/PHP+Oracle+FAQ"><a href="http://wiki.oracle.com/page/PHP+Oracle+FAQ">http://wiki.oracle.com/page/PHP+Oracle+FAQ</a></a>。使用PDO连接Oracle：
+</p>
+
+
+<pre class="example">
+try {
+$dbh = new PDO('oci:dbname=myhost/XE', 'myusername', 'mypassword');
+} 
+catch (PDOException $e) {
+trigger_error("Could not connect to database: ". $e-&gt;getMessage(), E_USER_ERROR);
+}
+</pre>
+
+
+<p>
+有三种合法字符串：
+</p>
+<ol class="org-ol">
+<li>简易连接
+</li>
+</ol>
+
+
+<pre class="example">
+$c = oci_connect('myusername', 'mypassword', 'mymachine.mydomain/MYDB');
+$d = new PDO('oci:dbname=myhost/XE', 'myusername', 'mypassword');
+//或
+$c = oci_connect('myusername', 'mypassword', '127.0.0.1/XE');
+$d = new PDO('oci:dbname=127.0.0.1/XE', 'myusername', 'mypassword');
+</pre>
+
+
+
+<ol class="org-ol">
+<li>一个用户选择的网络服务名通常用来识别的数据库连接。
+</li>
+</ol>
+
+
+<pre class="example">
+$c = oci_connect('myusername', 'mypassword', 'MYDB');
+$d = new PDO('oci:dbname=MYDB', 'myusername', 'mypassword');
+</pre>
+
+
+<p>
+tnsnames.ora文件内容
+</p>
+
+
+<pre class="example">
+MYDB =
+(DESCRIPTION =
+(ADDRESS = (PROTOCOL = TCP)(HOST = mymachine.mydomain)(PORT = 1521))
+(CONNECT_DATA =
+(SERVER = DEDICATED)
+(SERVICE_NAME = MYDB)
+)
+)
+</pre>
+
+
+<ol class="org-ol">
+<li>如果简单连接方法被禁用了，你使用的又是Oracle 8i或9i库，你可以这样做。
+</li>
+</ol>
+
+
+<pre class="example">
+$db = "(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)
+(HOST = mymachine.mydomain)(PORT=1521))
+(CONNECT_DATA=(SERVER=DEDICATED)
+(SERVICE_NAME=MYDB)))";
+
+$c = oci_connect('myusername', 'mypassword', $db);
+$d = new PDO("oci:dbname=$db", 'myusername', 'mypassword');
+</pre>
+
+
+
+<p>
+看到了吧？这和PHP的PDO连接方式很不一样，所以Solar的Sql\_Oracle\_Adapter类的\_buildDsn应该修改一下：
+</p>
+
+
+<pre class="example">
+$info = array(
+    'host' =&gt; '192.168.1.118',
+    'port' =&gt; '1521',
+    'name' =&gt; 'pzblog',     // the service id
+    'user' =&gt; 'root',       // authenticate as this user
+    'pass' =&gt; '123456',     // authenticate with this password
+
+);
+class Solar_Sql_Adapter_Oracle
+{
+    protected $_pdo_type = 'oci';
+
+    protected function _buildDsn($info)
+    {
+        $dsn = array();
+
+        if (! empty($info['host'])) {
+            $dsn[] = 'dbname=//' . $info['host'];
+        }
+
+        if (! empty($info['port'])) {
+            $dsn[] = ':' . $info['port'];
+        }
+
+        if (! empty($info['name'])) {
+            $dsn[] = '/' . $info['name'];
+        }
+
+        return $this-&gt;_pdo_type . ':' . implode('', $dsn);
+    }
+}
+</pre>
+
+      </div>
+    </div>
+    <div> 
+      <div class="post-meta">
+        <span title="post date" class="post-info">2011-01-02</span>
+        <span title="last modification date" class="post-info">2013-07-05</span>
+        <span title="tags" class="post-info"><a href="/tags/oracle/">oracle</a>, <a href="/tags/php/">php</a>, <a href="/tags/solar/">solar</a></span>
+        <span title="author" class="post-info">Gu Weigang</span>
+      </div>
+      <section>
+        <h1>Comments</h1>
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+          //var disqus_developer = 1;
+          var disqus_identifier = "/blog/2011/01/02/solar-connect-to-oracle-problems/";
+          var disqus_url = "http://guweigang.com/blog/2011/01/02/solar-connect-to-oracle-problems/";
+          var disqus_shortname = 'guweigang';
+          /* * * DON'T EDIT BELOW THIS LINE * * */
+          (function() {
+          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+          dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+          })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </section>
+      <div class="footer">
+        <p>Generated by <a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.3.1 (<a href="http://orgmode.org">Org</a> mode 8.0.3)</p>
+        <p> 
+          Copyright &copy; 2012 - 2013 <a href="mailto:guweigang &lt;at&gt; outlook &lt;dot&gt; com">Gu Weigang</a>
+          &nbsp;&nbsp;-&nbsp;&nbsp;
+          Powered by <a href="https://github.com/kelvinh/org-page" target="_blank">org-page</a>
+        </p>
+      </div>
+    </div>
+  </body>
+</html>

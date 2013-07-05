@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <title>PHP中如何获得数组中指定元素的前一个或后一个元素 - 闭眼听世界</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Gu Weigang" />
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <link rel="stylesheet" href="/media/css/main.css" type="text/css">
+  </head>
+  <body class="container">
+    <div> 
+      <header class="masthead">
+        <h1 class="masthead-title"><a href="/">闭眼听世界</a></h1>
+        <p>心如松静意无尘，气若浮萍了无痕！</p>
+        <ul>
+          <li><a href="/blog/">Blog</a></li>
+          <li><a href="/wiki/">Wiki</a></li>
+          <li><a href="/tags/">Tags</a></li>
+          <li><a href="/about/">About</a></li>
+          <li><a href="https://github.com/guweigang">GitHub</a></li>
+          <li><a href="https://google.com/search?q=site:guweigang.com">Search</a></li>
+        </ul>
+      </header>
+    </div>
+    <div> 
+      <div class="post">
+        <h1>PHP中如何获得数组中指定元素的前一个或后一个元素</h1>
+        <p>
+方法一：用循环
+</p>
+
+
+<pre class="example">
+function getNext(&amp;$array, $curr_key)
+{
+    $next = 0;
+    reset($array);
+
+    do
+    {
+        $tmp_key = key($array);
+        $res = next($array);
+    } while ( ($tmp_key != $curr_key) &amp;&amp; $res );
+
+    if( $res )
+    {
+        $next = key($array);
+    }
+
+    return $next;
+}
+
+function getPrev(&amp;$array, $curr_key)
+{
+    end($array);
+    $prev = key($array);
+
+    do
+    {
+        $tmp_key = key($array);
+        $res = prev($array);
+    } while ( ($tmp_key != $curr_key) &amp;&amp; $res );
+
+    if( $res )
+    {
+        $prev = key($array);
+    }
+
+    return $prev;
+}
+</pre>
+
+
+<p>
+方法二：用Iterator，不过要先得到position
+</p>
+
+
+<pre class="example">
+// 默认查找键为key元素的后一个元素
+function get_element($key, $arr, $who='next')
+{
+    //查找键为$key元素的位置
+    $offset = array_search($key, array_keys($arr));
+    if(FALSE == $offset || NULL == $offset) { return ;}
+
+    //查找哪个元素，前一个或后一个？
+    if ('prev' == $who) {
+        $arr = array_reverse($arr);
+    } else if ('next' == $who) {
+
+    } else {
+        throw new Exception("错误的参数");
+    }
+
+    $iterator = new ArrayIterator($arr);
+    $iterator-&gt;seek($offset);
+    $iterator-&gt;next();
+
+    //返回数组当前指针指向元素的键值数组
+    return array($iterator-&gt;key(), $iterator-&gt;current());
+}
+
+$arr = array('foo' =&gt; 10, 'bar' =&gt; 45, 'baz' =&gt; 23);
+$key ='bar';
+
+print_r(get_element($key, $arr));
+</pre>
+
+
+
+<p>
+方法三：<a href="http://www.thin5.com/">老风</a>给的方法
+</p>
+
+<p>
+我按照老风的意思写的：
+</p>
+
+
+<pre class="example">
+function get_element($key, $array, $who='next') {
+ //先获取key 的位置
+  $arr_keys = array_keys($array);
+    $arr_keys_flip = array_flip($arr_keys);
+
+    if (array_key_exists($key, $arr_keys_flip)) {
+        $location = $arr_keys_flip[$key];//返回KEY的位置
+    } else {
+        throw new Exception("数组中不存在此键");
+    }
+
+   $arr_values = array_values($array);
+
+    //查找哪个元素，前一个或后一个？
+    if ('prev' == $who) {
+        $pos = $location-1;
+    } else if ('next' == $who) {
+        $pos = $location+1;
+    } else {
+        throw new Exception("错误的参数");
+    }
+
+ return array($arr_keys[$pos], $arr_values[$pos]);
+}
+</pre>
+
+
+
+<p>
+老风觉得太长，又优化了一遍
+</p>
+
+
+<pre class="example">
+function get_element($key, $array, $who='next'){
+  $arr_keys = array_keys($array);
+   $arr_keys_flip = array_flip($arr_keys);
+   $location = (array_key_exists($key,$arr_keys_flip))?$arr_keys_flip[$key]:die('数组中不存在此键');
+ $arr_values = array_values($array);
+   $info = array('prev'=&gt;$location-1,'next'=&gt;$location+1);
+   $pos = (array_key_exists($who,$info))?$info[$who]:die('错误的参数');
+   return array($arr_keys[$pos], $arr_values[$pos]);
+}
+</pre>
+
+
+
+<p>
+经过效率测试，方法二的效率最高，不过仍然存在瓶颈，那就是array\_keys函数，因此如果此处使用foreach取得location将会大大提高效率：
+</p>
+
+
+<pre class="example">
+function get_element($key, $arr, $who='next')
+{
+    //查找键为$key元素的位置
+    $offset = 0;
+    foreach ($arr as $_k =&gt; $_v) {
+        if($_k == $key) break;++$offset;
+    }
+
+    //查找哪个元素，前一个或后一个？
+    if ('prev' == $who) {
+        $arr = array_reverse($arr);
+    } else if ('next' == $who) {
+
+    } else {
+        throw new Exception("错误的参数");
+    }
+
+    $iterator = new ArrayIterator($arr);
+    $iterator-&gt;seek($offset);
+    $iterator-&gt;next();
+
+    //返回数组当前指针指向元素的键值数组
+    return array($iterator-&gt;key(), $iterator-&gt;current());
+}
+</pre>
+
+      </div>
+    </div>
+    <div> 
+      <div class="post-meta">
+        <span title="post date" class="post-info">2011-02-21</span>
+        <span title="last modification date" class="post-info">2013-07-05</span>
+        <span title="tags" class="post-info"><a href="/tags/array/">array</a>, <a href="/tags/next/">next</a>, <a href="/tags/php/">php</a>, <a href="/tags/pre/">pre</a></span>
+        <span title="author" class="post-info">Gu Weigang</span>
+      </div>
+      <section>
+        <h1>Comments</h1>
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+          //var disqus_developer = 1;
+          var disqus_identifier = "/blog/2011/02/21/how-to-get-an-array-in-php-before-a-specified-element-or-elements-after-a/";
+          var disqus_url = "http://guweigang.com/blog/2011/02/21/how-to-get-an-array-in-php-before-a-specified-element-or-elements-after-a/";
+          var disqus_shortname = 'guweigang';
+          /* * * DON'T EDIT BELOW THIS LINE * * */
+          (function() {
+          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+          dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+          })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </section>
+      <div class="footer">
+        <p>Generated by <a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.3.1 (<a href="http://orgmode.org">Org</a> mode 8.0.3)</p>
+        <p> 
+          Copyright &copy; 2012 - 2013 <a href="mailto:guweigang &lt;at&gt; outlook &lt;dot&gt; com">Gu Weigang</a>
+          &nbsp;&nbsp;-&nbsp;&nbsp;
+          Powered by <a href="https://github.com/kelvinh/org-page" target="_blank">org-page</a>
+        </p>
+      </div>
+    </div>
+  </body>
+</html>

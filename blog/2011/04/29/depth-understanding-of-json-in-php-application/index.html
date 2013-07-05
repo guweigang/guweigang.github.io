@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <title>深入理解JSON在PHP中的应用 - 闭眼听世界</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Gu Weigang" />
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <link rel="stylesheet" href="/media/css/main.css" type="text/css">
+  </head>
+  <body class="container">
+    <div> 
+      <header class="masthead">
+        <h1 class="masthead-title"><a href="/">闭眼听世界</a></h1>
+        <p>心如松静意无尘，气若浮萍了无痕！</p>
+        <ul>
+          <li><a href="/blog/">Blog</a></li>
+          <li><a href="/wiki/">Wiki</a></li>
+          <li><a href="/tags/">Tags</a></li>
+          <li><a href="/about/">About</a></li>
+          <li><a href="https://github.com/guweigang">GitHub</a></li>
+          <li><a href="https://google.com/search?q=site:guweigang.com">Search</a></li>
+        </ul>
+      </header>
+    </div>
+    <div> 
+      <div class="post">
+        <h1>深入理解JSON在PHP中的应用</h1>
+        <p>
+一直都认为JSON很简单，自己完全掌握了，今天才知道，自己只是“好像”掌握了，真正用起来连格式都记不住。
+</p>
+
+<p>
+群里的@TP新人（其实他是老人，不是什么新人，装纯的。。。:)）今天问了个问题，引起了我的兴趣，并让我真正了解了JSON。
+</p>
+
+
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1"><b>一、什么是JSON</b></h2>
+<div class="outline-text-2" id="text-1">
+<p>
+先看看什么是JSON，可以在<a href="http://www.json.org/json-zh.html"><a href="http://www.json.org/json-zh.html/">http://www.json.org/json-zh.html/</a></a>详细查看，当然也可以看看阮一峰的博客，有一篇介绍数据类型和JSON格式：<a href="http://www.ruanyifeng.com/blog/2009/05/data_types_and_json.html"><a href="http://www.ruanyifeng.com/blog/2009/05/data\_types\_and\_json.html">http://www.ruanyifeng.com/blog/2009/05/data\_types\_and\_json.html</a></a>。
+</p>
+</div>
+
+
+<div id="outline-container-sec-1-1" class="outline-3">
+<h3 id="sec-1-1"><b>1、对象</b></h3>
+<div class="outline-text-3" id="text-1-1">
+<p>
+对象是一个无序的“‘名称/值'对”集合。一个对象以“{”（左括号）开始，“}”（右括号）结束。每个“名称”后跟一个“:”（冒号）；“‘名称/值' 对”之间使用“,”（逗号）分隔。
+<img src="/images/json/object.gif"  alt="object.gif"/>
+也即，对象格式必须是如下形式：
+</p>
+
+
+<pre class="example">
+{"foo":"bar", "hello":{"roy":"gu"}}
+</pre>
+</div>
+</div>
+
+
+
+
+<div id="outline-container-sec-1-2" class="outline-3">
+<h3 id="sec-1-2"><b>2、数组</b></h3>
+<div class="outline-text-3" id="text-1-2">
+<p>
+数组是值（value）的有序集合。一个数组以“[”（左中括号）开始，“]”（右中括号）结束。值之间使用“,”（逗号）分隔。
+<img src="/images/json/array.gif"  alt="array.gif"/>
+也即，数组格式必须是如下形式：
+</p>
+
+
+<pre class="example">
+[["a", "b"],["c", "d"], "e"]
+</pre>
+</div>
+</div>
+
+
+
+
+<div id="outline-container-sec-1-3" class="outline-3">
+<h3 id="sec-1-3"><b>3、什么是值(Value)和字符串(String)？</b></h3>
+<div class="outline-text-3" id="text-1-3">
+<p>
+值（value）可以是双引号括起来的字符串（string）、数值(number)、true、false、 null、对象（object）或者数组（array）。这些结构可以嵌套。
+</p>
+
+
+<p>
+字符串（string）是由双引号包围的任意数量Unicode字符的集合，使用反斜线转义。一个字符（character）即一个单独的字符串（character string）。字符串（string）与C或者Java的字符串非常相似。
+</p>
+
+<p>
+现在应该对JSON有一定的了解了吧，:)？虽然JSON格式的组成原子很简单，但其复杂的嵌套足以让你头疼。
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-2" class="outline-2">
+<h2 id="sec-2"><b>二、PHP对JSON的支持</b></h2>
+<div class="outline-text-2" id="text-2">
+<p>
+目前只有三个函数：
+</p>
+
+
+<pre class="example">
+    json_decode() - decode from json format
+json_encode() - encode to json format
+json_last_error() - Returns the last error occurred
+</pre>
+
+
+<p>
+有人说PHP对JSON字符串要求很苛刻，其实不然，JSON格式的定义已经很明确了：不管是value还是string都必须用双引号，等等。
+</p>
+
+<p>
+那么昨天@TP新人的问题是：要用PHP处理这种字符：[{a:'a1',b:'b1'},{a:'a2',b:'b2'}]，咋一看以为是JSON字符串，其实不然，值不能用单引号引用，名称两边必须用双引号。如果是规范的那么应该是这样子：[{"a":"a1","b":"b1"},{"a":"a2","b":"b2"}]，这是一个具有两个元素的数组，每个元素都是一个对象，且每个对象中都包含有两对名称/值。如果要使用PHP的json\_decode函数，就必须把它转换成标准JSON字符串格式。这个时候我当然想到正则了哈，下面是我写的处理代码：
+</p>
+
+
+<pre class="example">
+    &lt;?php
+// raw string
+$j = "[{a:'a1',b:'b1'},{a:'a2',b:'b2'}]";
+
+// strip [ and ] on both boundary ...
+$j = trim($j, '[]');
+
+// process the string with regex
+$j = preg_replace('#\b([^\'\",]+?):\'([^,]*)\'#', '"$1":"$2"', $j);
+
+// ... then add [ and ] again
+$j = "[".$j."]";
+
+// print json stirng with standard format
+echo $j . "\n";
+
+// decode it and dump the result
+$a = json_decode($j, true);
+var_dump($a);
+</pre>
+
+
+
+<p>
+@TP新人 根据自己的需求重写了下：
+</p>
+
+
+<pre class="example">
+    &lt;?php
+$j = "[{a:a1,b:'b1'},{a:'a2',b:b2}]";
+$j = trim($j, '[]');
+$j = preg_replace_callback('#\b([^\'\",]+?):([^,\}]*)#', 't', $j);
+
+$j = "[".$j."]";
+
+echo $j."\n";
+
+$a = json_decode($j);
+
+var_dump($a);
+
+function t($m)
+{
+    $m[1]='"'.$m[1].'"';
+    $m[2]=trim($m[2],"'");
+    $m[2]='"'.trim($m[2],'"').'"';
+    return $m[1].':'.$m[2];
+}
+</pre>
+
+
+
+<p>
+问题解决，收工！！！！
+</p>
+</div>
+</div>
+
+      </div>
+    </div>
+    <div> 
+      <div class="post-meta">
+        <span title="post date" class="post-info">2011-04-29</span>
+        <span title="last modification date" class="post-info">2013-07-05</span>
+        <span title="tags" class="post-info"><a href="/tags/json/">json</a>, <a href="/tags/php/">php</a></span>
+        <span title="author" class="post-info">Gu Weigang</span>
+      </div>
+      <section>
+        <h1>Comments</h1>
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+          //var disqus_developer = 1;
+          var disqus_identifier = "/blog/2011/04/29/depth-understanding-of-json-in-php-application/";
+          var disqus_url = "http://guweigang.com/blog/2011/04/29/depth-understanding-of-json-in-php-application/";
+          var disqus_shortname = 'guweigang';
+          /* * * DON'T EDIT BELOW THIS LINE * * */
+          (function() {
+          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+          dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+          })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </section>
+      <div class="footer">
+        <p>Generated by <a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.3.1 (<a href="http://orgmode.org">Org</a> mode 8.0.3)</p>
+        <p> 
+          Copyright &copy; 2012 - 2013 <a href="mailto:guweigang &lt;at&gt; outlook &lt;dot&gt; com">Gu Weigang</a>
+          &nbsp;&nbsp;-&nbsp;&nbsp;
+          Powered by <a href="https://github.com/kelvinh/org-page" target="_blank">org-page</a>
+        </p>
+      </div>
+    </div>
+  </body>
+</html>

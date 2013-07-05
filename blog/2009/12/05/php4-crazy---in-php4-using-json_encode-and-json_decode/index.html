@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <title>PHP4也疯狂：在PHP4中使用json_encode()和json_decode() - 闭眼听世界</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Gu Weigang" />
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <link rel="stylesheet" href="/media/css/main.css" type="text/css">
+  </head>
+  <body class="container">
+    <div> 
+      <header class="masthead">
+        <h1 class="masthead-title"><a href="/">闭眼听世界</a></h1>
+        <p>心如松静意无尘，气若浮萍了无痕！</p>
+        <ul>
+          <li><a href="/blog/">Blog</a></li>
+          <li><a href="/wiki/">Wiki</a></li>
+          <li><a href="/tags/">Tags</a></li>
+          <li><a href="/about/">About</a></li>
+          <li><a href="https://github.com/guweigang">GitHub</a></li>
+          <li><a href="https://google.com/search?q=site:guweigang.com">Search</a></li>
+        </ul>
+      </header>
+    </div>
+    <div> 
+      <div class="post">
+        <h1>PHP4也疯狂：在PHP4中使用json_encode()和json_decode()</h1>
+        <p>
+原文链接：<a href="http://abeautifulsite.net/2008/05/using-json-encode-and-json-decode-in-php4/">http://abeautifulsite.net/2008/05/using-json-encode-and-json-decode-in-php4/</a>
+</p>
+
+<p>
+维基百科：<a href="http://zh.wikipedia.org/wiki/JSON">http://zh.wikipedia.org/wiki/JSON</a>
+</p>
+
+
+<blockquote>
+<p>
+JSON（Javascript Object Notation）是一种轻量级的数据交换语言，以文字为基础，且易于让人阅读。尽管JSON是在Javascript的一个子集，但JSON是独立于语言的文本格式，并且采用了类似于C语言家族的一些习惯。
+</p>
+</blockquote>
+
+
+<p>
+Json在Ajax交互过程中使用的非常频繁，而且开发者似乎更乐于使用Json，而且在PHP5.2之后也开始支持Json格式！另外，当人们把视线转向Json之后，关于Json和XML的争论就没有停止过：
+</p>
+
+
+<blockquote>
+<p>
+json和xml的比较：
+<a href="http://www.json.org/xml.html"><a href="http://www.json.org/xml.html">http://www.json.org/xml.html</a></a>
+<a href="http://blog.csdn.net/dengrenjian/archive/2009/06/26/4301385.aspx"><a href="http://blog.csdn.net/dengrenjian/archive/2009/06/26/4301385.aspx">http://blog.csdn.net/dengrenjian/archive/2009/06/26/4301385.aspx</a></a>
+<a href="http://webservices.ctocio.com.cn/tips/481/6708981.shtml"><a href="http://webservices.ctocio.com.cn/tips/481/6708981.shtml">http://webservices.ctocio.com.cn/tips/481/6708981.shtml</a></a>
+<a href="http://www.thomasfrank.se/xml_to_json.html"><a href="http://www.thomasfrank.se/xml\_to\_json.html">http://www.thomasfrank.se/xml\_to\_json.html</a></a>
+</p>
+</blockquote>
+
+
+<p>
+更有开发者开发出My JSON editor
+<a href="http://www.thomasfrank.se/json_editor.html"><a href="http://www.thomasfrank.se/json\_editor.html">http://www.thomasfrank.se/json\_editor.html</a></a>
+在线演示：<a href="http://www.thomasfrank.se/downloadableJS/JSONeditor_example.html"><a href="http://www.thomasfrank.se/downloadableJS/JSONeditor\_example.html">http://www.thomasfrank.se/downloadableJS/JSONeditor\_example.html</a></a>
+</p>
+
+<p>
+我们没有理由不使用Json，因为它太简洁、太明了、太易用，但是作为PHP开发者，我们仍会面对许多挫折，便如公司的CentOS5.2默认装的仍是php 5.16（当然可以升级至php 5.2.9），但是在不确定升级是否会产生问题的之前最好保持稳定的环境！所幸的是，<a href="http://pear.php.net/">PEAR</a>上已经有开发者发布了<a href="http://pear.php.net/package/Services_JSON/download">Services\_JSON</a>包（800 行代码，封装成类，但仍不如直接使用 json\_encode() 和json\_decode()方便）！
+</p>
+
+<p>
+为了达到和PHP(which version &gt; = 5.2) 同样的操作习惯，可以简单的在<a href="http://pear.php.net/package/Services_JSON/download">Services\_JSON</a>类底部加以下代码：
+</p>
+
+
+<pre class="example">
+    &lt;?php
+// Future-friendly json_encode
+if( !function_exists('json_encode') ) {
+    function json_encode($data) {
+        $json = new Services_JSON();
+        return( $json-&gt;encode($data) );
+    }
+}
+ 
+// Future-friendly json_decode
+if( !function_exists('json_decode') ) {
+    function json_decode($data) {
+        $json = new Services_JSON();
+        return( $json-&gt;decode($data) );
+    }
+}
+?&gt;
+</pre>
+
+
+<p>
+使用方法：
+</p>
+
+
+<pre class="example">
+    &lt;?php
+include("JSON.php");
+ 
+$a = json_encode( array('a'=&gt;1, 'b'=&gt;2, 'c'=&gt;'I &lt;3 JSON') );
+echo $a;
+// Outputs: {"a":1,"b":2,"c":"I &lt;3 JSON"}
+ 
+$b = json_decode( $a );
+echo "$b-&gt;a, $b-&gt;b, $b-&gt;c";
+// Outputs: 1, 2, I &lt;3 JSON
+?&gt;
+</pre>
+
+      </div>
+    </div>
+    <div> 
+      <div class="post-meta">
+        <span title="post date" class="post-info">2009-12-05</span>
+        <span title="last modification date" class="post-info">2013-07-05</span>
+        <span title="tags" class="post-info"><a href="/tags/json/">json</a>, <a href="/tags/json_decode/">json_decode</a>, <a href="/tags/json_encode/">json_encode</a>, <a href="/tags/pear/">pear</a>, <a href="/tags/php/">php</a>, <a href="/tags/php4/">php4</a></span>
+        <span title="author" class="post-info">Gu Weigang</span>
+      </div>
+      <section>
+        <h1>Comments</h1>
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+          //var disqus_developer = 1;
+          var disqus_identifier = "/blog/2009/12/05/php4-crazy---in-php4-using-json_encode-and-json_decode/";
+          var disqus_url = "http://guweigang.com/blog/2009/12/05/php4-crazy---in-php4-using-json_encode-and-json_decode/";
+          var disqus_shortname = 'guweigang';
+          /* * * DON'T EDIT BELOW THIS LINE * * */
+          (function() {
+          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+          dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+          })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </section>
+      <div class="footer">
+        <p>Generated by <a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.3.1 (<a href="http://orgmode.org">Org</a> mode 8.0.3)</p>
+        <p> 
+          Copyright &copy; 2012 - 2013 <a href="mailto:guweigang &lt;at&gt; outlook &lt;dot&gt; com">Gu Weigang</a>
+          &nbsp;&nbsp;-&nbsp;&nbsp;
+          Powered by <a href="https://github.com/kelvinh/org-page" target="_blank">org-page</a>
+        </p>
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <title>Propel ORM Plus Phing On Windows - 闭眼听世界</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Gu Weigang" />
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <link rel="stylesheet" href="/media/css/main.css" type="text/css">
+  </head>
+  <body class="container">
+    <div> 
+      <header class="masthead">
+        <h1 class="masthead-title"><a href="/">闭眼听世界</a></h1>
+        <p>心如松静意无尘，气若浮萍了无痕！</p>
+        <ul>
+          <li><a href="/blog/">Blog</a></li>
+          <li><a href="/wiki/">Wiki</a></li>
+          <li><a href="/tags/">Tags</a></li>
+          <li><a href="/about/">About</a></li>
+          <li><a href="https://github.com/guweigang">GitHub</a></li>
+          <li><a href="https://google.com/search?q=site:guweigang.com">Search</a></li>
+        </ul>
+      </header>
+    </div>
+    <div> 
+      <div class="post">
+        <h1>Propel ORM Plus Phing On Windows</h1>
+        <p>
+今天试用了传说中的Propel，感觉相当好，果然是个不错的ORM。不过它依赖于Phing，正好这两个项目都是<a href="http://bullsoft.org">BullSoft</a>关注的项目。现在我就来讲下如何配置环境，两个项目都支持Pear安装，但是今天无论如何也装不上Phing，所以就讲讲单独安装的过程吧。
+</p>
+
+<ol class="org-ol">
+<li>下载两个包
+</li>
+</ol>
+
+<p>
+项目官方站地址分别是<a href="http://www.propelorm.org"><a href="http://www.propelorm.org">http://www.propelorm.org</a></a>和<a href="http://www.phing.info/trac/"><a href="http://www.phing.info/trac/">http://www.phing.info/trac/</a></a>。由于Propel由两部分组成，一部分用于生成Model，一部分用于使用Model，所以在此我们把生成Model的部分提取出来，也就是propel的generator文件夹，改名为propel和phing统一放在D:\phing目录下。
+</p>
+
+<ol class="org-ol">
+<li>添用户自定义环境变量，把＝号后面的改成你实际的环境
+</li>
+</ol>
+
+
+<pre class="example">
+    #PHP执行文件目录
+PHP_COMMAND=d:\php\php.exe
+
+//phing根目录
+PHING_HOME=d:\phing\phing
+#propel根目录
+PROPEL_HOME=d:\phing\propel
+//phing的类目录
+PHP_CLASSPATH=d:\phing\phing\classes
+</pre>
+
+
+
+<ol class="org-ol">
+<li>打开cmd，输入
+</li>
+</ol>
+
+
+<pre class="example">
+PATH %PATH%;%PHING_HOME%\bin;%PROPEL_HOME%\bin
+</pre>
+
+
+<p>
+现在你就可以直接使用propel-gen和phing命令了，不过这是临时的，关闭cmd窗口后就会失效。
+</p>
+
+<ol class="org-ol">
+<li>使用propel建立项目
+</li>
+</ol>
+<p>
+新建一个文件夹如：bookstore
+新建文件schema.xml
+</p>
+
+
+<pre class="example">
+     1 &lt;?xml version="1.0" encoding="UTF-8"?&gt;
+ 2 &lt;database name="bookstore" defaultIdMethod="native"&gt;
+ 3   &lt;table name="book" phpName="Book"&gt;
+ 4     &lt;column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true"/&gt;
+ 5     &lt;column name="title" type="varchar" size="255" required="true" /&gt;
+ 6     &lt;column name="isbn" type="varchar" size="24" required="true" phpName="ISBN"/&gt;
+ 7     &lt;column name="publisher_id" type="integer" required="true"/&gt;
+ 8     &lt;column name="author_id" type="integer" required="true"/&gt;
+ 9     &lt;foreign-key foreignTable="publisher" phpName="Publisher" refPhpName="Book"&gt;
+10       &lt;reference local="publisher_id" foreign="id"/&gt;
+11     &lt;/foreign-key&gt;
+12     &lt;foreign-key foreignTable="author"&gt;
+13       &lt;reference local="author_id" foreign="id"/&gt;
+14     &lt;/foreign-key&gt;
+15   &lt;/table&gt;
+16   &lt;table name="author" phpName="Author"&gt;
+17     &lt;column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true"/&gt;
+18     &lt;column name="first_name" type="varchar" size="128" required="true"/&gt;
+19     &lt;column name="last_name" type="varchar" size="128" required="true"/&gt;
+20   &lt;/table&gt;
+21   &lt;table name="publisher" phpName="Publisher"&gt;
+22    &lt;column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true" /&gt;
+23    &lt;column name="name" type="varchar" size="128" required="true" /&gt;
+24   &lt;/table&gt;
+25 &lt;/database&gt;
+</pre>
+
+
+<p>
+使用以下命令生成模型文件：
+</p>
+
+
+<pre class="example">
+propel-gen om
+</pre>
+
+
+<p>
+可以在bookstore/build/classes/bookstore/下找到生成的模型文件
+</p>
+
+<p>
+新建build.properties文件
+</p>
+
+
+<pre class="example">
+    # Database driver
+propel.database = mysql
+
+# Project name
+propel.project = bookstore
+
+# Connection parameters
+propel.database.url = mysql:host=localhost;dbname=my_db_name
+propel.database.user = my_db_user
+propel.database.password = my_db_password
+
+# Other examples:
+# propel.database.url = sqlite:/path/to/bookstore.db
+# propel.database.url = pgsql:host=localhost dbname=my_db_name user=my_db_user password=my_db_password
+</pre>
+
+
+<p>
+使用以下命令生成SQL文件：
+</p>
+
+
+<pre class="example">
+propel-gen sql
+</pre>
+
+
+<p>
+可以在bookstore/build/sql/下找到相关的SQL文件
+使用以下命令生成表（插入SQL）
+</p>
+
+
+<pre class="example">
+propel-gen insert-sql
+</pre>
+
+
+<p>
+新建runtime-conf.xml文件
+</p>
+
+
+<pre class="example">
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;config&gt;
+  &lt;!-- Uncomment this if you have PEAR Log installed
+  &lt;log&gt;
+    &lt;type&gt;file&lt;/type&gt;
+    &lt;name&gt;/path/to/propel.log&lt;/name&gt;
+    &lt;ident&gt;propel-bookstore&lt;/ident&gt;
+    &lt;level&gt;7&lt;/level&gt;
+  &lt;/log&gt;
+  --&gt;
+  &lt;propel&gt;
+    &lt;datasources default="bookstore"&gt;
+      &lt;datasource id="bookstore"&gt;
+        &lt;adapter&gt;mysql&lt;/adapter&gt; &lt;!-- sqlite, mysql, myssql, oracle, or pgsql --&gt;
+        &lt;connection&gt;
+          &lt;dsn&gt;mysql:host=localhost;dbname=my_db_name&lt;/dsn&gt;
+          &lt;user&gt;my_db_user&lt;/user&gt;
+          &lt;password&gt;my_db_password&lt;/password&gt;
+        &lt;/connection&gt;
+      &lt;/datasource&gt;
+    &lt;/datasources&gt;
+  &lt;/propel&gt;
+&lt;/config&gt;
+</pre>
+
+
+<p>
+使用以下命令生成运行时的配置文件：
+</p>
+
+
+<pre class="example">
+propel-gen convert-conf
+</pre>
+
+
+<p>
+可以找到bookstore/build/conf/bookstore-conf.php文件
+</p>
+
+<p>
+其这第２步和第３步用不着这么麻烦，我们只要在d:/phing/目录下建个bat文件就行(如：start.bat)：
+</p>
+
+
+<pre class="example">
+@echo off
+@setlocal
+set PHP_COMMAND=d:\php\php.exe
+set PHING_HOME=d:\phing\phing
+set PROPEL_HOME=d:\phing\propel
+set PHP_CLASSPATH=d:\phing\phing\classes
+PATH %PATH%;%PHING_HOME%\bin;%PROPEL_HOME%\bin
+cmd.exe
+</pre>
+
+      </div>
+    </div>
+    <div> 
+      <div class="post-meta">
+        <span title="post date" class="post-info">2011-03-05</span>
+        <span title="last modification date" class="post-info">2013-07-05</span>
+        <span title="tags" class="post-info"><a href="/tags/orm/">orm</a>, <a href="/tags/phing/">phing</a>, <a href="/tags/propel/">propel</a>, <a href="/tags/windows/">windows</a></span>
+        <span title="author" class="post-info">Gu Weigang</span>
+      </div>
+      <section>
+        <h1>Comments</h1>
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+          //var disqus_developer = 1;
+          var disqus_identifier = "/blog/2011/03/05/propel-orm-plus-phing-on-windows/";
+          var disqus_url = "http://guweigang.com/blog/2011/03/05/propel-orm-plus-phing-on-windows/";
+          var disqus_shortname = 'guweigang';
+          /* * * DON'T EDIT BELOW THIS LINE * * */
+          (function() {
+          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+          dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+          })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </section>
+      <div class="footer">
+        <p>Generated by <a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.3.1 (<a href="http://orgmode.org">Org</a> mode 8.0.3)</p>
+        <p> 
+          Copyright &copy; 2012 - 2013 <a href="mailto:guweigang &lt;at&gt; outlook &lt;dot&gt; com">Gu Weigang</a>
+          &nbsp;&nbsp;-&nbsp;&nbsp;
+          Powered by <a href="https://github.com/kelvinh/org-page" target="_blank">org-page</a>
+        </p>
+      </div>
+    </div>
+  </body>
+</html>

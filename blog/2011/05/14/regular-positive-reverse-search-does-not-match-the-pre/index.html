@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <title>正则正/逆向预搜索不匹配……|bbb|….|…. - 闭眼听世界</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Gu Weigang" />
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <link rel="stylesheet" href="/media/css/main.css" type="text/css">
+  </head>
+  <body class="container">
+    <div> 
+      <header class="masthead">
+        <h1 class="masthead-title"><a href="/">闭眼听世界</a></h1>
+        <p>心如松静意无尘，气若浮萍了无痕！</p>
+        <ul>
+          <li><a href="/blog/">Blog</a></li>
+          <li><a href="/wiki/">Wiki</a></li>
+          <li><a href="/tags/">Tags</a></li>
+          <li><a href="/about/">About</a></li>
+          <li><a href="https://github.com/guweigang">GitHub</a></li>
+          <li><a href="https://google.com/search?q=site:guweigang.com">Search</a></li>
+        </ul>
+      </header>
+    </div>
+    <div> 
+      <div class="post">
+        <h1>正则正/逆向预搜索不匹配……|bbb|….|….</h1>
+        <p>
+那天在群里面@TP新人 又提出一个正则问题，描述如下：
+</p>
+
+
+
+
+
+<blockquote>
+
+
+
+<p>
+[武汉]TP新人(997****) 18:17:48
+</p>
+
+<p>
+aaa|bbb|ccc|ddd 这个是字符串的结构
+</p>
+
+<p>
+[武汉]TP新人(997****) 18:17:59
+</p>
+
+<p>
+aaa bbb ccc [武汉]TP新人(9976121) 18:18:32
+</p>
+
+<p>
+我现在 要 匹配 第一个和 第二个竖线 除了是 bbb 这种情况之外的所有情况 ddd 都是 可变的
+</p>
+
+<p>
+[武汉]TP新人(997****) 18:18:55
+</p>
+
+<p>
+aaa|bbb|ccc|ddd 这是 不匹配的
+</p>
+
+<p>
+武汉]TP新人(997****) 18:19:04
+</p>
+
+<p>
+aaa|bbbbbb|ccc|dddd 这是匹配的
+</p>
+
+<p>
+[武汉]TP新人(997****) 18:19:26
+</p>
+
+<p>
+......|bbb|....|.... 这是不匹配的
+</p>
+</blockquote>
+
+
+
+
+
+<p>
+@伪造 同学最近一直苦练正则，大有长劲，自告奋勇前来解题，哈哈，不料此题确实很刁，难以找到思路。@TP新人 也说没思路，看到这么难的份上我就试试吧 :) 。我也想了好久，大概有半个小时吧，中途@觉醒 劝我休息（谢谢关心）。废话不多说，看我设计的正则吧，这里用到了正向预搜索和反向预搜索：
+</p>
+
+
+
+
+
+<pre class="example">
+((?&lt;!\|bbb)\|(?!bbb\|))(.*?)\|
+</pre>
+
+
+
+
+
+<p>
+放到PHP中试验：
+</p>
+
+
+
+
+
+<pre class="example">
+&lt;?php
+//$str = 'aaa|bbb|ccc|ddd';
+$str = 'aaa|bbbff|ccc|ddd';
+
+$str2 = '';
+
+$r = preg_match_all('/((?&lt;!\|bbb)\|(?!bbb\|))+(.*?)\|/', $str, $matches);
+
+if ($r) {
+    $str2 = preg_replace('/((?&lt;!\|bbb)\|(?!bbb\|))+(.*?)\|/', "$1", $str);
+}
+
+var_dump($r);
+
+var_dump($str2);
+</pre>
+
+
+
+
+
+<p>
+结果如下，当=$str='aaa|bbbff|ccc|ddd'=时：
+</p>
+
+
+
+
+
+<pre class="example">
+---------- Debug PHP 5.3.5 ----------
+int(1)
+string(11) "aaa|ccc|ddd"
+</pre>
+
+
+
+
+
+<p>
+当=$str='aaa|bbb|ccc|ddd'=时：
+</p>
+
+
+
+
+
+<pre class="example">
+---------- Debug PHP 5.3.5 ----------
+int(0)
+string(0) ""
+</pre>
+
+
+
+
+
+<p>
+其实也不难，最后发现原来群里面@笑笑 才是正则表达式大牛，下面引用她的话：
+</p>
+
+
+
+
+
+<blockquote>
+
+
+
+<p>
+笑笑&lt;****@gmail.com&gt; 2011-5-13 10:33:59
+</p>
+
+<p>
+(?&lt;=t)
+</p>
+
+<p>
+逆序肯定环视，表示所在位置左侧能够匹配t
+</p>
+
+<p>
+(?&lt;!t)
+</p>
+
+<p>
+逆序否定环视，表示所在位置左侧不能匹配t
+</p>
+
+<p>
+(?=t)
+</p>
+
+<p>
+顺序肯定环视，表示所在位置右侧能够匹配t
+</p>
+
+<p>
+(?!t)
+</p>
+
+<p>
+顺序否定环视，表示所在位置右侧不能匹配t
+</p>
+
+<p>
+笑笑&lt;****@gmail.com&gt; 2011-5-13 10:34:17
+</p>
+
+<p>
+(?&lt;) (?) (?&lt;!) (?!)
+</p>
+
+<p>
+笑笑&lt;****@gmail.com&gt; 2011-5-13 10:34:43
+</p>
+
+<p>
+正则就是环视,捕获
+</p>
+
+<p>
+笑笑&lt;****@gmail.com&gt; 2011-5-13 10:34:50
+</p>
+
+<p>
+如果这两个搞懂了,其它的就简单了
+</p>
+
+<p>
+笑笑&lt;****@gmail.com&gt; 2011-5-13 10:37:11
+</p>
+
+<p>
+好记的方法 带有&lt;符号的都是判断左侧的，&lt;符号不是箭头向左嘛 理解是往左判断的
+</p>
+
+<p>
+笑笑&lt;****@gmail.com&gt; 2011-5-13 10:37:30
+</p>
+
+<p>
+不带&lt;箭头符号的 那就认为是按照正常顺序往右判断的，正则匹配正常顺序都是从左到右依次匹配的
+</p>
+
+<p>
+笑笑&lt;****@gmail.com&gt; 2011-5-13 10:37:58
+</p>
+
+<p>
+= 和 ! 用来区分 是和非， 或者就是 肯定还是否定，=是肯定，就是=后为真，也就是说=号后面表达式能匹配成功； !是否定，就是!后的表达式不能匹配成功
+</p>
+
+<p>
+笑笑&lt;****@gmail.com&gt; 2011-5-13 10:38:23
+</p>
+
+<p>
+? 有两种功能 一种就是你说的0-1次匹配，还有就是用在量词* 和 + 后 来区分惰性匹配和贪婪匹配
+</p>
+
+<p>
+[长沙] 校长&lt;<a href="mailto:roy@solarphp.cn">roy@solarphp.cn</a>&gt; 2011-5-13 10:39:40
+</p>
+
+<p>
+笑笑偷了我的笔记
+</p>
+
+<p>
+笑笑&lt;****@gmail.com&gt; 2011-5-13 10:39:40
+</p>
+
+<p>
+比如字符串： a1b2c3d
+</p>
+
+<p>
+1、要匹配字母后面是数字2的字母
+</p>
+
+<p>
+正则：[a-z](?=2)
+</p>
+
+<p>
+结果：b
+</p>
+
+<p>
+2、要匹配字母前面是数字2的字母
+</p>
+
+<p>
+正则：(?&lt;=2)[a-z]
+</p>
+
+<p>
+结果：c
+</p>
+
+<p>
+3、要匹配后面不是数字2的字母
+</p>
+
+<p>
+正则：[a-z](?!2)
+</p>
+
+<p>
+结果：a c d
+</p>
+
+<p>
+4、要匹配前面不是数字2的字母
+</p>
+
+<p>
+正则：(?&lt;!2)[a-z]
+</p>
+
+<p>
+结果：a b d
+</p>
+</blockquote>
+
+
+
+
+
+<p>
+果然是正则牛女，膜拜！！
+</p>
+
+      </div>
+    </div>
+    <div> 
+      <div class="post-meta">
+        <span title="post date" class="post-info">2011-05-14</span>
+        <span title="last modification date" class="post-info">2013-07-05</span>
+        <span title="tags" class="post-info"></span>
+        <span title="author" class="post-info">Gu Weigang</span>
+      </div>
+      <section>
+        <h1>Comments</h1>
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+          //var disqus_developer = 1;
+          var disqus_identifier = "/blog/2011/05/14/regular-positive-reverse-search-does-not-match-the-pre/";
+          var disqus_url = "http://guweigang.com/blog/2011/05/14/regular-positive-reverse-search-does-not-match-the-pre/";
+          var disqus_shortname = 'guweigang';
+          /* * * DON'T EDIT BELOW THIS LINE * * */
+          (function() {
+          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+          dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+          })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </section>
+      <div class="footer">
+        <p>Generated by <a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.3.1 (<a href="http://orgmode.org">Org</a> mode 8.0.3)</p>
+        <p> 
+          Copyright &copy; 2012 - 2013 <a href="mailto:guweigang &lt;at&gt; outlook &lt;dot&gt; com">Gu Weigang</a>
+          &nbsp;&nbsp;-&nbsp;&nbsp;
+          Powered by <a href="https://github.com/kelvinh/org-page" target="_blank">org-page</a>
+        </p>
+      </div>
+    </div>
+  </body>
+</html>

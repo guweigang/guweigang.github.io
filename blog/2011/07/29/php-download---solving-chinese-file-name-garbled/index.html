@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <title>PHP下载：解决中文文件名乱码 - 闭眼听世界</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Gu Weigang" />
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <link rel="stylesheet" href="/media/css/main.css" type="text/css">
+  </head>
+  <body class="container">
+    <div> 
+      <header class="masthead">
+        <h1 class="masthead-title"><a href="/">闭眼听世界</a></h1>
+        <p>心如松静意无尘，气若浮萍了无痕！</p>
+        <ul>
+          <li><a href="/blog/">Blog</a></li>
+          <li><a href="/wiki/">Wiki</a></li>
+          <li><a href="/tags/">Tags</a></li>
+          <li><a href="/about/">About</a></li>
+          <li><a href="https://github.com/guweigang">GitHub</a></li>
+          <li><a href="https://google.com/search?q=site:guweigang.com">Search</a></li>
+        </ul>
+      </header>
+    </div>
+    <div> 
+      <div class="post">
+        <h1>PHP下载：解决中文文件名乱码</h1>
+        <p>
+通过把Content-Type设置为application/octet-stream， 可以把动态生成的内容当作文件来下载，相信这个大家都会。 那么用Content-Disposition设置下载的文件名， 这个也有不少人知道吧。 基本上，下载程序都是这么写的：
+</p>
+
+
+<pre class="example">
+    &lt;?php
+$filename = "document.txt";
+header('Content-Type: application/octet-stream');
+header('Content-Disposition: attachment; filename=' . $filename);
+
+print "Hello!";
+?&gt;
+</pre>
+
+
+<p>
+这样用浏览器打开之后，就可以下载document.txt。
+</p>
+
+<p>
+但是，如果$filename是UTF-8编码的，有些浏览器就无法正常处理了。 比如把上面那个程序稍稍改一下：
+</p>
+
+
+<pre class="example">
+    &lt;?php
+$filename = "中文 文件名.txt";
+header('Content-Type: application/octet-stream');
+header('Content-Disposition: attachment; filename=' . $filename);
+
+print "Hello!";
+?&gt;
+</pre>
+
+
+<p>
+把程序保存成UTF-8编码再访问，IE6下载的文件名就会乱码。 FF3下下载的文件名就只有“中文”两个字。Opera 9下一切正常。
+</p>
+
+<p>
+输出的header实际上是这样子：
+</p>
+
+
+<pre class="example">
+Content-Disposition: attachment; filename=中文 文件名.txt
+</pre>
+
+
+<p>
+其实按照<a href="http://tools.ietf.org/html/rfc2231">RFC2231</a>的定义， 多语言编码的Content-Disposition应该这么定义：
+</p>
+
+
+<pre class="example">
+Content-Disposition: attachment; filename*="utf8''%E4%B8%AD%E6%96%87%20%E6%96%87%E4%BB%B6%E5%90%8D.txt"
+</pre>
+
+
+<p>
+即：
+</p>
+
+
+<ul class="org-ul">
+<li>filename后面的等号之前要加 *
+</li>
+<li>filename的值用单引号分成三段，分别是字符集(utf8)、语言(空)和urlencode过的文件名。
+</li>
+<li>最好加上双引号，否则文件名中空格后面的部分在Firefox中显示不出来
+</li>
+<li>注意urlencode的结果与php的urlencode函数结果不太相同，php的urlencode会把空格替换成+，而这里需要替换成%20
+</li>
+</ul>
+
+
+<p>
+经过试验，发现几种主流浏览器的支持情况如下：
+</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<p>
+IE6
+</p>
+
+
+
+
+<p>
+attachment; filename="&lt;URL编码之后的UTF-8文件名&gt;"
+</p>
+
+
+
+
+
+
+
+
+
+
+<p>
+FF3
+</p>
+
+
+
+
+<p>
+attachment; filename="UTF-8文件名"
+</p>
+
+
+
+
+
+
+
+
+
+
+<p>
+attachment; filename*="utf8''&lt;URL编码之后的UTF-8文件名&gt;"
+</p>
+
+
+
+
+
+
+
+
+
+
+<p>
+O9
+</p>
+
+
+
+
+<p>
+attachment; filename="UTF-8文件名"
+</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<p>
+这样看来，程序必须得这样写才能支持所有主流浏览器：
+</p>
+
+
+<pre class="example">
+    &lt;?php
+
+$ua = $_SERVER["HTTP_USER_AGENT"];
+
+$filename = "中文 文件名.txt";
+$encoded_filename = urlencode($filename);
+$encoded_filename = str_replace("+", "%20", $encoded_filename);
+
+header('Content-Type: application/octet-stream');
+
+if (preg_match("/MSIE/", $ua)) {
+   header('Content-Disposition: attachment; filename="' . $encoded_filename . '"');
+} else if (preg_match("/Firefox/", $ua)) {
+  header('Content-Disposition: attachment; filename*="utf8\'\'' . $filename . '"');
+} else {
+   header('Content-Disposition: attachment; filename="' . $filename . '"');
+}
+
+print 'ABC';
+?&gt;
+</pre>
+
+      </div>
+    </div>
+    <div> 
+      <div class="post-meta">
+        <span title="post date" class="post-info">2011-07-29</span>
+        <span title="last modification date" class="post-info">2013-07-05</span>
+        <span title="tags" class="post-info"><a href="/tags/chinese/">chinese</a>, <a href="/tags/download/">download</a>, <a href="/tags/php/">php</a>, <a href="/tags/utf-8/">utf-8</a></span>
+        <span title="author" class="post-info">Gu Weigang</span>
+      </div>
+      <section>
+        <h1>Comments</h1>
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+          //var disqus_developer = 1;
+          var disqus_identifier = "/blog/2011/07/29/php-download---solving-chinese-file-name-garbled/";
+          var disqus_url = "http://guweigang.com/blog/2011/07/29/php-download---solving-chinese-file-name-garbled/";
+          var disqus_shortname = 'guweigang';
+          /* * * DON'T EDIT BELOW THIS LINE * * */
+          (function() {
+          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+          dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+          })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </section>
+      <div class="footer">
+        <p>Generated by <a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.3.1 (<a href="http://orgmode.org">Org</a> mode 8.0.3)</p>
+        <p> 
+          Copyright &copy; 2012 - 2013 <a href="mailto:guweigang &lt;at&gt; outlook &lt;dot&gt; com">Gu Weigang</a>
+          &nbsp;&nbsp;-&nbsp;&nbsp;
+          Powered by <a href="https://github.com/kelvinh/org-page" target="_blank">org-page</a>
+        </p>
+      </div>
+    </div>
+  </body>
+</html>

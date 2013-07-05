@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <title>上班前两天－编译环境 - 闭眼听世界</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Gu Weigang" />
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <link rel="stylesheet" href="/media/css/main.css" type="text/css">
+  </head>
+  <body class="container">
+    <div> 
+      <header class="masthead">
+        <h1 class="masthead-title"><a href="/">闭眼听世界</a></h1>
+        <p>心如松静意无尘，气若浮萍了无痕！</p>
+        <ul>
+          <li><a href="/blog/">Blog</a></li>
+          <li><a href="/wiki/">Wiki</a></li>
+          <li><a href="/tags/">Tags</a></li>
+          <li><a href="/about/">About</a></li>
+          <li><a href="https://github.com/guweigang">GitHub</a></li>
+          <li><a href="https://google.com/search?q=site:guweigang.com">Search</a></li>
+        </ul>
+      </header>
+    </div>
+    <div> 
+      <div class="post">
+        <h1>上班前两天－编译环境</h1>
+        <p>
+上班第一天，鸟哥让我编译环境，说实话这个还真不会，以前虽然折腾过VPS或虚拟机，但从来不曾下足勇气去编译。。。一直都是yum或apt-get的选手。。。因为组中大家共用一个开发机，所以每个人分了个帐号，没有root权限。。。
+</p>
+
+<p>
+A. 先编译apache吧
+</p>
+
+<p>
+./configure --prefix=/home/guweigang/local/httpd ...
+配置选项在这里（中文）：<a href="http://apache.jz123.cn/programs/configure.html#configurationoptions">http://apache.jz123.cn/programs/configure.html#configurationoptions</a>
+（英文）：<a href="http://httpd.apache.org/docs/2.2/zh-cn/programs/configure.html">http://httpd.apache.org/docs/2.2/zh-cn/programs/configure.html</a>
+</p>
+
+<p>
+在配置rewrite的时候，发现apache没有mod\_rewrite，可能是当初编译apache的时候没有带上 --enable-rewrite选项。
+</p>
+
+<p>
+重新编译mod\_rewrite.so：
+在apache的源码安装目录中寻找mod\_rewrite.c文件
+find / -name mod\_rewrite.c
+/home/springshine/LAMP/httpd-2.2.3/modules/mappers/mod\_rewrite.c
+</p>
+
+<p>
+编译：
+cd <i>home/springshine/LAMP/httpd-2.2.3/modules/mappers</i>
+/usr/local/apache2/bin/apxs -c mod\_rewrite.c
+<i>usr/local/apache2/bin/apxs -i -a -n mod\_rewrite mod\_rewrite.la
+如果没出错，在/usr/local/apache2/modules</i> 中就会有mod\_rewrite.so了
+</p>
+
+<p>
+B. MySQL
+</p>
+
+
+<p>
+C. PHP
+1.获取源码
+2.解压
+ tar -jxvf php-5.x.x.tar.bz2
+ cd php-5.x.x
+3.配置编译选项
+ ./configure --with-apxs2=/usr/local/apache2/bin/apxs --with-mysql=/path/to/mysql --with-xml --with-dom --with-openssl --enable-ftp
+ 其中--with-apxs2=/usr/local/apache2/bin/apxs 选项和作用是：在安装里会修改APACHE配置文件，加入PHP模块，同时交将模块复制到apache的模块目录下。
+4.编译并安装
+ make &amp;&amp; make insatll
+5.测试
+ 1).查看/usr/local/apache2/conf/httpd.conf中是否存在并且启用下面的行
+ LoadModule php5\_moudle moudles/libphp5.so
+ 2).在配置文件添加下面的行，使以php为扩展名的文件会使用PHP程序来解析
+ AddType application/x-httpd-php .php
+ 注：在.php前必须有空格
+ 3).在/usr/local/apache2/htdocs下，创建一个测试文件index.php,内容如下
+</p>
+
+<p>
+4).检测并启动服务
+/usr/local/apache2/bin/httpd -S
+/usr/local/apache2/bin/httpd -k start
+5).测试
+在浏览器中输入<a href="http://10.1.1.199/index.php">http://10.1.1.199/index.php</a>
+如果成功返回php的相关信息，说明安装成功.
+</p>
+
+<p>
+原来编译php的时候，没有把pdo\_ mysql 相关的参数带上，安装完后才发现。再重新编译有点费时间，所以决定单独来安装。
+</p>
+
+<p>
+$cd $HOME/php-5.x.x/ext/pdo\_mysql
+$ ~/local/php/bin/phpize 
+Configuring for:
+PHP Api Version: 20041225
+Zend Module Api No: 20060613
+Zend Extension Api No: 220060519
+$ ./configure --with-php-config=PATH --with-pdo-mysq=DIR
+$ make &amp;&amp; make install
+</p>
+
+<p>
+D. SVN
+最新的SVN源代码包依赖sqlite和neon。。。
+分别到其官网下载源代码，解压并并分别重命名文件夹为：sqlite-amalgamation和neon
+然后编译安装，即可。
+</p>
+
+<p>
+E. 最后在配置emacs的时候，怎么样都无法显示中文，我靠，设置语言环境也不行，最后在网上找到一个简单的方法，在~/bashrc中加入以下环境变量：
+LC\_CTYPE=zh\_CN.UTF-8
+</p>
+
+<p>
+ＯＫ，全部搞定，你也可以在直接输入$ LC\_CTYPE=zh\_CN.UTF-8 emacs启动emacs。
+</p>
+
+<p>
+个人用户的环境配置文件是~/.bashrc，全局的环境配置文件是在./etc/profile
+</p>
+
+      </div>
+    </div>
+    <div> 
+      <div class="post-meta">
+        <span title="post date" class="post-info">2011-07-11</span>
+        <span title="last modification date" class="post-info">2013-07-05</span>
+        <span title="tags" class="post-info"></span>
+        <span title="author" class="post-info">Gu Weigang</span>
+      </div>
+      <section>
+        <h1>Comments</h1>
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+          //var disqus_developer = 1;
+          var disqus_identifier = "/blog/2011/07/11/before-going-to-work-two-days-build-environment/";
+          var disqus_url = "http://guweigang.com/blog/2011/07/11/before-going-to-work-two-days-build-environment/";
+          var disqus_shortname = 'guweigang';
+          /* * * DON'T EDIT BELOW THIS LINE * * */
+          (function() {
+          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+          dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+          })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </section>
+      <div class="footer">
+        <p>Generated by <a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.3.1 (<a href="http://orgmode.org">Org</a> mode 8.0.3)</p>
+        <p> 
+          Copyright &copy; 2012 - 2013 <a href="mailto:guweigang &lt;at&gt; outlook &lt;dot&gt; com">Gu Weigang</a>
+          &nbsp;&nbsp;-&nbsp;&nbsp;
+          Powered by <a href="https://github.com/kelvinh/org-page" target="_blank">org-page</a>
+        </p>
+      </div>
+    </div>
+  </body>
+</html>

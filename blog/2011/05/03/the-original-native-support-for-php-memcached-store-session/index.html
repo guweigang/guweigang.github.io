@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <title>原来PHP原生支持Memcached存储session - 闭眼听世界</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Gu Weigang" />
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <link rel="stylesheet" href="/media/css/main.css" type="text/css">
+  </head>
+  <body class="container">
+    <div> 
+      <header class="masthead">
+        <h1 class="masthead-title"><a href="/">闭眼听世界</a></h1>
+        <p>心如松静意无尘，气若浮萍了无痕！</p>
+        <ul>
+          <li><a href="/blog/">Blog</a></li>
+          <li><a href="/wiki/">Wiki</a></li>
+          <li><a href="/tags/">Tags</a></li>
+          <li><a href="/about/">About</a></li>
+          <li><a href="https://github.com/guweigang">GitHub</a></li>
+          <li><a href="https://google.com/search?q=site:guweigang.com">Search</a></li>
+        </ul>
+      </header>
+    </div>
+    <div> 
+      <div class="post">
+        <h1>原来PHP原生支持Memcached存储session</h1>
+        <p>
+转自：<a href="http://blog.csdn.net/ctowoo/archive/2009/09/28/4607858.aspx"><a href="http://blog.csdn.net/ctowoo/archive/2009/09/28/4607858.aspx">http://blog.csdn.net/ctowoo/archive/2009/09/28/4607858.aspx</a></a>
+一般地， Session 是以文本文件形式存储在服务器端的。如果使用 Seesion，或者该 PHP 文件要调用 Session 变量，那么就必须在调用 Session 之前启动它，使用 session\_start() 函数。其它都不需要你设置了，PHP 自动完成 Session 文件的创建。其默认 Session 的存放路径是服务器的系统临时文件夹。
+</p>
+
+<p>
+但是如果碰到大数据量的Sesstion的时候， 使用基于文件的Session存取瓶颈可能都是在磁盘IO操作上，现在利用Memcached来保存Session数据，直接通过内存的方式，效率自然能够提高不少。 在读写速度上会比 files 时快很多，而且在多个服务器需要共用 session 时会比较方便，将这些服务器都配置成使用同一组 memcached 服务器就可以，减少了额外的工作量。
+</p>
+
+<p>
+其缺点是 session 数据都保存在 memory 中，一旦宕机，数据将会丢失。但对 session 数据来说并不是严重的问题。
+</p>
+
+<p>
+如何用 memcached 来存储 session呢？以下是基本的配置步骤：
+</p>
+
+<ol class="org-ol">
+<li>安装 memcached （略过，不清楚的筒子可以查看我的另一篇文章：<a href="http://blog.csdn.net/ctowoo/archive/2009/09/26/459">http://blog.csdn.net/ctowoo/archive/2009/09/26/459</a> 6701.aspx ）
+</li>
+</ol>
+
+<p>
+在 phpinfo 输出中的 "Registered save handlers" 会有 "files user sqlite"。
+</p>
+
+<ol class="org-ol">
+<li>修改配置文件，
+</li>
+</ol>
+<p>
+a. 在 php.ini 中全局设置（* 需要重启服务器）
+</p>
+
+
+<pre class="example">
+    session.save_handler = memcache
+session.save_path = "tcp://127.0.0.1:11211"
+</pre>
+
+
+
+<p>
+b. 或者某个目录下的 .htaccess :
+</p>
+
+
+
+<pre class="example">
+    php_value session.save_handler "memcache"
+php_value session.save_path "tcp://127.0.0.1:11211"
+</pre>
+
+
+
+<p>
+c. 也可以在某个一个应用中：
+</p>
+
+
+
+<pre class="example">
+    ini_set("session.save_handler", "memcache");
+ini_set("session.save_path", "tcp://127.0.0.1:11211");
+</pre>
+
+
+
+<p>
+注：使用多个 memcached server 时用逗号","隔开，并且和 Memcache::addServer() 文档中说明的一样，可以带额外的参数"persistent"、"weight"、"timeout"、"retry\_interval" 等等，类似这样的："tcp://host:port?persistent=1&amp;weight=2,tcp://host2 :port2" 。
+</p>
+
+<ol class="org-ol">
+<li>启动 memcached
+</li>
+</ol>
+
+
+<pre class="example">
+memcached -d -m 10 -u root -l 127.0.0.1 -p 11211 -c 256 -P /tmp/memcached.pid
+</pre>
+
+
+
+<p>
+4.测试 创建一个 session
+</p>
+
+
+<pre class="example">
+    &lt;?php
+//set_session.php
+session_start();
+
+if (!isset($_SESSION['admin'])) {
+$_SESSION['TEST'] = 'wan';
+}
+print $_SESSION['admin'];
+print "\n";
+print session_id();
+?&gt;
+</pre>
+
+
+
+<ol class="org-ol">
+<li>用 sessionid 去 memcached 里查询一下
+</li>
+</ol>
+
+
+<pre class="example">
+&lt;?php
+//get_session.php
+$mem = new Memcache;
+$mem-&gt;connect("127.0.0.1", 11211);
+var_dump($mem-&gt;get('0935216dbc0d721d629f89efb89affa 6'));
+?&gt;
+</pre>
+
+
+<p>
+。。。
+</p>
+
+
+<pre class="example">
+[root@localhost html]# /usr/local/webserver/php/bin/php -f get_session.php
+</pre>
+
+
+<p>
+输出结果：
+</p>
+
+
+<pre class="example">
+    string(16) 
+"admin|s:3:"wan";"
+</pre>
+
+
+
+<p>
+证明 session 正常工作。
+</p>
+
+      </div>
+    </div>
+    <div> 
+      <div class="post-meta">
+        <span title="post date" class="post-info">2011-05-03</span>
+        <span title="last modification date" class="post-info">2013-07-05</span>
+        <span title="tags" class="post-info"><a href="/tags/memcache/">memcache</a>, <a href="/tags/memcached/">memcached</a>, <a href="/tags/php/">php</a>, <a href="/tags/session/">session</a></span>
+        <span title="author" class="post-info">Gu Weigang</span>
+      </div>
+      <section>
+        <h1>Comments</h1>
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+          //var disqus_developer = 1;
+          var disqus_identifier = "/blog/2011/05/03/the-original-native-support-for-php-memcached-store-session/";
+          var disqus_url = "http://guweigang.com/blog/2011/05/03/the-original-native-support-for-php-memcached-store-session/";
+          var disqus_shortname = 'guweigang';
+          /* * * DON'T EDIT BELOW THIS LINE * * */
+          (function() {
+          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+          dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+          })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </section>
+      <div class="footer">
+        <p>Generated by <a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.3.1 (<a href="http://orgmode.org">Org</a> mode 8.0.3)</p>
+        <p> 
+          Copyright &copy; 2012 - 2013 <a href="mailto:guweigang &lt;at&gt; outlook &lt;dot&gt; com">Gu Weigang</a>
+          &nbsp;&nbsp;-&nbsp;&nbsp;
+          Powered by <a href="https://github.com/kelvinh/org-page" target="_blank">org-page</a>
+        </p>
+      </div>
+    </div>
+  </body>
+</html>

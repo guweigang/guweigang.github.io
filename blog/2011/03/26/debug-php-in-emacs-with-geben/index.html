@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <title>Debug php in emacs with geben - 闭眼听世界</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Gu Weigang" />
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <link rel="stylesheet" href="/media/css/main.css" type="text/css">
+  </head>
+  <body class="container">
+    <div> 
+      <header class="masthead">
+        <h1 class="masthead-title"><a href="/">闭眼听世界</a></h1>
+        <p>心如松静意无尘，气若浮萍了无痕！</p>
+        <ul>
+          <li><a href="/blog/">Blog</a></li>
+          <li><a href="/wiki/">Wiki</a></li>
+          <li><a href="/tags/">Tags</a></li>
+          <li><a href="/about/">About</a></li>
+          <li><a href="https://github.com/guweigang">GitHub</a></li>
+          <li><a href="https://google.com/search?q=site:guweigang.com">Search</a></li>
+        </ul>
+      </header>
+    </div>
+    <div> 
+      <div class="post">
+        <h1>Debug php in emacs with geben</h1>
+        <p>
+While PHP-developing it sometimes is just too tedious to do those ‘add a echo here and there, then reload and search the echoed strings on the screen'-loops. So I searched for a debugger for my favourite editor emacs. After a lengthy install procedure I finally got it running: With geben on emacs you can debug PHP (step through and evaluate expressions)
+</p>
+
+<p>
+<img src="http://static.blog.local.ch/old/images/blog/geben.png"  alt="geben.png"/>
+geben in action
+Installation
+Install xdebug php5-module
+get xdebug for php (See “xdebug für ubuntu (german)”)
+</p>
+
+
+
+<pre class="example">
+01 sudo pecl install xdebug
+</pre>
+
+
+
+<p>
+→ File lies at /usr/lib/php5/20060613+lfs/xdebug.so
+edit php.ini (see “easy php debugging using debug and vim”)
+</p>
+
+<p>
+Put these under “Module Settings”:
+</p>
+
+
+
+<pre class="example">
+    01 zend_extension=/usr/lib/php5/20060613+lfs/xdebug.so
+02 [debug]
+03 ; Remote settings. Adapt if you?re not running apache on localhost
+04 xdebug.remote_autostart=off
+05 xdebug.remote_enable=on
+06 xdebug.remote_handler=dbgp
+07 xdebug.remote_mode=req
+08 xdebug.remote_host=localhost
+09 xdebug.remote_port=9000
+</pre>
+
+
+
+<p>
+Restart apache:
+</p>
+
+
+
+<pre class="example">
+01 /etc/init.d/apache2 restart
+</pre>
+
+
+
+<p>
+Install required packages
+</p>
+
+<p>
+Unfortunately, geben doesn't work with the ubuntu “gutsy gibbon” packages. So do not do apt-get eieio. Instead: download cedet and eieio from cedet.sourceforge.net and copy both into ~/elisp/
+</p>
+
+
+
+<pre class="example">
+    01 cd ~/elisp/
+02 tar -xzvf *.tar.gz
+03 cd cedet*
+04 make
+05 cd ../eieio*
+06 make
+</pre>
+
+
+
+<p>
+add this to .emacs:
+</p>
+
+
+
+<pre class="example">
+    01 (add-to-list 'load-path "~/elisp/eieio-0.17")
+02 (load-file "~/elisp/cedet-1.0pre4/common/cedet.el")
+</pre>
+
+
+
+<p>
+get debugclient from <a href="http://xdebug.org/">http://xdebug.org/</a> (currently: this file)
+</p>
+
+<p>
+rename it to debugclient and move to <i>usr/local/bin</i>
+install geben
+</p>
+
+<p>
+download geben from <a href="http://trac.sakura.ne.jp/geben/">http://trac.sakura.ne.jp/geben/</a>
+</p>
+
+<p>
+unpack it into ~/elisp/
+</p>
+
+<p>
+add this to your .emacs-file:
+</p>
+
+
+
+<pre class="example">
+    01 (add-to-list 'load-path "/home/phred/elisp/geben")
+02 (add-to-list 'load-path "/home/phred/elisp/geben/gud")
+</pre>
+
+
+
+<p>
+Usage
+</p>
+
+<p>
+Restart emacs. Type alt-x geben. Load the script you want to debug in firefox with ?XDEBUG\_SESSION\_START=1 appended
+</p>
+
+<p>
+Voilà, that's it. After pressing space to ‘activate' geben you can use this keys:
+</p>
+
+
+
+<pre class="example">
+    01 spc step into/step over
+02 i   step into
+03 o   step over
+04 r   step out
+05 b   set a breakpoint at a line
+06 u   unset a breakpoint at a line
+07 g   run
+08 e   eval expression (to inspect variables: best is probably print_r($this, true))
+09 q   stop debugger
+</pre>
+
+
+
+<p>
+Update: After some usage it bugged me to always type print\_r($var, true) to inspect a variable. And then, the print\_r-output is cut after 1024 chars. Knowing absolutely nothing about lisp I did some very lame changes to the geben code.
+</p>
+
+
+
+<p>
+With these changes I'm able to type ‘E' and then write $variable and geben writes all the output to the message-buffer. Download the diff and patch the geben-sourcecode with
+</p>
+
+<p>
+patch -i geben.diff
+</p>
+
+      </div>
+    </div>
+    <div> 
+      <div class="post-meta">
+        <span title="post date" class="post-info">2011-03-26</span>
+        <span title="last modification date" class="post-info">2013-07-05</span>
+        <span title="tags" class="post-info"><a href="/tags/emacs/">emacs</a>, <a href="/tags/geben/">geben</a>, <a href="/tags/php/">php</a></span>
+        <span title="author" class="post-info">Gu Weigang</span>
+      </div>
+      <section>
+        <h1>Comments</h1>
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+          //var disqus_developer = 1;
+          var disqus_identifier = "/blog/2011/03/26/debug-php-in-emacs-with-geben/";
+          var disqus_url = "http://guweigang.com/blog/2011/03/26/debug-php-in-emacs-with-geben/";
+          var disqus_shortname = 'guweigang';
+          /* * * DON'T EDIT BELOW THIS LINE * * */
+          (function() {
+          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+          dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+          })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </section>
+      <div class="footer">
+        <p>Generated by <a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.3.1 (<a href="http://orgmode.org">Org</a> mode 8.0.3)</p>
+        <p> 
+          Copyright &copy; 2012 - 2013 <a href="mailto:guweigang &lt;at&gt; outlook &lt;dot&gt; com">Gu Weigang</a>
+          &nbsp;&nbsp;-&nbsp;&nbsp;
+          Powered by <a href="https://github.com/kelvinh/org-page" target="_blank">org-page</a>
+        </p>
+      </div>
+    </div>
+  </body>
+</html>
