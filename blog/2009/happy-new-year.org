@@ -1,0 +1,14 @@
+#+TITLE: Happy new year!
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2009-12-31 Thu
+#+URI: /blog/2009/12/31/happy-new-year!/
+#+KEYWORDS: 2010, happy new year
+#+TAGS: wishes, happy new year
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+The year 2010 has come, wish everything is okay.
+
+

@@ -1,0 +1,37 @@
+#+TITLE: TP群中大Ｐ问的一个正则问题
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2011-04-04 Mon
+#+URI: /blog/2011/04/04/tp-group-a-large-p-asked-a-regular-problem/
+#+KEYWORDS: 
+#+TAGS: 
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+#+BEGIN_QUOTE
+  
+大P 14:36:54 
+我需要一个正则 
+回复大P 14:36:56 
+首位不能是 /
+所有字符不能包括 \<>*?:"|
+不能包括 ./ 这个字符串 
+
+#+END_QUOTE
+
+
+
+看来是目录正则匹配问题，还真是难倒了群里兄弟，呵呵，很久没接触正则表达式了，翻了下资料，初步确定要用预搜索，所以就简单了，
+
+
+#+BEGIN_EXAMPLE
+    [^/]((?!\./)[^\\\<>\*\?:\"|](?<!\./))+
+
+#+END_EXAMPLE
+
+
+恩，解决了，推荐个正则参考资料：[[http://www.regexlab.com/zh/regref.htm][http://www.regexlab.com/zh/regref.htm]]正则工具的话用RegexBuddy，这个网上有破解版，你们懂的。
+
+
+

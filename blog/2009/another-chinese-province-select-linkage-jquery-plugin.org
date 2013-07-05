@@ -1,0 +1,22 @@
+#+TITLE: 又一个中国省份select联动jquery插件
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2009-12-06 Sun
+#+URI: /blog/2009/12/06/another-chinese-province-select-linkage-jquery-plugin/
+#+KEYWORDS: 省份联动, SELECT, JQuery
+#+TAGS: china city, china provinces, jquery, select, 中国城市, 中国省份选择框
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+China Provinces 是一款jquery的Javascript 中国省份，市，区联动的选择框插件。它可以方便的将中国的省份、城市、区联动起来，不需要任何数据库，服务器端脚本支持。
+
+#+BEGIN_QUOTE
+  之前介绍过一个相似的插件：中国城市JSON数据（[[http://godpress.cn/?p=44][http://godpress.cn/?p=44]]）。可以自己比较性能根据需要、习惯选择使用。
+#+END_QUOTE
+
+不多说了，看演示：[[http://godpress.cn/demos/jquery/chinaprovinces/][http://godpress.cn/demos/jquery/chinaprovinces/]]
+
+ 
+
+感谢[[http://www.harrycms.cn][harry]]的努力，我们才有这么好的插件可以使用！

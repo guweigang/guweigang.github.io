@@ -1,0 +1,126 @@
+#+TITLE: 用error_log函数写缓存
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2011-04-30 Sat
+#+URI: /blog/2011/04/30/error_log-function-with-write-cache/
+#+KEYWORDS: 
+#+TAGS: cache, log, php
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+恩，没错，@伪造 在看[[http://justinvincent.com/ezsql][ezSQL]]源代码的时候，总是看到作者用error\_log函数写缓存，如：
+
+
+#+BEGIN_EXAMPLE
+    error_log( serialize($result_cache), 3, $cache_file);
+#+END_EXAMPLE
+
+
+来看看error\_log的原型：
+
+
+#+BEGIN_EXAMPLE
+    bool error_log ( string $message [, 
+        int $message_type = 0 [, string $destination [, string $extra_headers ]]] )
+#+END_EXAMPLE
+
+
+
+
+**error\_log()* log types*
+
+
+
+
+
+
+
+
+
+
+0
+
+
+
+
+/=message=/ is sent to PHP's system logger, using the Operating System's system logging mechanism or a file, depending on what the [[errorfunc.configuration.html#ini.error-log][error\_log]] configuration directive is set to. This is the default option.
+
+
+
+
+
+
+
+
+
+
+1
+
+
+
+
+/=message=/ is sent by email to the address in the /=destination=/ parameter. This is the only message type where the fourth parameter, /=extra_headers=/ is used.
+
+
+
+
+
+
+
+
+
+
+2
+
+
+
+
+No longer an option.
+
+
+
+
+
+
+
+
+
+
+3
+
+
+
+
+/=message=/ is appended to the file /=destination=/. A newline is not automatically added to the end of the /=message=/ string.
+
+
+
+
+
+
+
+
+
+
+4
+
+
+
+
+/=message=/ is sent directly to the SAPI logging handler.
+
+
+
+
+
+
+
+
+
+
+
+
+当$message\_type 值为3时，代表写文件，而且是以append的方式写文件。同类型的函数有file\_put\_contents，不过它是以覆盖方式写文件。而使用这两个函数，都能节约代码，因为file\_put\_conents和error\_log不需要提前获得文件句柄，当然也不需要关闭它们。
+
+

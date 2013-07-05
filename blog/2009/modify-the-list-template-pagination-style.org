@@ -1,0 +1,27 @@
+#+TITLE: 修改列表模板的分页样式[!--show.page--]和[!--show.listpage--]
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2009-11-25 Wed
+#+URI: /blog/2009/11/25/modify-the-list-template-pagination-style---show_page-and-show_listpage/
+#+KEYWORDS: 
+#+TAGS: 分页样式, 列表模板, 帝国cms
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+在/e/class/t\_functions.php里面查找函数：
+[!--show.listpage--] => sys\_ShowListMorePage
+[!--show.page--] => sys\_ShowListPage
+下面是我修改后的样式：
+
+[[http://godpress.cn/wp-content/uploads/2009/11/1.jpg]]
+
+改的过程还充满了戏剧性，改完之后“下一页”链接总是链接到第二页，问了客服才知道，原来我自定义的变量和系统变量冲突，所以生成的过程中断，没有生成完全的原因。
+
+我定义了2个全局变量：
+$pripage = "<img src='/images/fy1.jpg' border='0' align='absmiddle' />";
+$nextpage= "<img src='/images/fy2.jpg' border='0' align='absmiddle' />";
+
+最后出问题的就是$nextpage变量，把它改成$nextpagelink一切就OK了！
+
+

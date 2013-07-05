@@ -1,0 +1,24 @@
+#+TITLE: 原来不用ajax也可以这样做
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2011-09-15 Thu
+#+URI: /blog/2011/09/15/the-original-can-be-done-without-ajax/
+#+KEYWORDS: 
+#+TAGS: ajax, iframe
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+原来在提交表单时我们不一定要用ajax，在最近的项目中碰到一类避免写ajax的好方法，特别是在对表单处理时非常有效。每个页面放一个隐藏的iframe，然后不管是a标签还是form的target都指向该iframe，后端处理之后返回内容都在iframe中，然后就你可以在iframe中操纵父窗口的元素了，请看下面这个示例：
+
+ 
+
+[do action="code-source"]
+<form action="#" method="POST" name="newuser" target="\_pframe"></form>
+<iframe src="javascript:false;" id="\_pframe" name="\_pframe" frameborder="0" scrolling="no" style="display:none;"></iframe>
+[/do]
+[do action="code-source"]
+<script language="javascript>if (parent) {parent.\_form\_exception("email", "邮箱不能为空");}</script>;
+[/do]
+
+

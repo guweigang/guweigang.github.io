@@ -1,0 +1,33 @@
+#+TITLE: MySQL创始人发起网络倡议 反对甲骨文收购Sun
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2009-12-14 Mon
+#+URI: /blog/2009/12/14/mysql-founder-initiated-against-oracle/
+#+KEYWORDS: 
+#+TAGS: mysql, sun, 甲骨文
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+新闻来自:[[http://www.cnbeta.com/][CnBeta]]
+
+
+
+
+*MySQL创始人迈克尔-维德纽斯（Michael Widenius）发起一项互联网运动，倡议MySQL用户终止甲骨文收购Sun的交易。*
+
+
+
+
+欧盟委员会曾反对甲骨文斥资70亿美元收购Sun，声称该交易将限制数据库市场竞争。维德纽斯称，他发起的这项倡议MySQL用户通过电子邮件向欧盟委员会表达对该交易观点的活动是对上周甲骨文举措的回应。上周，甲骨文动员其大客户在听证会上表示该交易不妨碍竞争。
+
+
+
+
+反垄断律师曾表示，主流公司在听证会上对甲骨文收购Sun表示支持，可能会影响欧盟委员会裁定。
+全球数据库市场一直为技术巨头甲骨文、IBM和微软所控制，MySQL曾是该市场上的一枝独秀，推动了数据库及维护费用的下降。
+维德纽斯曾是一位威望很高的开放源代码软件开发人员之一，今年初离开Sun后创建了自己的数据库公司Monty Program Ab。Sun于2008年斥资10亿美元收购了MySQL，甲骨文收购Sun后将获得MySQL。
+维德纽斯在博客中写道：“有了用户的支持，欧盟委员会就可能阻止该交易或要求甲骨文修改有关MySQL条款，给用户提供别的保障；没有用户支持，上述希望将化为泡影。欧盟是我们最后一根救命稻草，因为美国政府已批准了该交易，而欧盟委员会还在担忧其影响。”
+甲骨文需要于本周一结束之前提交正式提案，保证欧盟委员会在明年1月27日的最终期限前有足够时间针对该交易作出裁定。
+
+

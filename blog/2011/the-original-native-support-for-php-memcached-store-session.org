@@ -1,0 +1,130 @@
+#+TITLE: 原来PHP原生支持Memcached存储session 
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2011-05-03 Tue
+#+URI: /blog/2011/05/03/the-original-native-support-for-php-memcached-store-session/
+#+KEYWORDS: 
+#+TAGS: memcache, memcached, php, session
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+转自：[[http://blog.csdn.net/ctowoo/archive/2009/09/28/4607858.aspx][http://blog.csdn.net/ctowoo/archive/2009/09/28/4607858.aspx]]
+一般地， Session 是以文本文件形式存储在服务器端的。如果使用 Seesion，或者该 PHP 文件要调用 Session 变量，那么就必须在调用 Session 之前启动它，使用 session\_start() 函数。其它都不需要你设置了，PHP 自动完成 Session 文件的创建。其默认 Session 的存放路径是服务器的系统临时文件夹。
+
+但是如果碰到大数据量的Sesstion的时候， 使用基于文件的Session存取瓶颈可能都是在磁盘IO操作上，现在利用Memcached来保存Session数据，直接通过内存的方式，效率自然能够提高不少。 在读写速度上会比 files 时快很多，而且在多个服务器需要共用 session 时会比较方便，将这些服务器都配置成使用同一组 memcached 服务器就可以，减少了额外的工作量。
+
+其缺点是 session 数据都保存在 memory 中，一旦宕机，数据将会丢失。但对 session 数据来说并不是严重的问题。
+
+如何用 memcached 来存储 session呢？以下是基本的配置步骤：
+
+1. 安装 memcached （略过，不清楚的筒子可以查看我的另一篇文章：http://blog.csdn.net/ctowoo/archive/2009/09/26/459 6701.aspx ）
+
+在 phpinfo 输出中的 "Registered save handlers" 会有 "files user sqlite"。
+
+2. 修改配置文件，
+a. 在 php.ini 中全局设置（* 需要重启服务器）
+
+
+#+BEGIN_EXAMPLE
+    session.save_handler = memcache
+session.save_path = "tcp://127.0.0.1:11211"
+
+#+END_EXAMPLE
+
+
+
+b. 或者某个目录下的 .htaccess :
+
+
+
+#+BEGIN_EXAMPLE
+    php_value session.save_handler "memcache"
+php_value session.save_path "tcp://127.0.0.1:11211"
+
+#+END_EXAMPLE
+
+
+
+c. 也可以在某个一个应用中：
+
+
+
+#+BEGIN_EXAMPLE
+    ini_set("session.save_handler", "memcache");
+ini_set("session.save_path", "tcp://127.0.0.1:11211");
+
+#+END_EXAMPLE
+
+
+
+注：使用多个 memcached server 时用逗号","隔开，并且和 Memcache::addServer() 文档中说明的一样，可以带额外的参数"persistent"、"weight"、"timeout"、"retry\_interval" 等等，类似这样的："tcp://host:port?persistent=1&weight=2,tcp://host2 :port2" 。
+
+3. 启动 memcached
+
+
+#+BEGIN_EXAMPLE
+    memcached -d -m 10 -u root -l 127.0.0.1 -p 11211 -c 256 -P /tmp/memcached.pid
+
+#+END_EXAMPLE
+
+
+
+4.测试 创建一个 session
+
+
+#+BEGIN_EXAMPLE
+    <?php
+//set_session.php
+session_start();
+
+if (!isset($_SESSION['admin'])) {
+$_SESSION['TEST'] = 'wan';
+}
+print $_SESSION['admin'];
+print "\n";
+print session_id();
+?>
+
+#+END_EXAMPLE
+
+
+
+5. 用 sessionid 去 memcached 里查询一下
+
+
+#+BEGIN_EXAMPLE
+    
+<?php
+//get_session.php
+$mem = new Memcache;
+$mem->connect("127.0.0.1", 11211);
+var_dump($mem->get('0935216dbc0d721d629f89efb89affa 6'));
+?>
+
+#+END_EXAMPLE
+
+
+。。。
+
+
+#+BEGIN_EXAMPLE
+    [root@localhost html]# /usr/local/webserver/php/bin/php -f get_session.php
+
+#+END_EXAMPLE
+
+
+输出结果：
+
+
+#+BEGIN_EXAMPLE
+    string(16) 
+"admin|s:3:"wan";"
+
+#+END_EXAMPLE
+
+
+
+证明 session 正常工作。
+
+

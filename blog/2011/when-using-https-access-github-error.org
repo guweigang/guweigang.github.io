@@ -1,0 +1,98 @@
+#+TITLE: 使用https方式访问github时报错
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2011-05-15 Sun
+#+URI: /blog/2011/05/15/when-using-https-access-github-error/
+#+KEYWORDS: 
+#+TAGS: git, msys, msys git, win 7
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+Aura PHP项目托管在[[https://github.com/][github]]上，前天在google groups上看到邮件，说auraphp的基本类库已经就绪，开始使用aura.system装备所有包了。于是按照教程使用git命令下载aura.system。
+
+
+
+
+
+#+BEGIN_EXAMPLE
+    
+$ git clone https://github.com/auraphp/system
+Cloning into system...
+error: error setting certificate verify locations:
+  CAfile: /bin/curl-ca-bundle.crt
+  CApath: none
+ while accessing https://github.com/auraphp/system/info/refs
+
+fatal: HTTP request failed
+
+#+END_EXAMPLE
+
+
+
+
+
+提示错误，额。。。我的环境是Win 7+MSYS Git，但是可以使用git方式下载源码：
+
+
+
+
+
+#+BEGIN_EXAMPLE
+    
+$ git clone git://github.com/auraphp/system.git
+
+#+END_EXAMPLE
+
+
+
+
+
+没办法，第一次用github，所以又回到groups中提问，得到@Lee 的回复：
+
+
+
+
+
+#+BEGIN_QUOTE
+  
+
+
+  Are you on windows?
+  
+If so try this (you may need to change the path to curl-ca-bundle.crt):
+  
+git config ---system http.sslcainfo "C:\Program Files (x86)\git\bin\curl-ca-bundle.crt"
+
+  
+
+#+END_QUOTE
+
+
+
+
+
+事实证明，Ta是对的。。。
+
+
+
+
+
+#+BEGIN_EXAMPLE
+    
+ROY@ROY-PC ~
+$ git config --system http.sslcainfo "C:\MinGW\msys\1.0\bin\curl-ca-bundle.crt"
+
+ROY@ROY-PC ~
+$ git clone https://github.com/auraphp/system
+Cloning into system...
+remote: Counting objects: 577, done.
+remote: Compressing objects: 100% (253/253), done.
+remote: Total 577 (delta 323), reused 498 (delta 293)
+Receiving objects: 100% (577/577), 398.26 KiB | 4 KiB/s, done.
+Resolving deltas: 100% (323/323), done.
+
+#+END_EXAMPLE
+
+
+

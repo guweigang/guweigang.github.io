@@ -1,0 +1,52 @@
+#+TITLE: Yetii --- Yet another javascript tab interface
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2009-12-16 Wed
+#+URI: /blog/2009/12/16/yetii-yet-another-javascript-tab-interface/
+#+KEYWORDS: 
+#+TAGS: javascript, tab, web interface
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+come from: [[http://www.kminek.pl/lab/yetii/][http://www.kminek.pl/lab/yetii/]]
+
+
+
+
+/Yetii/ stands for *Yet (E)Another JavaScript Tab Interface Implementation*.
+
+
+
+
+There are plenty of DHTML tabs scripts out there but most of them are either poorly coded, library/framework dependend or bloated with unnecessary functionality. So I`ve decided to come up with this simple, yet functional tab interface implementation.
+
+
+
+
+
+** Features
+
+
+
+
+-  extremely lightweight, object-oriented code
+-  gracefull degradation in browsers without JavaScript
+-  you can have many independend tab interfaces on a single page
+-  you can specify initial tab
+-  you can customize default class names
+-  you can turn on automatic tabs rotation (available in two modes)
+-  you can add next/previous navigation
+-  you can nest one tab interface inside another
+-  you can manually invoke tab showing method
+-  you can define custom function to run after certain tab is clicked
+-  you can define custom function to run when user leaves certain tab
+-  *you can link to certain tab on page A from page B via URL parameter*
+-  *you can turn on tab persistence feature, so the most recently clicked tab is stored inside a cookie and remembered between page refresh*
+
+
+
+
+[[http://godpress.cn/wp-content/uploads/2009/12/yet-another-javascript-tab-interface.png]]
+
+

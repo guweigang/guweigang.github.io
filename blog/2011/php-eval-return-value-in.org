@@ -1,0 +1,53 @@
+#+TITLE: php中eval返回值
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2011-01-02 Sun
+#+URI: /blog/2011/01/02/php-eval-return-value-in/
+#+KEYWORDS: 
+#+TAGS: eval, php
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+前两天在群里面讨论，如何计算字符串表达式的值，如：1*2+3。群里面马上有人给出了方案，使用eval方法。
+
+不错，使用eval方法是最佳选择。
+
+当然下面这样是输出不了值的：
+
+
+#+BEGIN_EXAMPLE
+    
+echo eval('1*2+3;');
+
+#+END_EXAMPLE
+
+
+因为1*2+3是常量表达式，并没有返回值或保存变量。
+
+可以在eval中为变量赋值，像这样：
+
+
+#+BEGIN_EXAMPLE
+    
+eval('$a = 1*2+3;');
+echo $a;
+
+#+END_EXAMPLE
+
+
+因为在退出eval后，该函数中变量会保持其值。但这种方法使用了两条语句，所以不可取。
+
+最后的也是最好的方法，在eval函数中直接显示使用return返回值：
+
+
+#+BEGIN_EXAMPLE
+    
+echo eval('return 1*2+3;');
+
+#+END_EXAMPLE
+
+
+
+
+

@@ -1,0 +1,23 @@
+#+TITLE: 正则匹配字符串“@xxx:”中的xxx
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2011-04-08 Fri
+#+URI: /blog/2011/04/08/regular-matches-the-string-/
+#+KEYWORDS: 
+#+TAGS: 正则表达式
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+正则匹配字符串“@xxx:”中的xxx，不含引号，可能是微博中的应用吧，反正今天老风问起了，我就试着写了下，xxx代表数字、字母、下划线或中文。
+
+
+#+BEGIN_EXAMPLE
+    @([_0-9a-zA-Z\x{4e00}-\x{9fa5}]+):
+#+END_EXAMPLE
+
+
+效果：
+[[http://roygu.com/2011/04/regular/%e6%ad%a3%e5%88%99%e5%8c%b9%e9%85%8d%e5%ad%97%e7%ac%a6%e4%b8%b2%e2%80%9cxxx%e2%80%9d%e4%b8%ad%e7%9a%84xxx.html/attachment/2011-4-8-21-32-21][[[http://roygu.com/wp-content/uploads/2011/04/2011-4-8-21-32-21.png]]]]
+
+

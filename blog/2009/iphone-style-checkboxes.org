@@ -1,0 +1,20 @@
+#+TITLE: iphone style checkboxes
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2009-12-16 Wed
+#+URI: /blog/2009/12/16/iphone-style-checkboxes/
+#+KEYWORDS: 
+#+TAGS: iphone style, javascript, jquery
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+来源：[[http://awardwinningfjords.com/2009/06/16/iphone-style-checkboxes.html][http://awardwinningfjords.com/2009/06/16/iphone-style-checkboxes.html]]
+
+iphone风格的checkbox, 效果不错，apple的UI就是做得好！
+
+[caption id="attachment\_219" align="aligncenter" width="500" caption="iphone-style-checkboxes"][[http://godpress.cn/wp-content/uploads/2009/12/iphone-style-checkboxes.png]][/caption]
+
+本站演示：[[http://godpress.cn/demos/jquery/iphone-style-checkboxes/][http://godpress.cn/demos/jquery/iphone-style-checkboxes/]]
+
+

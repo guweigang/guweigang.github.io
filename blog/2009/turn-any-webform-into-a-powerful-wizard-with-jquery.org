@@ -1,0 +1,24 @@
+#+TITLE: Turn any webform into a powerful wizard with jQuery
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2009-12-16 Wed
+#+URI: /blog/2009/12/16/turn-any-webform-into-a-powerful-wizard-with-jquery/
+#+KEYWORDS: 
+#+TAGS: form, javascript, jquery, web form
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+表单过长是让用户受阻的重要原因，而基于浏览器的应用程序要提供用户注册或收集用户资料，也只能用form了，所以简洁大方的表单是吸引用户注册的有效手段，今天介绍一个jquery插件，看文章标题就知道：把任何web表单转化为美观的向导式表单，翻译得不好，看图：
+
+原始表单：
+
+[[http://godpress.cn/wp-content/uploads/2009/12/before-powerful-wizard.png]]
+
+转化后：
+
+[[http://godpress.cn/wp-content/uploads/2009/12/after-powerful-wizard.png]]
+
+插件来源：[[http://www.jankoatwarpspeed.com/examples/webform_to_wizard/][http://www.jankoatwarpspeed.com/examples/webform\_to\_wizard/]]
+
+

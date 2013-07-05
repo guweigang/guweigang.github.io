@@ -1,0 +1,42 @@
+#+TITLE: PHP CLI Bat
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2011-04-28 Thu
+#+URI: /blog/2011/04/28/php-cli-bat/
+#+KEYWORDS: 
+#+TAGS: bat, cli, php
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+恩，在Windows下用BAT调用PHP。
+
+
+#+BEGIN_EXAMPLE
+    TITLE PHP CLI BAT
+COLOR B0
+@echo off
+cls
+echo.
+php -n test.php
+echo.
+pause
+
+#+END_EXAMPLE
+
+
+test.php内容：
+
+
+#+BEGIN_EXAMPLE
+    <?php
+    echo "Hello, Wordl!\n";
+    echo "你好，世界！";
+
+#+END_EXAMPLE
+
+
+结果（当然，要显示中文，要用ASCII编码）：
+[[http://roygu.com/2011/04/php/php-cli-bat.html/attachment/php_cli_cmd][[[http://roygu.com/wp-content/uploads/2011/04/php_cli_cmd.jpg]]]]
+
+

@@ -1,0 +1,43 @@
+#+TITLE: 国内四大音乐电台flash地址
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2011-04-17 Sun
+#+URI: /blog/2011/04/17/flash-address-four-major-music-stations/
+#+KEYWORDS: 
+#+TAGS: adurl, music flash, radio
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+恩，最近一直在做短网址网站[[http://adurl.co][AdURL.CO]]，恩，基于shorturl二次开发，不过说实话shorturl的代码质量令人头脑，格式极其差，所以打算有时间还要重写下呢，呵呵。现分享国内四大音乐电台flash地址：
+
+
+
+
+#+BEGIN_QUOTE
+  虾米电台：[[http://kuang.xiami.com/kuang/play/xiamiradio][http://kuang.xiami.com/kuang/play/xiamiradio]]
+酷我音乐：[[http://player.kuwo.cn/webmusic/webdiantai/kuwoBaiduPlay.jsp][http://player.kuwo.cn/webmusic/webdiantai/kuwoBaiduPlay.jsp]]
+乐库电台：[[http://music.sina.com.cn/app/baidu/index.php][http://music.sina.com.cn/app/baidu/index.php]]
+豆瓣电台：[[http://douban.fm/partner/baidu/doubanradio][http://douban.fm/partner/baidu/doubanradio]]
+#+END_QUOTE
+
+
+
+
+下面是AdURL的短网址平台：
+
+
+
+
+#+BEGIN_QUOTE
+  虾米电台：[[http://adurl.co/xiamiradio][http://adurl.co/xiamiradio]]
+酷我音乐：[[http://adurl.co/kuwoplayer][http://adurl.co/kuwoplayer]]
+乐库电台：[[http://adurl.co/sinaplayer][http://adurl.co/sinaplayer]]
+豆瓣电台：[[http://adurl.co/doubanradio][http://adurl.co/doubanradio]]
+#+END_QUOTE
+
+
+
+
+
+

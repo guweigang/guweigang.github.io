@@ -1,0 +1,32 @@
+#+TITLE: 写论文时Word突然挂了，文件丢失！！！
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2011-04-22 Fri
+#+URI: /blog/2011/04/22/writing-papers-word-suddenly-hung-up-missing-files-/
+#+KEYWORDS: 
+#+TAGS: word, 论文
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+太扯淡了，实验室同学写论文时Word突然挂了并弹出错误窗口，然后不得不结束进程。再想打开论文继续时，发现论文不见了，我晕，论文就这么不见了，有木有，有木有，论文帝你伤不起呀~
+
+后来几经Google和百度，才找到了解决办法：
+
+
+
+
+#+BEGIN_QUOTE
+首先，调整文件显示设置，显示隐藏的文件
+然后，找到最新的.tmp文件，并把它重命名为word格式，如：毕业论文.doc。
+最后，双击打开。哇！论文又回来了。
+#+END_QUOTE
+
+
+
+
+
+论文帝，微软你伤不起~
+
+
+

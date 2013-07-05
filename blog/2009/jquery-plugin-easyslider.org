@@ -1,0 +1,18 @@
+#+TITLE: JQuery Plugin---EasySlider
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2009-12-03 Thu
+#+URI: /blog/2009/12/03/jquery-plugin-easyslider/
+#+KEYWORDS: 
+#+TAGS: easyslider, jquery, js, slider
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+不错的图片幻灯插件，看图：
+
+[[http://godpress.cn/wp-content/uploads/2009/12/QQ截图未命名.jpg]]
+
+本站演示及用法：[[http://godpress.cn/demos/jquery/easyslider/][http://godpress.cn/demos/jquery/easyslider/]]
+
+

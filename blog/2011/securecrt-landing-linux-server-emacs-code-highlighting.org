@@ -1,0 +1,22 @@
+#+TITLE: secureCRT登陆Linux服务器emacs代码高亮
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2011-07-28 Thu
+#+URI: /blog/2011/07/28/securecrt-landing-linux-server-emacs-code-highlighting/
+#+KEYWORDS: 
+#+TAGS: code, emacs, highlight, secureCRT
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+secureCRT中登录到服务器上时，汉字支持很好，但emacs中的代码总是不能高亮彩色显示，今天摸索了一下，终于找到了解决办法。
+
+首先要从两个方面来设置：
+
+1> secureCRT的设置。确保仿真终端类型为linux，并勾选“ANSI颜色选项”。
+
+2> 服务器端的设置。在.bashrc中添加：export TERM=xterm 语句。
+
+OK.
+
+

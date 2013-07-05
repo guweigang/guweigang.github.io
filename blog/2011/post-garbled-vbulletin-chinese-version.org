@@ -1,0 +1,16 @@
+#+TITLE: vBulletin中文版发帖出现乱码
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2011-04-05 Tue
+#+URI: /blog/2011/04/05/post-garbled-vbulletin-chinese-version/
+#+KEYWORDS: 
+#+TAGS: vBulletin, 国外源码
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+一直想建一个网赚、主机、源码讨论的论坛，因此找了个国外非常出名的论坛系统vBulletin做承载体，但是vBulletin是商用论坛　，所以只好找破解了，恰巧找到一个v4.1.2的破解论坛。简洁且功能强大，于是乎又找了个vBulletin 4.0.4的中文包装上了，效果还真不错。演示：[[http://www.geekcodex.org][http://www.geekcodex.org]]
+
+不过装好后发表文章有乱码，原来是vBulletin的一个默认配置导致的。设置 ---> 选项 ---> 主题内容显示选项 ---> 文本换行　---> 把该值设为０即可。
+
+

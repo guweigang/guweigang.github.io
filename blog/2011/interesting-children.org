@@ -1,0 +1,15 @@
+#+TITLE: 有趣儿的项目lisphp
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2011-07-26 Tue
+#+URI: /blog/2011/07/26/interesting-children/
+#+KEYWORDS: 
+#+TAGS: 
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+发现一个很有趣儿的项目，lisphp:h[[https://github.com/lunant/lisphp][ttps://github.com/lunant/lisphp]] 用lisp模式来写PHP代码。
+[[http://roygu.com/2011/07/php/%e6%9c%89%e8%b6%a3%e5%84%bf%e7%9a%84%e9%a1%b9%e7%9b%aelisphp.html/attachment/qq%e6%88%aa%e5%9b%be20110726173825][[[http://roygu.com/wp-content/uploads/2011/07/QQ截图20110726173825.png]]]]
+
+

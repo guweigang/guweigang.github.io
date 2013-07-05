@@ -1,0 +1,43 @@
+#+TITLE: 国人制作的Editplus4PHP
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2009-12-06 Sun
+#+URI: /blog/2009/12/06/people-making-editplus4php/
+#+KEYWORDS: 
+#+TAGS: editplus, ide, php, php ide, softs
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+EditPlus相信大家都不陌生了，特别是做php开发的程序员们。
+百度百科：
+
+
+#+BEGIN_QUOTE
+  EditPlus是一款由韩国 Sangil Kim （ES-Computing）出品的小巧但是功能强大的可处理文本、HTML和程序语言的32位编辑器，你甚至可以通过设置用户工具将其作为C,Java,Php等等语言的一个简单的IDE。
+#+END_QUOTE
+
+
+这里要感谢[[http://hent.xicp.net/][十五工作室]]，我们才会有免费的、针对PHP优化的轻量级IDE---editplus4php
+
+Editplus4PHP
+
+
+#+BEGIN_QUOTE
+  •说明：Editplus4PHP是一个以Editplus为基础的PHP集成开发环境。包含了PHP编辑器、PHP运行调试环境、相关工具及手册。
+•声明：本软件仅作研究学习之用，请于下载后24小时内主动删除。其包含的软件版权属于原作者，任何个人和组织未经授权不得用于商业用途，违者追究其法律责任。
+•大小：19.3 M
+•更新：2009-6-10
+•组件：
+◦EditPlus v3.11(342)
+◦xampplite1.7.1
+◦Zend Code Analyzer 1.2.3
+◦LeapFTP2.7.6
+•下载：[[http://hent.xicp.net/i/downloads/Editplus4PHP0.9.0Lite.exe][Editplus4PHP0.9.0Lite
+]]HentStudio™ ©2002-2009
+#+END_QUOTE
+
+
+在win xp系统下是完全没有问题的，但是在win 7下面要右键以管理员身份运行安装文件才能安装！
+
+

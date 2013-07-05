@@ -1,0 +1,74 @@
+#+TITLE: 开源视窗在本期推荐项目中推荐SOLAR PHP
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2011-04-24 Sun
+#+URI: /blog/2011/04/24/open-windows-in-the-current-project-recommended-solar-php-recommended/
+#+KEYWORDS: 
+#+TAGS: oseye, solar, solar php
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+============================
+*Solar简介*
+============================
+Solar（Simple Object Library and Application Repository的缩写）是基于PHP 5的web应用框架。她继承了Savant模板系统、DB\_Table对象-关系管理包以及PEAR组织结构的优良特性及先进思想。
+Solar由Paul M. Jones创办，他也是Solar系统的“独裁者”。其他开发人员主要为标准项目分发包开发组件，所有这些代码和分发包都遵守New BSD协议。
+============================
+*Solar特点*
+============================
+1. 优雅和一致的：代码库本身是很容易理解的，坚持文档友好的命名规则，并有很强的概念完整性。
+2. 完整的名字空间： Solar类库有它们自己的PHP5.2名字空间 ，并且Solar中的vendor同样有自己的名字空间。这样一来，混合其他组件和框架也不是什么难事了，因为他们不会产生名字冲突。
+3. 配置是可继承的：在配置文件配置好某个类，该类的所有子类都会默认继承该配置。
+4. 本地化是可继承的：设置某个类的本地化字符串，该类的所有子类都会继承那些本地化字符串。
+5. 针对SQL注入，跨站点脚本的攻击和其他常见的攻击有非常容易使用的防卸体系。
+6. 验证和查审有户输入，有健壮和可扩展的数据过滤体系。
+7. 用于LDAP、TypeKey、数据库htpasswd及其他源的验证适配器。
+8. 用于memcache、APC、XCache及其他系统的缓存适配器。
+9. 用于超链接, 图像, 样式, 本地化文本, 表单生成等的视图辅助类。
+10. 健全和强大的模型系统 ，让你可以使用记录对象自动生成表单。
+11. 充分集成企业的开发模式，例如：
+* 数据映射
+* 依赖注入和服务定位器
+* 延迟加载
+* MVC 模式
+o Front 控制器
+o Page 控制器
+o Table Module和Active Record
+o 模板视图
+o 两步视图
+* 查询对象
+* 注册表
+* 服务器会话状态
+============================
+*Solar 理解*
+============================
+Paul <http://paul-m-jones.com> 把 Solar 设计得足够好了，整个 Solar 是一个系统，你可以把它理解为操作系统，它由 Solar 内核和辅助工具组成，我们在 Solar 上开发应用就相当于在操作系统上开发软件一样，这个比喻应该好理解而且不过分。一般来说，我们有两种途径访问 Solar：一种是从浏览器访问，这个时候入口文件是 /docroot/index.php 或 /index.php；一种是从 CLI（命令行）访问，这个时候入口文件是 /script/solar。这两个文件都通过 Solar 的架构类 /source/solar/Solar.php 来使用 Solar 内核。
+
+在 Solar 上开发应用是以 vendor 为单位的，你开发的应用的所有代码都是高度集中的，事实上一个 vendor 是一个文件夹。这就是说你在部署代码时，只需要部署 vendor 就行了，非常简单高效。
+============================
+*Solar 入门*
+============================
+Solar入门相比国内的ThinkPHP, FleaPHP及国外的CodeIgniter框架来说要稍微难一些，但背后隐藏的是优雅的代码和优秀的设计。恩，刚开始接触Solar可能会让你有点晕的感觉（\^\^不要瞎想），即便如此，也挡不住我们继续学习Solar的决心。
+
+Solar对操作系统有一定要求，从Solar的角度来看，操作系统分为以下3类：
+1. Linux/Unix
+2. Win NT 6以后（也即Win Vista之后的系统，支持Symlink）
+3. Win NT 6以前（也即Win Xp, Win 2000, Win 2003等，不支持Symlink）
+============================
+打断一下，这里插入一个话题：为什么要区分操作系统？
+
+
+
+
+#+BEGIN_QUOTE
+  这个问题确实让我们没办法回避，事实上这可能也是Solar目前尚不流行的原因，许多人看到这里肯定会问：“ PHP 不是跨平台的么，为何一个PHP框架不是跨平台的呢？”恩，这个问题我现在可以回答你。不错，PHP是跨平台的，但是PHP在两个平台下肯定有不同的实现。Solar也一样，Solar 出生在 Linux 家庭。其实Solar可以直接在WIN下运行(只要有WAMP环境)，但是Solar CLI（命令行工具）要用到文件系统的 Symlink 特性，所以其实是 Solar CLI不能很好地在 WIN 下工作。命令行工具是帮助我们快速开发的得力助手，我们当然不允许它不能使用。
+#+END_QUOTE
+
+
+
+
+============================
+看到这里觉得很复杂？呵呵，不用担心，现在已经有很成熟的方案处理所有这些问题，读读我们的手册，你一定会大有收获。中文手册地址：[[http://solarphp.cn/manual-new][http://solarphp.cn/manual-new]]，英文手册地址：[[http://www.solarphp.com/manual/][http://www.solarphp.com/manual/]]
+
+

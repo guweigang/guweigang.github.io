@@ -1,0 +1,46 @@
+#+TITLE: 用PHP压缩CSS
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2009-12-05 Sat
+#+URI: /blog/2009/12/05/compress-css-with-php/
+#+KEYWORDS: compressing, css, php
+#+TAGS: compressing, css, php
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+原文链接：[[http://abeautifulsite.net/2009/11/compressing-css-with-php/][http://abeautifulsite.net/2009/11/compressing-css-with-php/]]
+
+原文：
+
+#+BEGIN_QUOTE
+  Here is a short PHP function that removes comments and whitespace from your CSS. If you happen to be generating your stylesheet dynamically, try wrapping this around the output to reduce the overall size.function compress\_css($css) {
+// Remove comments
+$css = preg\_replace('!/\*[\^*]*\*+([\^/][\^*]*\*+)*/!', '', $css);
+// Remove whitespace
+$css = str\_replace(array("\r\n", "\r", "\n", "\t", ' ', ' ', ' '), '', $css);
+return $css;
+}
+
+Dont' forget that, if you are using PHP to output CSS, you'll need to serve the correct headers:header("Content-type: text/css");
+header("Expires: " . gmdate("D, d M Y H:i:s", (time() + 604800000)) . " GMT");
+
+The second line tells the browser to cache the styles for seven days. You can adjust that accordingly based on your preferences.
+#+END_QUOTE
+
+
+#+BEGIN_EXAMPLE
+    
+// Remove comments
+$css = preg_replace('!/\*[^*]*\*+([^/][^*]*\*+)*/!', '', $css);
+// Remove whitespace
+$css = str_replace(array("\r\n", "\r", "\n", "\t", '  ', '    ', '    '), '', $css);
+return $css;
+}
+// Serve the correct headers
+header("Content-type: text/css");
+header("Expires: " . gmdate("D, d M Y H:i:s", (time() + 604800000)) . " GMT");
+
+#+END_EXAMPLE
+
+上面的英文很简单，相信不用翻译了。

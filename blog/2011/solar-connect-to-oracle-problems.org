@@ -1,0 +1,128 @@
+#+TITLE: Solar连接Oracle存在的问题！
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2011-01-02 Sun
+#+URI: /blog/2011/01/02/solar-connect-to-oracle-problems/
+#+KEYWORDS: 
+#+TAGS: oracle, php, solar
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+前段时间朋友@东疯 使用Solar连接Oracle，死活都连不上，搞了好久天，所以我也找时间研究了下。看这里：[[http://wiki.oracle.com/page/PHP+Oracle+FAQ][http://wiki.oracle.com/page/PHP+Oracle+FAQ]]。使用PDO连接Oracle：
+
+
+#+BEGIN_EXAMPLE
+    
+try {
+$dbh = new PDO('oci:dbname=myhost/XE', 'myusername', 'mypassword');
+} 
+catch (PDOException $e) {
+trigger_error("Could not connect to database: ". $e->getMessage(), E_USER_ERROR);
+}
+
+#+END_EXAMPLE
+
+
+有三种合法字符串：
+1. 简易连接
+
+
+#+BEGIN_EXAMPLE
+    
+$c = oci_connect('myusername', 'mypassword', 'mymachine.mydomain/MYDB');
+$d = new PDO('oci:dbname=myhost/XE', 'myusername', 'mypassword');
+//或
+$c = oci_connect('myusername', 'mypassword', '127.0.0.1/XE');
+$d = new PDO('oci:dbname=127.0.0.1/XE', 'myusername', 'mypassword');
+
+#+END_EXAMPLE
+
+
+
+2. 一个用户选择的网络服务名通常用来识别的数据库连接。
+
+
+#+BEGIN_EXAMPLE
+    
+$c = oci_connect('myusername', 'mypassword', 'MYDB');
+$d = new PDO('oci:dbname=MYDB', 'myusername', 'mypassword');
+
+#+END_EXAMPLE
+
+
+tnsnames.ora文件内容
+
+
+#+BEGIN_EXAMPLE
+    
+MYDB =
+(DESCRIPTION =
+(ADDRESS = (PROTOCOL = TCP)(HOST = mymachine.mydomain)(PORT = 1521))
+(CONNECT_DATA =
+(SERVER = DEDICATED)
+(SERVICE_NAME = MYDB)
+)
+)
+
+#+END_EXAMPLE
+
+
+3. 如果简单连接方法被禁用了，你使用的又是Oracle 8i或9i库，你可以这样做。
+
+
+#+BEGIN_EXAMPLE
+    
+$db = "(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)
+(HOST = mymachine.mydomain)(PORT=1521))
+(CONNECT_DATA=(SERVER=DEDICATED)
+(SERVICE_NAME=MYDB)))";
+
+$c = oci_connect('myusername', 'mypassword', $db);
+$d = new PDO("oci:dbname=$db", 'myusername', 'mypassword');
+
+#+END_EXAMPLE
+
+
+
+看到了吧？这和PHP的PDO连接方式很不一样，所以Solar的Sql\_Oracle\_Adapter类的\_buildDsn应该修改一下：
+
+
+#+BEGIN_EXAMPLE
+    
+$info = array(
+    'host' => '192.168.1.118',
+    'port' => '1521',
+    'name' => 'pzblog',     // the service id
+    'user' => 'root',       // authenticate as this user
+    'pass' => '123456',     // authenticate with this password
+
+);
+class Solar_Sql_Adapter_Oracle
+{
+    protected $_pdo_type = 'oci';
+
+    protected function _buildDsn($info)
+    {
+        $dsn = array();
+
+        if (! empty($info['host'])) {
+            $dsn[] = 'dbname=//' . $info['host'];
+        }
+
+        if (! empty($info['port'])) {
+            $dsn[] = ':' . $info['port'];
+        }
+
+        if (! empty($info['name'])) {
+            $dsn[] = '/' . $info['name'];
+        }
+
+        return $this->_pdo_type . ':' . implode('', $dsn);
+    }
+}
+
+#+END_EXAMPLE
+
+
+

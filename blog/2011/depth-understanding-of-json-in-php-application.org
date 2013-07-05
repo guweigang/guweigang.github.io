@@ -1,0 +1,141 @@
+#+TITLE: 深入理解JSON在PHP中的应用
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2011-04-29 Fri
+#+URI: /blog/2011/04/29/depth-understanding-of-json-in-php-application/
+#+KEYWORDS: 
+#+TAGS: json, php
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+一直都认为JSON很简单，自己完全掌握了，今天才知道，自己只是“好像”掌握了，真正用起来连格式都记不住。
+
+群里的@TP新人（其实他是老人，不是什么新人，装纯的。。。:)）今天问了个问题，引起了我的兴趣，并让我真正了解了JSON。
+
+
+** *一、什么是JSON*
+
+
+先看看什么是JSON，可以在[[http://www.json.org/json-zh.html][http://www.json.org/json-zh.html/]]详细查看，当然也可以看看阮一峰的博客，有一篇介绍数据类型和JSON格式：[[http://www.ruanyifeng.com/blog/2009/05/data_types_and_json.html][http://www.ruanyifeng.com/blog/2009/05/data\_types\_and\_json.html]]。
+
+
+*** *1、对象*
+
+
+对象是一个无序的“‘名称/值'对”集合。一个对象以“{”（左括号）开始，“}”（右括号）结束。每个“名称”后跟一个“:”（冒号）；“‘名称/值' 对”之间使用“,”（逗号）分隔。
+[[/images/json/object.gif]]
+也即，对象格式必须是如下形式：
+
+
+#+BEGIN_EXAMPLE
+    {"foo":"bar", "hello":{"roy":"gu"}}
+#+END_EXAMPLE
+
+
+
+
+
+*** *2、数组*
+
+
+数组是值（value）的有序集合。一个数组以“[”（左中括号）开始，“]”（右中括号）结束。值之间使用“,”（逗号）分隔。
+[[/images/json/array.gif]]
+也即，数组格式必须是如下形式：
+
+
+#+BEGIN_EXAMPLE
+    [["a", "b"],["c", "d"], "e"]
+#+END_EXAMPLE
+
+
+
+
+
+*** *3、什么是值(Value)和字符串(String)？*
+
+
+值（value）可以是双引号括起来的字符串（string）、数值(number)、true、false、 null、对象（object）或者数组（array）。这些结构可以嵌套。
+
+
+字符串（string）是由双引号包围的任意数量Unicode字符的集合，使用反斜线转义。一个字符（character）即一个单独的字符串（character string）。字符串（string）与C或者Java的字符串非常相似。
+
+现在应该对JSON有一定的了解了吧，:)？虽然JSON格式的组成原子很简单，但其复杂的嵌套足以让你头疼。
+
+
+** *二、PHP对JSON的支持*
+
+
+目前只有三个函数：
+
+
+#+BEGIN_EXAMPLE
+    json_decode() - decode from json format
+json_encode() - encode to json format
+json_last_error() - Returns the last error occurred
+
+#+END_EXAMPLE
+
+
+有人说PHP对JSON字符串要求很苛刻，其实不然，JSON格式的定义已经很明确了：不管是value还是string都必须用双引号，等等。
+
+那么昨天@TP新人的问题是：要用PHP处理这种字符：[{a:'a1',b:'b1'},{a:'a2',b:'b2'}]，咋一看以为是JSON字符串，其实不然，值不能用单引号引用，名称两边必须用双引号。如果是规范的那么应该是这样子：[{"a":"a1","b":"b1"},{"a":"a2","b":"b2"}]，这是一个具有两个元素的数组，每个元素都是一个对象，且每个对象中都包含有两对名称/值。如果要使用PHP的json\_decode函数，就必须把它转换成标准JSON字符串格式。这个时候我当然想到正则了哈，下面是我写的处理代码：
+
+
+#+BEGIN_EXAMPLE
+    <?php
+// raw string
+$j = "[{a:'a1',b:'b1'},{a:'a2',b:'b2'}]";
+
+// strip [ and ] on both boundary ...
+$j = trim($j, '[]');
+
+// process the string with regex
+$j = preg_replace('#\b([^\'\",]+?):\'([^,]*)\'#', '"$1":"$2"', $j);
+
+// ... then add [ and ] again
+$j = "[".$j."]";
+
+// print json stirng with standard format
+echo $j . "\n";
+
+// decode it and dump the result
+$a = json_decode($j, true);
+var_dump($a);
+
+#+END_EXAMPLE
+
+
+
+@TP新人 根据自己的需求重写了下：
+
+
+#+BEGIN_EXAMPLE
+    <?php
+$j = "[{a:a1,b:'b1'},{a:'a2',b:b2}]";
+$j = trim($j, '[]');
+$j = preg_replace_callback('#\b([^\'\",]+?):([^,\}]*)#', 't', $j);
+
+$j = "[".$j."]";
+
+echo $j."\n";
+
+$a = json_decode($j);
+
+var_dump($a);
+
+function t($m)
+{
+    $m[1]='"'.$m[1].'"';
+    $m[2]=trim($m[2],"'");
+    $m[2]='"'.trim($m[2],'"').'"';
+    return $m[1].':'.$m[2];
+}
+
+#+END_EXAMPLE
+
+
+
+问题解决，收工！！！！
+
+

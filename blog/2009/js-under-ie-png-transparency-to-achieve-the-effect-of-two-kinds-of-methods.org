@@ -1,0 +1,55 @@
+#+TITLE: js实现IE下PNG透明效果的2种方法
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2009-12-02 Wed
+#+URI: /blog/2009/12/02/js-under-ie-png-transparency-to-achieve-the-effect-of-two-kinds-of-methods/
+#+KEYWORDS: 
+#+TAGS: jquery, js, pngfix
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+PNG的透明是相当不错的网页特效，但遗憾的是，IE老是跟我们作对无法实现透明效果。 下面2种用js方法来实现透明效果
+
+
+
+
+1. 首先是jquery.pngFix.pack.js，一看名字就知道是JQUERY的一个插件，所以使用前请调用jquery库
+
+
+
+
+具体使用方法请参考66小朋友网站的DEMO。
+
+
+
+
+
+[[http://www.cssrain.cn/demo/jquery-pngFix/demo.html][http://www.cssrain.cn/demo/jquery-pngFix/demo.html
+]]
+
+
+2 . IE PNG Alpha Fix v2.0   这是原生态js编写的，具体功效看下面介绍吧
+
+
+
+
+
+自动激活的透明度，在网页PNG图像。
+支持<IMG SRC=”">元素。
+支持背景PNG图像
+在CSS1中背景重复和立场的支持（通过可选附件）
+背景图片可以定义内联或外部的样式表。
+支持包括CSS的类的变化。
+采用了自动的解决方法的<a href=”">在新元素的背景元素。
+脚本容量小，便于下载
+
+
+DEMO:[[http://www.twinhelix.com/css/iepngfix/demo/][http://www.twinhelix.com/css/iepngfix/demo/]]
+
+
+
+
+主页：[[http://www.twinhelix.com/css/iepngfix/][http://www.twinhelix.com/css/iepngfix/]]
+
+

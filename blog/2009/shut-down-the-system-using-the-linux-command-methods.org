@@ -1,0 +1,74 @@
+#+TITLE: 用Linux命令关闭系统的方法
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2009-12-05 Sat
+#+URI: /blog/2009/12/05/shut-down-the-system-using-the-linux-command-methods/
+#+KEYWORDS: 
+#+TAGS: linux, man, shutdown
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+用Linux命令关闭系统的方法
+　shutdown 命令可以安全地关闭或重启Linux 系统，它在系统关闭之前给系统上的所有登录用户提示一条警告信息。该命令还答应用户指定一个时间参数，可以是一个精确的时间，也可以是从现在开始的一个时间段。
+
+　　精确时间的格式是hh:mm，表示小时和分钟，时间段由 和分钟数表示。系统执行该命令后会自动进行数据同步的工作。
+
+　　该命令的一般格式
+
+
+
+#+BEGIN_EXAMPLE
+    
+shutdown [选项] [时间] [警告信息]
+
+#+END_EXAMPLE
+
+
+
+　　命令中各选项的含义为:
+
+
+#+BEGIN_EXAMPLE
+    
+　　- k 并不真正关机而只是发出警告信息给所有用户
+
+　　- r 关机后立即重新启动
+
+　　- h 关机后不重新启动
+
+　　- f 快速关机重启动时跳过fsck
+
+　　- n 快速关机不经过init 程序
+
+　　- c 取消一个已经运行的shutdown
+
+#+END_EXAMPLE
+
+
+
+　　需要特别说明的是该命令只能由超级用户使用。
+
+　　例1，系统在十分钟后关机并且马上重新启动
+
+
+
+#+BEGIN_EXAMPLE
+    
+# shutdown –r 10
+
+#+END_EXAMPLE
+
+
+
+　　例2，系统马上关机并且不重新启动
+
+
+#+BEGIN_EXAMPLE
+    
+# shutdown –h now
+
+#+END_EXAMPLE
+
+
+

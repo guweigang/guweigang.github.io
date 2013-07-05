@@ -1,0 +1,151 @@
+#+TITLE: Solar工厂模式/工厂方法
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2011-04-23 Sat
+#+URI: /blog/2011/04/23/solar-factory-model-factory-method/
+#+KEYWORDS: 
+#+TAGS: factory function, factory pattern, solar, solarphp
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+SOLAR PHP 群中有人要求我写一篇介绍如何开发Solar插件的文章，恩，我也觉得很有必要，不过要介绍Solar插件，我认为必须先介绍Solar工厂模式和Solar依赖注入才能更好的了解Solar插件。那么这篇文章就来介绍下Solar的工厂模式。
+
+首先来看下Solar工厂方法，对于一个框架来说工厂函数至关重要，所以该方法在Solar架构类中，[[http://solarphp.cn/apidoc/__filesource/fsource_Solar__Solar.php.html#a378][点击这里查看]]，由此可见其重要性。
+
+
+#+BEGIN_EXAMPLE
+    public static function factory($class, $config = null)
+{
+    Solar_Class::autoload($class);
+    $obj = new $class($config);
+    // is it an object factory?
+    if ($obj instanceof Solar_Factory) {
+        // return an instance from the object factory
+        return $obj->factory();
+    }
+    // return the object itself
+    return $obj;
+}
+
+#+END_EXAMPLE
+
+
+
+大致意思如下：
+
+
+
+
+#+BEGIN_QUOTE
+  首先通过[[http://solarphp.cn/apidoc/__filesource/fsource_Solar__SolarClass.php.html#a45][Solar\_Class::autoload()]]方法加载文件，该方法会在被PHP或SOLAR包含过的所有路径中查找类文件。
+然后实例化类，如果该对象是[[http://solarphp.cn/apidoc/Solar/Solar_Factory.html][Solar\_Factory]]的实例，则直接调用对象的[[http://solarphp.cn/apidoc/__filesource/fsource_Solar__SolarFactory.php.html#a59][factory]]方法，并返回结果。如果不是则直接返回对象。
+#+END_QUOTE
+
+
+
+代码很简单，但设计得很巧妙。妙就妙在[[http://solarphp.cn/apidoc/Solar/Solar_Factory.html][Solar\_Factory]]类，它是一个抽象类，不能直接实例化它。适配器模式主要就是由它实现的。请看[[http://solarphp.cn/apidoc/__filesource/fsource_Solar__SolarFactory.php.html#a59][factory]]方法：
+
+
+#+BEGIN_EXAMPLE
+        public function factory()
+    {
+        // bring in the config and get the adapter class.
+        $config = $this->_config;
+        $class = $config['adapter'];
+        unset($config['adapter']);
+
+        // return the factoried adapter object
+        return new $class($config);
+    }
+
+#+END_EXAMPLE
+
+
+
+
+在实例化Solar\_Factory类型的对象时，接收的数组参数中一般都有'adapter'项，如：
+
+
+#+BEGIN_EXAMPLE
+    array(
+    'adapter' => 'Solar_Foo',
+    // ... more
+    // ,
+)
+
+#+END_EXAMPLE
+
+
+该选项告诉工厂函数要真正实例化的类，数组参数中的其他项将会被传递给真正需要实例化的类，在上面代码中，Solar\_Foo是我们真正要实例化的类。
+
+这个有什么用呢？呵呵，当然有用了，举个例子吧：
+
+
+
+
+#+BEGIN_QUOTE
+  现在你要写个支付模块，我们都知道支付手段不只一种（常见的有，支付宝、财付通、百付宝、网银在线等）。我们希望增加或删除任何一种支付手段无需修改支付模块代码。如果是这样你会怎么设计呢？
+#+END_QUOTE
+
+
+
+我们要做的就是遵从[[http://solarphp.cn/apidoc/Solar/Solar_Factory.html][Solar\_Factory]]的设计，如下：
+
+
+#+BEGIN_EXAMPLE
+    | - /source/solar/Solar
+     | - Pay.php (class Solar_Pay)
+     | - Pay
+          | - Adapter.php
+          | - Adapter
+               | - Alipay.php (class Solar_Pay_Adapter_Alipay)
+               | - Alipay
+               | - Tenpay.php (class Solar_Pay_Adapter_Tenpay)
+               | - Tenpay
+               | - ...
+
+#+END_EXAMPLE
+
+
+简单写下代码吧，:)
+
+
+#+BEGIN_EXAMPLE
+    # /source/solar/Solar/Pay.php
+class Solar_Pay extends Solar_Factory
+{
+    $_Solar_Pay = array(
+        'adapter' => 'Solar_Pay_Adapter_Alipay',
+    );
+    // ...
+}
+
+# /source/solar/Solar/Pay/Adapter.php
+class Solar_Pay_Adapter extends Solar_Base
+{
+    // ...
+}
+
+# /source/solar/Solar/Pay/Adapter/Alipay.php
+class Solar_Pay_Adapter_Alipay extends Solar_Pay_Adapter
+{
+    // ...
+}
+
+# call
+$params = array('Adapter' => 'Solar_Pay_Adapter_Alipay',
+                'partner' => '...',
+                'security_code' => '...',
+                'seller_email' => 'your@email.com',
+                'show_url' => '...',
+                'notify_url' => '...',
+                'return_url' => '...',
+);
+// call alipay
+$alipay = Solar::factory('Solar_Pay', $params);
+
+#+END_EXAMPLE
+
+
+

@@ -1,0 +1,39 @@
+#+TITLE: 原来method_exists等方法不区分大小写
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2011-09-15 Thu
+#+URI: /blog/2011/09/15/the-original-method_exists-other-methods-are-not-case-sensitive/
+#+KEYWORDS: 
+#+TAGS: class, method, php
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+今天突然回头想想刚开发完项目的新功能，好像我新增的action都是以双单词出现的，如：=actionNewUser=，但是在Router中只是简单的对URL中action做=ucfirest(strtolower($action))=处理，百思不得其解，这尼玛怎么就能找到该action呢？　但是事实往往是红果果的，经过测试发现method\_exits和call\_user\_func\_array等方法不区分方名法大小写。
+
+千言万语不如上一图：
+[[http://roygu.com/2011/09/php/%e5%8e%9f%e6%9d%a5method_exists%e7%ad%89%e6%96%b9%e6%b3%95%e4%b8%8d%e5%8c%ba%e5%88%86%e5%a4%a7%e5%b0%8f%e5%86%99.html/attachment/class_method_cas][[[http://roygu.com/wp-content/uploads/2011/09/class_method_cas-640x150.jpg]]]]
+
+
+
+
+原来是我了解得不够，下次一定记得，哈哈，还大惊小怪的！！！！
+
+一、大小写敏感
+1. 变量名区分大小写
+2. 常量名默认区分大小写，通常都写为大写
+3. php.ini配置项指令区分大小写
+
+二、大小写不敏感 
+1. 函数名、方法名、类名 不区分大小写，但推荐使用与定义时相同的名字
+2. 魔术常量不区分大小写，推荐大写
+3. NULL、TRUE、FALSE不区分大小写
+4. 类型强制转换，不区分大小写，包括：
+* (int)，(integer) -- 转换成整型
+* (bool)，(boolean) -- 转换成布尔型
+* (float)，(double)，(real) -- 转换成浮点型
+* (string) -- 转换成字符串
+* (array) -- 转换成数组
+* (object) -- 转换成对象
+
+

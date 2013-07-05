@@ -1,0 +1,75 @@
+#+TITLE: 没事儿多翻翻手册，多用PHP常量
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2011-04-14 Thu
+#+URI: /blog/2011/04/14/more-than-all-right-looking-through-the-manual-multi-use-php-constants/
+#+KEYWORDS: 
+#+TAGS: PHP常量, PHP手册, php
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+没事儿应多翻翻PHP手册，PHP函数极其丰富，很多时候我们都会重复造轮子。比如：今天有个问题，有一个路径如“/adurl.co/BullSoft.org/极客/Solar-PHP”形式，要判断有多少层怎么写？
+
+
+
+群里lychee写了一个：
+
+
+#+BEGIN_EXAMPLE
+    size(explode('/', '/a/b/c/1/2/3'))
+
+#+END_EXAMPLE
+
+
+我也写了个：
+
+
+#+BEGIN_EXAMPLE
+    substr_count('/a/b/c/1/2/3', '/');
+
+#+END_EXAMPLE
+
+
+不错，其实PHP已经有函数可以处理。
+第2个问题来了，如何它变成../../这种形式呢？也就是说有几层目录就有几个../
+桦写了这个：
+
+
+#+BEGIN_EXAMPLE
+    while($temp!='/'){
+    $per .='../';
+    dirname($temp);
+}
+
+#+END_EXAMPLE
+
+
+咋看上去没问题，哈哈，但是一运行就是死循环，为什么？原来运行到根目录时，在Windows平台上，dirname函数返回的'\'，而不是'/'，所以要改为：
+
+
+#+BEGIN_EXAMPLE
+    while($temp!='\\'){
+    $per .='../';
+    dirname($temp);
+}
+
+#+END_EXAMPLE
+
+
+如果改成这样，在linux上用就麻烦了，因为一般大家在windows下开发，在linux下跑程序，所以这里最好用PHP常量：
+
+
+#+BEGIN_EXAMPLE
+    while($temp!=DIRECTORY_SEPARATOR){
+    $per .='../';
+    dirname($temp);
+}
+
+#+END_EXAMPLE
+
+
+我给出的方法是正则，哈哈。。。就像图中这样，
+[[http://roygu.com/2011/04/php/%e6%b2%a1%e4%ba%8b%e5%84%bf%e5%ba%94%e8%af%a5%e5%a4%9a%e7%bf%bb%e7%bf%bb%e6%89%8b%e5%86%8c.html/attachment/dir_re][[[http://roygu.com/wp-content/uploads/2011/04/dir_re.jpg]]]]
+
+

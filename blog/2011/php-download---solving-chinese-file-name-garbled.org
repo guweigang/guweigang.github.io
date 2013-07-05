@@ -1,0 +1,186 @@
+#+TITLE: PHP下载：解决中文文件名乱码
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2011-07-29 Fri
+#+URI: /blog/2011/07/29/php-download---solving-chinese-file-name-garbled/
+#+KEYWORDS: 
+#+TAGS: chinese, download, php, utf-8
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+通过把Content-Type设置为application/octet-stream， 可以把动态生成的内容当作文件来下载，相信这个大家都会。 那么用Content-Disposition设置下载的文件名， 这个也有不少人知道吧。 基本上，下载程序都是这么写的：
+
+
+#+BEGIN_EXAMPLE
+    <?php
+$filename = "document.txt";
+header('Content-Type: application/octet-stream');
+header('Content-Disposition: attachment; filename=' . $filename);
+
+print "Hello!";
+?>
+#+END_EXAMPLE
+
+
+这样用浏览器打开之后，就可以下载document.txt。
+
+但是，如果$filename是UTF-8编码的，有些浏览器就无法正常处理了。 比如把上面那个程序稍稍改一下：
+
+
+#+BEGIN_EXAMPLE
+    <?php
+$filename = "中文 文件名.txt";
+header('Content-Type: application/octet-stream');
+header('Content-Disposition: attachment; filename=' . $filename);
+
+print "Hello!";
+?>
+#+END_EXAMPLE
+
+
+把程序保存成UTF-8编码再访问，IE6下载的文件名就会乱码。 FF3下下载的文件名就只有“中文”两个字。Opera 9下一切正常。
+
+输出的header实际上是这样子：
+
+
+#+BEGIN_EXAMPLE
+    Content-Disposition: attachment; filename=中文 文件名.txt
+#+END_EXAMPLE
+
+
+其实按照[[http://tools.ietf.org/html/rfc2231][RFC2231]]的定义， 多语言编码的Content-Disposition应该这么定义：
+
+
+#+BEGIN_EXAMPLE
+    Content-Disposition: attachment; filename*="utf8''%E4%B8%AD%E6%96%87%20%E6%96%87%E4%BB%B6%E5%90%8D.txt"
+#+END_EXAMPLE
+
+
+即：
+
+
+-  filename后面的等号之前要加 *
+-  filename的值用单引号分成三段，分别是字符集(utf8)、语言(空)和urlencode过的文件名。
+-  最好加上双引号，否则文件名中空格后面的部分在Firefox中显示不出来
+-  注意urlencode的结果与php的urlencode函数结果不太相同，php的urlencode会把空格替换成+，而这里需要替换成%20
+
+
+经过试验，发现几种主流浏览器的支持情况如下：
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+IE6
+
+
+
+
+attachment; filename="<URL编码之后的UTF-8文件名>"
+
+
+
+
+
+
+
+
+
+
+FF3
+
+
+
+
+attachment; filename="UTF-8文件名"
+
+
+
+
+
+
+
+
+
+
+attachment; filename*="utf8''<URL编码之后的UTF-8文件名>"
+
+
+
+
+
+
+
+
+
+
+O9
+
+
+
+
+attachment; filename="UTF-8文件名"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+这样看来，程序必须得这样写才能支持所有主流浏览器：
+
+
+#+BEGIN_EXAMPLE
+    <?php
+
+$ua = $_SERVER["HTTP_USER_AGENT"];
+
+$filename = "中文 文件名.txt";
+$encoded_filename = urlencode($filename);
+$encoded_filename = str_replace("+", "%20", $encoded_filename);
+
+header('Content-Type: application/octet-stream');
+
+if (preg_match("/MSIE/", $ua)) {
+   header('Content-Disposition: attachment; filename="' . $encoded_filename . '"');
+} else if (preg_match("/Firefox/", $ua)) {
+  header('Content-Disposition: attachment; filename*="utf8\'\'' . $filename . '"');
+} else {
+   header('Content-Disposition: attachment; filename="' . $filename . '"');
+}
+
+print 'ABC';
+?>
+#+END_EXAMPLE
+
+
+

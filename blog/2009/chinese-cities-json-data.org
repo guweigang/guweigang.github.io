@@ -1,0 +1,20 @@
+#+TITLE: 中国城市JSON数据
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2009-12-02 Wed
+#+URI: /blog/2009/12/02/chinese-cities-json-data/
+#+KEYWORDS: jquery, 中国城市, js
+#+TAGS: jquery, js, json, 中国城市
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+[[http://godpress.cn/wp-content/uploads/2009/12/json2select.jpg]]
+
+效果很不错，非常实用的地区选择jquery插件
+
+本站演示地址：[[http://godpress.cn/demos/jquery/json2select/][http://godpress.cn/demos/jquery/json2select/]]
+
+原文链接：[[http://www.cnweb.org/down/areajson/][http://www.cnweb.org/down/areajson/]]（中国城市JSON数据（Noker压缩版））
+
+

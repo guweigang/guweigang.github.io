@@ -1,0 +1,24 @@
+#+TITLE: FTP三剑客之一 --- LeapFtp
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2009-12-12 Sat
+#+URI: /blog/2009/12/12/ftp-three-musketeers-leapftp/
+#+KEYWORDS: ftp, keygen, leapftp
+#+TAGS: ftp, keygen, leapftp, software
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+之前用过LeapFtp 2.7.6版本（好像是），界面真的差， 3.0.1.46版本改善很多了，而且支持多标签，这个真的不错，呵呵，用过FlashFxp的人肯定知道，FlashFxp上传速度很快，但极不稳定（上传速度的波峰波谷相差很大），而LeapFtp上传速度极其稳定，之前用国外主机的时候感觉尤其明显，不多说了看介绍：
+
+#+BEGIN_QUOTE
+  小巧强大的 FTP 工具之一，友好的用户界面，稳定的传输速度，LeapFTP 与 FlashFXP 、CuteFTP 堪称 FTP 三剑客。FlashFXP 传输速度比较快，但有时对于一些教育网 FTP 站点却无法连接；LeapFTP 传输速度稳定，能够连接绝大多数 FTP 站点（包括一些教育网站点）；CuteFTP 虽然相对来说比较庞大，但其自带了许多免费的 FTP 站点，资源丰富。总之来说，三者各有所长。
+#+END_QUOTE
+
+下载地址：[[http://www.leapware.com/][http://www.leapware.com/]]
+
+不过这个版本好像不支持中文目录名（有时候有能显示，应该是有BUG）
+
+crack keygen（v 3.0.1.46，如果官网更新了，那么到网络上搜下吧，本人已注册成功！）: [[http://godpress.cn/softs/LeapFtp%203.0.1.46%20crack.rar][本站下载]]
+
+

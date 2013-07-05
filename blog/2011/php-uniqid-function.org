@@ -1,0 +1,44 @@
+#+TITLE: PHP uniqid()函数
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2011-02-25 Fri
+#+URI: /blog/2011/02/25/php-uniqid-function/
+#+KEYWORDS: 
+#+TAGS: php, uniqid
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+PHP的uniqid()函数可以生成唯一不重复的ID，而且我们能够从生成的ID中获取生成的时间戳。
+
+
+#+BEGIN_EXAMPLE
+    
+$id = uniqid();
+echo $id;
+echo "\r\n";
+$timestamp = hexdec(substr($id,0,8));
+echo date('Y-m-d H:i:s', $timestamp);
+
+#+END_EXAMPLE
+
+
+
+uniqid函数的原型：
+
+
+#+BEGIN_EXAMPLE
+    
+function _uniqid($prefix=''){
+    list($micro,$sec) = explode(" " ,microtime());
+    $msec =  ($micro*1000000.00)%0x100000;
+    return sprintf("%s%x%05x",$prefix,$sec,$msec);
+}
+
+#+END_EXAMPLE
+
+
+
+但在高并发下，uniqid函数偶尔也会出现重复的ID，这也就是说光用uniqid是不够的，需要拼接一些别的字符，如：使用rand()生成几位随机数再做拼接。
+
+

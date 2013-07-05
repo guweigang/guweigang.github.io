@@ -1,0 +1,84 @@
+#+TITLE: 配置Apache+fcgid_module
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2011-06-09 Thu
+#+URI: /blog/2011/06/09/configuring-apache-+-fcgid_module/
+#+KEYWORDS: 
+#+TAGS: apache, fcgid, php vc9, php x64
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+请先看[[http://roygu.com/2011/03/php/php-vc9-or-vc6-thread_safe-or-non_thread_safe.html][VC9,VC6,Thread Safe,Non Thread Safe的意思?]]。 PHP有两种执行方式：ISAPI 和 FastCGI。
+
+
+
+
+
+ISAPI 执行方式是以 DLL 动态库的形式使用，可以在被用户请求后执行，在处理完一个用户请求后不会马上消失，所以需要进行线程安全检查，这样来提高程序的执行效率，所以如果是以 ISAPI 来执行 PHP，建议选择 Thread Safe 版本；
+
+
+
+
+
+而 FastCGI 执行方式是以单一线程来执行操作，所以不需要进行线程的安全检查，除去线程安全检查的防护反而可以提高执行效率，所以，如果是以 FastCGI 来执行 PHP，建议选择 Non Thread Safe 版本。
+
+
+
+
+
+FastCGI 又有fastcgi和fcgid两个模块，推荐使用fcgid，在apache项目的页面上有单独的链接页面。配置信息如下：
+
+
+
+
+
+#+BEGIN_EXAMPLE
+    
+LoadModule fcgid_module modules/mod_fcgid.so
+
+<IfModule fcgid_module>
+   FcgidInitialEnv PHPRC "c:/php/"
+   FcgidInitialEnv PATH "C:/php;C:/WINDOWS/system32;C:/WINDOWS;C:/WINDOWS/System32/Wbem;"
+   FcgidInitialEnv SystemRoot "C:/Windows"
+   FcgidInitialEnv SystemDrive "C:"
+   FcgidInitialEnv TEMP "C:/WINDOWS/TEMP"
+   FcgidInitialEnv TMP "C:/WINDOWS/TEMP"
+   FcgidInitialEnv windir "C:/WINDOWS"
+
+   FcgidIOTimeout 40
+   FcgidConnectTimeout 10
+   FcgidMaxProcesses 1000
+   FcgidOutputBufferSize 64
+   FcgidProcessLifeTime 120
+   FcgidMaxRequestsPerProcess 10000
+   FcgidMinProcessesPerClass 0
+   FcgidFixPathinfo 1
+
+# Global Config Example
+  <Files ~ "\.php$">
+
+    Options Indexes FollowSymLinks ExecCGI
+    AddHandler fcgid-script .php
+    FcgidWrapper "c:/php/php-cgi.exe" .php
+  </Files>
+</IfModule>
+
+#+END_EXAMPLE
+
+
+
+
+
+现在官方都不推荐使用VC6版本了，也不会提供VC6的源码，所以大家都迁移到PHP VC9。这里推荐几个网站，分别提供了Apache VC9, Apache X64, PHP X64。
+
+
+
+
+
+-  Apache Haus: [[http://www.apachehaus.com/][http://www.apachehaus.com/]]
+-  Apache Lounge: [[http://www.apachelounge.com/][http://www.apachelounge.com/]]
+-  Aninda's Blog: [[http://www.anindya.com/][http://www.anindya.com/]]
+
+
+

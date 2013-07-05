@@ -1,0 +1,418 @@
+#+TITLE: CentOS网络设置
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2009-12-05 Sat
+#+URI: /blog/2009/12/05/centos-network-settings/
+#+KEYWORDS: centos, netstat, network, ping
+#+TAGS: centos, netstat, network, ping, 网络设置
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+CentOS网络设置
+这里介绍一下Linux下的网络设置文件，这是网络计算机服务器的前提条件。
+1．网络的基本设置
+我们在设置网络环境的时候，提前要弄清楚以下的相关信息。
+
+#+BEGIN_EXAMPLE
+    
+IP #IP地址
+Netmask #子网掩码
+Gateway #默认网关
+HostName #主机名称
+DomainName #域名
+DNS #DNS的IP
+
+#+END_EXAMPLE
+
+
+2．网络设置文件
+无论是通过网络配置命令（下文将提到）来配置网络，还是通过图形化的配置界面，最终的配置信息都将写入到某某的文件中，也就是说一旦我们知道了这些信息都 写到了什么文件中或哪儿个文件中，我们就可以通过直接的修改某某文件来直接进行配置，下面就说明一下网络设置将要涉及到的几个主要的文件。不光是 CentOS，其他的UNIX系的OS都可以通过这个方法来配置网络，不过系统的不同定义也不同，比如说有些系统会说到通过直接修改文件的方法配置网络信 息会导致网络环境的不稳定，提倡使用图形界面或配置命令的形式来配置网络，这里要特别的注意。
+（1）文件 /etc/sysconfig/network
+这个/etc/sysconfig/network文件是定义hostname和是否利用网络的不接触网络设备的对系统全体定义的文件。
+设定形式：设定值=值
+/etc/sysconfig/network的设定项目如下：
+
+
+#+BEGIN_EXAMPLE
+    
+NETWORKING #是否利用网络
+GATEWAY #默认网关
+IPGATEWAYDEV #默认网关的接口名
+HOSTNAME #主机名
+DOMAIN #域名
+
+#+END_EXAMPLE
+
+
+（2）文件 /etc/sysconfig/network-scripts/ifcfg-eth0
+/etc/sysconfig/network-scripts在这个目录下面，存放的是网络接口（网卡）的制御脚本文件（控制文件），ifcfg- eth0是默认的第一个网络接口，如果机器中有多个网络接口，那么名字就将依此类推ifcfg-eth1,ifcfg-eth2,ifcfg- eth3......（这里面的文件是相当重要的，涉及到网络能否正常工作）
+设定形式：设定值=值
+设定项目项目如下：
+
+
+#+BEGIN_EXAMPLE
+    
+DEVICE #接口名（设备,网卡）
+BOOTPROTO #IP的配置方法（static:固定IP， dhcp:动态IP， none:手动）
+HWADDR #MAC地址
+ONBOOT #系统启动的时候网络接口是否有效（yes/no）
+TYPE #网络类型（通常是Ethemet）
+NETMASK #网络掩码
+IPADDR #IP地址
+IPV6INIT #IPV6是否有效（yes/no）
+GATEWAY #默认网关IP地址
+
+#+END_EXAMPLE
+
+
+这里有一个例子：
+
+
+#+BEGIN_EXAMPLE
+    
+[root@linux ~]# cat -n /etc/sysconfig/network-scripts/ifcfg-eth0
+DEVICE=eth0
+BOOTPROTO=static
+BROADCAST=192.168.1.255
+HWADDR=00:0C:2x:6x:0x:xx
+IPADDR=192.168.1.23
+NETMASK=255.255.255.0
+NETWORK=192.168.1.0
+ONBOOT=yes
+TYPE=Ethernet
+
+#+END_EXAMPLE
+
+
+（3）文件 /etc/resolv.conf
+这个文件是用来配置主机将用的DNS服务器信息。在这个文件中如果不设置DNS服务器的IP地址，那么在通信的时候，将无法指定像[url=../] [url=http://www.centospub.com[/url]www.centospub.com[/url[/url]]这样的域 名。（DNS是Domain Name System的简称，中文名称域名解析服务器，主要是IP和域名转换功能）/etc/resolv.conf的设定项目：
+
+
+#+BEGIN_EXAMPLE
+    
+domain #←定义本地域名
+search #←定义域名和搜索列表
+nameserver #←定义被参照的DNS服务器的IP地址（最多可指定3个）
+
+#+END_EXAMPLE
+
+
+一般来说最重要的是第三个nameserver项目，没有这项定义，用域名将无法访问网站，并且yum等服务将无法利用
+（4）文件 /etc/hosts
+/etc/hosts这个文件是记载LAN内接续的各主机的对应[HostName和IP]用的。在LAN内，我们各个主机间访问通信的时候，用的是内网 的IP地址进行访问（例：192.168.1.22，192.168.1.23），从而确立连接进行通信。除了通过访问IP来确立通信访问之外，我们还可 以通过HostName进行访问，我们在安装机器的时候都会给机器起一个名字，这个名字就是这台机器的HostName，通过上图可以看到，HostA的 hostname是centos1，HostB的hostname是centos2那我们怎么能不但通过IP确立连接，通过这个IP对应的 HostName进行连接访问呢？解决的办法就是这个/etc/hosts这个文件，通过把LAN内的各主机的IP地址和HostName的一一对应写入 这个文件的时候，就可以解决问题。
+要在HostA上用ssh访问HostB的时候，在命令行下做这样的操作：
+
+
+#+BEGIN_EXAMPLE
+    
+[root@centos1 ~]# ssh 192.168.1.23
+root@192.168.1.23's password:
+Last login: Mon Dec 25 15:04:58 2006 from centos1
+[root@centos2 ~]#
+
+#+END_EXAMPLE
+
+
+访问成功后，我们看到hostname的地方变化了。
+那么我们用hostname试试看：
+
+
+#+BEGIN_EXAMPLE
+    
+[root@centos1 ~]# ssh centos2
+ssh:centos2: Name or service not known ←提示错误，不知道主机
+[root@centos1 ~]#
+
+#+END_EXAMPLE
+
+
+那么我们编辑/etc/hosts文件，将HostB的IP和hostname的对应关系写入这个文件,如果主机有域名，可以将域名写在IP地址之后hostname之前，并且用空格隔开，形式如第三行127.0.0.1的设置。
+
+
+#+BEGIN_EXAMPLE
+    
+[root@centos1 ~]# cat -n /etc/hosts
+# Do not remove the following line, or various programs
+# that require network functionality will fail.
+127.0.0.1 localhost.localdomain localhost
+192.168.1.23 centos2
+[root@centos2 ~]#
+
+#+END_EXAMPLE
+
+
+然后我们再重复#ssh centos2的操作
+
+
+#+BEGIN_EXAMPLE
+    
+[root@centos1 ~]# ssh centos2
+root@centos2's password:
+Last login: Mon Dec 25 15:05:07 2006 from centos1
+[root@centos2 ~]#
+
+#+END_EXAMPLE
+
+
+可以看到访问成功了，这个文件就是这样的，倘若你要用windowsXP访问局域网中的linux你也可以用上面的方法，只不过在 windowsXP下面你也要修改hosts这个文件，文件路径：C:\WINDOWS\system32\drivers\etc\hosts，在这个 文件中添加你要访问的局域网中的主机的IP和hostname，就能通过主机名访问主机了。
+
+3．网络基本命令
+（1）network service的制御网络接口配置信息改动后，网络服务必须从新启动，来激活网络新配置的使得配置生效，这部分操作和从新启动系统时时一样的作用。制御 （控制）是/etc/init.d/network这个文件，可以用这个文件后面加上下面的参数来操作网络服务。例如：
+
+
+#+BEGIN_EXAMPLE
+    
+[root@linux ~]#/etc/init.d/networkrestart
+
+#+END_EXAMPLE
+
+
+同样也可以用service这个命令来操作网络服务例如：
+
+
+#+BEGIN_EXAMPLE
+    
+[root@linux ~]#service network restart
+start #←启动
+stop #←停止
+restart #←再启动
+reload #←和再启动一样（..）
+status #←状态表示
+
+#+END_EXAMPLE
+
+
+如果服务器软件采用rpm的方式安装，以上的内容大多数都对应。
+（2）network管理命令网络管理还有一些常用的命令，下面介绍几个常用的命令。
+
+
+#+BEGIN_EXAMPLE
+    
+ifconfig
+netstat
+hostname
+ping
+traceroute
+
+#+END_EXAMPLE
+
+
+这个命令可以用于，网络接口的启动/停止，更改设置和表示网络状态，在不添加任何参数的情况下，这个ifconfig可以表示网络接口的状态。例如：
+
+
+#+BEGIN_EXAMPLE
+    
+[root@linux ~]# ifconfig
+eth0 Link encap:Ethernet HWaddr00:xx:xx:xx:04:45
+inet addr:192.168.1.81 Bcast:192.168.1.255 Mask:255.255.255.0
+inet6 addr: fe80::20c:29ff:fe61:445/64 Scopeink
+UPBROADCAST RUNNING MULTICAST MTU:1500 Metric:1
+RXpackets:472 errors:0 dropped:0 overruns:0 frame:0
+TXpackets:445 errors:0 dropped:0 overruns:0 carrier:0
+collisions:0 txqueuelen:1000
+RXbytes:35804 (34.9 KiB) TX bytes:53012(51.7 KiB)
+Interrupt:185 Base address:0x1080
+lo Link encapocal Loopback
+inet addr:127.0.0.1 Mask:255.0.0.0
+inet6 addr: ::1/128 Scope:Host
+UPLOOPBACK RUNNING MTU:16436 Metric:1
+RXpackets:8 errors:0 dropped:0 overruns:0 frame:0
+TXpackets:8 errors:0 dropped:0 overruns:0 carrier:0
+collisions:0 txqueuelen:0
+RXbytes:560 (560.0 b) TX bytes:560 (560.0b)
+[root@linux ~]#
+
+#+END_EXAMPLE
+
+
+看看ifconfig的输出内容
+
+
+#+BEGIN_EXAMPLE
+    
+Link encap #←
+HWaddr #←MAC地址
+inet addr #←IP地址（IPV4）
+Bcast #←广播地址
+Mask #←掩码
+inet6 addr #←IP地址（IPV6）
+UP #←启动中
+BROADCAST #←广播地址有效
+RUNNING #←动作
+MTU #←网络接口的MTU（MaximumTransfer Unit：Ethernet最大传送frame值）
+Metric #←
+RX packets #←受信包数
+TX packets #←送信包数
+collisions #←
+interrupt #←IRQ号码
+Baseaddress #←I/O地址
+
+#+END_EXAMPLE
+
+
+通过这个命令还可以up（开启）和down（关闭）某个网络接口（网卡），例如我们关闭eth0可以用下面的命令：
+
+
+#+BEGIN_EXAMPLE
+    
+[root@linux ~]#ifconfigeth0 down
+
+#+END_EXAMPLE
+
+
+相反的开启如下：
+
+
+#+BEGIN_EXAMPLE
+    
+[root@linux ~]#ifconfigeth0 up
+
+#+END_EXAMPLE
+
+
+通过这个命令还可以设置网络接口（网卡），例如我们将eth0的IP设置成192.168.1.11，子网衍码设置成255.255.255.0如下：
+
+
+#+BEGIN_EXAMPLE
+    
+[root@linux ~]#ifconfigetho inet 192.168.1.11 netmask 255.255.255.0
+
+#+END_EXAMPLE
+
+
+假如有多个网络接口的情况下，ethX的X部分用网络接口码（数字，例如eth0,eth1,eth2代替）。
+
+
+#+BEGIN_EXAMPLE
+    
+netstat
+
+#+END_EXAMPLE
+
+
+这条命令是显示网络各种情况的命令，在不跟随任何参数被执行的情形下，将表示Active Internet connections和ActiveUNIX domain sockets的情报。
+看看下面的输出信息：
+这里是192.168.1.56正在通过ssh连接192.168.1.81的情形
+
+
+#+BEGIN_EXAMPLE
+    
+[root@linux ~]#netstat
+Active Internetconnections (w/o servers)
+Proto Recv-Q Send-QLocal Address ForeignAddress State
+tcp 0 0 ::ffff:192.168.1.81:ssh ::ffff:192.168.1.56:4757 ESTABLISHED
+Active UNIX domainsockets (w/o servers)
+Proto RefCntFlags Type State I-Node Path
+unix 11 [ ] DGRAM 5202 /dev/log
+unix 2 [ ] DGRAM 5997 @/var/run/hal/hotplug_socket
+unix 2 [ ] DGRAM 2536 @udevd
+unix 2 [ ] DGRAM 7474
+unix 3 [ ] STREAM CONNECTED 5995 /var/run/dbus/system_bus_socket
+unix 3 [ ] STREAM CONNECTED 5994
+unix 3 [ ] STREAM CONNECTED 5974
+unix 3 [ ] STREAM CONNECTED 5973
+unix 2 [ ] DGRAM 5933
+unix 2 [ ] DGRAM 5923
+unix 2 [ ] DGRAM 5876
+unix 2 [ ] DGRAM 5819
+unix 2 [ ] DGRAM 5805
+unix 2 [ ] DGRAM 5786
+unix 2 [ ] DGRAM 5723
+unix 3 [ ] STREAM CONNECTED 5388
+unix 3 [ ] STREAM CONNECTED 5387
+unix 2 [ ] DGRAM 5280
+unix 2 [ ] DGRAM 5210
+[root@linux ~]#
+主要的选项：
+-a 显示所有socket，包括正在监听的。
+-c 每隔1秒就重新显示一遍，直到用户中断它。
+-i 显示所有网络接口的信息，格式同"ipconfig -e"。
+-n 以网络IP地址代替名称，显示出网络连接情形。
+-r 显示核心路由表，格式同"route -e"。
+-t 显示TCP协议的连接情况。
+-u 显示UDP协议的连接情况。
+-v 显示正在进行的工作。
+
+#+END_EXAMPLE
+
+
+以上的选项可以结合使用，例如我们想知道正在开放的TCP端口，可以用下面的形势执行察看：
+
+
+#+BEGIN_EXAMPLE
+    
+[root@linux ~]#netstat -at
+Active Internetconnections (servers and established)
+Proto Recv-Q Send-QLocal Address ForeignAddress State
+tcp 0 0 *:617 *:* LISTEN
+tcp 0 0 *:sunrpc *:* LISTEN
+tcp 0 0 *:ipp *:* LISTEN
+tcp 0 0 linux.xiaoqi.ddo.jp:smtp *:* LISTEN
+tcp 0 0 *:ssh *:* LISTEN
+tcp 0 132 ::ffff:192.168.1.81:ssh ::ffff:192.168.1.56:4757 ESTABLISHED
+[root@linux ~]#
+
+#+END_EXAMPLE
+
+
+其他使用方法可以自己尝试.....
+Hostname
+这个命令是表示hostname和设置hostname用的，在不跟随任何选项被执行的情形下，将表示现在的hostname，例如下面的输出：
+
+
+#+BEGIN_EXAMPLE
+    
+[root@linux ~]#hostname
+linux.xiaoqi.ddo.jp
+[root@linux ~]#
+
+#+END_EXAMPLE
+
+
+如果是root的登陆情形下，可以更改hostname，例如我们把现在的hostname改称centos的情形如下：
+
+
+#+BEGIN_EXAMPLE
+    
+[root@linux ~]#hostname centos
+[root@linux ~]#hostname
+centos
+[root@linux ~]#
+
+#+END_EXAMPLE
+
+
+ping
+这条命令是通过向目标地址发送ICMP信息包的方式，来确定目标主机是否在工作或网络联通与否。参数是目标主机的IP地址，例如我们要知道自己的主机的网络配置是否正常，可通过ping自己主机来判断，情形如下：
+[root@linux ~]# pinglocalhost // 这个地方的localhost可以用127.0.0.1来代替，或目标地址IP地址或域名，通常还用这条命令来访问DNS服务器来取得目标主机的IP地址或域名等用法
+
+
+#+BEGIN_EXAMPLE
+    
+PING linux.xiaoqi.ddo.jp (127.0.0.1) 56(84) bytes ofdata.
+64 bytes fromlinux.xiaoqi.ddo.jp (127.0.0.1): icmp_seq=0 ttl=64 time=0.999 ms
+64 bytes fromlinux.xiaoqi.ddo.jp (127.0.0.1): icmp_seq=1 ttl=64 time=0.630 ms
+---linux.xiaoqi.ddo.jp ping statistics ---
+
+#+END_EXAMPLE
+
+
+2 packetstransmitted, 2 received, 0% packet loss, time 1001ms // 注意这个地方有一个0%表示网络正常，当此处的X%的X是0以外的数字就表明网络有问题，或者当ping 命令被执行后，将会显示time out之类的字样。
+rtt min/avg/max/mdev= 0.630/0.814/0.999/0.186 ms, pipe 2
+[root@linux ~]#
+
+
+#+BEGIN_EXAMPLE
+    
+Ping命令的主要选项如下：
+-c 数目在发送指定数目的包后停止。
+-d 设定SO_DEBUG的选项。
+-f 大量且快速地送网络封包给一台机器，看它的回应。
+-I 秒数设定间隔几秒送一个网络封包给一台机器，预设值是一秒送一次。
+-l 次数在指定次数内，以最快的方式送封包数据到指定机器（只有超级用户可以使用此选项）。
+-q 不显示任何传送封包的信息，只显示最后的结果。
+-r 不经由网关而直接送封包到一台机器，通常是查看本机的网络接口是否有问题。
+-s 字节数指定发送的数据字节数，预设值是56，加上8字节的ICMP头，一共是64ICMP数据字节。
+
+#+END_EXAMPLE

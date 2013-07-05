@@ -1,0 +1,284 @@
+#+TITLE: localization
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2011-10-19 Wed
+#+URI: /blog/2011/10/19/localization/
+#+KEYWORDS: 
+#+TAGS: apache, localization, php
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+原文： [[http://phpadvent.org/2010/localization-by-anthony-gentile][http://phpadvent.org/2010/localization-by-anthony-gentile]]
+翻译：校长 RoyGu http://roygu.com
+
+
+
+
+当我们创建一个网站时，一个非常重要的考虑是：网站的受众/访客。无论网站是销售商品、提供服务亦或是信息资讯，都须考虑当国外用户访问时页面如何呈现。如果他们想在你的网站上购买商品、使用服务或获取资讯，你的网站能够正常服务他们吗？应该提供正常服务吗？本地化让用户界面符合用户的预期，如：日期格式、货币以及本地语言文本。
+
+
+
+
+
+许多以英语为母语的人并没有意识到这点，尽管英语的普及率很高，但说英语的人仍只占很小比率。[[http://anthro.palomar.edu/language/language_1.htm][这篇文章]]统计了世界上分布最广的语言是英语，但英语并不是人们说得最多的语言（现在排第三）。互联网上有如此多的有用信息，很大一部分不是用英文描述的。用计算机解决语言相关的问题是一件困难的事情，但是创建一个国际友好的网站并不是我们想象的那么难。虽然今天介绍的方法不能适用于10种不同语言的网站，但是对于需要提供两三种语言的网站非常有效果。比如，在美国，讲西班牙语的人数在显著增加，拥有一个能用西班牙语言交流的电子商务网站，将扩大你的潜在客户群。
+
+
+
+
+
+在讲如何为网站实现本地化之前，我想花点时间谈论下[[http://en.wikipedia.org/wiki/Character_encoding][字符编码]]。即使你无法预见你的网站是否需要提供本地化功能，了解字符(charsets)编码相关的知识都是非常有必要的。字符编码是用来帮助软件识别用户期望字符集的。例如，通用的ISO 8859-1字符集是西欧的通用字符集。因此，在这种字符集中可以用英文字母表示德语中的[[http://en.wikipedia.org/wiki/Umlaut][原音]]。但如果我在这种字符集中想显示可拉伯字符，如：ق，那么很可能会显示成� 或 Ù。这就意味着，在ISO 8859-1字符集下，不能正确识别阿拉伯字符。
+
+
+
+
+
+一种非常友好的跨语言字符编码是兼容ASCII码的UTF-8编码，它代表Unicode字符集，特别是在传统应用中较为常见。在网站中使用UTF-8，其[[http://en.wikipedia.org/wiki/List_of_Unicode_characters][支持的字符]]非常多，能够最大地满足用户需求。为了正确地实现一种字符编码，你要确保在你整个应用中编码保持一致。如果你使用UTF-8，那么Apache、[[http://dev.mysql.com/doc/refman/5.1/en/charset-table.html][数据库]][[http://www.postgresql.org/docs/8.4/static/multibyte.html][表]]、PHP以及PHP可用的功能和文档类型都应该设置成UTF-8。如果这些都不是一致的，你最终可能会得到不同字符编码的混合数据，这种问题即使能补救也比较困难。
+
+
+
+
+
+#+BEGIN_EXAMPLE
+    
+// Apache httpd.conf or .htaccess
+
+// This will add a charset to the Content-Type response header.
+AddDefaultCharset UTF-8
+
+// php.ini
+default_charset = "UTF-8"
+
+// Example PHP function
+htmlentities($data, ENT_COMPAT, 'UTF-8');
+
+// XML
+<?xml version="1.0" encoding="UTF-8" ?>
+
+// HTML
+<meta http-equiv="Content-Type"
+    content="text/html; charset=utf-8" />
+
+#+END_EXAMPLE
+
+
+
+
+
+如果你想了解更多关于UTF-8的内容，并且为什么它如此重要，猛击下面的链接：
+
+
+
+
+
+-  [[http://htmlpurifier.org/docs/enduser-utf8.html#whyutf8][UTF-8: 字符编码的秘密]]
+-  [[http://developers.sun.com/dev/gadc/technicalpublications/articles/utf8.html][什么是UTF-8?为什么它如此重要?]]
+
+
+
+
+
+
+刚才我们已经讨论了字符编码，接下来我们进入主题，谈谈如何实现本地化。如何判断为用户加载哪个本地化？如何知道用户来自哪里？一种解决方案是根据IP地址判断地域，但是更好的解决方案是让浏览器告诉我们使用哪个本地化。当用户发起HTTP请求时，HTTP头中的Accept-Language将会被发送，我们通常可以从PHP超全局变量$\_SERVER中获取该值。看个示例：
+
+
+
+
+
+#+BEGIN_EXAMPLE
+    
+Accept-Language: en-us;en;q=0.5
+
+#+END_EXAMPLE
+
+
+
+
+
+虽然这是一种检测默认语言的简单方法，但这并不意味着它就是用户期望的语言。所以提供一种简单方法给用户切换语言是非常有必要的。许多开发者认为，在session或cookie中存储本地化编码就足够了，但这种方法不够友好和直接，在URL中加入本地化提示岂不是更好，如:[[http://example.com/en/blog/][http://example.com/en/blog/]] 和 [[http://example.com/de/blog][http://example.com/de/blog]]; 或者用子域名来表示，如： [[http://en.wikipedia.org/][http://en.wikipedia.org/]].
+
+
+
+
+
+
+如何实现呢？不难，在Apache中为网站设置一个重写规则：
+
+
+
+
+
+#+BEGIN_EXAMPLE
+    
+RewriteRule ^(en|es)/(.*) /$2 [PT,E=lang:$1]
+
+#+END_EXAMPLE
+
+
+
+
+
+有了这个重写规则，我们就不需要为每种语言复制一份代码了。我们可以委托Apache查找用户请求的语言，并把它存储在环境变量中，然后转递到代码中。在我们的应用逻辑中，我们可以这样获取本地化编码：
+
+
+
+
+
+#+BEGIN_EXAMPLE
+    
+$locale = apache_getenv('lang', true);
+
+
+#+END_EXAMPLE
+
+
+
+
+
+这里有一个支持本地化的PHP脚本，仅供参考：
+
+
+
+
+
+#+BEGIN_EXAMPLE
+    
+<?php
+
+/**
+ * Stick to the codes that are already standard.
+ * ISO 3166 - http://en.wikipedia.org/wiki/ISO_3166-1
+ * RFC 1766 - http://www.faqs.org/rfcs/rfc1766.html
+ */
+$accepted_locales = array(
+
+    'en' => 'en_US',
+    'es' => 'es_MX'
+);
+
+
+// Get the locale from the browser.
+$browser_locale = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2);
+
+
+// For more specific locale codes, e.g., en-us (English, United States), es-mx (Spanish, Mexican), etc.
+// $browser_locale = current(explode(',', $_SERVER['HTTP_ACCEPT_LANGUAGE']));
+
+// Check against a whitelist instead of trusting $_GET['lang'].
+// For reference: http://ha.ckers.org/blog/20100128/micro-php-lfi-backdoor/
+if (in_array($browser_locale, array_keys($accepted_locales))) {
+    $locale_code = $accepted_locales[$browser_locale];
+} else {
+    $locale_code = 'en_US';
+}
+
+
+// Or, use a URL-based locale designator and a rewrite rule.
+// RewriteRule ^(en|es)/(.*) /$2 [PT,E=lang:$1]
+// Then, grab that environment variable with PHP.
+/*
+$locale_code = apache_getenv('lang', true);
+if (in_array($locale_code, array_keys($accepted_locales))) {
+    $locale_code = $accepted_locales[$locale_code];
+} else {
+    $locale_code = 'en_US';
+}
+*/
+
+$locale_entries = array();
+
+
+// Load the locale file.
+if (file_exists($locale_code . '.php')) {
+    $locale_entries = include $locale_code . '.php';
+}
+
+
+/*
+These locale entries are loaded from files that return an array.
+en_US.php
+<?php
+return array(
+    'WELCOME' => 'Hello %s!',
+    'GOODBYE' => 'Goodbye!',
+);
+
+es_MX.php
+<?php
+return array(
+    'WELCOME' => '¡Hola %s!',
+    'GOODBYE' => '¡Adios!',
+);
+
+You could store locales in a database as well.
+ */
+
+// Now, you can create a simple function that will display the correct text.
+function locale($locale_entries, $key, $replacements = array()) {
+    if (isset($locale_entries[$key]) && empty($replacements)) {
+        return $locale_entries[$key];
+    } elseif (isset($locale_entries[$key])) {
+        return vsprintf($locale_entries[$key], $replacements);
+    }
+    throw new Exception("Locale entry for '$key' does not exist.");
+}
+
+
+// echo locale($locale_entries, 'WELCOME', array('Anthony'));
+// echo locale($locale_entries, 'GOODBYE');
+
+// A basic class to handle locales
+class Locale {
+
+    public $code = 'en_US';
+    public $locale_path = '/var/www/';
+    protected $_entries = array();
+
+    public function setCode($code)
+    {
+        $this->code = $code;
+        $this->load();
+    }
+
+    public function load()
+    {
+        if (!file_exists($this->locale_path . $this->code . '.php')) {
+            throw new Exception("Locale file: {$this->locale_path}{$this->code}.php does not exist.");
+        }
+
+        $this->_entries = include $this->locale_path . $this->code . '.php';
+    }
+
+    public function fetch($key, $replacements = array())
+    {
+        if (isset($this->_entries[$key]) && empty($replacements)) {
+            return $this->_entries[$key];
+        } elseif (isset($this->_entries[$key])) {
+            return vsprintf($this->_entries[$key], $replacements);
+        }
+        throw new Exception("Locale entry {$this->code}:$key does not exist.");
+    }
+}
+
+$locale = new Locale();
+$locale->setCode($locale_code);
+
+//echo $locale->fetch('WELCOME', 'Anthony');
+//echo $locale->fetch('GOODBYE');
+
+?>
+
+#+END_EXAMPLE
+
+
+
+
+
+我希望本文讲述得足够清楚了，能够帮助你养成思考网站访客并最大满足用户的好习惯。我认为绝大多数网站应该使用UTF-8。在项目开始阶段请至少花点时间确保网站是国际友好的。
+
+
+
+
+
+
+

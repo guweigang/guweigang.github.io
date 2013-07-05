@@ -1,0 +1,27 @@
+#+TITLE: div css模拟美化的Select样式,超经典
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2009-12-13 Sun
+#+URI: /blog/2009/12/13/div-css-simulation-beautified-select-style-ultra-classic/
+#+KEYWORDS: 
+#+TAGS: css, div, select, 下拉框
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+*转至：*[[http://www.51toria.cn/?p=424][*http://www.51toria.cn/?p=424*]]
+
+效果图：
+
+[[http://godpress.cn/wp-content/uploads/2009/12/b33e641e35e1c8d519d5767c.jpg]]
+
+
+结构分析图:
+
+
+[[http://godpress.cn/wp-content/uploads/2009/12/2eeeaa1baeaa3e388418bf7d.jpg]]
+
+
+废话少说，上菜：
+
+本站演示: [[http://godpress.cn/demos/javascript/select2css/][http://godpress.cn/demos/javascript/select2css/]]

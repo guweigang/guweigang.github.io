@@ -1,0 +1,16 @@
+#+TITLE: 中国域名注册暂不再对个人开放
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2009-12-12 Sat
+#+URI: /blog/2009/12/12/chinese-domain-name-registration-is-no-longer-open-to-individuals-temporarily/
+#+KEYWORDS: 域名, cn域名
+#+TAGS: cn域名, 中国域名, 域名注册
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+来自新浪的消息称，在遭到[[http://space.tv.cctv.com/video/VIDE1260361083654885][央视点名批评]]后，中国域名监管机构CNNIC接连发出[[http://www.cnnic.net.cn/html/Dir/2009/12/11/5749.htm][加强域名注册信息审核工作的公告]]，将造成个人用户没有资格进行域名注册。
+
+CNNIC的公告中，要求用户向域名注册服务机构在线提交域名注册申请的同时，应当提交书面申请材料。申请材料包括加盖公章的域名注册申请表(原 件)、企业营业执照或组织机构代码证(复印件)、注册联系人身份证明(复印件)。而个人用户由于无法提供企业营业执照或组织机构代码证，因此也没有资格进 行域名注册。
+
+[[http://www.blawgdog.com/article/BLawg/942.htm][填写域名注册资料的作用]]，是保障私权而非社会控制。域名持有者填不填写真实资料，是自身私权利益衡量的决定。

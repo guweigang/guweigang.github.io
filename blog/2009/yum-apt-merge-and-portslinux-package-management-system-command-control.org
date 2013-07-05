@@ -1,0 +1,86 @@
+#+TITLE: Yum\Apt\Emerge和PortsLinux包管理系统的命令对照
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2009-12-05 Sat
+#+URI: /blog/2009/12/05/yum-apt-merge-and-portslinux-package-management-system-command-control/
+#+KEYWORDS: 
+#+TAGS: apt, emerge, linux, package, ports, yum
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+本文主要介绍Yum，Apt，Emerge和Ports等4种Linux/BSD包管理系统的命令对照 
+
+Yum用于各种基于RPM的发行版，如RHEL，Fedora，红旗等。 
+Apt用于各种基于DEB的发行版，如Debian，Ubuntu。 
+Emerge用于Gentoo。 
+Ports用于FreeBSD。 
+
+下面进行简单的比较： 
+
+1，更新软件列表（Package Tree）：
+
+
+#+BEGIN_EXAMPLE
+     
+yum check-update 
+apt-get update 
+emerge --sync 
+cvsup -g -L 2 ports-supfile && portsdb -Uu 
+
+#+END_EXAMPLE
+
+
+2，安装一个包： 
+
+
+#+BEGIN_EXAMPLE
+    
+yum install  
+apt-get install  
+emerge  
+portinstall  
+
+#+END_EXAMPLE
+
+
+3，删除一个包： 
+
+
+#+BEGIN_EXAMPLE
+    
+yum remove  
+apt-get remove  
+emerge --unmerge  
+pkg_delete  
+
+#+END_EXAMPLE
+
+
+4，查询一个包的信息： 
+
+
+#+BEGIN_EXAMPLE
+    
+yum info  
+apt-cache showpkg  
+emerge -vp  
+pkg_info  
+
+#+END_EXAMPLE
+
+
+5，升级所有软件：
+
+
+#+BEGIN_EXAMPLE
+     
+yum -y update 
+apt-get upgrade 
+emerge -u world 
+portupgrade -a
+
+#+END_EXAMPLE
+
+
+

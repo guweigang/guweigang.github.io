@@ -1,0 +1,18 @@
+#+TITLE: 一切都归咎于Zend Engine 1(PHP 4.x)兼容模式
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2011-06-23 Thu
+#+URI: /blog/2011/06/23/everything-is-blamed-zend-engine-1-with-php-4_x-compatibility-mode/
+#+KEYWORDS: 
+#+TAGS: php 4, zend, zend optimizer
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+前段时间，杨老师给服务器装了Zend Optimizer，至此，我的几个网站就没有正常运行过。。。几经测试：纯HTML没问题，非数据库以外的PHP代码没问题，WordPress可以正常运行。于是大胆去掉Solar站的数据库连接，结果就可以正常运行了。。。真是奇怪了，查了查去才知道是此兼容模式和PDO的冲突问题，而此模式又是为了兼容PHP 4.X的。所以大胆在php.ini中把此兼容模式改成Off状态。。。
+=; Enable compatibility mode with Zend Engine 1 (PHP 4.x)
+zend.ze1_compatibility_mode = Off=
+
+原来一切都是这个兼容模式在搞怪。。。
+
+

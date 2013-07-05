@@ -1,0 +1,19 @@
+#+TITLE: 非常好用的Jquery图片切换插件
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2009-12-14 Mon
+#+URI: /blog/2009/12/14/very-easy-to-use-jquery-picture-switch-plug/
+#+KEYWORDS: 
+#+TAGS: imageswitch, javascript, jquery, jquery plugin, 图片切换
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+Developed by [[http://www.hieu.co.uk/blog/index.php/imageswitch/][http://www.hieu.co.uk/blog/index.php/imageswitch/]]
+图片切换效果图
+[[http://godpress.cn/wp-content/uploads/2009/12/QQ截图未命名.png]]
+
+本站演示：[[http://godpress.cn/demos/jquery/imageswitch/][http://godpress.cn/demos/jquery/imageswitch/]]
+[[http://godpress.cn/demos/jquery/imageswitch/imageswitch.rar][[[http://godpress.cn/wp-content/uploads/2009/12/writeDownload.jpg]]]]
+
+

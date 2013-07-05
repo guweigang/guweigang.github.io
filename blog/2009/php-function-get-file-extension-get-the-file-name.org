@@ -1,0 +1,54 @@
+#+TITLE: PHP函数---获取文件扩展名/获取文件名
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2009-12-05 Sat
+#+URI: /blog/2009/12/05/php-function-get-file-extension-get-the-file-name/
+#+KEYWORDS: 
+#+TAGS: file extension, file name, php
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+原文链接：[[http://abeautifulsite.net/2009/03/php-functions-to-get-and-remove-the-file-extension-from-a-string/][http://abeautifulsite.net/2009/03/php-functions-to-get-and-remove-the-file-extension-from-a-string/]]
+
+get extension function
+file\_ext()
+
+
+#+BEGIN_EXAMPLE
+    
+// Returns only the file extension (without the period).
+function file_ext($filename) {
+    return preg_replace('/^.*\./', '', $filename);
+}
+
+#+END_EXAMPLE
+
+
+get file name function
+file\_ext\_strip()
+
+
+#+BEGIN_EXAMPLE
+    
+// Returns the file name, less the extension.
+function file_ext_strip($filename){
+    return preg_replace('/\.[^.]*$/', '', $filename);
+}
+
+#+END_EXAMPLE
+
+
+但是，好像PHP也有自带解决方案：
+
+
+#+BEGIN_EXAMPLE
+    
+’;
+echo file_ext_strip($filename).’’;
+?>
+
+#+END_EXAMPLE
+
+
+

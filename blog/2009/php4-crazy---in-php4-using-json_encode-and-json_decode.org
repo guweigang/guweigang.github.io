@@ -1,0 +1,84 @@
+#+TITLE: PHP4也疯狂：在PHP4中使用json_encode()和json_decode()
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2009-12-05 Sat
+#+URI: /blog/2009/12/05/php4-crazy---in-php4-using-json_encode-and-json_decode/
+#+KEYWORDS: 
+#+TAGS: json, json_decode, json_encode, pear, php, php4
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+原文链接：http://abeautifulsite.net/2008/05/using-json-encode-and-json-decode-in-php4/
+
+维基百科：http://zh.wikipedia.org/wiki/JSON
+
+
+#+BEGIN_QUOTE
+  JSON（Javascript Object Notation）是一种轻量级的数据交换语言，以文字为基础，且易于让人阅读。尽管JSON是在Javascript的一个子集，但JSON是独立于语言的文本格式，并且采用了类似于C语言家族的一些习惯。
+#+END_QUOTE
+
+
+Json在Ajax交互过程中使用的非常频繁，而且开发者似乎更乐于使用Json，而且在PHP5.2之后也开始支持Json格式！另外，当人们把视线转向Json之后，关于Json和XML的争论就没有停止过：
+
+
+#+BEGIN_QUOTE
+  json和xml的比较：
+[[http://www.json.org/xml.html][http://www.json.org/xml.html]]
+[[http://blog.csdn.net/dengrenjian/archive/2009/06/26/4301385.aspx][http://blog.csdn.net/dengrenjian/archive/2009/06/26/4301385.aspx]]
+[[http://webservices.ctocio.com.cn/tips/481/6708981.shtml][http://webservices.ctocio.com.cn/tips/481/6708981.shtml]]
+[[http://www.thomasfrank.se/xml_to_json.html][http://www.thomasfrank.se/xml\_to\_json.html]]
+#+END_QUOTE
+
+
+更有开发者开发出My JSON editor
+[[http://www.thomasfrank.se/json_editor.html][http://www.thomasfrank.se/json\_editor.html]]
+在线演示：[[http://www.thomasfrank.se/downloadableJS/JSONeditor_example.html][http://www.thomasfrank.se/downloadableJS/JSONeditor\_example.html]]
+
+我们没有理由不使用Json，因为它太简洁、太明了、太易用，但是作为PHP开发者，我们仍会面对许多挫折，便如公司的CentOS5.2默认装的仍是php 5.16（当然可以升级至php 5.2.9），但是在不确定升级是否会产生问题的之前最好保持稳定的环境！所幸的是，[[http://pear.php.net/][PEAR]]上已经有开发者发布了[[http://pear.php.net/package/Services_JSON/download][Services\_JSON]]包（800 行代码，封装成类，但仍不如直接使用 json\_encode() 和json\_decode()方便）！
+
+为了达到和PHP(which version > = 5.2) 同样的操作习惯，可以简单的在[[http://pear.php.net/package/Services_JSON/download][Services\_JSON]]类底部加以下代码：
+
+
+#+BEGIN_EXAMPLE
+    <?php
+// Future-friendly json_encode
+if( !function_exists('json_encode') ) {
+    function json_encode($data) {
+        $json = new Services_JSON();
+        return( $json->encode($data) );
+    }
+}
+ 
+// Future-friendly json_decode
+if( !function_exists('json_decode') ) {
+    function json_decode($data) {
+        $json = new Services_JSON();
+        return( $json->decode($data) );
+    }
+}
+?>
+
+#+END_EXAMPLE
+
+
+使用方法：
+
+
+#+BEGIN_EXAMPLE
+    <?php
+include("JSON.php");
+ 
+$a = json_encode( array('a'=>1, 'b'=>2, 'c'=>'I <3 JSON') );
+echo $a;
+// Outputs: {"a":1,"b":2,"c":"I <3 JSON"}
+ 
+$b = json_decode( $a );
+echo "$b->a, $b->b, $b->c";
+// Outputs: 1, 2, I <3 JSON
+?>
+
+#+END_EXAMPLE
+
+
+

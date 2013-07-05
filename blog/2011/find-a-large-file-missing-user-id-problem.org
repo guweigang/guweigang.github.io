@@ -1,0 +1,101 @@
+#+TITLE: 一个大文件查找缺失用户ID问题
+#+AUTHOR: Gu Weigang
+#+EMAIL: guweigang@outlook.com
+#+DATE: 2011-04-17 Sun
+#+URI: /blog/2011/04/17/find-a-large-file-missing-user-id-problem/
+#+KEYWORDS: 
+#+TAGS: bcmod, 哈稀, 大文件处理
+#+LANGUAGE: zh_CN
+#+OPTIONS: H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 
+
+问题描述：
+
+
+
+
+#+BEGIN_QUOTE
+  有一堆文件，都是一堆ID，以前有些号码跳过了，没有使用，现在要挑出没有使用过的号码，ID大概有8亿多个，10亿开始，到21亿结尾。 从数据库读出数据存储时已按哈稀规则（id%257）存文件，每个文件大概有300万个。
+#+END_QUOTE
+
+
+
+很庆幸，21亿左右是32位机能处理的最大值。所以下面就径直使用mod和/了。如果超过32位，PHP还提供了BC Math系统函数，可以对任意长度数字的做四则运算。
+
+
+#+BEGIN_EXAMPLE
+    string bcmod ( string $left_operand , string $modulus ) 
+echo bcmod('4', '2'); // 0
+echo bcmod('2', '4'); // 2
+
+#+END_EXAMPLE
+
+
+
+最后看这个问题解决的代码：
+
+
+#+BEGIN_EXAMPLE
+    <?php
+$mod = 0; //模：脚本中唯一变化参数
+$array = array(); //实始化数组
+
+//所有ID的最大值和最小值
+$max_num = 2100000000;
+$min_num = 1000000000;
+
+$idea_max = $max_num;//初始化理想最大值
+$idea_min = $min_num;//初始化理想最小值
+
+//获取实际最大值
+for ($i = $max_num; $i > $max_num-257; --$i) {
+    if($mod == $i % 257)
+        $idea_max = $i;
+}
+//获取实际最小值
+for ($i = $min_num; $i < $min_num+257; ++$i) {
+    if($mod == $i % 257)
+        $idea_min = $i;
+}
+//打开文件，逐行读取
+$handle = fopen("./auth".$mod.".txt", "r");
+if ($handle) {
+    $curr = $idea_min;//当前值设为理想最小值
+    while (!feof($handle)) {
+        //逐行读取
+        $next = (int) fgets($handle, 4096);
+        if($next < $min_num || $next < $idea_min) {
+            //如果ID不在要求范围内，不做任何操作
+            ;
+        } else if ($next >= $idea_min && $next <= $idea_max) {
+            //如果ID符合要求，继续循环判断：如果$next值大于$curr值
+            while($next > $curr) {
+                $array[] = $curr;
+                $curr = $curr+257;
+            }
+            $curr = $next;
+        } else {
+            //其他情况一律不考虑
+            ;
+        }
+    }
+    fclose($handle);
+}
+
+write_num($array);
+
+function write_num ($uid){
+    global $mod;
+    $fp = fopen('c'.$mod.'.txt','a');
+
+    foreach($uid as $values) {
+        fwrite($fp, $values."\r\n");
+    }
+
+    fclose($fp);
+}
+
+#+END_EXAMPLE
+
+
+
