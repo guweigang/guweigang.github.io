@@ -1,4 +1,14 @@
-#+TITLE: 关于我
+#+TITLE:       关于我
+#+AUTHOR:      Gu Weigang
+#+EMAIL:       guweigang@baidu.com
+#+DATE:        2013-08-26 Mon
+#+URI:         <TODO: insert your uri here>
+#+KEYWORDS:    <TODO: insert your keywords here>
+#+TAGS:        <TODO: insert your tags here>
+#+LANGUAGE:    en
+#+OPTIONS:     H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: <TODO: insert your description here>
+
 
 - 联系方式
   - 邮箱：guweigang@outlook.com
