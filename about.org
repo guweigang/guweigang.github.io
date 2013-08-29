@@ -2,13 +2,6 @@
 #+AUTHOR:      Gu Weigang
 #+EMAIL:       guweigang@baidu.com
 #+DATE:        2013-08-26 Mon
-#+URI:         <TODO: insert your uri here>
-#+KEYWORDS:    <TODO: insert your keywords here>
-#+TAGS:        <TODO: insert your tags here>
-#+LANGUAGE:    en
-#+OPTIONS:     H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
-#+DESCRIPTION: <TODO: insert your description here>
-
 
 - 联系方式
   - 邮箱：guweigang@outlook.com
@@ -40,6 +33,8 @@
   - 热爱开源，乐于分享，在github上有自己的源：https://github.com/cnwggu，并常在IRC上与国外RD交流。
   - 有创业经验，有一定管理能力，有项目管理经验。
   - 喜欢羽毛球，网球，乒乓球；性格开朗，健谈，有幽默细胞；喜欢写博客、微博，善于总结。
+
+
 
 
 
