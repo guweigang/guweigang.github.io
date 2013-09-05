@@ -2,7 +2,7 @@
 #+AUTHOR:      Guweigang
 #+EMAIL:       guweigang@outlook.com
 #+DATE:        2013-06-20 Thu
-#+URI:         /index.html
+#+URI:         /
 #+KEYWORDS:    技术博客
 #+TAGS:        homepage:guweigang
 #+LANGUAGE:    en
