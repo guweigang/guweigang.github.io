@@ -8,20 +8,20 @@
 #+OPTIONS:     H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
 #+DESCRIPTION: 关于我，个人简介
 
-- 联系方式
+* 联系方式
   - 邮箱：guweigang@outlook.com
   - 新浪微博：
     
     [[http://service.t.sina.com.cn/widget/qmd/1651724537/2149560e/1.png]]
   - QQ：258047660
   - Github: [[https://github.com/guweigang][@guweigang]]
-- 教育经历
+* 教育经历
   - 2008 – 2011中南大学信息学院攻读硕士学位；系统分析与集成专业；课题：无线传感器网络；导师：王国军。
   - 2004 – 2008 中南大学信息学院攻读学士学位，电子信息工程专业。 
-- 工作经历
+* 工作经历
   - 2011-至今 百度 商务基础平台部 PHP工程师
   - 2009-2011 中南出版传媒集团 PHP工程师
-- 项目经历
+* 项目经历
   - 在校期间担任班长、学生会副主席、创业俱乐部会长等职务。
   - 2006年 创建SODO电子商务创业团队，项目负责人。
   - 2007年 与黎胤（学工办主任）、毛天石联合创办“中南大学科研训练中心”培训机。
@@ -32,7 +32,7 @@
   - 2011年 参与PHP开源项目Aura https://github.com/auraphp 。
   - 2012年 参与PHP开源项目Phalcon https://github.com/phalcon 。
   - 2011年 – 至今  负责百度 总控中心（黑白名单等配置中心）、创新实验平台（凤巢新广告样式）以及电商广告平台、微购、垂直搜索优化等。
-- 特长爱好
+* 特长爱好
   - 热爱英语，曾译过Solar PHP手册http://solarphp.cn/manual-new/ ；Aura包文档 http://bullsoft.org/auraphp/index.html ，并能轻松阅读英文资料及文档。
   - 喜欢互联网并对互联网有自己的见解，擅长PHP编程，熟悉C、Lisp语言，熟悉Linux、MySQL，熟悉Emacs编辑器。
   - 热爱开源，乐于分享，在github上有自己的源：https://github.com/cnwggu，并常在IRC上与国外RD交流。
