@@ -52,7 +52,7 @@
 * 特长爱好
   - 热爱英语，曾译过Solar PHP手册http://solarphp.cn/manual-new/ ；Aura包文档 http://bullsoft.org/auraphp/index.html ，并能轻松阅读英文资料及文档。
   - 喜欢互联网并对互联网有自己的见解，擅长PHP编程，熟悉C、Lisp语言，熟悉Linux、MySQL，Sphinx等常用服务组件，熟悉Emacs编辑器。
-  - 热爱开源，乐于分享，在github上有自己的源：https://github.com/cnwggu。
+  - 热爱开源，乐于分享，在github上有自己的源：https://github.com/guweigang。
   - 有创业经验，有一定管理能力，有项目管理经验。
   - 喜欢羽毛球，网球，乒乓球；性格开朗，健谈，有幽默细胞；喜欢写博客、微博，善于总结。
 
