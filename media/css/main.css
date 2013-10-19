@@ -101,10 +101,6 @@ ul, ol {
     padding: 0;
     margin: 0 0 1.5rem;
 }
-ul.org-ul {
-    margin-left: 2rem;
-}
-
 code, pre {
     font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
 }
