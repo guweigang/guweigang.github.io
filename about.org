@@ -31,7 +31,6 @@
 
 * 开源项目
   - 参与PHP开源项目Solar，并创建Solar Framework for PHP 5 中国（ http://solarphp.cn ），领导Solar中国项目开发。
-  - 创建长沙市尤盛网络科技有限公司，开展互联网广告及团购业务。
   - 参与PHP开源项目Aura https://github.com/auraphp 。
   - 参与PHP开源项目Phalcon https://github.com/phalcon 。
   - 创办开源组织布尔软件：http://bullsoft.org, 且已经有如下产出：
