@@ -1,4 +1,4 @@
-#+TITLE:       mysql-binlog-in-realtime.org
+#+TITLE:       mysql binlog in realtime
 #+AUTHOR:      Gu Weigang
 #+EMAIL:       guweigang@outlook.com
 #+DATE:        2013-11-18 Mon
@@ -7,7 +7,7 @@
 #+TAGS:        mysql:php-binlog
 #+LANGUAGE:    zh_CN
 #+OPTIONS:     H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
-#+DESCRIPTION : MySQL实时增量解析。
+#+DESCRIPTION: MySQL实时增量解析。
 
 众所周知，MySQL是最受欢迎的互联网数据库（没有之一），它为开源而生。发展初期，很多公司都受益于其易用性和经济性。随着这些公司的成长，越来越多的公司投入到MySQL的开发中，因此MySQL的特性也越来越丰富，如：不同特性的存储引擎、Binlog主从复制方案等。
 
