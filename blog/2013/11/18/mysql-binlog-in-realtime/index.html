@@ -30,6 +30,13 @@
 <div>
 <div class="post">
 <h1>mysql binlog in realtime</h1>
+<div class="center">
+
+<div class="figure">
+<p><img src="./binlog_app.png"  alt="binlog_app.png"/></p>
+</div>
+</div>
+
 <p>
 众所周知，MySQL是最受欢迎的互联网数据库（没有之一），它为开源而生。发展初期，很多公司都受益于其易用性和经济性。随着这些公司的成长，越来越多的公司投入到MySQL的开发中，因此MySQL的特性也越来越丰富，如：不同特性的存储引擎、Binlog主从复制方案等。
 </p>
@@ -125,15 +132,15 @@
 </div>
 
 <ul class="org-ul">
-<li>扫表方式来查找变更的记录。
+<li>扫表找出变更的记录。
 </li>
 </ul>
 
-<p>
-#+BEGING_SRC SQL
-      SELECT * FROM `products` WHERE updateTime &gt; '2013-11-12 12:00:00';
-#+END_SRC
-</p>
+<div class="org-src-container">
+
+<pre class="src src-SQL">SELECT * FROM `products` WHERE updateTime &gt; '2013-11-12 12:00:00';
+</pre>
+</div>
 
 <p>
 大家觉得这两种哪种更好呢？
