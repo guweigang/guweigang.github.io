@@ -74,9 +74,9 @@ $db->commit();
 
 看似一个海量访问的服务，其实是由无数个小服务组成的，图中所示就是我们组做的小服务，在具体场景中蓝色部分做的事情是把前端服务集群的协议转换成FASTCGI协议，并转发给后端服务UI/PHP-FPM。虽然名称叫UI，但是做的不是我们所理解的UI的工作，而是对于后面的检索和数据流来说它是最前面的一部分，所以才叫UI。它承担的工作是解析代理层发来的数据，并根据请求数据和参数构造结构化的查询条件，当然这个构造的过程可能仍需要请求很多外部服务，然后向检索系统（BS）发出请求，BS返回的是一个实体ID集合（你可以理解为商品ID），UI根据实体ID到数据库（这里省略了缓存系统）里面查询实体详情，整个完程就是这样。
 
-我们这个架构中也存在上面描述的异构系统，BS（Basic Search）模块是对Lucene的二次开发，它需要DB中的数据来建立索引，而客户会时不时地往DB里面写一些数据，为了能让UI实时地从BS中检索到新数据，DB的所有变更要能实时地体现到BS中，这是用双写／定时任务无法完成的。所以我们开发了基于MySQL Binlog的异步事件框架，ad pipe,简称AP。
+我们这个架构中也存在上面描述的异构系统，BS（Basic Search）模块是对Lucene的二次开发，它需要DB中的数据来建立索引，而客户会时不时地往DB里面写一些数据，为了能让UI实时地从BS中检索到新数据，DB的所有变更要能实时地体现到BS中，这是用双写／定时任务无法完成的。所以我们开发了基于MySQL Binlog的异步事件框架(AdPipe)。
 
-AP由以下几部分组成：
+AdPipe由以下几部分组成：
 
  - BIZ framework: 大家都知道PHP是最快的，所以经常需要变更的事件逻辑使用PHP写。
  - PHP ext: 为了能在PHP用户空间写Binlog事件逻辑，不可避免地需要PHP扩展。
@@ -85,6 +85,22 @@ AP由以下几部分组成：
    
 来看看BIZ框架的代码：
 
+首先是启动脚本
+
 #+BEGIN_HTML
 <script src="https://gist.github.com/guweigang/7637250.js"></script>
+#+END_HTML
+
+上面代码主要职责是连接MySQL Server，并且设置Binlog的位置，建立连接后根据接收到的事件调用BinlogEvent相应的方法。
+
+其次是事件处理类，BinlogEvent：
+
+#+BEGIN_HTML
+<script src="https://gist.github.com/guweigang/7637601.js"></script>
+#+END_HTML
+
+最后是消息打包类，Message
+
+#+BEGIN_HTML
+<script src="https://gist.github.com/guweigang/7637720.js"></script>
 #+END_HTML
