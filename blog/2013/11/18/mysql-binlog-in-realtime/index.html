@@ -237,7 +237,21 @@ AdPipe由以下几部分组成：
 <script src="https://gist.github.com/guweigang/7637601.js"></script>
 
 <p>
-最后是消息打包类，Message
+看171行，getHandleClass方法是查获取一个业务对象来处理事件，如果没有找到处理某个DB事件的类，那么默认会调用DefaultEvent来处理：
+</p>
+
+<p>
+请看DefaultEvent类：
+</p>
+
+<script src="https://gist.github.com/guweigang/7637883.js"></script>
+
+<p>
+由于Binlog事件和DB的scheme是息息相关的，所以在DefaultEvent中也调用了Model类来获取表字段。每个事件处理类都有三个方法，onWrite, onUpdate, onDelete，你可以在方法中获取DB变更的数据，然后根据业务需求做各种变换，然后打包成消息。
+</p>
+
+<p>
+接下来就说到消息类，这里的消息是指逻辑消息，是经过业务代码变换后准备发往BS的消息，Message
 </p>
 
 <script src="https://gist.github.com/guweigang/7637720.js"></script>
