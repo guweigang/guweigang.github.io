@@ -190,11 +190,11 @@ $db-&gt;commit();
 </p>
 
 <p>
-我们这个架构中也存在上面描述的异构系统，BS（Basic Search）模块是对Lucene的二次开发，它需要DB中的数据来建立索引，而客户会时不时地往DB里面写一些数据，为了能让UI实时地从BS中检索到新数据，DB的所有变更要能实时地体现到BS中，这是用双写／定时任务无法完成的。所以我们开发了基于MySQL Binlog的异步事件框架，ad pipe,简称AP。
+我们这个架构中也存在上面描述的异构系统，BS（Basic Search）模块是对Lucene的二次开发，它需要DB中的数据来建立索引，而客户会时不时地往DB里面写一些数据，为了能让UI实时地从BS中检索到新数据，DB的所有变更要能实时地体现到BS中，这是用双写／定时任务无法完成的。所以我们开发了基于MySQL Binlog的异步事件框架(AdPipe)。
 </p>
 
 <p>
-AP由以下几部分组成：
+AdPipe由以下几部分组成：
 </p>
 
 <ul class="org-ul">
@@ -211,7 +211,27 @@ AP由以下几部分组成：
 来看看BIZ框架的代码：
 </p>
 
+<p>
+首先是启动脚本
+</p>
+
 <script src="https://gist.github.com/guweigang/7637250.js"></script>
+
+<p>
+上面代码主要职责是连接MySQL Server，并且设置Binlog的位置，建立连接后根据接收到的事件调用BinlogEvent相应的方法。
+</p>
+
+<p>
+其次是事件处理类，BinlogEvent：
+</p>
+
+<script src="https://gist.github.com/guweigang/7637601.js"></script>
+
+<p>
+最后是消息打包类，Message
+</p>
+
+<script src="https://gist.github.com/guweigang/7637720.js"></script>
 
 </div>
 </div>
