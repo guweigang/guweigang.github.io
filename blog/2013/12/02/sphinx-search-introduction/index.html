@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <title>sphinx search introduction - 闭眼听世界</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Gu Weigang" />
+    <meta name="description" content="&lt;TODO: insert your description here&gt;" />
+    <meta name="keywords" content="sphinx, search" />
+    <link rel="stylesheet" href="/media/css/main.css" type="text/css">
+  </head>
+  <body class="container">
+    <div>
+      <header class="masthead">
+        <h1 class="masthead-title"><a href="/">闭眼听世界</a></h1>
+        <p>心如松静意无尘，气若浮萍了无痕！</p>
+        <ul>
+          <li><a href="/blog/">Blog</a></li>
+          <li><a href="/tags/">Tags</a></li>
+          <li><a href="/about/">About</a></li>
+          <li><a href="https://github.com/guweigang">GitHub</a></li>
+          <li><a href="/rss.xml">RSS</a></li>
+        </ul>
+        <form method="get" id="searchform" action="http://www.google.com/search">
+          <input type="text" class="field" name="q" id="s" placeholder="Search">
+          <input type="hidden" name="q" value="site:guweigang.com">
+        </form>
+      </header>
+    </div>
+
+<div>
+<div class="post">
+<h1>sphinx search introduction</h1>
+
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1">简介</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+Sphinx是由俄罗斯人 Andrew Aksyonoff 开发的一个全文检索引擎。意图为其他应 用提供高速、低空间占用、高结果 相关度的全文搜索功能。Sphinx 可以非常容 易的与 SQL 数据库和脚本语言集成。当前系统内置 MySQL 和 PostgreSQL 数据 库数据源的支持，也支持从标准输入读取特定格式 的XML数据。通过修改源代码， 用户可以自行增加新的数据源（例如：其他类型的 DBMS 的原生支持）
+</p>
+
+<p>
+Sphinx的特性：
+</p>
+
+<ul class="org-ul">
+<li>高速的建立索引(在当代CPU上，峰值性能可达到10 MB/秒);
+</li>
+<li>高性能的搜索(在2 – 4GB 的文本数据上，平均每次检索响应时间小于0.1秒);
+</li>
+<li>可处理海量数据(目前已知可以处理超过100 GB的文本数据, 在单一CPU的系统上可 处理100 M 文档);
+</li>
+<li>提供了优秀的相关度算法，基于短语相似度和统计（BM25）的复合Ranking方法;
+</li>
+<li>支持分布式搜索;
+</li>
+<li>支持短语搜索
+</li>
+<li>提供文档摘要生成
+</li>
+<li>可作为 MySQL 的存储引擎提供搜索服务;
+</li>
+<li>支持布尔、短语、词语相似度等多种检索模式;
+</li>
+<li>文档支持多个全文检索字段(最大不超过32个);
+</li>
+<li>文档支持多个额外的属性信息(例如：分组信息，时间戳等);
+</li>
+<li>支持断词;
+</li>
+</ul>
+
+
+<p>
+而我们一般用 Sphinx 来解决数据库全文检索效率低下以及 like "%test%" 慢查询等问题。
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-2" class="outline-2">
+<h2 id="sec-2">编译安装</h2>
+<div class="outline-text-2" id="text-2">
+<ol class="org-ol">
+<li>下载Sphinx 2.0.5
+</li>
+</ol>
+
+<div class="org-src-container">
+
+<pre class="src src-SHELL">$ wget http://sphinxsearch.com/files/sphinx-2.0.5-release.tar.gz
+</pre>
+</div>
+
+<p>
+解压源码包：
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-SHELL">$ tar zxvf sphinx-2.0.5-release.tar.gz
+$ cd sphinx-2.0.5-release
+</pre>
+</div>
+
+<ol class="org-ol">
+<li>执行configure配置程序:
+</li>
+</ol>
+
+<div class="org-src-container">
+
+<pre class="src src-SHELL">$ ./configure [options]
+</pre>
+</div>
+
+<p>
+有一些参数可以在配置的时候指定，主要如下:
+</p>
+
+<ul class="org-ul">
+<li>prefix, 指定sphinx安装到系统的那个位置; 例如 —prefix=/usr/local/sphinx
+</li>
+<li>with-mysql, mysql 的安装目录，指定如果自动侦查 mysql 的相关库文件失败后到哪个目录查找
+</li>
+<li>with-pgsql, 同上，用于 pgsql
+</li>
+</ul>
+
+<p>
+完整的配置命令如下：
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-SHELL">./configure --prefix=/usr/local/sphinx --with-mysql=/usr/local/mysql
+</pre>
+</div>
+
+<ol class="org-ol">
+<li>编译
+</li>
+</ol>
+
+<div class="org-src-container">
+
+<pre class="src src-SHELL">$ make
+</pre>
+</div>
+
+<ol class="org-ol">
+<li>安装
+</li>
+</ol>
+
+<div class="org-src-container">
+
+<pre class="src src-SHELL">$ make install
+</pre>
+</div>
+
+<p>
+如果编译中没有产生错误，这个步骤应该不会遇到问题。如果完成后未正确安装， 就要回去找make过程中遇到的错误了。
+</p>
+
+<ol class="org-ol">
+<li>运行测试
+</li>
+</ol>
+
+<div class="org-src-container">
+
+<pre class="src src-SHELL">$ cd /usr/local/sphinx/etc
+$ cp sphinx.conf.dist sphinx.conf
+$ emacs sphinx.conf
+</pre>
+</div>
+
+<p>
+这里，sphinx提供了一个简单的例子，基本步骤是先将 /sphinx/etc 下面的 sphinx.conf.dist 重命名为 sphinx.conf, 然后修改 sphinx.conf 中的配置，主要是修改你服务器上面的 mysql 的用户名、密码、数据库名等。修改的位 置是 sphinx.conf 的 source src1 下面几行。
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-SHELL">$ mysql -u test &lt; /usr/local/sphinx/etc/example.sql
+</pre>
+</div>
+
+<p>
+这里是导入 sphinx 准备的测试数据，我们把数据导入到 mysql 的 test 数据库中。 当然，这里的数据库要和你上面的配置文件（sphinx.conf）中指定的 sql_db 值 相同。注意，运行这个命令的话，如果你的 mysql 命令没有加入到环境变量中， 就需要用完整路径，同时可能需要输入密码。比如你的 mysql 安装在 /usr/local/mysql 目录中，root 账户的密码是 xxxxxx，那么命令应该调整为：
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-SHELL">$ /usr/local/mysql/bin/mysql -uroot -pxxxxxx test &lt; /usr/local/sphinx/etc/example.sql
+$ cd /usr/local/sphinx/etc
+$ /usr/local/sphinx/bin/indexer --all
+</pre>
+</div>
+
+<p>
+这个命令是建立索引，当然数据基础是刚刚导入的example.sql的数据，如果这 里出错，最大的可能是你的 sphinx.conf 中的数据库配置错了，你需要回去检查 并修正。但是，还有可能出现 sphinx 必须的库文件无法找到，例如出现以下错误：
+</p>
+
+<pre class="example">
+/usr/local/sphinx/bin/indexer: error while loading shared libraries: libmysqlclient.so.16: cannot open shared object file: No such file or directory
+</pre>
+
+<p>
+这主要是因为你安装了一些库后，没有能够配置相应的环境变量。你可以通过建 立连接的方式修正这个问题，运行如下命令：
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-SHELL">ln -s /usr/local/mysql/lib/libmysqlclient.so.15 /usr/lib/libmysqlclient.so.15
+</pre>
+</div>
+
+<p>
+这里我假设你相应的软件包安装在 /usr/local/xxx 目录下，如果你不是安装在相应目录下，你就需要使用你自己的路径。
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-SHELL">$ cd /usr/local/sphinx/etc
+$ /usr/local/sphinx/bin/search test
+</pre>
+</div>
+
+<p>
+上面的命令是搜索测试，测试的关键词就是 test 了，如果成功的话，你应该看到搜到的结果，出现字串“index 'test1': query 'test ': returned 3 matches of 3 total in 0.000 sec”，后面跟的是结果表示成功了。
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-SHELL">$ cd /usr/local/sphinx/etc
+$ /usr/local/sphinx/bin/searchd
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-3" class="outline-2">
+<h2 id="sec-3">索引</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+Sphinx 提供两种索引方式，一种是普通索引，另一种是实时索引。两种索引方式带来了不同的部署和使用方式。
+</p>
+</div>
+
+
+<div id="outline-container-sec-3-1" class="outline-3">
+<h3 id="sec-3-1">普通索引（Plain Index）</h3>
+<div class="outline-text-3" id="text-3-1">
+<p>
+如上面的介绍，就是用 Sphinx 搭建的一套普通索引，这种索引无法达到实时索 引的效果，退而求其次，只能通过定时重建索引的方式达到准实时的效果，而且 一旦索引数据量增大，索引重建所需的时间越来越长，实时效果会越来越差。所 以此类索引要达到实准时效果的方案是使用 base + delta 结构，每天重建 base 索引，每5分钟重建 delta 索引。更有甚者使用 base + day + delta 结构。如下图所示：
+</p>
+
+<div class="center">
+
+<div class="figure">
+<p><img src="./sphinx-plain-index.png"  alt="sphinx-plain-index.png"/></p>
+</div>
+</div>
+
+<div class="org-src-container">
+
+<pre class="src src-WinConf">source base
+{
+    type = mysql
+    sql_host = 127.0.0.1
+    sql_user = root
+    sql_pass =
+    sql_db   = test
+    sql_port = 8686
+    sql_query_pre = SET NAMES utf8
+    sql_query_pre = REPLACE INTO sph_counter SELECT 1, MAX(id) FROM
+    invoice_main;
+    sql_query = SELECT id, uid, ... FROM table;
+    sql_attr_timestamp = addtime
+    sql_attr_timestamp = modtime
+}
+
+index base
+{
+    source          = base
+    path            = /path/to/var/data/base
+    docinfo         = extern
+    enable_star     = 1
+    min_infix_len   = 3
+    charset_type    = utf-8
+    # 中文一元切词
+    charset_table   = 0..9, A..Z-&gt;a..z, _, a..z,
+    U+410..U+42F-&gt;U+430..U+44F, U+430..U+44F
+    ngram_len       = 1
+    ngram_chars     = U+3000..U+2FA1F
+}
+
+source delta : base
+{
+    sql_query_pre = SET NAMES utf8
+    sql_query = SELECT id, uid, ... FROM table WHERE id &gt; ( SELECT
+max_doc_id FROM sph_counter WHERE counter_id = 1)
+}
+
+index delta : base
+{
+    source = delta
+    path = /path/to/var/data/delta
+}
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-3-2" class="outline-3">
+<h3 id="sec-3-2">实时索引（Realtime Index）</h3>
+<div class="outline-text-3" id="text-3-2">
+</div><div id="outline-container-sec-3-2-1" class="outline-4">
+<h4 id="sec-3-2-1">简介</h4>
+<div class="outline-text-4" id="text-3-2-1">
+<p>
+Sphinx实时索引在版本 1.10-bita 被引入的。
+实时索引也是一种索引类型，也需要在 sphinx.conf 文件中声明。不需要并忽略数据来源，需要明确地列举所有文本域，不只是属性。
+</p>
+
+<div class="center">
+
+<div class="figure">
+<p><img src="./sphinx-realtime-index.png"  alt="sphinx-realtime-index.png"/></p>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-sec-3-2-2" class="outline-4">
+<h4 id="sec-3-2-2">转换实时索引</h4>
+<div class="outline-text-4" id="text-3-2-2">
+<p>
+通常情况下，我们已经有数据源了，这个时候如何把现有数据转换成实时索引数 据呢？ Sphinx 实现了一种 ATTACH 机制可以做到这一点，如下所示：
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-WinConf">source orig
+{
+    type            = mysql
+    sql_host        = localhost
+    sql_user        = root
+    sql_pass        =
+    sql_db          = test
+    sql_port        = 3306  # optional, default is 3306
+    sql_query       = \
+        SELECT id, group_id, UNIX_TIMESTAMP(date_added) AS date_added, title, content \
+        FROM documents
+    sql_attr_uint       = group_id
+    sql_attr_timestamp  = date_added
+    sql_query_info      = SELECT * FROM documents WHERE id=$id
+}
+
+index orig
+{
+    source          = orig
+    path            = idx/orig
+    docinfo         = extern
+    charset_type    = sbcs
+}
+
+index rtindex
+{
+    type            = rt
+    rt_mem_limit    = 32M
+    path            = idx/rtindex
+    charset_type    = utf-8
+    rt_field          = title
+    rt_field          = content
+    rt_attr_uint      = group_id
+    rt_attr_timestamp = date_added
+}
+
+source attach
+{
+    type            = mysql
+    sql_host        = 127.0.0.1
+    sql_user        =
+    sql_pass        =
+    sql_db          =
+    sql_port        = 9306  # optional, default is 3306
+    sql_query       = select 1 from testrt
+    sql_query_post  = ATTACH INDEX orig TO RTINDEX rtindex
+}
+
+index attach
+{
+    source          = attach
+    path            = idx/attach
+    docinfo         = extern
+    charset_type    = sbcs
+}
+</pre>
+</div>
+
+<p>
+操作步骤如下：
+</p>
+
+<ul class="org-ul">
+<li>开启 searchd：
+</li>
+</ul>
+
+<div class="org-src-container">
+
+<pre class="src src-SHELL">./bin/searchd  -c ./etc/sphinx.conf
+</pre>
+</div>
+
+<p>
+这里请忽略空索引attach警告。
+</p>
+
+
+<ul class="org-ul">
+<li>新建 orig 索引：
+</li>
+</ul>
+
+<div class="org-src-container">
+
+<pre class="src src-SHELL">$ ./bin/indexer -c ./etc/sphinx.conf orig --rotate
+</pre>
+</div>
+
+<ul class="org-ul">
+<li>转换实时索引：
+</li>
+</ul>
+
+<div class="org-src-container">
+
+<pre class="src src-SHELL">$ ./bin/indexer -c ./etc/sphinx.conf attach
+</pre>
+</div>
+
+<p>
+现在来收获成果：
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-SHELL">mysql -P9306 -h127.0.0.1
+mysql&gt; select * from rtindex;
+</pre>
+</div>
+
+<!-- This HTML table template is generated by emacs 24.3.1 -->
+<table border="1">
+  <tr>
+    <td align="left" valign="top">
+      &nbsp;id&nbsp;&nbsp;&nbsp;
+    </td>
+    <td align="left" valign="top">
+      &nbsp;weight&nbsp;
+    </td>
+    <td align="left" valign="top">
+      &nbsp;group_id&nbsp;
+    </td>
+    <td align="left" valign="top">
+      &nbsp;date_added&nbsp;
+    </td>
+  </tr>
+  <tr>
+    <td align="left" valign="top">
+      &nbsp;&nbsp;&nbsp;&nbsp;1&nbsp;<br />
+      &nbsp;&nbsp;&nbsp;&nbsp;2&nbsp;<br />
+      &nbsp;&nbsp;&nbsp;&nbsp;3&nbsp;<br />
+      &nbsp;&nbsp;&nbsp;&nbsp;4&nbsp;
+    </td>
+    <td align="left" valign="top">
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1&nbsp;<br />
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1&nbsp;<br />
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1&nbsp;<br />
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1&nbsp;
+    </td>
+    <td align="left" valign="top">
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1&nbsp;<br />
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1&nbsp;<br />
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2&nbsp;<br />
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2&nbsp;
+    </td>
+    <td align="left" valign="top">
+      &nbsp;1322419937&nbsp;<br />
+      &nbsp;1322419937&nbsp;<br />
+      &nbsp;1322419937&nbsp;<br />
+      &nbsp;1322419937&nbsp;
+    </td>
+  </tr>
+</table>
+
+<p>
+大功告成，皆大欢喜！
+</p>
+</div>
+</div>
+<div id="outline-container-sec-3-2-3" class="outline-4">
+<h4 id="sec-3-2-3">分布式索引</h4>
+<div class="outline-text-4" id="text-3-2-3">
+<p>
+随着索引数据增加和检索次数增加，单机可能无法承受如此大的数据量和检索量， 这个时候我们便会考虑使用分布式索引，这其中也有两种方案可以选用。
+</p>
+
+<p>
+下面引用张宴的架构图：
+</p>
+
+<div class="center">
+
+<div class="figure">
+<p><img src="./sphinx-search-system.png"  alt="sphinx-search-system.png"/></p>
+</div>
+</div>
+</div>
+
+
+<ul class="org-ul"><li>索引同步<br/><div class="outline-text-5" id="text-3-2-3-1">
+<p>
+使用 rsync 之类的工具定时同步索引，随机选择每个节点进行查询，这么做的 好处是可以解决检索量的问题，但并不能解决单机索引数据过大的问题。
+</p>
+</div>
+</li>
+
+<li>Sphinx 分布式索引<br/><div class="outline-text-5" id="text-3-2-3-2">
+<p>
+使用 Sphinx 自身的分布式索引，在每个节点上只索引总数据量的一部分（这可 以对数据表的主键取模来实现，如 id MOD 4），然后在 sphinx.conf 中配置分 布式索引，如下：
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-WinConf">source base
+{
+    # ...
+}
+
+index base
+{
+    # ...
+}
+
+source delta : base
+{
+    # ...
+}
+
+index delta : base
+{
+    # ...
+}
+
+index main
+{
+    type = distributed
+    local = base
+    local = delta
+    agent = 127.0.0.1:9313:main,delta
+    agent = 127.0.0.1:9314:main,delta
+    agent = 127.0.0.1:9315:main,delta
+
+    # remote agent connection timeout, milliseconds
+    # optional, default is 1000 ms, ie. 1 sec
+    agent_connect_timeout   = 1000
+
+    # remote agent query timeout, milliseconds
+    # optional, default is 3000 ms, ie. 3 sec
+    agent_query_timeout = 3000
+}
+</pre>
+</div>
+</div>
+</li></ul>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-4" class="outline-2">
+<h2 id="sec-4">XMLPIPE</h2>
+<div class="outline-text-2" id="text-4">
+<p>
+上面介绍的都是使用 MySQL 数据源的，如果是 MongoDB 当如何处理？ Sphinx 自身集成了XML协议，只要你在标准输出中打印出符合 Sphinx 要求的 XML 那么 Sphinx 就能正确获取数据，并创建索引。
+</p>
+
+<div class="center">
+
+<div class="figure">
+<p><img src="./sphinx-mongodb.png"  alt="sphinx-mongodb.png"/></p>
+</div>
+</div>
+
+<div class="org-src-container">
+
+<pre class="src src-WinConf">source products
+{
+    type = xmlpipe2
+    xmlpipe_command = php53 /home/guweigang/work/scripts/exportProducts2Sphinx.php
+}
+
+index products
+{
+    source = products
+    path   = /home/guweigang/local/sphinx/var/data/products
+    docinfo = extern
+    charset_type    = utf-8
+    charset_table   = 0..9, A..Z-&gt;a..z, _, a..z, U+410..U+42F-&gt;U+430..U+44F, U+430..U+44F
+    ngram_len       = 1
+    ngram_chars     = U+3000..U+2FA1F
+}
+</pre>
+</div>
+
+<p>
+具体代码可参考<a href="http://guweigang.com/blog/2013/12/02/php-xmlpipe2-for-sphinx/">http://guweigang.com/blog/2013/12/02/php-xmlpipe2-for-sphinx/</a>
+</p>
+</div>
+</div>
+
+</div>
+</div>
+    <div>
+      <div class="post-meta">
+        <span title="post date" class="post-info">2013-12-02</span>
+        <span title="last modification date" class="post-info">2013-12-02</span>
+        <span title="tags" class="post-info"><a href="/tags/sphinx/">sphinx</a></span>
+        <span title="author" class="post-info">Gu Weigang</span>
+      </div>
+      <section>
+        <h1>Comments</h1>
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+          //var disqus_developer = 1;
+          var disqus_identifier = "/blog/2013/12/02/sphinx-search-introduction/";
+          var disqus_url = "http://guweigang.com/blog/2013/12/02/sphinx-search-introduction/";
+          var disqus_shortname = 'guweigang';
+          /* * * DON'T EDIT BELOW THIS LINE * * */
+          (function() {
+          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+          dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+          })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </section>
+      <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'cnwggu@gmail.com']);
+        _gaq.push(['_trackPageview']);
+        (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+      </script>
+      <div class="footer">
+        <p>Generated by <a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.3.1 (<a href="http://orgmode.org">Org</a> mode 8.0.3)</p>
+        <p>
+          Copyright &copy; 2012 - 2013 <a href="mailto:guweigang &lt;at&gt; outlook &lt;dot&gt; com">Gu Weigang</a>
+          &nbsp;&nbsp;-&nbsp;&nbsp;
+          Powered by <a href="https://github.com/kelvinh/org-page" target="_blank">org-page</a>
+        </p>
+      </div>
+    </div>
+  </body>
+</html>
