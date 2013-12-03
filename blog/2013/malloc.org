@@ -21,15 +21,20 @@ font-weight: bolder !important;
 
 #+BEGIN_QUOTE
 
-原文地址：http://web.eecs.utk.edu/~plank/plank/classes/cs360/360/notes/Malloc1/lecture.html
-原文作者：Jim Plank http://www.cs.utk.edu/~plank
-翻译：顾伟刚 http://guweigang.com
+原文地址： http://web.eecs.utk.edu/~plank/plank/classes/cs360/360/notes/Malloc1/lecture.html
+
+原文作者： Jim Plank http://www.cs.utk.edu/~plank
+
+翻译： 顾伟刚 http://guweigang.com
 
 #+END_QUOTE
 
-译者注：
+
+#+BEGIN_CENTER
 
 一直想找时间好好理解一下C语言中malloc的使用和原理，它是如此的重要以至于影响到程序的方方面面。
+
+#+END_CENTER
 
 #+BEGIN_QUOTE
 在使用本讲义中的代码之前请先看讲义。不幸的是，实验室机器上的 *malloc()* 和  *free* 的实现百分之百和本讲义中的不一样。因为这些讲义是在20世纪90年代中编写的，而 /malloc/ 的实现几乎每四年变化一次。
