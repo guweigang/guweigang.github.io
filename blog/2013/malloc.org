@@ -1,0 +1,40 @@
+#+TITLE:       Malloc in C
+#+AUTHOR:      Gu Weigang
+#+EMAIL:       guweigang@outlook.com
+#+DATE:        2013-12-03 Tue
+#+URI:         /blog/%y/%m/%d/malloc/
+#+KEYWORDS:    c, malloc
+#+TAGS:        c
+#+LANGUAGE:    zh_CN
+#+OPTIONS:     H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: <TODO: insert your description here>
+
+#+BEGIN_QUOTE
+
+原文地址：http://web.eecs.utk.edu/~plank/plank/classes/cs360/360/notes/Malloc1/lecture.html
+原文作者：Jim Plank http://www.cs.utk.edu/~plank
+翻译：顾伟刚 http://guweigang.com
+
+#+END_QUOTE
+
+译者注：
+
+一直想找时间好好理解一下C语言中malloc的使用和原理，它是如此的重要以至于影响到程序的方方面面。
+
+#+BEGIN_QUOTE
+在使用本讲义中的代码之前请先看讲义。不幸的是，实验室机器上的 *malloc()* 和  *free* 的实现百分之百和本讲义中的不一样。因为这些讲义是在20世纪90年代中编写的，而 /malloc/ 的实现几乎每四年变化一次。
+
+而我坚持使用这些描述是因为它足够清晰。如果想知道它和现在机器实现的区别，请猛击http://web.eecs.utk.edu/~plank/plank/classes/cs360/360/notes/Malloc1/diff.html
+#+END_QUOTE
+
+这是一篇关于 *sbrk()* 和 *malloc()* 的讲义。
+
+
+上一节课我们学习了通用的内存知识 -- 我们了解到代码段最后的地址是 *&etext* ，全局段最后的地址是 *&edata* 。随着程序的运行，堆内存会不断地增长，因为代码使用 *malloc()* 从堆中分配内存。为了解决堆内存局限的问题，我们必须使用 *brk()* 和 *sbrk()* 。它们都是系统调用，我们可以通过UNIX的man手册了解它们。这里我们仅讨论 *sbrk()* ，因为你只需要使用它就行了。
+
+#+BEGIN_SRC C
+caddr_t sbrk(int incr);
+#+END_SRC
+
+*caddr_t* 是一个“C地址指针”。它等同于 *(char *)* 或者 *(void *)* 。
+
