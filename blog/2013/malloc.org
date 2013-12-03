@@ -12,8 +12,11 @@
 #+BEGIN_HTML
 <style type="text/css">
 pre.src-C {
-background-color: black !important;
-font-weight: bolder !important;
+    background-color: black !important;
+    font-weight: bolder !important;
+}
+b:before, b:after, strong:before, strong:after {
+    content: "";
 }
 </style>
 #+END_HTML
