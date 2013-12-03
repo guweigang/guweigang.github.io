@@ -9,6 +9,16 @@
 #+OPTIONS:     H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
 #+DESCRIPTION: <TODO: insert your description here>
 
+#+BEGIN_HTML
+<style type="text/css">
+pre.src-C {
+background-color: black !important;
+font-weight: bolder !important;
+}
+</style>
+#+END_HTML
+
+
 #+BEGIN_QUOTE
 
 原文地址：http://web.eecs.utk.edu/~plank/plank/classes/cs360/360/notes/Malloc1/lecture.html
