@@ -51,13 +51,7 @@ i:before, i:after, em:before, em:after {
 
 <p>
 原文地址： <a href="http://web.eecs.utk.edu/~plank/plank/classes/cs360/360/notes/Malloc1/lecture.html">http://web.eecs.utk.edu/~plank/plank/classes/cs360/360/notes/Malloc1/lecture.html</a>
-</p>
-
-<p>
 原文作者： <a href="http://www.cs.utk.edu/~plank">Jim Plank</a>
-</p>
-
-<p>
 译文作者： <a href="http://guweigang.com">顾伟刚</a>
 </p>
 </blockquote>
@@ -67,7 +61,7 @@ i:before, i:after, em:before, em:after {
 
 
 <p>
-一直想找时间好好理解一下C语言中malloc的使用和原理，它是如此的重要以至于影响到程序的方方面面。
+译者注：一直想找时间好好理一下C语言中malloc的使用方法及其原理，它是如此的重要以至于影响到程序的方方面面。现在终于有机会了，我将借助这个讲义来记录和分享malloc。
 </p>
 </div>
 
@@ -75,20 +69,22 @@ i:before, i:after, em:before, em:after {
 
 
 <p>
-在使用本讲义中的代码之前请先看讲义。不幸的是，实验室机器上的 <b>malloc()</b> 和  <b>free</b> 的实现百分之百和本讲义中的不一样。因为这些讲义是在20世纪90年代中编写的，而 <i>malloc</i> 的实现几乎每四年变化一次。
+在尝试使用本文提到的代码之前请先看讲义。不幸的是，实验室机器上的 <b>malloc()</b> 和  <b>free</b> 的实现百分之百和本讲义中的不一样。因为这些讲义是在20世纪90年代中期编写的，而 <i>malloc</i> 的实现几乎每几年都要变化一次。
 </p>
 
 <p>
-而我坚持使用这些描述是因为它足够清晰。如果想知道它和现在机器实现的区别，请猛击 <a href="http://web.eecs.utk.edu/~plank/plank/classes/cs360/360/notes/Malloc1/diff.html">http://web.eecs.utk.edu/~plank/plank/classes/cs360/360/notes/Malloc1/diff.html</a>
+而我坚持使用本讲义来教学是因为它足够清晰。如果想知道它和现在机器实现的联系和区别，请猛击 <a href="http://web.eecs.utk.edu/~plank/plank/classes/cs360/360/notes/Malloc1/diff.html">http://web.eecs.utk.edu/~plank/plank/classes/cs360/360/notes/Malloc1/diff.html</a>。
 </p>
 </blockquote>
+
+<hr/>
 
 <p>
 这是一篇关于 <b>sbrk()</b> 和 <b>malloc()</b> 的讲义。
 </p>
 
 <p>
-上一节课我们学习了通用的内存知识 -- 我们了解到代码段最后的地址是 <b>&amp;etext</b> ，全局段最后的地址是 <b>&amp;edata</b> 。随着程序的运行，堆内存会不断地增长，因为代码使用 <b>malloc()</b> 从堆中分配内存。为了解决堆内存局限的问题，我们必须使用 <b>brk()</b> 和 <b>sbrk()</b> 。它们都是系统调用，我们可以通过UNIX的man手册了解它们。这里我们仅讨论 <b>sbrk()</b> ，因为你只需要使用它就行了。
+上一节课我们学习了操作系统内存的通用知识 -- 我们了解到代码段的尾地址是 <b>&amp;etext</b> ，全局段的尾地址是 <b>&amp;edata</b> 。随着程序的运行，堆内存会不断地增长，因为代码使用 <b>malloc()</b> 从堆中分配内存。为了解决堆内存局限的问题，我们必须使用 <b>brk()</b> 和 <b>sbrk()</b> 。它们都是系统调用，我们可以通过UNIX的man手册了解它们。这里我们仅讨论 <b>sbrk()</b> ，因为你只需要跟它打交道就行了。
 </p>
 
 <div class="org-src-container">
@@ -100,6 +96,52 @@ i:before, i:after, em:before, em:after {
 <p>
 <b>caddr_t</b> 是一个“C地址指针”。它等同于 <b>(char *)</b> 或者 <b>(void *)</b> 。
 </p>
+
+<p>
+这个操作指定操作系统给堆内存多分配 <b>incr</b> 字节空间。它返回调用 <b>sbrk()</b> 之前的堆内存尾地址。因此，调用 <b>sbrk()</b> 之后堆内存新的尾地址是：
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-C">sbrk(incr) + incr;
+</pre>
+</div>
+
+<p>
+如果你调用 <b>sbrk(0)</b> ，它会返回当前堆内存的尾地址给你。
+</p>
+
+<p>
+现在， <b>malloc()</b> （ 包括相应的 <b>realloc()</b> 和 <b>calloc()</b> ）都是通过调用 <b>sbrk()</b> 获取堆内存空间的。它们只是 <b>sbrk()</b> 的日常用法。因此，可以说，获取堆内存的唯一方法是通过调用 <b>malloc()</b> 或 <b>sbrk()</b> 。但是你始终应该使用 <b>malloc()</b> ，因为它更高效。
+</p>
+
+<p>
+----
+</p>
+
+<p>
+让我们来试试，请看fb2.c：
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-C"><span style="color: #d94a05; background-color: #000000;">#include</span> <span style="color: #009090; background-color: #000000;">&lt;stdio.h&gt;</span>
+<span style="color: #d94a05; background-color: #000000;">#include</span> <span style="color: #009090; background-color: #000000;">&lt;stdlib.h&gt;</span>
+<span style="color: #d94a05; background-color: #000000;">#include</span> <span style="color: #009090; background-color: #000000;">&lt;sys/types.h&gt;</span>
+
+<span style="color: #b13120; background-color: #000000;">main</span>()
+{
+  <span style="color: #a23f1e; background-color: #000000;">int</span> *<span style="color: #7c9fc9; background-color: #000000;">i1</span>, *<span style="color: #7c9fc9; background-color: #000000;">i2</span>;
+
+  printf(<span style="color: #009090; background-color: #000000;">"sbrk(0) before malloc(4): 0x%x\n"</span>, sbrk(0));
+  i1 = (<span style="color: #a23f1e; background-color: #000000;">int</span> *) malloc(4);
+  printf(<span style="color: #009090; background-color: #000000;">"sbrk(0) after `i1 = (int *) malloc(4)': 0x%x\n"</span>, sbrk(0));
+  i2 = (<span style="color: #a23f1e; background-color: #000000;">int</span> *) malloc(4);
+  printf(<span style="color: #009090; background-color: #000000;">"sbrk(0) after `i2 = (int *) malloc(4)': 0x%x\n"</span>, sbrk(0));
+  printf(<span style="color: #009090; background-color: #000000;">"i1 = 0x%x, i2 = 0x%x\n"</span>, i1, i2);
+}
+</pre>
+</div>
 
 </div>
 </div>
