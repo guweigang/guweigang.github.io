@@ -98,7 +98,7 @@ i:before, i:after, em:before, em:after {
 </p>
 
 <p>
-这个操作指定操作系统给堆内存多分配 <b>incr</b> 字节空间。它返回调用 <b>sbrk()</b> 之前的堆内存尾地址。因此，调用 <b>sbrk()</b> 之后堆内存新的尾地址是：
+这个操作指定操作系统给当前堆多分配 <b>incr</b> 字节内存。它返回调用 <b>sbrk()</b> 之前的堆内存尾地址。因此，调用 <b>sbrk()</b> 之后堆内存新的尾地址是：
 </p>
 
 <div class="org-src-container">
@@ -112,12 +112,10 @@ i:before, i:after, em:before, em:after {
 </p>
 
 <p>
-现在， <b>malloc()</b> （ 包括相应的 <b>realloc()</b> 和 <b>calloc()</b> ）都是通过调用 <b>sbrk()</b> 获取堆内存空间的。它们只是 <b>sbrk()</b> 的日常用法。因此，可以说，获取堆内存的唯一方法是通过调用 <b>malloc()</b> 或 <b>sbrk()</b> 。但是你始终应该使用 <b>malloc()</b> ，因为它更高效。
+现在， <b>malloc()</b> （ 包括相应的 <b>realloc()</b> 和 <b>calloc()</b> ）都是通过调用 <b>sbrk()</b> 获取堆内存空间的。它们只是 <b>sbrk()</b> 的习惯用法。因此，可以说，获取堆内存的唯一方法是通过调用 <b>malloc()</b> 或 <b>sbrk()</b> 。但是你始终应该使用 <b>malloc()</b> ，因为它更高效。
 </p>
 
-<p>
-----
-</p>
+<hr/>
 
 <p>
 让我们来试试，请看fb2.c：
@@ -135,20 +133,123 @@ i:before, i:after, em:before, em:after {
 
   printf(<span style="color: #009090; background-color: #000000;">"sbrk(0) before malloc(4): 0x%x\n"</span>, sbrk(0));
   i1 = (<span style="color: #a23f1e; background-color: #000000;">int</span> *) malloc(4);
-  printf(<span style="color: #009090; background-color: #000000;">"sbrk(0) after `i1 = (int *) malloc(4)': 0x%x\n"</span>, sbrk(0));
+  printf(<span style="color: #009090; background-color: #000000;">"sbrk(0) after 'i1 = (int *) malloc(4)': 0x%x\n"</span>, sbrk(0));
   i2 = (<span style="color: #a23f1e; background-color: #000000;">int</span> *) malloc(4);
-  printf(<span style="color: #009090; background-color: #000000;">"sbrk(0) after `i2 = (int *) malloc(4)': 0x%x\n"</span>, sbrk(0));
+  printf(<span style="color: #009090; background-color: #000000;">"sbrk(0) after 'i2 = (int *) malloc(4)': 0x%x\n"</span>, sbrk(0));
   printf(<span style="color: #009090; background-color: #000000;">"i1 = 0x%x, i2 = 0x%x\n"</span>, i1, i2);
 }
 </pre>
 </div>
 
+<p>
+这个示例打印出调用 <b>malloc()</b> 前后 <b>sbrk(0)</b> 的结果。下面是运行在 <b>hydra3a</b> 的结果：
+</p>
+
+<pre class="example">
+UNIX&gt; fb2
+sbrk(0) before malloc(4): 0x21ab0
+sbrk(0) after `i1 = (int *) malloc(4)': 0x23ab0
+sbrk(0) after `i2 = (int *) malloc(4)': 0x23ab0
+i1 = 0x21ac0, i2 = 0x21ad0
+UNIX&gt;
+</pre>
+
+<p>
+注意到， <b>sbrk()</b> 返回值在调用 <b>malloc()</b> 之后并没有发生变化。为什么会这样？因为 <b>malloc()</b> 会缓冲内存。当它调用 <b>sbrk()</b> 申请内存时，它会申请一块大内存 -- 如12K或8K，之后的 <b>malloc()</b> 会从缓冲区里面获取内存。换句话说，在分配完内存i1和i2之后，缓冲区中还剩一整块内存（从 0x0x21ad0 至 0x0x23ab0）供 <b>malloc()</b> 使用，在这之前它都无需再次调用 <b>sbrk()</b> ，在这个示例中缓冲区内大概还剩8160字节内存。因此，在示例 fb2a.c 中，当我们分配完i1和i2后，再申请大于8160字节（ <b>malloc()</b> ）的内存时，我们期待看到发生 <b>sbrk()</b> 的调用以获取更多内存。事实的确如此：
+</p>
+
+<pre class="example">
+UNIX&gt; fb2a
+sbrk(0) before malloc(4): 0x21b68
+sbrk(0) after `i1 = (int *) malloc(4)': 0x23b68
+sbrk(0) after `i2 = (int *) malloc(4)': 0x23b68
+i1 = 0x21b78, i2 = 0x21b88, sbrk(0)-i2 = 8160
+sbrk(0) after `i3 = (int *) malloc(8164)': 0x25b68
+i3 = 0x21f78
+UNIX&gt;
+</pre>
+
+<p>
+现在来看fb3.c, 调用 <b>malloc(4)</b> 10次，并且打印出分配的内存地址：
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-C"><span style="color: #d94a05; background-color: #000000;">#include</span> <span style="color: #009090; background-color: #000000;">&lt;stdio.h&gt;</span>
+<span style="color: #d94a05; background-color: #000000;">#include</span> <span style="color: #009090; background-color: #000000;">&lt;stdlib.h&gt;</span>
+
+<span style="color: #b13120; background-color: #000000;">main</span>()
+{
+  <span style="color: #a23f1e; background-color: #000000;">int</span> <span style="color: #7c9fc9; background-color: #000000;">j</span>, *<span style="color: #7c9fc9; background-color: #000000;">buf</span>;
+
+  <span style="color: #d94a05; background-color: #000000;">for</span> (j = 0; j &lt; 10; j++) {
+    buf = (<span style="color: #a23f1e; background-color: #000000;">int</span> *) malloc(4);
+    printf(<span style="color: #009090; background-color: #000000;">"malloc(4) returned 0x%x\n"</span>, buf);
+  }
+}
+</pre>
+</div>
+
+<p>
+结果如下：
+</p>
+
+<pre class="example">
+UNIX&gt; fb3
+malloc(4) returned 0x219d0
+malloc(4) returned 0x219e0
+malloc(4) returned 0x219f0
+malloc(4) returned 0x21a00
+malloc(4) returned 0x21a10
+malloc(4) returned 0x21a20
+malloc(4) returned 0x21a30
+malloc(4) returned 0x21a40
+malloc(4) returned 0x21a50
+malloc(4) returned 0x21a60
+UNIX&gt;
+</pre>
+
+<p>
+观察上面的打印结果，你将会发现每次 <b>malloc()</b> 返回的地址相比之前一次调用都是是以 16 字节递增的。你可能会想为什么不是4字节呢，因为你只请求了4字节内存？这里发生了一些事情， <b>malloc()</b> 每次都会额外分配一些字节以帮助保存申请记录。这些额外的字节在你调用 <b>free()</b> 的时候将发挥重要的作用。这些额外的字节通常是在内存申请前分配的。这也是我们之后讨论 <b>free()</b> 的原因。
+</p>
+
+<p>
+再看fb4.c，这个文件做的事情是：使用 <b>malloc()</b> 分配一整块内存，然后打印出他们的起始地址，以及这个起始地址之前的1个字和2个字（这里我使用“字”来代表4字节大小）。这是大部分程序员认为的“不安全”的代码，可是要弄清楚这些事情我们只能做了。你可以看到, <b>malloc()</b> 返回地址之前的2个字的空间存领了本次实际分配的内存大小。好像有点混乱了，我们来仔细看看 <b>fb4</b> 的输出：（不同的操作系统上， <b>malloc</b> 的工作方式不一样。如果你的输出跟我的不一样，请猛击 <a href="http://web.eecs.utk.edu/~plank/plank/classes/cs360/360/notes/Malloc1/diff.html">这里</a>）。
+</p>
+
+<pre class="example">
+UNIX&gt; fb4
+sbrk(0) = 0x70f8
+Allocated 4 bytes.  buf = 0x61a8, buf[-1] = 0, buf[-2] = 16, buf[0] = 1000
+Allocated 8 bytes.  buf = 0x61b8, buf[-1] = 0, buf[-2] = 16, buf[0] = 1001
+Allocated 12 bytes.  buf = 0x61c8, buf[-1] = 0, buf[-2] = 24, buf[0] = 1002
+Allocated 16 bytes.  buf = 0x61e0, buf[-1] = 0, buf[-2] = 24, buf[0] = 1003
+Allocated 20 bytes.  buf = 0x61f8, buf[-1] = 0, buf[-2] = 32, buf[0] = 1004
+Allocated 24 bytes.  buf = 0x6218, buf[-1] = 0, buf[-2] = 32, buf[0] = 1005
+Allocated 28 bytes.  buf = 0x6238, buf[-1] = 0, buf[-2] = 40, buf[0] = 1006
+Allocated 100 bytes.  buf = 0x6260, buf[-1] = 0, buf[-2] = 112, buf[0] = 1007
+sbrk(0) = 0x70f8
+UNIX&gt;
+</pre>
+
+<p>
+现在我们看一下调用 <b>malloc()</b> 之后堆的状况，注意，这里 <b>buf<sup><a id="fnr.1" name="fnr.1" class="footref" href="#fn.1">1</a></sup></b> 的内容被设置为 <b>i</b> = 1000：
+</p>
+<div id="footnotes">
+<h2 class="footnotes">Footnotes: </h2>
+<div id="text-footnotes">
+
+<div class="footdef"><sup><a id="fn.1" name="fn.1" class="footnum" href="#fnr.1">1</a></sup> <p>DEFINITION NOT FOUND.</p></div>
+
+
+</div>
+</div>
 </div>
 </div>
     <div>
       <div class="post-meta">
         <span title="post date" class="post-info">2013-12-03</span>
-        <span title="last modification date" class="post-info">2013-12-03</span>
+        <span title="last modification date" class="post-info">2013-12-04</span>
         <span title="tags" class="post-info"><a href="/tags/c/">c</a></span>
         <span title="author" class="post-info">Gu Weigang</span>
       </div>
