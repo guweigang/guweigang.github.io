@@ -158,6 +158,38 @@ UNIX>
 
 再看fb4.c，这个文件做的事情是：使用 *malloc()* 分配一整块内存，然后打印出他们的起始地址，以及这个起始地址之前的1个字和2个字（这里我使用“字”来代表4字节大小）。这是大部分程序员认为的“不安全”的代码，可是要弄清楚这些事情我们只能做了。你可以看到, *malloc()* 返回地址之前的2个字的空间存领了本次实际分配的内存大小。好像有点混乱了，我们来仔细看看 *fb4* 的输出：（不同的操作系统上， *malloc* 的工作方式不一样。如果你的输出跟我的不一样，请猛击 [[http://web.eecs.utk.edu/~plank/plank/classes/cs360/360/notes/Malloc1/diff.html][这里]]）。
 
+#+BEGIN_SRC C
+#include <stdio.h>
+#include <sys/types.h>
+#include <stdlib.h>
+
+main()
+{
+  int *buf;
+  int i, sz;
+
+  i = 1000;
+  printf("sbrk(0) = 0x%x\n", sbrk(0));
+  for (sz = 4; sz < 32; sz += 4) {
+    buf = (int *) malloc(sz);
+    buf[0] = i;
+    i++;
+  printf("Allocated %d bytes.  buf = 0x%x, buf[-1] = %d, buf[-2] = %d, buf[0] = %d\n", 
+            sz, (unsigned int) buf, buf[-1], buf[-2], buf[0]);
+  }
+
+  sz = 100;
+  buf = (int *) malloc(sz);
+  buf[0] = i;
+  i++;
+  printf("Allocated %d bytes.  buf = 0x%x, buf[-1] = %d, buf[-2] = %d, buf[0] = %d\n", 
+            sz, (unsigned int) buf, buf[-1], buf[-2], buf[0]);
+  printf("sbrk(0) = 0x%x\n", sbrk(0));
+}
+#+END_SRC
+
+其输出结果如下：
+
 #+BEGIN_EXAMPLE
 UNIX> fb4
 sbrk(0) = 0x70f8
