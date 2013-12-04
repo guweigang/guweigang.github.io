@@ -233,17 +233,26 @@ UNIX&gt;
 </pre>
 
 <p>
-现在我们看一下调用 <b>malloc()</b> 之后堆的状况，注意，这里 <b>buf<sup><a id="fnr.1" name="fnr.1" class="footref" href="#fn.1">1</a></sup></b> 的内容被设置为 <b>i</b> = 1000：
+现在我们看一下调用 <b>malloc()</b> 之后堆的状况，注意，这里 <b>buf\[0\]</b> 的内容被设置为 <b>i</b> = 1000：
 </p>
-<div id="footnotes">
-<h2 class="footnotes">Footnotes: </h2>
-<div id="text-footnotes">
 
-<div class="footdef"><sup><a id="fn.1" name="fn.1" class="footnum" href="#fnr.1">1</a></sup> <p>DEFINITION NOT FOUND.</p></div>
+<pre class="example">
+|---------------|  
+|      ...      | 
+|               |      
+|      16       | 0x61a0
+|               | 0x61a4     
+|     1000      | 0x61a8  &lt;--------- return value
+|               | 0x61ac
+|               | 0x61b0
+|               | 0x61b4
+|      ...      |      
+|               |      
+|               |      
+|               |      
+|---------------| 0x70f8 (sbrk(0));
+</pre>
 
-
-</div>
-</div>
 </div>
 </div>
     <div>
