@@ -217,6 +217,42 @@ UNIX&gt;
 再看fb4.c，这个文件做的事情是：使用 <b>malloc()</b> 分配一整块内存，然后打印出他们的起始地址，以及这个起始地址之前的1个字和2个字（这里我使用“字”来代表4字节大小）。这是大部分程序员认为的“不安全”的代码，可是要弄清楚这些事情我们只能做了。你可以看到, <b>malloc()</b> 返回地址之前的2个字的空间存领了本次实际分配的内存大小。好像有点混乱了，我们来仔细看看 <b>fb4</b> 的输出：（不同的操作系统上， <b>malloc</b> 的工作方式不一样。如果你的输出跟我的不一样，请猛击 <a href="http://web.eecs.utk.edu/~plank/plank/classes/cs360/360/notes/Malloc1/diff.html">这里</a>）。
 </p>
 
+<div class="org-src-container">
+
+<pre class="src src-C"><span style="color: #d94a05; background-color: #000000;">#include</span> <span style="color: #009090; background-color: #000000;">&lt;stdio.h&gt;</span>
+<span style="color: #d94a05; background-color: #000000;">#include</span> <span style="color: #009090; background-color: #000000;">&lt;sys/types.h&gt;</span>
+<span style="color: #d94a05; background-color: #000000;">#include</span> <span style="color: #009090; background-color: #000000;">&lt;stdlib.h&gt;</span>
+
+<span style="color: #b13120; background-color: #000000;">main</span>()
+{
+  <span style="color: #a23f1e; background-color: #000000;">int</span> *<span style="color: #7c9fc9; background-color: #000000;">buf</span>;
+  <span style="color: #a23f1e; background-color: #000000;">int</span> <span style="color: #7c9fc9; background-color: #000000;">i</span>, <span style="color: #7c9fc9; background-color: #000000;">sz</span>;
+
+  i = 1000;
+  printf(<span style="color: #009090; background-color: #000000;">"sbrk(0) = 0x%x\n"</span>, sbrk(0));
+  <span style="color: #d94a05; background-color: #000000;">for</span> (sz = 4; sz &lt; 32; sz += 4) {
+    buf = (<span style="color: #a23f1e; background-color: #000000;">int</span> *) malloc(sz);
+    buf[0] = i;
+    i++;
+  printf(<span style="color: #009090; background-color: #000000;">"Allocated %d bytes.  buf = 0x%x, buf[-1] = %d, buf[-2] = %d, buf[0] = %d\n"</span>, 
+            sz, (<span style="color: #a23f1e; background-color: #000000;">unsigned</span> <span style="color: #a23f1e; background-color: #000000;">int</span>) buf, buf[-1], buf[-2], buf[0]);
+  }
+
+  sz = 100;
+  buf = (<span style="color: #a23f1e; background-color: #000000;">int</span> *) malloc(sz);
+  buf[0] = i;
+  i++;
+  printf(<span style="color: #009090; background-color: #000000;">"Allocated %d bytes.  buf = 0x%x, buf[-1] = %d, buf[-2] = %d, buf[0] = %d\n"</span>, 
+            sz, (<span style="color: #a23f1e; background-color: #000000;">unsigned</span> <span style="color: #a23f1e; background-color: #000000;">int</span>) buf, buf[-1], buf[-2], buf[0]);
+  printf(<span style="color: #009090; background-color: #000000;">"sbrk(0) = 0x%x\n"</span>, sbrk(0));
+}
+</pre>
+</div>
+
+<p>
+其输出结果如下：
+</p>
+
 <pre class="example">
 UNIX&gt; fb4
 sbrk(0) = 0x70f8
