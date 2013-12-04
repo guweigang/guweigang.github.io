@@ -173,9 +173,9 @@ sbrk(0) = 0x70f8
 UNIX>
 #+END_EXAMPLE
 
-现在我们看一下调用 *malloc()* 之后堆的状况，注意，这里 *buf[0]* 的内容被设置为 *i* = 1000：
+现在我们看一下调用 *malloc()* 之后堆的状况，注意，这里 *buf\[0\]* 的内容被设置为 *i* = 1000：
 
-#+BEGIN_ASCII
+#+BEGIN_EXAMPLE
 
          |---------------|  
          |      ...      | 
@@ -192,4 +192,4 @@ UNIX>
          |               |      
          |---------------| 0x70f8 (sbrk(0));
                                             
-#+END_ASCII    
+#+END_EXAMPLE
