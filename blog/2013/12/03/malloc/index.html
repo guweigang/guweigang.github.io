@@ -383,12 +383,59 @@ UNIX&gt;
 可以看出， <b>malloc()</b> 通过调用 <b>sbrk()</b> 从操作系统获取内存到缓冲区，当 <b>malloc()</b> 再次被调用时从缓冲区中获取。当缓冲区的内存用尽之后，它再次调用 <b>sbrk()</b> 从操作系统获取更多内存。
 </p>
 
+<p>
+那为什么 <b>malloc(4)</b> 和 <b>malloc(8)</b> 分配16字节空间，而 <b>malloc(12)</b> 和 <b>malloc(16)</b> 分配24字节呢？这是因为 <b>malloc()</b> 会扩展分配的内存大小为8的整数倍。因此 <b>malloc(4)</b> 和 <b>malloc(8)</b> 会为你分配8字节内存，另外再申请额外的8字节用以记录。 <b>malloc(12)</b> 和 <b>malloc(16)</b> 会分配16字节空间，加上额外的8字节用以记录。 <b>malloc(100)</b> 会为你分配104字节内存，加上额外的8字节用以记录。
+</p>
+
+
+<p>
+为什么 <b>malloc()</b> 为执行内存扩展呢？这么做之后， <b>malloc()</b> 返回的地址一定会是8的整数倍，因此对于任何类型的指针来说都是合法的。假如 <b>malloc()</b> 不这么做，而是可以返回任何地址的指针，下面的代码就会出现问题：
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-C"><span style="color: #a23f1e; background-color: #000000;">int</span> *<span style="color: #7c9fc9; background-color: #000000;">i</span>;
+
+i = (<span style="color: #a23f1e; background-color: #000000;">int</span> *) malloc(4);
+*i = 4;
+</pre>
+</div>
+
+<p>
+这可能会产生一个总线错误，因为 <b>malloc()</b> 可以返回任何非4的整数倍地址给你。而事实是 <b>malloc()</b> 返回的地址是8的整数倍，因此对于浮点和长整型（8字节长度）来说也不会有总线问题。
+</p>
+
+<p>
+<b>malloc()</b> 如何知道从哪里获取内存呢？它使用一个或两个全局变量来标识。例如：它可能会有如下两个全局变量：
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-C"><span style="color: #a23f1e; background-color: #000000;">char</span> *<span style="color: #7c9fc9; background-color: #000000;">malloc_begin</span> = <span style="color: #7868b5; background-color: #000000;">NULL</span>;
+<span style="color: #a23f1e; background-color: #000000;">char</span> *<span style="color: #7c9fc9; background-color: #000000;">malloc_end</span> = <span style="color: #7868b5; background-color: #000000;">NULL</span>;
+</pre>
+</div>
+
+<p>
+当 <b>malloc()</b> 被调用时，它首先检验 <b>malloc_begin == NULL</b> 是否成立？如果成立，它会调用 <b>sbrk()</b> 获取一个内存缓冲区。并且使用 <b>malloc_begin</b> 和 <b>malloc_end</b> 标明这个缓冲区的开始和结尾。当 <b>malloc()</b> 被调用时，它会从缓冲区的开始分配内存，并且更新 <b>malloc_begin</b>  的值。如果缓冲区中内存不足，那么它会转而调用 <b>sbrk()</b> 向系统申请更多内存，并且会更新 <b>malloc_end</b> 的值以扩展缓冲区。
+</p>
+
+<p>
+到目前为止，我们描述了如何编写无需内存回收（ <b>free()</b> ）的 <b>malloc()</b> 函数。当 <b>free()</b> 被调用时，你必须保证它释放的内存能被 <b>malloc</b> 再次使用。也就是说你要在 <b>malloc()</b> 中做一些更复杂的事情，我们会在接下来继续讨论，大家先自己思考一下吧！
+</p>
+
+<hr/>
+
+<p>
+重申一下，如果你还没有阅读对比 <b>malloc()</b> 不同实现的 <a href="http://web.eecs.utk.edu/~plank/plank/classes/cs360/360/notes/Malloc1/diff.html">这篇文章</a> ，你应该现在就读一下。
+</p>
+
 </div>
 </div>
     <div>
       <div class="post-meta">
         <span title="post date" class="post-info">2013-12-03</span>
-        <span title="last modification date" class="post-info">2013-12-04</span>
+        <span title="last modification date" class="post-info">2013-12-05</span>
         <span title="tags" class="post-info"><a href="/tags/c/">c</a></span>
         <span title="author" class="post-info">Gu Weigang</span>
       </div>
