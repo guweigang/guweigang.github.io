@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <title>More about Malloc in C - 闭眼听世界</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Gu Weigang" />
+    <meta name="description" content="&lt;TODO: insert your description here&gt;" />
+    <meta name="keywords" content="c, malloc" />
+    <link rel="stylesheet" href="/media/css/main.css" type="text/css">
+  </head>
+  <body class="container">
+    <div>
+      <header class="masthead">
+        <h1 class="masthead-title"><a href="/">闭眼听世界</a></h1>
+        <p>心如松静意无尘，气若浮萍了无痕！</p>
+        <ul>
+          <li><a href="/blog/">Blog</a></li>
+          <li><a href="/tags/">Tags</a></li>
+          <li><a href="/about/">About</a></li>
+          <li><a href="https://github.com/guweigang">GitHub</a></li>
+          <li><a href="/rss.xml">RSS</a></li>
+        </ul>
+        <form method="get" id="searchform" action="http://www.google.com/search">
+          <input type="text" class="field" name="q" id="s" placeholder="Search">
+          <input type="hidden" name="q" value="site:guweigang.com">
+        </form>
+      </header>
+    </div>
+
+<div>
+<div class="post">
+<h1>More about Malloc in C</h1>
+<style type="text/css">
+pre.src-C {
+    background-color: black !important;
+    font-weight: bolder !important;
+}
+
+b:before, b:after, strong:before, strong:after {
+    content: "";
+}
+
+i:before, i:after, em:before, em:after {
+    content: "";
+}
+</style>
+
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1">更多 malloc() 和 free() 细节</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+上一节课我们讨论了malloc是如何在堆中维护一个大的内存缓冲区的，当用户调用 <b>malloc()</b> 的时候它会累积和分配内存。如果内存缓冲区中所剩的内存不足以满足用户申请的，则会调用 <b>sbrk()</b> 为堆分配足够大的缓冲区。
+</p>
+
+<p>
+事实上 <b>Malloc</b> 的工作方式不太一样。它真正做的事情是维护一个未分配内存的链接。当 <b>malloc()</b> 被调用时，它会查找链接找出足够大的内存块。如果找到了，便把那块内存从链接中删除，并且把内存块返回给用户。这就是 <b>malloc()</b> 的标准工作方式 -- 它管理一示分配内存的链接。 <b>Malloc()</b> 从链接表获取内存并且返回给用户， *free()*则把内存还给链接。
+</p>
+
+<p>
+初始时，内存链接是空的。当第一次调用 <b>malloc()</b> 时，它会调用 <b>sbrk()</b> 从系统获取内存并使用链表维护。我们会不断地从这整块内存中取出部分部足用户申请，剩下的放在链表中。
+</p>
+
+<p>
+在讲示例之前，我先讲讲链表的实现方式。首先有一个全局变量 <b>malloc_head</b> ，它指向链表头。刚开始 <b>malloc_head</b> 值为 <b>NULL</b> ，当 <b>malloc()</b> 第一次被调用时， <b>sbrk()</b> 被调用申请内存使用链表维护。具体做法是，使用少量字节标记链表结构。换句话说，如果你在链接中有一块内存，且这块内存至少有12字节大小， 那么你可以把这块内存的前12个字节用来描述链表结构。如：
+</p>
+
+<ul class="org-ul">
+<li>字节0-3：整数 -- 这块内存的大小
+</li>
+<li>字节4-7：指向链表下一块内存的指针
+</li>
+<li>字节8-11：指向链表上一块内存的指针
+</li>
+</ul>
+
+<p>
+你会怎么做呢？你会像下向这样创建一个类型定义：
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-C"><span style="color: #d94a05; background-color: #000000;">typedef</span> <span style="color: #d94a05; background-color: #000000;">struct</span> <span style="color: #a23f1e; background-color: #000000;">flist</span> {
+   <span style="color: #a23f1e; background-color: #000000;">int</span> <span style="color: #7c9fc9; background-color: #000000;">size</span>;
+   <span style="color: #d94a05; background-color: #000000;">struct</span> <span style="color: #a23f1e; background-color: #000000;">flist</span> *<span style="color: #7c9fc9; background-color: #000000;">flink</span>;
+   <span style="color: #d94a05; background-color: #000000;">struct</span> <span style="color: #a23f1e; background-color: #000000;">flist</span> *<span style="color: #7c9fc9; background-color: #000000;">blink</span>;
+} *<span style="color: #a23f1e; background-color: #000000;">Flist</span>;
+</pre>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+    <div>
+      <div class="post-meta">
+        <span title="post date" class="post-info">2013-12-05</span>
+        <span title="last modification date" class="post-info">2013-12-05</span>
+        <span title="tags" class="post-info"><a href="/tags/c/">c</a></span>
+        <span title="author" class="post-info">Gu Weigang</span>
+      </div>
+      <section>
+        <h1>Comments</h1>
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+          //var disqus_developer = 1;
+          var disqus_identifier = "/blog/2013/12/05/malloc2/";
+          var disqus_url = "http://guweigang.com/blog/2013/12/05/malloc2/";
+          var disqus_shortname = 'guweigang';
+          /* * * DON'T EDIT BELOW THIS LINE * * */
+          (function() {
+          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+          dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+          })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </section>
+      <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'cnwggu@gmail.com']);
+        _gaq.push(['_trackPageview']);
+        (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+      </script>
+      <div class="footer">
+        <p>Generated by <a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.3.1 (<a href="http://orgmode.org">Org</a> mode 8.0.3)</p>
+        <p>
+          Copyright &copy; 2012 - 2013 <a href="mailto:guweigang &lt;at&gt; outlook &lt;dot&gt; com">Gu Weigang</a>
+          &nbsp;&nbsp;-&nbsp;&nbsp;
+          Powered by <a href="https://github.com/kelvinh/org-page" target="_blank">org-page</a>
+        </p>
+      </div>
+    </div>
+  </body>
+</html>
