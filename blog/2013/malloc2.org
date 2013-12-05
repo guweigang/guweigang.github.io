@@ -1,0 +1,54 @@
+#+TITLE:       More about Malloc in C
+#+AUTHOR:      Gu Weigang
+#+EMAIL:       guweigang@outlook.com
+#+DATE:        2013-12-05 Thu
+#+URI:         /blog/%y/%m/%d/malloc2/
+#+KEYWORDS:    c, malloc
+#+TAGS:        c
+#+LANGUAGE:    zh_CN
+#+OPTIONS:     H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: <TODO: insert your description here>
+
+#+BEGIN_HTML
+<style type="text/css">
+pre.src-C {
+    background-color: black !important;
+    font-weight: bolder !important;
+}
+
+b:before, b:after, strong:before, strong:after {
+    content: "";
+}
+
+i:before, i:after, em:before, em:after {
+    content: "";
+}
+</style>
+#+END_HTML
+
+* 更多 malloc() 和 free() 细节
+
+上一节课我们讨论了malloc是如何在堆中维护一个大的内存缓冲区的，当用户调用 *malloc()* 的时候它会累积和分配内存。如果内存缓冲区中所剩的内存不足以满足用户申请的，则会调用 *sbrk()* 为堆分配足够大的缓冲区。
+
+事实上 *Malloc* 的工作方式不太一样。它真正做的事情是维护一个未分配内存的链接。当 *malloc()* 被调用时，它会查找链接找出足够大的内存块。如果找到了，便把那块内存从链接中删除，并且把内存块返回给用户。这就是 *malloc()* 的标准工作方式 -- 它管理一示分配内存的链接。 *Malloc()* 从链接表获取内存并且返回给用户， *free()*则把内存还给链接。
+
+初始时，内存链接是空的。当第一次调用 *malloc()* 时，它会调用 *sbrk()* 从系统获取内存并使用链表维护。我们会不断地从这整块内存中取出部分部足用户申请，剩下的放在链表中。
+
+在讲示例之前，我先讲讲链表的实现方式。首先有一个全局变量 *malloc_head* ，它指向链表头。刚开始 *malloc_head* 值为 *NULL* ，当 *malloc()* 第一次被调用时， *sbrk()* 被调用申请内存使用链表维护。具体做法是，使用少量字节标记链表结构。换句话说，如果你在链接中有一块内存，且这块内存至少有12字节大小， 那么你可以把这块内存的前12个字节用来描述链表结构。如：
+
+ - 字节0-3：整数 -- 这块内存的大小
+ - 字节4-7：指向链表下一块内存的指针
+ - 字节8-11：指向链表上一块内存的指针
+   
+你会怎么做呢？你会像下向这样创建一个类型定义：
+
+#+BEGIN_SRC C
+typedef struct flist {
+   int size;
+   struct flist *flink;
+   struct flist *blink;
+} *Flist;
+#+END_SRC
+
+
+  
