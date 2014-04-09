@@ -1,0 +1,27 @@
+#+TITLE:       HHVM VS Zend Engine6
+#+AUTHOR:      Gu Weigang
+#+EMAIL:       guweigang@outlook.com
+#+DATE:        2014-04-09 三
+#+URI:         /blog/%y/%m/%d/HHVM-VS-Zend-Engine6
+#+KEYWORDS:    hhvm, php, zend
+#+TAGS:        php, zend, hhvm
+#+LANGUAGE:    en
+#+OPTIONS:     H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: HHVM VS Zend Engine 6
+
+
+源文链接 http://www.sitepoint.com/hhvm-vs-zend-engine-php-6/
+
+漫长的等待之后，传说中的PHP6至今仍未发布。这只WEB开发世界中的独角兽已经陪伴我们走过了10个春秋，然而我们仍然不清楚在接下来的10年
+PHP6是否能发布。PHP6或许仅仅只是一个想法，又或许是PHP开发者的一个幻想。然而最近发布的次级版本（如5.4->5.5, 5.5->5.6）带来了很多
+新特性，所以我们有时会把它们当成主版本看待。
+
+我自己对于PHP V6的幻想是：函数命名风格保持一致，彻底解决全局命名空间污染问题，重写所有数据类型为类（像Scala或Dart一样）。
+不过，这只是我的个人想法，可能不切实际。
+
+这里(http://philsturgeon.co.uk/blog/2013/01/php-6-pissing-in-the-wind)有一篇很长的介绍PHP6悲惨命运的文章，务必看一下评论。从核心PHP开发者的态度中学习一些宝贵的经验教训。
+
+
+假设
+
+很多人不太了解这个，但是 http://www.phpclasses.org 还是有点意思的，虽然大部分时候它是一个糟糕的播客。有时候你真的很难从这些谈话中听到有用的信息，但是Manuel's的内容列表却对我帮助很大。如果你很关心PHP的改变，并且一直跟进最近的新闻，为什么不做点其他的事情（如：锻炼身体，写代码，做饭等）？在最新的一辑中，
