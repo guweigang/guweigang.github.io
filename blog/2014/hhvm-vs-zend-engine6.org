@@ -24,7 +24,7 @@ PHP6是否能发布。PHP6或许仅仅只是一瞬间的念头，是PHP开发者
 
 ** 假设
 
-很多人不太了解，其实 http://www.phpclasses.org 还是有点意思的，虽然大部分时候它是一个糟糕的播客。有时候你真的很难从这些谈话中听到有用的信息，但是Manuel的内容列表却对我帮助很大。如果你很关心PHP的改变，并且一直跟进最近的新闻，为什么不在锻炼身体、写代码、做饭的时候听听这个播客呢？在最新的一辑中，Manuel Lemos和César Rodas，讨论了一个有趣的话题 --- Facebook的HHVM将在PHP 发布的时候6取代ZEND Engine。
+很多人不太了解，其实 http://www.phpclasses.org 还是有点意思的，虽然大部分时候它是一个糟糕的播客。有时候你真的很难从这些谈话中听到有用的信息，但是Manuel的内容列表却对我帮助很大。如果你很关心PHP的改变，并且一直跟进最近的新闻，为什么不在锻炼身体、写代码、做饭的时候听听这个播客呢？在最新的一辑中，Manuel Lemos和César Rodas，讨论了一个有趣的话题 --- Facebook的HHVM将在PHP6 发布的时候替代ZEND Engine。
 
 当然在讨论的时候这纯粹是一个推测，不管你信不信PHP 6，你不得不承认它是一个有意思的概念。正如我们在 [[http://www.sitepoint.com/hhvm-vs-zend-engine-php-6/www.sitepoint.com/hhvm-revisited/][HHVM]] 一文和 [[http://hhvm.com/][HHVM博客]] 中看到的那样，HHVM正在加快步伐，兼容大部分流行开发库、CMS和框架。而HHVM开发团队在兼容现有产品代码的前提下，尽最大努力提升性能。那咱们也来误乐一下HHVM在PHP 6替代Zend Engine的可能性，并且看一下优劣势。
 
