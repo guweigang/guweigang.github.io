@@ -37,7 +37,7 @@
 
 <p>
 漫长的等待之后，传说中的PHP6至今仍未发布。这只WEB开发世界中的独角兽已经陪伴我们走过了10个春秋，然而我们仍然不清楚在接下来的10年
-PHP6是否能发布。PHP6或许仅仅只是一个想法，又或许是PHP开发者的一个幻想。然而最近发布的次级版本（如5.4-&gt;5.5, 5.5-&gt;5.6）带来了很多
+PHP6是否能发布。PHP6或许仅仅只是一瞬间的念头，是PHP开发者的一个幻想。然而最近发布的次级版本（如5.4-&gt;5.5, 5.5-&gt;5.6）带来了很多
 新特性，所以我们有时会把它们当成主版本看待。
 </p>
 
@@ -47,24 +47,90 @@ PHP6是否能发布。PHP6或许仅仅只是一个想法，又或许是PHP开发
 </p>
 
 <p>
-这里(<a href="http://philsturgeon.co.uk/blog/2013/01/php-6-pissing-in-the-wind">http://philsturgeon.co.uk/blog/2013/01/php-6-pissing-in-the-wind</a>)有一篇很长的介绍PHP6悲惨命运的文章，务必看一下评论。从核心PHP开发者的态度中学习一些宝贵的经验教训。
+这里(<a href="http://philsturgeon.co.uk/blog/2013/01/php-6-pissing-in-the-wind">http://philsturgeon.co.uk/blog/2013/01/php-6-pissing-in-the-wind</a>)有一篇很长的介绍PHP6悲惨命运的文章，务必要看一下评论，精彩不容错过。从这里可以了解到一些有价值的信息：核心PHP开发者对于PHP6的态度。
+</p>
+
+
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1">假设</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+很多人不太了解， <a href="http://www.phpclasses.org">http://www.phpclasses.org</a> 还是有点意思的，虽然大部分时候它是一个糟糕的播客。有时候你真的很难从这些谈话中听到有用的信息，但是Manuel的内容列表却对我帮助很大。如果你很关心PHP的改变，并且一直跟进最近的新闻，为什么不在锻炼身体，写代码，做饭的时候让它火起来呢？在最新的一辑中，Manuel Lemos和César Rodas，讨论了一个有趣的话题 --- Facebook的HHVM将在PHP 6取代ZEND Engine。
+</p>
+
+<p>
+当然在讨论的时候这纯粹是一个推测，不管你信不信PHP 6，你不得不承认它是一个有意思的概念。正如我们在 <a href="http://www.sitepoint.com/hhvm-vs-zend-engine-php-6/www.sitepoint.com/hhvm-revisited/">HHVM</a> 一文和 <a href="http://hhvm.com/">HHVM博客</a> 中看到的那样，HHVM正在加快步伐，兼容大部分流行开发库、CMS和框架。而HHVM开发团队在兼容现有产品代码的前提下，尽最大努力提升性能。那咱们也来误乐一下HHVM在PHP 6替代Zend Engine的可能性，并且看一下优劣势。
+</p>
+</div>
+</div>
+<div id="outline-container-sec-2" class="outline-2">
+<h2 id="sec-2">优势</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+很明显，性能是HHVM的优势。HHVM突飞猛进，性能不仅超越普通的PHP发行版，甚至与内置OpCache的PHP 5.5发行版 比较也是有过之无不及。总的来说，它用更少的资源更快地执行任务。谁都不可能忽视这个优点 - 考虑一下，如果你愿意地云端部署环境中使用HHVM，这意味着更少的CPU、内存和更短的计算时间，这能帮你省下一大笔。
+</p>
+
+<p>
+第二个优势是HHVM是Facebook开发的，背靠大公司。Facebook使用HHVM部署他们自己的PHP代码，所以他们一定会把HHVM做到尽可能高效。1%的CPU需求对他们来说意味着数万美元的花费，所以他们自然而然愿意把钱花在HHVM开发团队上以避免这种事情的发生。在这样的背景下HHVM开发团队诞生了，跟Zend Engine的核心开发团队相比，HHVM团队更有经验、更专注 --- 因为他们身处在一个高并发高流量的世界。举个例子，generators在PHP主版本发布之前三年，Facebook就在他们内部版本中实现了该功能。
+</p>
+
+<p>
+一个未来的优势是HHVM在它最近的版本中加入了静态类型，通过他们内部开发的Hack语言。Hack继承自PHP，但是支持静态类型。如果你想在某个文件中做类型检测，该文件要以 <b>&lt;?hh</b> 开始，而不是 <b>&lt;?php</b> ，然后编译器会接管剩下的工作。我正在写一篇关于Hack语言的详细介绍，不久便会发布。HHVM将来肯定会优化编译质量，生成更高效的本地代码。总之，使用HHVM，PHP将更快。
 </p>
 
 
 <p>
-假设
+天下武功，唯快不破。不是吗？
+</p>
+</div>
+</div>
+<div id="outline-container-sec-3" class="outline-2">
+<h2 id="sec-3">劣势</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+HHVM其中的一个劣势是无法安装依赖于Zend Engine的扩展程序。就像Césa说的一样，HHVM和ZE好比俩儿类似的汽车，但它们的内部结构完全不一样。
 </p>
 
 <p>
-很多人不太了解这个，但是 <a href="http://www.phpclasses.org">http://www.phpclasses.org</a> 还是有点意思的，虽然大部分时候它是一个糟糕的播客。有时候你真的很难从这些谈话中听到有用的信息，但是Manuel's的内容列表却对我帮助很大。如果你很关心PHP的改变，并且一直跟进最近的新闻，为什么不做点其他的事情（如：锻炼身体，写代码，做饭等）？在最新的一辑中，
+我想说，俩儿车有不同的发动机，或不同的换档系统。无论你怎么努力，尝试在电动汽车中安装Nitrous Oxide肯定是行不通的。因为NOS依赖于燃烧过程，而电动汽车中是不存在的。
 </p>
+
+<p>
+这意味着，现在你能找到的大部分扩展不能在HHVM中使用，除非做一些转化。但是大部分扩展是开源的，它们的作者是没有报酬的，这种囧境就好比Python3-hell*一样。
+</p>
+
+<p>
+另一个劣势是我们在优势中提到的---它是由Facebook开发的，正所谓成也萧何败也萧何。今日之Facebook正在稳健成长，César 和 Manuel推测在未来几年，Facebook一定会遭遇成长减慢，这一点我表示同意。除此之外，Facebook可能会进行大胆地尝试，完全抛弃PHP往更快和更结构化的方向发展（如: Google Dart） --- 如果万一发生这些事情怎么办？HHVM是开源的不错，但是如果没有Facebook的财力和人力支持，没有数十亿的用户群参与测试，HHVM的发展将大大放缓。开源社区缺少经验和资源，很难成功接管。
+</p>
+
+<p>
+最后但并非不重要的是，开发者正在通过其他途径大幅改善PHP的性能。Phalcon框架，我们已经进行过广泛讨论，使用C语言开发速度惊人。再加上他们的Zephir语言，让用户能非常容易地开发基于Zend Engine的扩展程序。这意味着闭源 和/或 编译过的PHP应用的执行速度已经基本接本地代码了，与HHVM不相上下。
+</p>
+</div>
+</div>
+<div id="outline-container-sec-4" class="outline-2">
+<h2 id="sec-4">结论</h2>
+<div class="outline-text-2" id="text-4">
+<p>
+没有明显的获胜者。如果HHVM取代ZE，PHP社区将会从中受益，尽管在HHVM支持通用扩展或扩展都被转化之前，使用新版本的用户群不大。如果保持现状，以两个独立项目继续开发，会出现俩儿思想流派：依赖HHVM和HACK编译框架和类以使性通接近本地代码；或者依赖优秀但陈旧的ZE PHP和老扩展，框架和一些边缘语言，如：Phalcon和Zephir。
+</p>
+
+<p>
+不论你如何看待这个问题，很清晰的一点是PHP将迎来新春。可变参数函数的支持和参数解包这些已经在其他主流语言中得到证明的特性陆续在PHP中出现，开发组通过高品质的底层代码和前所未有的卓越地努力推动语言向前发展。对于我们PHP用户来说，唯一能让我们失去这个比赛的是放弃PHP。
+</p>
+
+<p>
+让我们一起努力。手里有HHVM/Hack 和/或 Phalcon/Zephir 的教程吗？快行吧！
+</p>
+</div>
+</div>
 
 </div>
 </div>
     <div>
       <div class="post-meta">
         <span title="post date" class="post-info">2014-04-09</span>
-        <span title="last modification date" class="post-info">2014-04-09</span>
+        <span title="last modification date" class="post-info">2014-05-16</span>
         <span title="tags" class="post-info"><a href="/tags/php/">php</a>, <a href="/tags/zend/">zend</a>, <a href="/tags/hhvm/">hhvm</a></span>
         <span title="author" class="post-info">Gu Weigang</span>
       </div>
