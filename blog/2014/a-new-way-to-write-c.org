@@ -9,7 +9,8 @@
 #+OPTIONS:     H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
 #+DESCRIPTION: 使用libCello，让我们重新定义C语言
 
-libCellol是一个能让C语言成为高级语言语法糖的类库。
+libCello 是一个能让你用高级语法糖来写C的类库。
+
     - Interfaces allow for structured design
     - Duck Typing allows for generic functions
     - Exceptions control error handling
