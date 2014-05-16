@@ -2,12 +2,12 @@
 #+AUTHOR:      Gu Weigang
 #+EMAIL:       guweigang@outlook.com
 #+DATE:        2014-05-16 Fri
-#+URI:         <TODO: insert your uri here>
-#+KEYWORDS:    <TODO: insert your keywords here>
-#+TAGS:        <TODO: insert your tags here>
-#+LANGUAGE:    en
+#+URI:         /blog/%y/%m/%d/A-New-Way-To-Write-C-Lang
+#+KEYWORDS:    c, libCello
+#+TAGS:        c
+#+LANGUAGE:    zh_CN
 #+OPTIONS:     H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
-#+DESCRIPTION: <TODO: insert your description here>
+#+DESCRIPTION: 使用libCello，让我们重新定义C语言
 
 libCellol是一个能让C语言成为高级语言语法糖的类库。
     - Interfaces allow for structured design
