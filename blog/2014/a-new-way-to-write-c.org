@@ -11,9 +11,39 @@
 
 libCello 是一个能让你用高级语法糖来写C的类库。
 
-    - Interfaces allow for structured design
-    - Duck Typing allows for generic functions
-    - Exceptions control error handling
-    - Constructors/Destructors aid memory management
-    - Syntactic Sugar increases readability
-    - C Library means excellent performance and integration
+    - 接口，让你可以进行结构化设计
+    - 鸭子类型，允许泛型函数
+    - 异常控制，错误处理
+    - 构造器和析构器，解决内存管理问题
+    - 语法糖，增加代码可读性
+    - 基于C，意味着出色的性能和极佳的兼容性
+
+
+#+BEGIN_SRC c
+
+/* Example libCello Program */
+
+#include "Cello.h"
+
+int main(int argc, char** argv) {
+
+  /* Stack objects are created using "$" */
+  var int_item = $(Int, 5);
+  var float_item = $(Real, 2.4);
+  var string_item = $(String, "Hello");
+
+  /* Heap objects are created using "new" */
+  var items = new(List, int_item, float_item, string_item);
+
+  /* Collections can be looped over */
+  foreach (item in items) {
+    /* Types are also objects */
+    var type = type_of(item);
+    print("Object %$ has type %$\n", item, type);
+  }
+
+  /* Heap objects destroyed with "delete" */
+  delete(items); 
+}
+
+#+END_SRC
