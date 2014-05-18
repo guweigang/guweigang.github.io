@@ -36,26 +36,56 @@ libCello 是一个能让你用高级语法糖来写C的类库。
 </p>
 
 <ul class="org-ul">
-<li>Interfaces allow for structured design
+<li>接口，让你可以进行结构化设计
 </li>
-<li>Duck Typing allows for generic functions
+<li>鸭子类型，允许泛型函数
 </li>
-<li>Exceptions control error handling
+<li>异常控制，错误处理
 </li>
-<li>Constructors/Destructors aid memory management
+<li>构造器和析构器，解决内存管理问题
 </li>
-<li>Syntactic Sugar increases readability
+<li>语法糖，增加代码可读性
 </li>
-<li>C Library means excellent performance and integration
+<li>基于C，意味着出色的性能和极佳的兼容性
 </li>
 </ul>
+
+
+<div class="org-src-container">
+
+<pre class="src src-c">/* Example libCello Program */
+
+#include "Cello.h"
+
+int main(int argc, char** argv) {
+
+  /* Stack objects are created using "$" */
+  var int_item = $(Int, 5);
+  var float_item = $(Real, 2.4);
+  var string_item = $(String, "Hello");
+
+  /* Heap objects are created using "new" */
+  var items = new(List, int_item, float_item, string_item);
+
+  /* Collections can be looped over */
+  foreach (item in items) {
+    /* Types are also objects */
+    var type = type_of(item);
+    print("Object %$ has type %$\n", item, type);
+  }
+
+  /* Heap objects destroyed with "delete" */
+  delete(items); 
+}
+</pre>
+</div>
 
 </div>
 </div>
     <div>
       <div class="post-meta">
         <span title="post date" class="post-info">2014-05-16</span>
-        <span title="last modification date" class="post-info">2014-05-16</span>
+        <span title="last modification date" class="post-info">2014-05-18</span>
         <span title="tags" class="post-info"><a href="/tags/c/">c</a></span>
         <span title="author" class="post-info">Gu Weigang</span>
       </div>
