@@ -136,6 +136,7 @@ img {
     display: block;
     margin: 0;
     border-radius: 5px;
+    max-width: 640px;
 }
 a {
     font-weight: inherit;
@@ -171,7 +172,7 @@ table th.right, table td.right {
 /* body */
 .container {
     margin: 0 auto;
-    max-width: 770px;
+    max-width: 80%;
 }
 /* head */
 .masthead {
@@ -179,7 +180,7 @@ table th.right, table td.right {
 }
 .masthead:after {
     display: block;
-    content: '----------------------------------------------------------------';
+    content: '--------------------------------------------------------------------------------------------';
     margin: 10px 0;
     color: #ccc;
 }
@@ -303,7 +304,7 @@ table th.right, table td.right {
     /* Increase body padding and font-sizes */
     body {
         padding: 30px;
-        font-size: 18px;
+        font-size: 14px;
         line-height: 1.75;
     }
     h1:before, h2:before, h3:before {
