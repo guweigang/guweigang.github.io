@@ -47,3 +47,72 @@ int main(int argc, char** argv) {
 }
 
 #+END_SRC
+
+    
+** 快速开始
+
+   更多示例请查看快速开始章节：
+
+  - 容器和集合
+  - 类型和类
+  - 异常
+  - 一级函数
+  - 内存管理
+
+或者关于这个项目的介绍：
+  - 极限改造Ｃ语言
+  - Cello VS C++ VS Obj-C
+    
+或者一个更长的示例：
+
+#+BEGIN_SRC C
+/* Another Example Cello Program */
+
+#include "Cello.h"
+
+int main(int argc, char** argv) {
+
+  /* Tables require "Eq" and "Hash" on key type */
+  var prices = new(Table, String, Int);
+  put(prices, $(String, "Apple"),  $(Int, 12)); 
+  put(prices, $(String, "Banana"), $(Int,  6)); 
+  put(prices, $(String, "Pear"),   $(Int, 55));
+
+  /* Tables also supports iteration */
+  foreach (key in prices) {
+    var price = get(prices, key);
+    print("Price of %$ is %$\n", key, price);
+  }
+
+  /* "with" automatically closes file at end of scope. */
+  with (file in open($(File, NULL), "prices.bin", "wb")) {
+
+    /* First class function object */
+    lambda(write_pair, args) {
+
+      /* Run time type-checking with "cast" */
+      var key = cast(at(args, 0), String);
+      var value = cast(get(prices, key), Int);
+
+      try {
+        print_to(file, 0, "%$ :: %$\n", key, value);
+      } catch (e in IOError) {
+        println("Could not write to file - got %$", e);
+      }
+
+      return None;
+    };
+
+    /* Higher order functions */
+    map(prices, write_pair);
+  }
+
+  delete(prices);
+}
+#+END_SRC
+
+** 灵感
+
+   Cello项目的灵感来自于Haskell，语法和语义来自于Python和Obj-C。Cello并不是C语言的面向对象变种。而是一套工具，它可以把C变成某种动态语言或强大的函数式编程语言。
+
+   虽然语法很友好，但是Cello并不适合初学者。它只适合高级C开发者，因为手动内存管理在高级概念中并不是那么显而易见。总地来说，Cello是一个有趣的实验，我们只想看看能如何极限地改造C语言。
