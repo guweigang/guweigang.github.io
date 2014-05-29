@@ -281,7 +281,7 @@ table th.right, table td.right {
     content: "\2223 \00a0";
 }
 .post-meta:after {
-    content: "----------------------------------------------------------------";
+    content: "-------------------------------------------------------------------------------------------";
     display: block;
     margin-top: -1px;
     color: #ccc;
@@ -307,7 +307,7 @@ table th.right, table td.right {
     /* Increase body padding and font-sizes */
     body {
         padding: 30px;
-        font-size: 14px;
+        font-size: 16px;
         line-height: 1.75;
     }
     h1:before, h2:before, h3:before {

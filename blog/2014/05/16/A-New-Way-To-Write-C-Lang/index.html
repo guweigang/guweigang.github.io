@@ -80,12 +80,109 @@ int main(int argc, char** argv) {
 </pre>
 </div>
 
+
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1">快速开始</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+更多示例请查看快速开始章节：
+</p>
+
+<ul class="org-ul">
+<li>容器和集合
+</li>
+<li>类型和类
+</li>
+<li>异常
+</li>
+<li>一级函数
+</li>
+<li>内存管理
+</li>
+</ul>
+
+<p>
+或者关于这个项目的介绍：
+</p>
+<ul class="org-ul">
+<li>极限改造Ｃ语言
+</li>
+<li>Cello VS C++ VS Obj-C
+</li>
+</ul>
+
+<p>
+或者一个更长的示例：
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-C">/* Another Example Cello Program */
+
+#include "Cello.h"
+
+int main(int argc, char** argv) {
+
+  /* Tables require "Eq" and "Hash" on key type */
+  var prices = new(Table, String, Int);
+  put(prices, $(String, "Apple"),  $(Int, 12)); 
+  put(prices, $(String, "Banana"), $(Int,  6)); 
+  put(prices, $(String, "Pear"),   $(Int, 55));
+
+  /* Tables also supports iteration */
+  foreach (key in prices) {
+    var price = get(prices, key);
+    print("Price of %$ is %$\n", key, price);
+  }
+
+  /* "with" automatically closes file at end of scope. */
+  with (file in open($(File, NULL), "prices.bin", "wb")) {
+
+    /* First class function object */
+    lambda(write_pair, args) {
+
+      /* Run time type-checking with "cast" */
+      var key = cast(at(args, 0), String);
+      var value = cast(get(prices, key), Int);
+
+      try {
+        print_to(file, 0, "%$ :: %$\n", key, value);
+      } catch (e in IOError) {
+        println("Could not write to file - got %$", e);
+      }
+
+      return None;
+    };
+
+    /* Higher order functions */
+    map(prices, write_pair);
+  }
+
+  delete(prices);
+}
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-sec-2" class="outline-2">
+<h2 id="sec-2">灵感</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+Cello项目的灵感来自于Haskell，语法和语义来自于Python和Obj-C。Cello并不是C语言的面向对象变种。而是一套工具，它可以把C变成某种动态语言或强大的函数式编程语言。
+</p>
+
+<p>
+虽然语法很友好，但是Cello并不适合初学者。它只适合高级C开发者，因为手动内存管理在高级概念中并不是那么显而易见。总地来说，Cello是一个有趣的实验，我们只想看看能如何极限地改造C语言。
+</p>
+</div>
+</div>
+
 </div>
 </div>
     <div>
       <div class="post-meta">
         <span title="post date" class="post-info">2014-05-16</span>
-        <span title="last modification date" class="post-info">2014-05-18</span>
+        <span title="last modification date" class="post-info">2014-05-29</span>
         <span title="tags" class="post-info"><a href="/tags/c/">c</a></span>
         <span title="author" class="post-info">Gu Weigang</span>
       </div>
