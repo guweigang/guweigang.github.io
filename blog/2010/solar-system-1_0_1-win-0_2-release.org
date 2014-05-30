@@ -1,8 +1,8 @@
-#+TITLE: solar- system-1.01-win-0.2发布
+#+TITLE: solar-system-1.01-win-0.2发布
 #+AUTHOR: Gu Weigang
 #+EMAIL: guweigang@outlook.com
 #+DATE: 2010-05-13 Thu
-#+URI: /blog/2010/05/13/solar-system-1_0_1-win-0_2-release/
+#+URI: /blog/2010/05/13/solar-system-1_0_1-win-0_2-release
 #+KEYWORDS: 
 #+TAGS: solar, solar win, solarphp
 #+LANGUAGE: zh_CN
