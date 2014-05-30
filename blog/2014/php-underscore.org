@@ -1,0 +1,73 @@
+#+TITLE:       PHP Underscore
+#+AUTHOR:      Gu Weigang
+#+EMAIL:       guweigang@outlook.com
+#+DATE:        2014-05-30 五
+#+URI:         /blog/%y/%m/%d/PHP-Underscore
+#+KEYWORDS:    php, php library
+#+TAGS:        php library
+#+LANGUAGE:    en
+#+OPTIONS:     H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: Underscore.php is a PHP port of the popular Underscore.js library.
+
+
+#+BEGIN_QUOTE
+原文地址： https://www.sitepoint.com/getting-started-php-underscore/
+
+Underscore：下划线。
+
+如果你曾使用过Javascript的Backbone框架，你可能已经很熟悉Underscore是什么。不得不承认，它对于JS开发者来说已经变得非常重要了。但是你想过在PHP中实现Underscore吗？
+
+本文将介绍Underscore，以及它能做什么，并且提供一些有用的示例。
+#+END_QUOTE
+
+** 什么是Underscore？
+
+   Underscore的自我诠释是: "一个提供函数式编程支持的公共工具类，就像你在Prototype.js(或Ruby)看到的一样，但它没有基于任何Javascript内置对象。它能把jQuery和Backbone.js完美地结合在一起"。
+
+   很明显，Underscore提供的工具大多是用来处理集合、数组和对象的，另外还提供基本模板的功能和其他一些有用的函数。
+
+   那些操作集合和数组的函数在处理JSON时尤其有用，这在处理Web服务返回结果的时候显得极其方便。
+
+** 安装/下载
+
+   最简单的安装方式是通过[[http://getcomposer.org/][Composer]]：
+   
+#+BEGIN_SRC JSON
+{
+    "require": {
+        "underscore/underscore.php": "dev-master"
+    }   
+}
+#+END_SRC
+
+   你也可以手动下载，或从[[https://github.com/brianhaveri/Underscore.php][Github]] 检出 - 你只需要在代码中包含一个文件（underscore.php）即可。
+
+** PHP Underscore 语法
+
+   在原始的Javascript库中，所有Underscore的函数名均以一个下划线和一个点开始；如：_.each, _.map, _.reduce。而在PHP中，下划线是保留符号，是gettext函数的别名，所以只能使用双下划线取而代之。
+
+   所以，如果我们想寻找Javascript Underscore在PHP中的对等实现的话：
+
+#+BEGIN_SRC TEXT
+JavaScript          PHP
+_.each              __::each
+_.map               __::map
+_.reduce            __::reduce
+#+END_SRC
+
+要像这样转换。
+
+
+你也可以用面向对象的方式：
+
+#+BEGIN_SRC PHP
+__(array(1, 2, 3))->map(function($n) { return $n * 2; });
+#+END_SRC
+
+这等价于：
+
+#+BEGIN_SRC PHP
+__::map(array(1, 2, 3), function($n) { return $n * 2; });
+#+END_SRC
+
+在本文中，我将使用静态方法这种风格。
