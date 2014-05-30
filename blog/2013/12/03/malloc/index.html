@@ -7,6 +7,7 @@
     <meta name="description" content="&lt;TODO: insert your description here&gt;" />
     <meta name="keywords" content="c, malloc" />
     <link rel="stylesheet" href="/media/css/main.css" type="text/css">
+    <link rel="stylesheet" href="/media/css/prettify.css" type="text/css">
   </head>
   <body class="container">
     <div>
@@ -14,6 +15,7 @@
         <h1 class="masthead-title"><a href="/">闭眼听世界</a></h1>
         <p>心如松静意无尘，气若浮萍了无痕！</p>
         <ul>
+          <li><a href="/assets/">Assets</a></li>
           <li><a href="/blog/">Blog</a></li>
           <li><a href="/tags/">Tags</a></li>
           <li><a href="/about/">About</a></li>
@@ -48,6 +50,10 @@ i:before, i:after, em:before, em:after {
 
 <blockquote>
 
+<div class="figure">
+<p>
+</p>
+</div>
 
 <p>
 原文地址： <a href="http://web.eecs.utk.edu/~plank/plank/classes/cs360/360/notes/Malloc1/lecture.html">http://web.eecs.utk.edu/~plank/plank/classes/cs360/360/notes/Malloc1/lecture.html</a>
@@ -65,6 +71,10 @@ i:before, i:after, em:before, em:after {
 
 <div class="center">
 
+<div class="figure">
+<p>
+</p>
+</div>
 
 <p>
 译者注：一直想找时间好好理一下C语言中malloc的使用方法及其原理，它是如此的重要以至于影响到程序的方方面面。现在终于有机会了，我将借助这个讲义来记录和分享 <b>malloc()</b> 。
@@ -73,6 +83,10 @@ i:before, i:after, em:before, em:after {
 
 <blockquote>
 
+<div class="figure">
+<p>
+</p>
+</div>
 
 <p>
 在尝试使用本文提到的代码之前请先看讲义。不幸的是，实验室机器上的 <b>malloc()</b> 和  <b>free()</b> 的实现百分之百和本讲义中的不一样。因为这些讲义是在20世纪90年代中期编写的，而 <i>malloc</i> 的实现几乎每几年都要变化一次。
@@ -83,7 +97,7 @@ i:before, i:after, em:before, em:after {
 </p>
 </blockquote>
 
-<hr/>
+<hr  />
 
 <p>
 这是一篇关于 <b>sbrk()</b> 和 <b>malloc()</b> 的讲义。
@@ -95,7 +109,7 @@ i:before, i:after, em:before, em:after {
 
 <div class="org-src-container">
 
-<pre class="src src-C"><span style="color: #a23f1e; background-color: #000000;">caddr_t</span> <span style="color: #b13120; background-color: #000000;">sbrk</span>(<span style="color: #a23f1e; background-color: #000000;">int</span> <span style="color: #7c9fc9; background-color: #000000;">incr</span>);
+<pre class="src src-C">caddr_t sbrk(int incr);
 </pre>
 </div>
 
@@ -121,7 +135,7 @@ i:before, i:after, em:before, em:after {
 现在， <b>malloc()</b> （ 包括相应的 <b>realloc()</b> 和 <b>calloc()</b> ）都是通过调用 <b>sbrk()</b> 获取堆内存空间的。它们只是 <b>sbrk()</b> 的习惯用法。因此，可以说，获取堆内存的唯一方法是通过调用 <b>malloc()</b> 或 <b>sbrk()</b> 。但是你始终应该使用 <b>malloc()</b> ，因为它更高效。
 </p>
 
-<hr/>
+<hr  />
 
 <p>
 让我们来试试，请看fb2.c：
@@ -129,20 +143,20 @@ i:before, i:after, em:before, em:after {
 
 <div class="org-src-container">
 
-<pre class="src src-C"><span style="color: #d94a05; background-color: #000000;">#include</span> <span style="color: #009090; background-color: #000000;">&lt;stdio.h&gt;</span>
-<span style="color: #d94a05; background-color: #000000;">#include</span> <span style="color: #009090; background-color: #000000;">&lt;stdlib.h&gt;</span>
-<span style="color: #d94a05; background-color: #000000;">#include</span> <span style="color: #009090; background-color: #000000;">&lt;sys/types.h&gt;</span>
+<pre class="src src-C">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;sys/types.h&gt;
 
-<span style="color: #b13120; background-color: #000000;">main</span>()
+main()
 {
-  <span style="color: #a23f1e; background-color: #000000;">int</span> *<span style="color: #7c9fc9; background-color: #000000;">i1</span>, *<span style="color: #7c9fc9; background-color: #000000;">i2</span>;
+  int *i1, *i2;
 
-  printf(<span style="color: #009090; background-color: #000000;">"sbrk(0) before malloc(4): 0x%x\n"</span>, sbrk(0));
-  i1 = (<span style="color: #a23f1e; background-color: #000000;">int</span> *) malloc(4);
-  printf(<span style="color: #009090; background-color: #000000;">"sbrk(0) after 'i1 = (int *) malloc(4)': 0x%x\n"</span>, sbrk(0));
-  i2 = (<span style="color: #a23f1e; background-color: #000000;">int</span> *) malloc(4);
-  printf(<span style="color: #009090; background-color: #000000;">"sbrk(0) after 'i2 = (int *) malloc(4)': 0x%x\n"</span>, sbrk(0));
-  printf(<span style="color: #009090; background-color: #000000;">"i1 = 0x%x, i2 = 0x%x\n"</span>, i1, i2);
+  printf("sbrk(0) before malloc(4): 0x%x\n", sbrk(0));
+  i1 = (int *) malloc(4);
+  printf("sbrk(0) after 'i1 = (int *) malloc(4)': 0x%x\n", sbrk(0));
+  i2 = (int *) malloc(4);
+  printf("sbrk(0) after 'i2 = (int *) malloc(4)': 0x%x\n", sbrk(0));
+  printf("i1 = 0x%x, i2 = 0x%x\n", i1, i2);
 }
 </pre>
 </div>
@@ -181,16 +195,16 @@ UNIX&gt;
 
 <div class="org-src-container">
 
-<pre class="src src-C"><span style="color: #d94a05; background-color: #000000;">#include</span> <span style="color: #009090; background-color: #000000;">&lt;stdio.h&gt;</span>
-<span style="color: #d94a05; background-color: #000000;">#include</span> <span style="color: #009090; background-color: #000000;">&lt;stdlib.h&gt;</span>
+<pre class="src src-C">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
 
-<span style="color: #b13120; background-color: #000000;">main</span>()
+main()
 {
-  <span style="color: #a23f1e; background-color: #000000;">int</span> <span style="color: #7c9fc9; background-color: #000000;">j</span>, *<span style="color: #7c9fc9; background-color: #000000;">buf</span>;
+  int j, *buf;
 
-  <span style="color: #d94a05; background-color: #000000;">for</span> (j = 0; j &lt; 10; j++) {
-    buf = (<span style="color: #a23f1e; background-color: #000000;">int</span> *) malloc(4);
-    printf(<span style="color: #009090; background-color: #000000;">"malloc(4) returned 0x%x\n"</span>, buf);
+  for (j = 0; j &lt; 10; j++) {
+    buf = (int *) malloc(4);
+    printf("malloc(4) returned 0x%x\n", buf);
   }
 }
 </pre>
@@ -225,32 +239,32 @@ UNIX&gt;
 
 <div class="org-src-container">
 
-<pre class="src src-C"><span style="color: #d94a05; background-color: #000000;">#include</span> <span style="color: #009090; background-color: #000000;">&lt;stdio.h&gt;</span>
-<span style="color: #d94a05; background-color: #000000;">#include</span> <span style="color: #009090; background-color: #000000;">&lt;sys/types.h&gt;</span>
-<span style="color: #d94a05; background-color: #000000;">#include</span> <span style="color: #009090; background-color: #000000;">&lt;stdlib.h&gt;</span>
+<pre class="src src-C">#include &lt;stdio.h&gt;
+#include &lt;sys/types.h&gt;
+#include &lt;stdlib.h&gt;
 
-<span style="color: #b13120; background-color: #000000;">main</span>()
+main()
 {
-  <span style="color: #a23f1e; background-color: #000000;">int</span> *<span style="color: #7c9fc9; background-color: #000000;">buf</span>;
-  <span style="color: #a23f1e; background-color: #000000;">int</span> <span style="color: #7c9fc9; background-color: #000000;">i</span>, <span style="color: #7c9fc9; background-color: #000000;">sz</span>;
+  int *buf;
+  int i, sz;
 
   i = 1000;
-  printf(<span style="color: #009090; background-color: #000000;">"sbrk(0) = 0x%x\n"</span>, sbrk(0));
-  <span style="color: #d94a05; background-color: #000000;">for</span> (sz = 4; sz &lt; 32; sz += 4) {
-    buf = (<span style="color: #a23f1e; background-color: #000000;">int</span> *) malloc(sz);
+  printf("sbrk(0) = 0x%x\n", sbrk(0));
+  for (sz = 4; sz &lt; 32; sz += 4) {
+    buf = (int *) malloc(sz);
     buf[0] = i;
     i++;
-  printf(<span style="color: #009090; background-color: #000000;">"Allocated %d bytes.  buf = 0x%x, buf[-1] = %d, buf[-2] = %d, buf[0] = %d\n"</span>, 
-            sz, (<span style="color: #a23f1e; background-color: #000000;">unsigned</span> <span style="color: #a23f1e; background-color: #000000;">int</span>) buf, buf[-1], buf[-2], buf[0]);
+  printf("Allocated %d bytes.  buf = 0x%x, buf[-1] = %d, buf[-2] = %d, buf[0] = %d\n", 
+            sz, (unsigned int) buf, buf[-1], buf[-2], buf[0]);
   }
 
   sz = 100;
-  buf = (<span style="color: #a23f1e; background-color: #000000;">int</span> *) malloc(sz);
+  buf = (int *) malloc(sz);
   buf[0] = i;
   i++;
-  printf(<span style="color: #009090; background-color: #000000;">"Allocated %d bytes.  buf = 0x%x, buf[-1] = %d, buf[-2] = %d, buf[0] = %d\n"</span>, 
-            sz, (<span style="color: #a23f1e; background-color: #000000;">unsigned</span> <span style="color: #a23f1e; background-color: #000000;">int</span>) buf, buf[-1], buf[-2], buf[0]);
-  printf(<span style="color: #009090; background-color: #000000;">"sbrk(0) = 0x%x\n"</span>, sbrk(0));
+  printf("Allocated %d bytes.  buf = 0x%x, buf[-1] = %d, buf[-2] = %d, buf[0] = %d\n", 
+            sz, (unsigned int) buf, buf[-1], buf[-2], buf[0]);
+  printf("sbrk(0) = 0x%x\n", sbrk(0));
 }
 </pre>
 </div>
@@ -400,9 +414,9 @@ UNIX&gt;
 
 <div class="org-src-container">
 
-<pre class="src src-C"><span style="color: #a23f1e; background-color: #000000;">int</span> *<span style="color: #7c9fc9; background-color: #000000;">i</span>;
+<pre class="src src-C">int *i;
 
-i = (<span style="color: #a23f1e; background-color: #000000;">int</span> *) malloc(4);
+i = (int *) malloc(4);
 *i = 4;
 </pre>
 </div>
@@ -417,8 +431,8 @@ i = (<span style="color: #a23f1e; background-color: #000000;">int</span> *) mall
 
 <div class="org-src-container">
 
-<pre class="src src-C"><span style="color: #a23f1e; background-color: #000000;">char</span> *<span style="color: #7c9fc9; background-color: #000000;">malloc_begin</span> = <span style="color: #7868b5; background-color: #000000;">NULL</span>;
-<span style="color: #a23f1e; background-color: #000000;">char</span> *<span style="color: #7c9fc9; background-color: #000000;">malloc_end</span> = <span style="color: #7868b5; background-color: #000000;">NULL</span>;
+<pre class="src src-C">char *malloc_begin = NULL;
+char *malloc_end = NULL;
 </pre>
 </div>
 
@@ -430,7 +444,7 @@ i = (<span style="color: #a23f1e; background-color: #000000;">int</span> *) mall
 到目前为止，我们描述了如何编写无需内存回收（ <b>free()</b> ）的 <b>malloc()</b> 函数。当 <b>free()</b> 被调用时，你必须保证它释放的内存能被 <b>malloc</b> 再次使用。也就是说你要在 <b>malloc()</b> 中做一些更复杂的事情，我们会在接下来继续讨论，大家先自己思考一下吧！
 </p>
 
-<hr/>
+<hr  />
 
 <p>
 重申一下，如果你还没有阅读对比 <b>malloc()</b> 不同实现的 <a href="http://web.eecs.utk.edu/~plank/plank/classes/cs360/360/notes/Malloc1/diff.html">这篇文章</a> ，你应该现在就读一下。
@@ -463,6 +477,9 @@ i = (<span style="color: #a23f1e; background-color: #000000;">int</span> *) mall
         <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
         <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
       </section>
+      <script src="/media/js/jquery-latest.min.js"></script>
+      <script src="/media/js/prettify.js"></script>
+      <script src="/media/js/main.js"></script>
       <script type="text/javascript">
         var _gaq = _gaq || [];
         _gaq.push(['_setAccount', 'cnwggu@gmail.com']);
@@ -474,13 +491,14 @@ i = (<span style="color: #a23f1e; background-color: #000000;">int</span> *) mall
         })();
       </script>
       <div class="footer">
-        <p>Generated by <a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.3.1 (<a href="http://orgmode.org">Org</a> mode 8.0.3)</p>
+        <p>Generated by <a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.x (<a href="http://orgmode.org">Org mode</a> 8.x)</p>
         <p>
-          Copyright &copy; 2012 - 2013 <a href="mailto:guweigang &lt;at&gt; outlook &lt;dot&gt; com">Gu Weigang</a>
+          Copyright &copy; 2012 - 2014 <a href="mailto:guweigang &lt;at&gt; outlook &lt;dot&gt; com">Gu Weigang</a>
           &nbsp;&nbsp;-&nbsp;&nbsp;
           Powered by <a href="https://github.com/kelvinh/org-page" target="_blank">org-page</a>
         </p>
       </div>
     </div>
+
   </body>
 </html>
