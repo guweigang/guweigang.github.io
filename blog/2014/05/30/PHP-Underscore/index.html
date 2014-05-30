@@ -91,7 +91,7 @@ Underscore的自我诠释是: "一个提供函数式编程支持的公共工具�
 <h2 id="sec-3">PHP Underscore 语法</h2>
 <div class="outline-text-2" id="text-3">
 <p>
-在原始的Javascript库中，所有Underscore的函数名均以一个下划线和一个点开始；如：_.each, _.map, _.reduce。而在PHP中，下划线是保留符号，是gettext函数的别名，所以只能使用双下划线取而代之。
+在原始的Javascript库中，所有Underscore的函数名均以一个下划线和一个点开始；如： <code>_.each</code> ,  <code>_.map</code> ,  <code>_.reduce</code> 。而在PHP中，下划线是保留符号，是 <code>gettext</code> 函数的别名，所以只能使用双下划线取而代之。
 </p>
 
 <p>
@@ -135,6 +135,290 @@ _.reduce            __::reduce
 <p>
 在本文中，我将使用静态方法这种风格。
 </p>
+</div>
+</div>
+<div id="outline-container-sec-4" class="outline-2">
+<h2 id="sec-4">处理集合和数组</h2>
+<div class="outline-text-2" id="text-4">
+</div><div id="outline-container-sec-4-1" class="outline-3">
+<h3 id="sec-4-1">Each</h3>
+<div class="outline-text-3" id="text-4-1">
+<p>
+使用它迭代数组，并对数组每个元应用一个函数。
+</p>
+
+<p>
+例如：
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-PHP">$items = array(1, 2, 3, 4, 5);
+__::each($items, function($item) { print $item; });
+</pre>
+</div>
+
+<p>
+将输出：
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-TEXT">12345
+</pre>
+</div>
+
+<p>
+下面是一个更详细的示例：
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-PHP">$student_records = array(
+    array(
+        'name'    =&gt;  'Joe Bloggs',
+        'id'      =&gt;  1,
+        'grade'   =&gt;  72,
+        'class'   =&gt;  'A',
+    ),
+    array(
+        'name'    =&gt;  'Jack Brown',
+        'id'      =&gt;  2,
+        'grade'   =&gt;  67,
+        'class'   =&gt;  'B',
+    ),
+    array(
+        'name'    =&gt;  'Jill Beaumont',
+        'id'      =&gt;  3,
+        'grade'   =&gt;  81,
+        'class'   =&gt;  'B',
+    ),
+);
+
+__::each($student_records, function($record) { 
+    print $record['name'] . ' ' . $record['grade'] . '&lt;br /&gt;'; 
+});
+</pre>
+</div>
+
+<p>
+这个示例的输出是：
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-TEXT">Joe Bloggs A
+Jack Brown B
+Jill Beaumont B
+</pre>
+</div>
+
+<p>
+一会儿在我们探索模板的时候我们将使用更好的方式来处理它。
+</p>
+</div>
+</div>
+<div id="outline-container-sec-4-2" class="outline-3">
+<h3 id="sec-4-2">Pluck</h3>
+<div class="outline-text-3" id="text-4-2">
+<p>
+如果你有一个多维数组，并且你想“摘出“某些确定的值，并且获得一个一维的数组，你可使用以 <code>_ __::pluk</code> 。
+</p>
+
+<p>
+Facebook API 提供了一个真实的示例，这看起来靠谱多了。当你请求Facebook的用户列表时，返回结果（经 <code>json_deoce</code> 处理后的多维数组）大致是这样的：
+</p>
+
+
+<div class="org-src-container">
+
+<pre class="src src-PHP">$response = array(
+    'data'  =&gt;  array(
+        array(
+            'name'  =&gt;  'Joe Bloggs',
+            'id'        =&gt;   123456789,
+        ),
+        array(
+            'name'  =&gt;  'Jack Brown',
+            'id'        =&gt;  987654321,
+        ),
+    )
+// ...
+);
+</pre>
+</div>
+
+<p>
+如果我们想获取Facebook用户ID的一维数组，我们可以这么做：
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-PHP">$ids = __::pluck($response['data'], 'id');
+// array(123456789, 98765432)
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-sec-4-3" class="outline-3">
+<h3 id="sec-4-3">求最小值和最大值</h3>
+<div class="outline-text-3" id="text-4-3">
+<p>
+基于上面提到的一个学生信息的示例，我们可以使用 <code>__::max</code> 找出学生的最高分：
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-PHP">__::max($student_records, function($student) { return $student['grade']; });
+// returns array('name' =&gt; 'Jill Beaumont', 'id' =&gt; 3, 'grade' =&gt; 81, 'class' =&gt; 'B)
+</pre>
+</div>
+
+<p>
+或者使用 <code>__::main</code> 求出最低分：
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-PHP">__::min($student_records, function($student) { return $student['grade']; });
+// returns array('name' =&gt; 'Jack Brown', 'id' =&gt; 2, 'grade' =&gt; 67, 'class' =&gt; 'B')
+</pre>
+</div>
+
+<p>
+如你所见，这个示例不仅仅简单地返回最高分或最低分，而是返回整条记录 － 如：学生信息。
+</p>
+</div>
+</div>
+<div id="outline-container-sec-4-4" class="outline-3">
+<h3 id="sec-4-4">过滤和拒绝</h3>
+<div class="outline-text-3" id="text-4-4">
+<p>
+<code>filter</code> 方法对集合或数组执行真值测试，并且返回那些通过测试的元素。
+</p>
+
+<p>
+让我们回到刚才那个学生信息的示例，假设70分以上才被认为通过考试。我们可以使用 <code>__::filter</code> 为数组每个元素执行一个简单的函数，这样我们就能得到通过考试的学生名单。
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-PHP">$passed = __::filter($student_records, function($student) { return $student['grade'] &gt;= 70; });
+</pre>
+</div>
+
+<p>
+<code>reject</code> 函数正好和 <code>filter</code> 相反。它会排除那些通过真值测试的元素。
+</p>
+
+<p>
+换言之，下面两个函数的执行结果是一样的：
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-PHP">__::filter($student_records, function($student) { return $student['grade'] &gt;= 70; });
+
+__::reject($student_records, function($student) { return $student['grade'] &lt; 70; });
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-sec-4-5" class="outline-3">
+<h3 id="sec-4-5">sortBy</h3>
+<div class="outline-text-3" id="text-4-5">
+<p>
+<code>sortBy</code> 函数对数组进行排序 － 按升序排 －通过一个迭代函数。下面是一个简单的示例：
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-PHP">$scores = array(476, 323, 1010, 567, 723, 1009, 600);
+$sorted = __::sortBy($scores, function($score) { return $score; });
+</pre>
+</div>
+
+<p>
+如果想以降序进行排序，简单地对值取负数即可。如：要获得按分数降序排序的学生名单，可以这样：
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-PHP">$ordered = __::sortBy($student_records, function($student) { return -$student['grade']; });
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-sec-4-6" class="outline-3">
+<h3 id="sec-4-6">groupBy</h3>
+<div class="outline-text-3" id="text-4-6">
+<p>
+现在假设我们想按班级来重新组织我们的数组。
+</p>
+
+<p>
+这就是 <code>groupBy</code> 用武之地。我们可以像这样做：
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-PHP">var_dump( __::groupBy($student_records, 'class') );
+</pre>
+</div>
+
+<p>
+输出将是：
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-PHP">array(2) {
+["A"]=&gt;
+array(1) {
+    [0]=&gt;
+    array(4) {
+    ["name"]=&gt;
+    string(10) "Joe Bloggs"
+    ["id"]=&gt;
+    int(1)
+    ["grade"]=&gt;
+    int(72)
+    ["class"]=&gt;
+    string(1) "A"
+    }
+}
+["B"]=&gt;
+array(2) {
+    [0]=&gt;
+    array(4) {
+    ["name"]=&gt;
+    string(10) "Jack Brown"
+    ["id"]=&gt;
+    int(2)
+    ["grade"]=&gt;
+    int(67)
+    ["class"]=&gt;
+    string(1) "B"
+    }
+    [1]=&gt;
+    array(4) {
+    ["name"]=&gt;
+    string(13) "Jill Beaumont"
+    ["id"]=&gt;
+    int(3)
+    ["grade"]=&gt;
+    int(81)
+    ["class"]=&gt;
+    string(1) "B"
+    }
+}
+}
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-sec-4-7" class="outline-3">
+<h3 id="sec-4-7">Reduce</h3>
 </div>
 </div>
 

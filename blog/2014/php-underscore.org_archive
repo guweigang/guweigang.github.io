@@ -1,0 +1,34 @@
+#    -*- mode: org -*-
+
+
+Archived entries from file /Users/guweigang/github/guweigang/guweigang.github.io/blog/2014/php-underscore.org
+
+
+* 过滤和拒绝
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2014-05-30 五 16:42
+  :ARCHIVE_FILE: ~/github/guweigang/guweigang.github.io/blog/2014/php-underscore.org
+  :ARCHIVE_OLPATH: 处理集合和数组
+  :ARCHIVE_CATEGORY: php-underscore
+  :END:
+
+=filter= 方法对集合或数组执行真值测试，并且返回那些通过测试的元素。
+
+让我们回到刚才那个学生信息的示例，假设70分以上才被认为通过考试。我们可以使用 =__::filter= 为数组每个元素执行一个简单的函数，这样我们就能得到通过考试的学生名单。
+
+#+BEGIN_SRC PHP
+$passed = __::filter($student_records, function($student) { return $student['grade'] >= 70; });
+#+END_SRC
+
+=reject= 函数正好和 =filter= 相反。它会排除那些通过真值测试的元素。
+
+换言之，下面两个函数的执行结果是一样的：
+
+
+#+BEGIN_SRC PHP
+__::filter($student_records, function($student) { return $student['grade'] >= 70; });
+
+__::reject($student_records, function($student) { return $student['grade'] < 70; });
+#+END_SRC
+
+
