@@ -44,7 +44,7 @@ Underscore：下划线。
 
 ** PHP Underscore 语法
 
-   在原始的Javascript库中，所有Underscore的函数名均以一个下划线和一个点开始；如：_.each, _.map, _.reduce。而在PHP中，下划线是保留符号，是gettext函数的别名，所以只能使用双下划线取而代之。
+   在原始的Javascript库中，所有Underscore的函数名均以一个下划线和一个点开始；如： =_.each= ,  =_.map= ,  =_.reduce= 。而在PHP中，下划线是保留符号，是 =gettext= 函数的别名，所以只能使用双下划线取而代之。
 
    所以，如果我们想寻找Javascript Underscore在PHP中的对等实现的话：
 
@@ -71,3 +71,209 @@ __::map(array(1, 2, 3), function($n) { return $n * 2; });
 #+END_SRC
 
 在本文中，我将使用静态方法这种风格。
+
+** 处理集合和数组
+
+*** Each
+   
+使用它迭代数组，并对数组每个元应用一个函数。
+
+例如：
+
+#+BEGIN_SRC PHP
+$items = array(1, 2, 3, 4, 5);
+__::each($items, function($item) { print $item; });
+#+END_SRC
+
+将输出：
+
+#+BEGIN_SRC TEXT
+12345
+#+END_SRC
+
+下面是一个更详细的示例：
+
+#+BEGIN_SRC PHP
+
+$student_records = array(
+    array(
+        'name'    =>  'Joe Bloggs',
+        'id'      =>  1,
+        'grade'   =>  72,
+        'class'   =>  'A',
+    ),
+    array(
+        'name'    =>  'Jack Brown',
+        'id'      =>  2,
+        'grade'   =>  67,
+        'class'   =>  'B',
+    ),
+    array(
+        'name'    =>  'Jill Beaumont',
+        'id'      =>  3,
+        'grade'   =>  81,
+        'class'   =>  'B',
+    ),
+);
+
+__::each($student_records, function($record) { 
+    print $record['name'] . ' ' . $record['grade'] . '<br />'; 
+});
+
+#+END_SRC
+
+这个示例的输出是：
+
+#+BEGIN_SRC TEXT
+Joe Bloggs A
+Jack Brown B
+Jill Beaumont B
+#+END_SRC
+
+一会儿在我们探索模板的时候我们将使用更好的方式来处理它。
+
+*** Pluck
+    
+如果你有一个多维数组，并且你想“摘出“某些确定的值，并且获得一个一维的数组，你可使用以 =_ __::pluk= 。
+
+Facebook API 提供了一个真实的示例，这看起来靠谱多了。当你请求Facebook的用户列表时，返回结果（经 =json_deoce= 处理后的多维数组）大致是这样的：
+
+
+#+BEGIN_SRC PHP
+
+$response = array(
+    'data'  =>  array(
+        array(
+            'name'  =>  'Joe Bloggs',
+            'id'        =>   123456789,
+        ),
+        array(
+            'name'  =>  'Jack Brown',
+            'id'        =>  987654321,
+        ),
+    )
+// ...
+);
+
+#+END_SRC
+
+如果我们想获取Facebook用户ID的一维数组，我们可以这么做：
+
+#+BEGIN_SRC PHP
+$ids = __::pluck($response['data'], 'id');
+// array(123456789, 98765432)
+#+END_SRC
+
+*** 求最小值和最大值
+
+基于上面提到的一个学生信息的示例，我们可以使用 =__::max= 找出学生的最高分：
+
+#+BEGIN_SRC PHP
+__::max($student_records, function($student) { return $student['grade']; });
+// returns array('name' => 'Jill Beaumont', 'id' => 3, 'grade' => 81, 'class' => 'B)
+#+END_SRC
+
+或者使用 =__::main= 求出最低分：
+
+#+BEGIN_SRC PHP
+__::min($student_records, function($student) { return $student['grade']; });
+// returns array('name' => 'Jack Brown', 'id' => 2, 'grade' => 67, 'class' => 'B')
+#+END_SRC
+
+如你所见，这个示例不仅仅简单地返回最高分或最低分，而是返回整条记录 － 如：学生信息。
+
+*** 过滤和拒绝
+
+=filter= 方法对集合或数组执行真值测试，并且返回那些通过测试的元素。
+
+让我们回到刚才那个学生信息的示例，假设70分以上才被认为通过考试。我们可以使用 =__::filter= 为数组每个元素执行一个简单的函数，这样我们就能得到通过考试的学生名单。
+
+#+BEGIN_SRC PHP
+$passed = __::filter($student_records, function($student) { return $student['grade'] >= 70; });
+#+END_SRC
+
+=reject= 函数正好和 =filter= 相反。它会排除那些通过真值测试的元素。
+
+换言之，下面两个函数的执行结果是一样的：
+
+#+BEGIN_SRC PHP
+__::filter($student_records, function($student) { return $student['grade'] >= 70; });
+
+__::reject($student_records, function($student) { return $student['grade'] < 70; });
+#+END_SRC
+
+*** sortBy
+
+=sortBy= 函数对数组进行排序 － 按升序排 －通过一个迭代函数。下面是一个简单的示例：
+
+#+BEGIN_SRC PHP
+
+$scores = array(476, 323, 1010, 567, 723, 1009, 600);
+$sorted = __::sortBy($scores, function($score) { return $score; });
+
+#+END_SRC
+
+如果想以降序进行排序，简单地对值取负数即可。如：要获得按分数降序排序的学生名单，可以这样：
+
+#+BEGIN_SRC PHP
+$ordered = __::sortBy($student_records, function($student) { return -$student['grade']; });
+#+END_SRC
+
+*** groupBy
+
+现在假设我们想按班级来重新组织我们的数组。
+
+这就是 =groupBy= 用武之地。我们可以像这样做：
+
+#+BEGIN_SRC PHP
+var_dump( __::groupBy($student_records, 'class') );
+#+END_SRC
+
+输出将是：
+
+#+BEGIN_SRC PHP
+array(2) {
+["A"]=>
+array(1) {
+    [0]=>
+    array(4) {
+    ["name"]=>
+    string(10) "Joe Bloggs"
+    ["id"]=>
+    int(1)
+    ["grade"]=>
+    int(72)
+    ["class"]=>
+    string(1) "A"
+    }
+}
+["B"]=>
+array(2) {
+    [0]=>
+    array(4) {
+    ["name"]=>
+    string(10) "Jack Brown"
+    ["id"]=>
+    int(2)
+    ["grade"]=>
+    int(67)
+    ["class"]=>
+    string(1) "B"
+    }
+    [1]=>
+    array(4) {
+    ["name"]=>
+    string(13) "Jill Beaumont"
+    ["id"]=>
+    int(3)
+    ["grade"]=>
+    int(81)
+    ["class"]=>
+    string(1) "B"
+    }
+}
+}
+#+END_SRC
+
+*** Reduce
+
