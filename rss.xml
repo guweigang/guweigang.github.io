@@ -4,10 +4,17 @@
     <title>闭眼听世界</title>
     <link>http://guweigang.com/</link>
     <description>心如松静意无尘，气若浮萍了无痕！</description>
-    <pubDate>四, 29  5 2014 22:48:48 CST</pubDate>
-    <lastBuildDate>四, 29  5 2014 22:48:48 CST</lastBuildDate>
+    <pubDate>五, 30  5 2014 15:57:53 CST</pubDate>
+    <lastBuildDate>五, 30  5 2014 15:57:53 CST</lastBuildDate>
     <docs>http://www.rssboard.org/rss-specification</docs>
     <generator>Org-page static site generator (https://github.com/kelvinh/org-page)</generator>
+    <item>
+      <title>PHP Underscore</title>
+      <link>http://guweigang.com/blog/2014/05/30/PHP-Underscore</link>
+      <description>Underscore.php is a PHP port of the popular Underscore.js library.</description>
+      <pubDate>2014-05-30</pubDate>
+      <guid>http://guweigang.com/blog/2014/05/30/PHP-Underscore</guid>
+    </item>
     <item>
       <title>A New Way to Write C</title>
       <link>http://guweigang.com/blog/2014/05/16/A-New-Way-To-Write-C-Lang</link>
@@ -70,13 +77,6 @@
       <description></description>
       <pubDate>2013-07-05</pubDate>
       <guid>http://guweigang.com/blog/2009/12/05/centos-network-settings/</guid>
-    </item>
-    <item>
-      <title>中国城市JSON数据</title>
-      <link>http://guweigang.com/blog/2009/12/02/chinese-cities-json-data/</link>
-      <description></description>
-      <pubDate>2013-07-05</pubDate>
-      <guid>http://guweigang.com/blog/2009/12/02/chinese-cities-json-data/</guid>
     </item>
   </channel>
 </rss>
