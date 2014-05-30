@@ -11,20 +11,22 @@
 
 
 #+BEGIN_QUOTE
+
 原文地址： https://www.sitepoint.com/getting-started-php-underscore/
 
 Underscore：下划线。
 
-如果你曾使用过Javascript的Backbone框架，你可能已经很熟悉Underscore是什么。不得不承认，它对于JS开发者来说已经变得非常重要了。但是你想过在PHP中实现Underscore吗？
+如果你曾使用过Javascript的Backbone框架，你可能已经很熟悉Underscore是什么。不得不承认，它对于JS开发者来说已经变得非常重要。但是你想过在PHP中实现Underscore吗？
 
 本文将介绍Underscore，以及它能做什么，并且提供一些有用的示例。
+
 #+END_QUOTE
 
 ** 什么是Underscore？
 
    Underscore的自我诠释是: "一个提供函数式编程支持的公共工具类，就像你在Prototype.js(或Ruby)看到的一样，但它没有基于任何Javascript内置对象。它能把jQuery和Backbone.js完美地结合在一起"。
 
-   很明显，Underscore提供的工具大多是用来处理集合、数组和对象的，另外还提供基本模板的功能和其他一些有用的函数。
+   很明显，Underscore提供的工具大多是用来处理集合、数组和对象的，不过额外还提供了基本模板的功能和其他一些有用的函数。
 
    那些操作集合和数组的函数在处理JSON时尤其有用，这在处理Web服务返回结果的时候显得极其方便。
 
@@ -40,7 +42,7 @@ Underscore：下划线。
 }
 #+END_SRC
 
-   你也可以手动下载，或从[[https://github.com/brianhaveri/Underscore.php][Github]] 检出 - 你只需要在代码中包含一个文件（underscore.php）即可。
+   你也可以手动下载，或从[[https://github.com/brianhaveri/Underscore.php][Github]] 检出 - 安装相当简单，只需要在代码中 =require= 一个文件（underscore.php）即可。
 
 ** PHP Underscore 语法
 
@@ -48,17 +50,16 @@ Underscore：下划线。
 
    所以，如果我们想寻找Javascript Underscore在PHP中的对等实现的话：
 
-#+BEGIN_SRC TEXT
+#+BEGIN_SRC TXT
 JavaScript          PHP
 _.each              __::each
 _.map               __::map
 _.reduce            __::reduce
 #+END_SRC
 
-要像这样转换。
+要像这样转换一下。
 
-
-你也可以用面向对象的方式：
+除了上面看到的，在PHP中你还可以用面向对象的方式：
 
 #+BEGIN_SRC PHP
 __(array(1, 2, 3))->map(function($n) { return $n * 2; });
@@ -70,13 +71,13 @@ __(array(1, 2, 3))->map(function($n) { return $n * 2; });
 __::map(array(1, 2, 3), function($n) { return $n * 2; });
 #+END_SRC
 
-在本文中，我将使用静态方法这种风格。
+在本文中，我将全部使用静态方法这种风格。
 
 ** 处理集合和数组
 
 *** Each
    
-使用它迭代数组，并对数组每个元应用一个函数。
+使用它迭代整个数组，并对数组的每个元素执行一个函数。
 
 例如：
 
@@ -124,20 +125,19 @@ __::each($student_records, function($record) {
 
 这个示例的输出是：
 
-#+BEGIN_SRC TEXT
+#+BEGIN_SRC TXT
 Joe Bloggs A
 Jack Brown B
 Jill Beaumont B
 #+END_SRC
 
-一会儿在我们探索模板的时候我们将使用更好的方式来处理它。
+一会儿在我们探索模板的时候我们将使用更好的方式来处理。
 
 *** Pluck
     
-如果你有一个多维数组，并且你想“摘出“某些确定的值，并且获得一个一维的数组，你可使用以 =_ __::pluk= 。
+如果你有一个多维数组，并且你想“摘出“某些确定的值最终且获得一个一的数组，你可使用以 =__::pluk= 。
 
 Facebook API 提供了一个真实的示例，这看起来靠谱多了。当你请求Facebook的用户列表时，返回结果（经 =json_deoce= 处理后的多维数组）大致是这样的：
-
 
 #+BEGIN_SRC PHP
 
@@ -157,7 +157,7 @@ $response = array(
 
 #+END_SRC
 
-如果我们想获取Facebook用户ID的一维数组，我们可以这么做：
+如果我们想获取Facebook用户IDs的一维数组，我们可以这么做：
 
 #+BEGIN_SRC PHP
 $ids = __::pluck($response['data'], 'id');
@@ -166,7 +166,7 @@ $ids = __::pluck($response['data'], 'id');
 
 *** 求最小值和最大值
 
-基于上面提到的一个学生信息的示例，我们可以使用 =__::max= 找出学生的最高分：
+基于上面提到的一个学生信息的示例，我们可以使用 =__::max= 找出学生名单中的最高分得者：
 
 #+BEGIN_SRC PHP
 __::max($student_records, function($student) { return $student['grade']; });
@@ -180,13 +180,13 @@ __::min($student_records, function($student) { return $student['grade']; });
 // returns array('name' => 'Jack Brown', 'id' => 2, 'grade' => 67, 'class' => 'B')
 #+END_SRC
 
-如你所见，这个示例不仅仅简单地返回最高分或最低分，而是返回整条记录 － 如：学生信息。
+如你所见，这个示例不仅仅简单地返回最高分或最低分，而是返回整条记录 － 学生信息。
 
-*** 过滤和拒绝
+*** 过滤和排除
 
 =filter= 方法对集合或数组执行真值测试，并且返回那些通过测试的元素。
 
-让我们回到刚才那个学生信息的示例，假设70分以上才被认为通过考试。我们可以使用 =__::filter= 为数组每个元素执行一个简单的函数，这样我们就能得到通过考试的学生名单。
+让我们回到刚才那个学生信息的示例，假设70分及以上才被认为通过考试。我们可以使用 =__::filter= 为数组每个元素执行一个简单的函数，这样我们就能得到通过考试的学生名单。
 
 #+BEGIN_SRC PHP
 $passed = __::filter($student_records, function($student) { return $student['grade'] >= 70; });
@@ -204,7 +204,7 @@ __::reject($student_records, function($student) { return $student['grade'] < 70;
 
 *** sortBy
 
-=sortBy= 函数对数组进行排序 － 按升序排 －通过一个迭代函数。下面是一个简单的示例：
+=sortBy= 函数对数组进行排序 － 默认按升序排 －通过一个迭代函数。下面是一个简单的示例：
 
 #+BEGIN_SRC PHP
 
@@ -223,7 +223,7 @@ $ordered = __::sortBy($student_records, function($student) { return -$student['g
 
 现在假设我们想按班级来重新组织我们的数组。
 
-这就是 =groupBy= 用武之地。我们可以像这样做：
+这就是 =groupBy= 的用武之地。我们可以像这样做：
 
 #+BEGIN_SRC PHP
 var_dump( __::groupBy($student_records, 'class') );
@@ -276,4 +276,180 @@ array(2) {
 #+END_SRC
 
 *** Reduce
+=reduce= 函数用于把一个集合或数组降为一个单值。
 
+例如，为了求得一维数组的元素和可以这么做：
+
+#+BEGIN_SRC PHP
+__::reduce(array(1, 2, 3), function($first, $second) { return $first + $second; }, 0); // 6
+#+END_SRC
+
+如果我们在学生信息那个示例中结合 =reduct= 和 =pluck= ，我们可以求得学生平均成绩：
+
+#+BEGIN_SRC PHP
+$average = round( ( __::reduce(__::pluck($student_records, 'grade'), function($first, $second) { return $first + $second; }, 0) / count($student_records) ), 2);
+#+END_SRC
+
+这里我们首先使用 =pluck= 把学生成绩解出来成为一个一维数组，然后使用一个简单的加法迭代把数组降为一个单值，再除以学生个数，最后结果保留两位小数。
+
+*** Find
+    
+=find= 函数迭代整个数组，对每相元素执行函数直到函数返回真，也就是说，它返回第一次匹配到的“记录“。
+
+例如，为了找出第一个成绩低于70分的学生，你可以这样做：
+
+#+BEGIN_SRC PHP
+__::find($student_records, function($student) { return $student['grade'] < 70; })
+#+END_SRC
+
+如果你 =var_dump= 结果的话，这个示例的输出应该是这样的：
+
+#+BEGIN_SRC PHP
+array(4) {
+["name"]=>
+string(10) "Jack Brown"
+["id"]=>
+int(2)
+["grade"]=>
+int(67)
+["class"]=>
+string(1) "B"
+}
+#+END_SRC
+
+假设我们想通过ID找到某个学生，我们可以这样做：
+
+#+BEGIN_SRC PHP
+function findById($records, $id) {
+    return __::find($records, function($record) use ($id) { return ($record['id'] == $id); });
+}
+#+END_SRC
+
+如果你执行下面这段代码：
+
+#+BEGIN_SRC PHP
+var_dump(findById($student_records, 2));
+#+END_SRC
+
+你会获得如下结果：
+
+
+#+BEGIN_SRC PHP
+
+array(4) {
+    ["name"]=>
+    string(10) "Jack Brown"
+    ["id"]=>
+    int(2)
+    ["grade"]=>
+    int(67)
+    ["class"]=>
+    string(1) "B"
+}
+
+#+END_SRC
+
+注意到上面的示例中我们引入了 =use= 关词字，这样在闭包中才可以使用变量 =$id= 。
+
+*** 模板
+    
+Backbone使用Underscore最频繁的功能其实是它的模板功能。
+
+用Underscore简直就是太简洁了，比如说字符串连接，而且如果结合其他Underscore函数(如 =__::each= )就更加强大了。
+
+在一个模板字符串中，你可以像这样打印出变量的值：
+
+#+BEGIN_SRC PHP
+<%= $student['name'] %>
+#+END_SRC
+
+你可以使用这个语法执行代码：
+
+#+BEGIN_SRC PHP
+<% __::each($records, function($student) { %>
+ // …
+<% }) %>
+#+END_SRC
+
+模板功能这块有两个常用方法。一个是定义字符串，使用上面的语法注入变量或代码，然后用 =::template()= 函数渲染。
+
+#+BEGIN_SRC
+$welcome = 'Hello <%= $name %>, welcome back!';
+print __::template($welcome, array('name' => 'Jack'));
+#+END_SRC
+
+当然，你也可以先“编译“一个模板，并把 =__::template= 函数（接收一个字符串参数）的结果值给一个变量。
+
+下面的代码和上面的示例是等价的：
+
+#+BEGIN_SRC PHP
+$compiled = __::template('Hello <%= $name %>, welcome back!');
+print $compiled(array('name'=>'Jack'));
+
+// Hello Jack, welcome back!
+#+END_SRC
+
+这儿有一个你可能会经常使用的简单模板，它结合 =__::template= 和 =__::each= 输出一个无序列表。
+
+#+BEGIN_SRC PHP
+$ul = __::template('<ul><% __::each($items, function($item)  { %><li><%= $item %></li><% }); %></ul>');
+
+print $ul(array('items' => array('one', 'two', 'three')));
+#+END_SRC
+
+让我们开始构建一个模板，它接收一个学生名单参数，并由此创建一个由学生姓名组成的无序列表：
+
+#+BEGIN_SRC PHP
+$list_students = __::template('<ul><% __::each($records,  function($student) { %><li><%= $student["name"] %></li><% }); %></ul>');
+#+END_SRC
+
+然后，渲染它：
+
+#+BEGIN_SRC PHP
+print $list_students(array('records' => $student_records));
+#+END_SRC
+
+你应该会得到以下输出：
+
+#+BEGIN_SRC HTML
+<ul>
+    <li>Joe Bloggs</li>
+    <li>Jack Brown</li>
+    <li>Jill Beaumont</li>
+</ul>
+#+END_SRC
+
+或者我们也可以创建一个学生姓名和成绩的表格：
+
+#+BEGIN_SRC PHP
+$grades_table = __::template('<table><thead><tr><td>Student</td><td>Grade</td></tr></thead><tbody><% __::each($records, function($student) { %><tr><td><%= $student["name"] %></td><td><%= $student["grade"] %>%</td></tr><% }); %></tbody></table>');
+
+print $grades_table(array('records' => $student_records));
+#+END_SRC
+
+你当然可以传入多个参数，所以我们试着给这个表格加上表头信息，例如：
+
+#+BEGIN_SRC PHP
+$grades_table = __::template('<h4><%= $title %></h4><table><thead><tr><td>Student</td><td>Grade</td></tr></thead><tbody><% __::each($records, function($student) { %><tr><td><%= $student["name"] %></td><td><%= $student["grade"] %>%</td></tr><% }); %></tbody></table>');
+
+print $grades_table(array('title' => $title, 'records' => $student_records));
+#+END_SRC
+
+
+** 扩展Underscore
+
+你可以使用 =mixin= 创建你的函数。
+
+#+BEGIN_SRC PHP
+__::mixin(array(
+'capitalize'=> function($string) { return ucwords($string); },
+'shout'      => function($string) { return strtoupper($string); }
+));
+__::capitalize('joe bloggs'); // 'Joe Bloggs'
+__::shout('Joe bloggs');       // 'JOE BLOGGS'
+#+END_SRC
+
+
+** 总结
+
+本文介绍了重量级工具库Underscore的PHP移植版。虽然我大体概述了它的可用特性；但是还有更多值得探索的功能和特性。猛击这里查看[[http://brianhaveri.github.io/Underscore.php/][官方手册]]。
