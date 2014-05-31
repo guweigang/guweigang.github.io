@@ -8,7 +8,7 @@
 #+LANGUAGE:    en
 #+OPTIONS:     H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
 #+DESCRIPTION: Underscore.php is a PHP port of the popular Underscore.js library.
-
+#+OPTIONS:     toc:3
 
 #+BEGIN_QUOTE
 

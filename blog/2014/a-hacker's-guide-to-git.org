@@ -1,0 +1,14 @@
+#+TITLE:       A Hacker's Guide to Git
+#+AUTHOR:      Gu Weigang
+#+EMAIL:       guweigang@outlook.com
+#+DATE:        2014-05-31 六
+#+URI:         /blog/%y/%m/%d/A-Hacker's-Guide-to-Git
+#+KEYWORDS:    git
+#+TAGS:        git
+#+LANGUAGE:    en
+#+OPTIONS:     H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: a hacker's guide to git
+#+OPTIONS:     toc:3
+
+原文链接：http://wildlyinaccurate.com/a-hacker's-guide-to-git
+
