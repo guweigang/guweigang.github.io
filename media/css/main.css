@@ -232,6 +232,18 @@ table th.right, table td.right {
     background-color: #f9f9f9;
     width: 160px;
 }
+
+#table-of-contents {
+    margin-bottom: 50px;
+}
+
+#text-table-of-contents {
+    background-color: #efefef;
+    padding-left: 24px;
+    width: 300px;
+    border: solid 1px #ccc;
+}
+
 /* post */
 .post {
     position: relative;
