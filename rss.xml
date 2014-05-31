@@ -4,15 +4,22 @@
     <title>闭眼听世界</title>
     <link>http://guweigang.com/</link>
     <description>心如松静意无尘，气若浮萍了无痕！</description>
-    <pubDate>五, 30  5 2014 21:06:23 CST</pubDate>
-    <lastBuildDate>五, 30  5 2014 21:06:23 CST</lastBuildDate>
+    <pubDate>六, 31  5 2014 10:22:05 CST</pubDate>
+    <lastBuildDate>六, 31  5 2014 10:22:05 CST</lastBuildDate>
     <docs>http://www.rssboard.org/rss-specification</docs>
     <generator>Org-page static site generator (https://github.com/kelvinh/org-page)</generator>
+    <item>
+      <title>A Hacker&#39;s Guide to Git</title>
+      <link>http://guweigang.com/blog/2014/05/31/A-Hacker&#39;s-Guide-to-Git</link>
+      <description>a hacker&#39;s guide to git</description>
+      <pubDate>2014-05-31</pubDate>
+      <guid>http://guweigang.com/blog/2014/05/31/A-Hacker&#39;s-Guide-to-Git</guid>
+    </item>
     <item>
       <title>PHP Underscore</title>
       <link>http://guweigang.com/blog/2014/05/30/PHP-Underscore</link>
       <description>Underscore.php is a PHP port of the popular Underscore.js library.</description>
-      <pubDate>2014-05-30</pubDate>
+      <pubDate>2014-05-31</pubDate>
       <guid>http://guweigang.com/blog/2014/05/30/PHP-Underscore</guid>
     </item>
     <item>
@@ -70,13 +77,6 @@
       <description></description>
       <pubDate>2013-07-05</pubDate>
       <guid>http://guweigang.com/blog/2009/12/06/another-chinese-province-select-linkage-jquery-plugin/</guid>
-    </item>
-    <item>
-      <title>CentOS网络设置</title>
-      <link>http://guweigang.com/blog/2009/12/05/centos-network-settings/</link>
-      <description></description>
-      <pubDate>2013-07-05</pubDate>
-      <guid>http://guweigang.com/blog/2009/12/05/centos-network-settings/</guid>
     </item>
   </channel>
 </rss>
