@@ -93,15 +93,12 @@ hr {
 hr:after {
     display: block;
     margin: 20px 0;
-    content: "-----------------------------------------";
+    content: "----------------------------------------------------------------";
     color: #ccc;
 }
 ul, ol {
     padding: 0;
     margin: 0 0 20px;
-}
-li ul {
-    margin-left: 20px;
 }
 code, pre {
     font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
@@ -118,7 +115,7 @@ pre {
     margin: 0 0 14px;
     padding: 15px;
     border-radius: 3px 3px 3px 3px;
-    font-size: 14px;
+    font-size: 18px;
     line-height: 28px;
     background-color: #f5f5f5;
     white-space: pre;
@@ -139,7 +136,6 @@ img {
     display: block;
     margin: 0;
     border-radius: 5px;
-    max-width: 640px;
 }
 a {
     font-weight: inherit;
@@ -175,7 +171,7 @@ table th.right, table td.right {
 /* body */
 .container {
     margin: 0 auto;
-    max-width: 80%;
+    max-width: 770px;
 }
 /* head */
 .masthead {
@@ -183,7 +179,7 @@ table th.right, table td.right {
 }
 .masthead:after {
     display: block;
-    content: '-----------------------------------------';
+    content: '----------------------------------------------------------------';
     margin: 10px 0;
     color: #ccc;
 }
@@ -232,25 +228,20 @@ table th.right, table td.right {
     background-color: #f9f9f9;
     width: 160px;
 }
-
-#table-of-contents {
-    margin-bottom: 50px;
+.masthead img.avatar {
+    position: absolute;
+    width: 200px;
+    top: 100px;
+    right: 29%;
+    background-color: #fff;
 }
-
-#text-table-of-contents {
-    background-color: #efefef;
-    padding-left: 24px;
-    width: 300px;
-    border: solid 1px #ccc;
-}
-
 /* post */
 .post {
     position: relative;
 }
 .post:after {
     display: block;
-    content: '-----------------------------------------';
+    content: "----------------------------------------------------------------";
     color: #ccc;
 }
 .post img {
@@ -293,7 +284,7 @@ table th.right, table td.right {
     content: "\2223 \00a0";
 }
 .post-meta:after {
-    content: '-----------------------------------------';
+    content: "----------------------------------------------------------------";
     display: block;
     margin-top: -1px;
     color: #ccc;
@@ -319,7 +310,7 @@ table th.right, table td.right {
     /* Increase body padding and font-sizes */
     body {
         padding: 30px;
-        font-size: 16px;
+        font-size: 18px;
         line-height: 1.75;
     }
     h1:before, h2:before, h3:before {
