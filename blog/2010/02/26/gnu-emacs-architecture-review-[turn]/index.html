@@ -1,37 +1,35 @@
 <!DOCTYPE html>
 <html lang="en-us">
-  <head>
-    <title>GNU Emacs 体系架构评论【转】 - Gu Weigang</title>
-    <meta charset="utf-8" />
-    <meta name="author" content="Gu Weigang" />
-    <meta name="description" content="" />
-    <meta name="keywords" content="" />
-    <link rel="stylesheet" href="/media/css/main.css" type="text/css">
-    <link rel="stylesheet" href="/media/css/prettify.css" type="text/css">
-  </head>
-  <body class="container">
-    <div>
-      <header class="masthead">
-        <h1 class="masthead-title"><a href="/">Gu Weigang</a></h1>
-        <p>A Geek&#39;s Blog</p>
-        <ul>
-          <li><a href="/blog/">Blog</a></li>
-          <li><a href="/tags/">Tags</a></li>
-          <li><a href="/about/">About</a></li>
-          <li><a href="https://github.com/guweigang">GitHub</a></li>
-          <li><a href="/rss.xml">RSS</a></li>
-        </ul>
-        <form method="get" id="searchform" action="http://www.google.com/search">
-          <input type="text" class="field" name="q" id="s" placeholder="Search">
-          <input type="hidden" name="q" value="site:guweigang.com">
-        </form>
-      </header>
-    </div>
+<head>
+  <title>GNU Emacs 体系架构评论【转】 - Gu Weigang</title>
+  <meta charset="utf-8" />
+  <meta name="author" content="Gu Weigang" />
+  <meta name="description" content="" />
+  <meta name="keywords" content="" />
 
-<div>
-<div class="post">
-<h1>GNU Emacs 体系架构评论【转】</h1>
-<p>
+  <link rel="alternate" title="RSS Feed" href="/rss.xml" type="application/rss+xml">
+
+  <link rel="stylesheet" href="/media/css/main.css" type="text/css">
+  <link rel="stylesheet" href="/media/css/prettify.css" type="text/css">
+</head>
+
+  <body class="container">
+<header id="header">
+  <h1 class="title"><a href="/">Gu Weigang</a></h1>
+  <ul>
+    <li><a href="/blog/">Blog</a></li>
+    <li><a href="/tags/">Tags</a></li>
+    <li><a href="/about/">About</a></li>
+  </ul>
+  <form method="get" id="search" action="https://duckduckgo.com">
+    <input type="text" class="field" name="q" id="s" placeholder="Search">
+    <input type="hidden" name="q" value="site:guweigang.com">
+  </form>
+</header>
+
+<section id="content" role="main">
+  <h1>GNU Emacs 体系架构评论【转】</h1>
+  <p>
 GNU Emacs 是自由软件协会的旗舰产品，也是自由软件之父 Richard Stallman博士的得意之作。自十几年前问世以来，其基本体系架构一直保持稳定，人们在这个基础架构之上不断添砖加瓦，逐渐将 GNU Emacs 构建成一个壮观的软件系统。用户越来越多，功能越来越强，又没有专有软件开发所特有的集中的管理，GNUEmacs的基本体系却能长期保持稳定不变，这在信奉“唯一不变的就是变化本身”的十倍速时代，几乎可以说是一个传奇。究竟GNU Emacs是依靠什么秘方常盛不衰？恐怕只有对自由软件及GNU Emacs 有深入了解的人才能为我们揭开。 为此我采访了洪峰先生。
 </p>
 
@@ -279,56 +277,14 @@ Scheme是一个非常适合编写网络程序的语言。例如，你可以使�
 洪：看来你也是专有软件的受害者啊。Word 制作出来的PDF 很邋遢，就好像FrontPage 制作出来的HTML 页面一样。有机会希望你能加入CTUG(Chinese TexUser Group)。 CTUG 现在已经全面推广ConTeXt，这是目前最出色的扩展，而且对中文的支持一流，远远好于LaTeX。ConTeXt可以直接采用pdftex 来输出PDF 文件，而越南人搞的pdftex 的确很优秀。
 </p>
 
-</div>
-</div>
-    <div>
-      <div class="post-meta">
-        <span title="post date" class="post-info">2010-02-26</span>
-        <span title="last modification date" class="post-info">2013-07-04</span>
-        <span title="tags" class="post-info">N/A</span>
-        <span title="author" class="post-info">Gu Weigang</span>
-      </div>
-      <section>
-        <h1>Comments</h1>
-        <div id="disqus_thread"></div>
-        <script type="text/javascript">
-          //var disqus_developer = 1;
-          var disqus_identifier = "/blog/2010/02/26/gnu-emacs-architecture-review-[turn]/";
-          var disqus_url = "http://guweigang.com/blog/2010/02/26/gnu-emacs-architecture-review-[turn]/";
-          var disqus_shortname = 'guweigang';
-          /* * * DON'T EDIT BELOW THIS LINE * * */
-          (function() {
-          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-          dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
-          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-          })();
-        </script>
-        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
-      </section>
-      <script src="http://code.jquery.com/jquery-latest.min.js"></script>
-      <script src="https://google-code-prettify.googlecode.com/svn/loader/prettify.js"></script>
-      <script src="/media/js/main.js"></script>
-      <script type="text/javascript">
-        var _gaq = _gaq || [];
-        _gaq.push(['_setAccount', 'UA-51493169-1']);
-        _gaq.push(['_trackPageview']);
-        (function() {
-        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-        })();
-      </script>
-      <div class="footer">
-        <p>Generated by <a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.x (<a href="http://orgmode.org">Org mode</a> 8.x)</p>
-        <p>
-          Copyright &copy; 2012 - <span id="footerYear"></span> <a href="mailto:guweigang &lt;at&gt; outlook &lt;dot&gt; com">Gu Weigang</a>
-          &nbsp;&nbsp;-&nbsp;&nbsp;
-          Powered by <a href="https://github.com/kelvinh/org-page" target="_blank">org-page</a>
-          <script type="text/javascript">document.getElementById("footerYear").innerHTML = (new Date()).getFullYear();</script>
-        </p>
-      </div>
-    </div>
+</section>
+
+
+
+<footer id="footer">
+    Send comments, critique and suggestions to <a href="mailto:guweigang &lt;at&gt; outlook &lt;dot&gt; com">Gu Weigang</a>.
+    Powered by <a href="https://github.com/kelvinh/org-page">org-page</a>
+</footer>
 
   </body>
 </html>

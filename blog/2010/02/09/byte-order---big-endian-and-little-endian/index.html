@@ -1,37 +1,35 @@
 <!DOCTYPE html>
 <html lang="en-us">
-  <head>
-    <title>[非原创]字节顺序:大端字节(big-endian)和小端字节(little-endian) - Gu Weigang</title>
-    <meta charset="utf-8" />
-    <meta name="author" content="Gu Weigang" />
-    <meta name="description" content="" />
-    <meta name="keywords" content="" />
-    <link rel="stylesheet" href="/media/css/main.css" type="text/css">
-    <link rel="stylesheet" href="/media/css/prettify.css" type="text/css">
-  </head>
-  <body class="container">
-    <div>
-      <header class="masthead">
-        <h1 class="masthead-title"><a href="/">Gu Weigang</a></h1>
-        <p>A Geek&#39;s Blog</p>
-        <ul>
-          <li><a href="/blog/">Blog</a></li>
-          <li><a href="/tags/">Tags</a></li>
-          <li><a href="/about/">About</a></li>
-          <li><a href="https://github.com/guweigang">GitHub</a></li>
-          <li><a href="/rss.xml">RSS</a></li>
-        </ul>
-        <form method="get" id="searchform" action="http://www.google.com/search">
-          <input type="text" class="field" name="q" id="s" placeholder="Search">
-          <input type="hidden" name="q" value="site:guweigang.com">
-        </form>
-      </header>
-    </div>
+<head>
+  <title>[非原创]字节顺序:大端字节(big-endian)和小端字节(little-endian) - Gu Weigang</title>
+  <meta charset="utf-8" />
+  <meta name="author" content="Gu Weigang" />
+  <meta name="description" content="" />
+  <meta name="keywords" content="" />
 
-<div>
-<div class="post">
-<h1>[非原创]字节顺序:大端字节(big-endian)和小端字节(little-endian)</h1>
-<p>
+  <link rel="alternate" title="RSS Feed" href="/rss.xml" type="application/rss+xml">
+
+  <link rel="stylesheet" href="/media/css/main.css" type="text/css">
+  <link rel="stylesheet" href="/media/css/prettify.css" type="text/css">
+</head>
+
+  <body class="container">
+<header id="header">
+  <h1 class="title"><a href="/">Gu Weigang</a></h1>
+  <ul>
+    <li><a href="/blog/">Blog</a></li>
+    <li><a href="/tags/">Tags</a></li>
+    <li><a href="/about/">About</a></li>
+  </ul>
+  <form method="get" id="search" action="https://duckduckgo.com">
+    <input type="text" class="field" name="q" id="s" placeholder="Search">
+    <input type="hidden" name="q" value="site:guweigang.com">
+  </form>
+</header>
+
+<section id="content" role="main">
+  <h1>[非原创]字节顺序:大端字节(big-endian)和小端字节(little-endian)</h1>
+  <p>
 原文链接: <a href="http://blog.csdn.net/suyouxin/archive/2006/06/01/767857.aspx"><a href="http://blog.csdn.net/suyouxin/archive/2006/06/01/767857.aspx">http://blog.csdn.net/suyouxin/archive/2006/06/01/767857.aspx</a></a>
 今天碰一个关于字节顺序的问题,虽然看起来很简单,但一直都没怎么完全明白这个东西,索性就找了下资料,把它弄清楚.
 因为现行的计算机都是以八位一个字节为存储单位,那么一个16位的整数,也就是C语言中的short,在内存中可能有两种存储顺序big-endian和 litte-endian.考虑一个short整数0x3132(0x32是低位,0x31是高位),把它赋值给一个short变量,那么它在内存中的存储可能有如下两种情况:
@@ -196,56 +194,14 @@ void main( void )
 一开始我在理解这个问题时,总在想为什么其他数据不用交换字节顺序?比如说我们write一块buffer到文件,最后终于想明白了,因为都是以 unsigned char类型一个字节一个字节的写进去,这个顺序是固定的,不存在字节顺序的问题,只有对short或者int赋值时存在这个问题,t够笨啊..
 </p>
 
-</div>
-</div>
-    <div>
-      <div class="post-meta">
-        <span title="post date" class="post-info">2010-02-09</span>
-        <span title="last modification date" class="post-info">2013-07-04</span>
-        <span title="tags" class="post-info"><a href="/tags/big-endian/">big-endian</a> <a href="/tags/little-endian/">little-endian</a> <a href="/tags/大端字节/">大端字节</a> <a href="/tags/小端字节/">小端字节</a></span>
-        <span title="author" class="post-info">Gu Weigang</span>
-      </div>
-      <section>
-        <h1>Comments</h1>
-        <div id="disqus_thread"></div>
-        <script type="text/javascript">
-          //var disqus_developer = 1;
-          var disqus_identifier = "/blog/2010/02/09/byte-order---big-endian-and-little-endian/";
-          var disqus_url = "http://guweigang.com/blog/2010/02/09/byte-order---big-endian-and-little-endian/";
-          var disqus_shortname = 'guweigang';
-          /* * * DON'T EDIT BELOW THIS LINE * * */
-          (function() {
-          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-          dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
-          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-          })();
-        </script>
-        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
-      </section>
-      <script src="http://code.jquery.com/jquery-latest.min.js"></script>
-      <script src="https://google-code-prettify.googlecode.com/svn/loader/prettify.js"></script>
-      <script src="/media/js/main.js"></script>
-      <script type="text/javascript">
-        var _gaq = _gaq || [];
-        _gaq.push(['_setAccount', 'UA-51493169-1']);
-        _gaq.push(['_trackPageview']);
-        (function() {
-        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-        })();
-      </script>
-      <div class="footer">
-        <p>Generated by <a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.x (<a href="http://orgmode.org">Org mode</a> 8.x)</p>
-        <p>
-          Copyright &copy; 2012 - <span id="footerYear"></span> <a href="mailto:guweigang &lt;at&gt; outlook &lt;dot&gt; com">Gu Weigang</a>
-          &nbsp;&nbsp;-&nbsp;&nbsp;
-          Powered by <a href="https://github.com/kelvinh/org-page" target="_blank">org-page</a>
-          <script type="text/javascript">document.getElementById("footerYear").innerHTML = (new Date()).getFullYear();</script>
-        </p>
-      </div>
-    </div>
+</section>
+
+
+
+<footer id="footer">
+    Send comments, critique and suggestions to <a href="mailto:guweigang &lt;at&gt; outlook &lt;dot&gt; com">Gu Weigang</a>.
+    Powered by <a href="https://github.com/kelvinh/org-page">org-page</a>
+</footer>
 
   </body>
 </html>

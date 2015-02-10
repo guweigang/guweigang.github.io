@@ -1,37 +1,35 @@
 <!DOCTYPE html>
 <html lang="en-us">
-  <head>
-    <title>转：VC9,VC6,Thread Safe,Non Thread Safe的意思? - Gu Weigang</title>
-    <meta charset="utf-8" />
-    <meta name="author" content="Gu Weigang" />
-    <meta name="description" content="" />
-    <meta name="keywords" content="" />
-    <link rel="stylesheet" href="/media/css/main.css" type="text/css">
-    <link rel="stylesheet" href="/media/css/prettify.css" type="text/css">
-  </head>
-  <body class="container">
-    <div>
-      <header class="masthead">
-        <h1 class="masthead-title"><a href="/">Gu Weigang</a></h1>
-        <p>A Geek&#39;s Blog</p>
-        <ul>
-          <li><a href="/blog/">Blog</a></li>
-          <li><a href="/tags/">Tags</a></li>
-          <li><a href="/about/">About</a></li>
-          <li><a href="https://github.com/guweigang">GitHub</a></li>
-          <li><a href="/rss.xml">RSS</a></li>
-        </ul>
-        <form method="get" id="searchform" action="http://www.google.com/search">
-          <input type="text" class="field" name="q" id="s" placeholder="Search">
-          <input type="hidden" name="q" value="site:guweigang.com">
-        </form>
-      </header>
-    </div>
+<head>
+  <title>转：VC9,VC6,Thread Safe,Non Thread Safe的意思? - Gu Weigang</title>
+  <meta charset="utf-8" />
+  <meta name="author" content="Gu Weigang" />
+  <meta name="description" content="" />
+  <meta name="keywords" content="" />
 
-<div>
-<div class="post">
-<h1>转：VC9,VC6,Thread Safe,Non Thread Safe的意思?</h1>
-<p>
+  <link rel="alternate" title="RSS Feed" href="/rss.xml" type="application/rss+xml">
+
+  <link rel="stylesheet" href="/media/css/main.css" type="text/css">
+  <link rel="stylesheet" href="/media/css/prettify.css" type="text/css">
+</head>
+
+  <body class="container">
+<header id="header">
+  <h1 class="title"><a href="/">Gu Weigang</a></h1>
+  <ul>
+    <li><a href="/blog/">Blog</a></li>
+    <li><a href="/tags/">Tags</a></li>
+    <li><a href="/about/">About</a></li>
+  </ul>
+  <form method="get" id="search" action="https://duckduckgo.com">
+    <input type="text" class="field" name="q" id="s" placeholder="Search">
+    <input type="hidden" name="q" value="site:guweigang.com">
+  </form>
+</header>
+
+<section id="content" role="main">
+  <h1>转：VC9,VC6,Thread Safe,Non Thread Safe的意思?</h1>
+  <p>
 最近在PHP官网上看到又有新版的PHP下载了，于是上去找找For Windows的版本，可是一看确傻眼了，一共给了四个版本，VC9 x86 Non Thread Safe、VC9 x86 Thread Safe、VC6 x86 Non Thread Safe、VC6 x86 Thread Safe，这让我这个菜鸟头疼啊，还好 PHP 官网提供下载的地方左边有个英文 choose 我看懂了，我估摸着就是如何来选择版本的意思吧，于是开始查字典及上网查找，终于看明白了具体意思，拿来做个备忘先。
 </p>
 
@@ -71,56 +69,14 @@ ISAPI 执行方式是以 DLL 动态库的形式使用，可以在被用户请求
 官方并不建议你将Non Thread Safe 应用于生产环境，所以我们选择Thread Safe 版本的PHP来使用。
 </p>
 
-</div>
-</div>
-    <div>
-      <div class="post-meta">
-        <span title="post date" class="post-info">2011-03-18</span>
-        <span title="last modification date" class="post-info">2013-07-05</span>
-        <span title="tags" class="post-info"><a href="/tags/no-thread-safe/">no thread safe</a> <a href="/tags/php/">php</a> <a href="/tags/thread-safe/">thread safe</a> <a href="/tags/vc6/">vc6</a> <a href="/tags/vc9/">vc9</a></span>
-        <span title="author" class="post-info">Gu Weigang</span>
-      </div>
-      <section>
-        <h1>Comments</h1>
-        <div id="disqus_thread"></div>
-        <script type="text/javascript">
-          //var disqus_developer = 1;
-          var disqus_identifier = "/blog/2011/03/18/turn---vc9-vc6-thread-safe-non-thread-safe-mean/";
-          var disqus_url = "http://guweigang.com/blog/2011/03/18/turn---vc9-vc6-thread-safe-non-thread-safe-mean/";
-          var disqus_shortname = 'guweigang';
-          /* * * DON'T EDIT BELOW THIS LINE * * */
-          (function() {
-          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-          dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
-          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-          })();
-        </script>
-        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
-      </section>
-      <script src="http://code.jquery.com/jquery-latest.min.js"></script>
-      <script src="https://google-code-prettify.googlecode.com/svn/loader/prettify.js"></script>
-      <script src="/media/js/main.js"></script>
-      <script type="text/javascript">
-        var _gaq = _gaq || [];
-        _gaq.push(['_setAccount', 'UA-51493169-1']);
-        _gaq.push(['_trackPageview']);
-        (function() {
-        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-        })();
-      </script>
-      <div class="footer">
-        <p>Generated by <a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.x (<a href="http://orgmode.org">Org mode</a> 8.x)</p>
-        <p>
-          Copyright &copy; 2012 - <span id="footerYear"></span> <a href="mailto:guweigang &lt;at&gt; outlook &lt;dot&gt; com">Gu Weigang</a>
-          &nbsp;&nbsp;-&nbsp;&nbsp;
-          Powered by <a href="https://github.com/kelvinh/org-page" target="_blank">org-page</a>
-          <script type="text/javascript">document.getElementById("footerYear").innerHTML = (new Date()).getFullYear();</script>
-        </p>
-      </div>
-    </div>
+</section>
+
+
+
+<footer id="footer">
+    Send comments, critique and suggestions to <a href="mailto:guweigang &lt;at&gt; outlook &lt;dot&gt; com">Gu Weigang</a>.
+    Powered by <a href="https://github.com/kelvinh/org-page">org-page</a>
+</footer>
 
   </body>
 </html>
