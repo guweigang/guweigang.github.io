@@ -23,7 +23,7 @@
   </ul>
   <form method="get" id="search" action="https://duckduckgo.com">
     <input type="text" class="field" name="q" id="s" placeholder="Search">
-    <input type="hidden" name="q" value="site:guweigang.com">
+    <input type="hidden" name="as_sitesearch" value="guweigang.com">
   </form>
 </header>
 
@@ -51,28 +51,28 @@ libCello 是一个能让你用高级语法糖来写C的类库。
 
 <div class="org-src-container">
 
-<pre class="src src-c">/* Example libCello Program */
+<pre class="src src-c"><span style="color: #b22222;">/* </span><span style="color: #b22222;">Example libCello Program </span><span style="color: #b22222;">*/</span>
 
-#include "Cello.h"
+<span style="color: #483d8b;">#include</span> <span style="color: #8b2252;">"Cello.h"</span>
 
-int main(int argc, char** argv) {
+<span style="color: #228b22;">int</span> <span style="color: #0000ff;">main</span>(<span style="color: #228b22;">int</span> <span style="color: #a0522d;">argc</span>, <span style="color: #228b22;">char</span>** <span style="color: #a0522d;">argv</span>) {
 
-  /* Stack objects are created using "$" */
-  var int_item = $(Int, 5);
-  var float_item = $(Real, 2.4);
-  var string_item = $(String, "Hello");
+  <span style="color: #b22222;">/* </span><span style="color: #b22222;">Stack objects are created using "$" </span><span style="color: #b22222;">*/</span>
+  <span style="color: #228b22;">var</span> <span style="color: #a0522d;">int_item</span> = $(Int, 5);
+  <span style="color: #228b22;">var</span> <span style="color: #a0522d;">float_item</span> = $(Real, 2.4);
+  <span style="color: #228b22;">var</span> <span style="color: #a0522d;">string_item</span> = $(String, <span style="color: #8b2252;">"Hello"</span>);
 
-  /* Heap objects are created using "new" */
-  var items = new(List, int_item, float_item, string_item);
+  <span style="color: #b22222;">/* </span><span style="color: #b22222;">Heap objects are created using "new" </span><span style="color: #b22222;">*/</span>
+  <span style="color: #228b22;">var</span> <span style="color: #a0522d;">items</span> = new(List, int_item, float_item, string_item);
 
-  /* Collections can be looped over */
-  foreach (item in items) {
-    /* Types are also objects */
-    var type = type_of(item);
-    print("Object %$ has type %$\n", item, type);
+  <span style="color: #b22222;">/* </span><span style="color: #b22222;">Collections can be looped over </span><span style="color: #b22222;">*/</span>
+  <span style="color: #a0522d;">foreach</span> (item <span style="color: #228b22;">in</span> <span style="color: #a0522d;">items</span>) {
+    <span style="color: #b22222;">/* </span><span style="color: #b22222;">Types are also objects </span><span style="color: #b22222;">*/</span>
+    <span style="color: #228b22;">var</span> <span style="color: #a0522d;">type</span> = type_of(item);
+    print(<span style="color: #8b2252;">"Object %$ has type %$\n"</span>, item, type);
   }
 
-  /* Heap objects destroyed with "delete" */
+  <span style="color: #b22222;">/* </span><span style="color: #b22222;">Heap objects destroyed with "delete" </span><span style="color: #b22222;">*/</span>
   delete(items); 
 }
 </pre>
@@ -115,44 +115,44 @@ int main(int argc, char** argv) {
 
 <div class="org-src-container">
 
-<pre class="src src-C">/* Another Example Cello Program */
+<pre class="src src-C"><span style="color: #b22222;">/* </span><span style="color: #b22222;">Another Example Cello Program </span><span style="color: #b22222;">*/</span>
 
-#include "Cello.h"
+<span style="color: #483d8b;">#include</span> <span style="color: #8b2252;">"Cello.h"</span>
 
-int main(int argc, char** argv) {
+<span style="color: #228b22;">int</span> <span style="color: #0000ff;">main</span>(<span style="color: #228b22;">int</span> <span style="color: #a0522d;">argc</span>, <span style="color: #228b22;">char</span>** <span style="color: #a0522d;">argv</span>) {
 
-  /* Tables require "Eq" and "Hash" on key type */
-  var prices = new(Table, String, Int);
-  put(prices, $(String, "Apple"),  $(Int, 12)); 
-  put(prices, $(String, "Banana"), $(Int,  6)); 
-  put(prices, $(String, "Pear"),   $(Int, 55));
+  <span style="color: #b22222;">/* </span><span style="color: #b22222;">Tables require "Eq" and "Hash" on key type </span><span style="color: #b22222;">*/</span>
+  <span style="color: #228b22;">var</span> <span style="color: #a0522d;">prices</span> = new(Table, String, Int);
+  put(prices, $(String, <span style="color: #8b2252;">"Apple"</span>),  $(Int, 12)); 
+  put(prices, $(String, <span style="color: #8b2252;">"Banana"</span>), $(Int,  6)); 
+  put(prices, $(String, <span style="color: #8b2252;">"Pear"</span>),   $(Int, 55));
 
-  /* Tables also supports iteration */
-  foreach (key in prices) {
-    var price = get(prices, key);
-    print("Price of %$ is %$\n", key, price);
+  <span style="color: #b22222;">/* </span><span style="color: #b22222;">Tables also supports iteration </span><span style="color: #b22222;">*/</span>
+  <span style="color: #a0522d;">foreach</span> (key <span style="color: #228b22;">in</span> <span style="color: #a0522d;">prices</span>) {
+    <span style="color: #228b22;">var</span> <span style="color: #a0522d;">price</span> = get(prices, key);
+    print(<span style="color: #8b2252;">"Price of %$ is %$\n"</span>, key, price);
   }
 
-  /* "with" automatically closes file at end of scope. */
-  with (file in open($(File, NULL), "prices.bin", "wb")) {
+  <span style="color: #b22222;">/* </span><span style="color: #b22222;">"with" automatically closes file at end of scope. </span><span style="color: #b22222;">*/</span>
+  <span style="color: #a0522d;">with</span> (file <span style="color: #228b22;">in</span> <span style="color: #a0522d;">open</span>($(File, <span style="color: #008b8b;">NULL</span>), <span style="color: #8b2252;">"prices.bin"</span>, <span style="color: #8b2252;">"wb"</span>)) {
 
-    /* First class function object */
-    lambda(write_pair, args) {
+    <span style="color: #b22222;">/* </span><span style="color: #b22222;">First class function object </span><span style="color: #b22222;">*/</span>
+    <span style="color: #a0522d;">lambda</span>(write_pair, args) {
 
-      /* Run time type-checking with "cast" */
-      var key = cast(at(args, 0), String);
-      var value = cast(get(prices, key), Int);
+      <span style="color: #b22222;">/* </span><span style="color: #b22222;">Run time type-checking with "cast" </span><span style="color: #b22222;">*/</span>
+      <span style="color: #228b22;">var</span> <span style="color: #a0522d;">key</span> = cast(at(args, 0), String);
+      <span style="color: #228b22;">var</span> <span style="color: #a0522d;">value</span> = cast(get(prices, key), Int);
 
       try {
-        print_to(file, 0, "%$ :: %$\n", key, value);
-      } catch (e in IOError) {
-        println("Could not write to file - got %$", e);
+        print_to(file, 0, <span style="color: #8b2252;">"%$ :: %$\n"</span>, key, value);
+      } <span style="color: #a0522d;">catch</span> (e <span style="color: #228b22;">in</span> <span style="color: #a0522d;">IOError</span>) {
+        println(<span style="color: #8b2252;">"Could not write to file - got %$"</span>, e);
       }
 
-      return None;
+      <span style="color: #a020f0;">return</span> None;
     };
 
-    /* Higher order functions */
+    <span style="color: #b22222;">/* </span><span style="color: #b22222;">Higher order functions </span><span style="color: #b22222;">*/</span>
     map(prices, write_pair);
   }
 

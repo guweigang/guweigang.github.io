@@ -23,7 +23,7 @@
   </ul>
   <form method="get" id="search" action="https://duckduckgo.com">
     <input type="text" class="field" name="q" id="s" placeholder="Search">
-    <input type="hidden" name="q" value="site:guweigang.com">
+    <input type="hidden" name="as_sitesearch" value="guweigang.com">
   </form>
 </header>
 
@@ -106,7 +106,7 @@ i:before, i:after, em:before, em:after {
 
 <div class="org-src-container">
 
-<pre class="src src-C">caddr_t sbrk(int incr);
+<pre class="src src-C"><span style="color: #228b22;">caddr_t</span> <span style="color: #0000ff;">sbrk</span>(<span style="color: #228b22;">int</span> <span style="color: #a0522d;">incr</span>);
 </pre>
 </div>
 
@@ -140,20 +140,20 @@ i:before, i:after, em:before, em:after {
 
 <div class="org-src-container">
 
-<pre class="src src-C">#include &lt;stdio.h&gt;
-#include &lt;stdlib.h&gt;
-#include &lt;sys/types.h&gt;
+<pre class="src src-C"><span style="color: #483d8b;">#include</span> <span style="color: #8b2252;">&lt;stdio.h&gt;</span>
+<span style="color: #483d8b;">#include</span> <span style="color: #8b2252;">&lt;stdlib.h&gt;</span>
+<span style="color: #483d8b;">#include</span> <span style="color: #8b2252;">&lt;sys/types.h&gt;</span>
 
-main()
+<span style="color: #0000ff;">main</span>()
 {
-  int *i1, *i2;
+  <span style="color: #228b22;">int</span> *<span style="color: #a0522d;">i1</span>, *<span style="color: #a0522d;">i2</span>;
 
-  printf("sbrk(0) before malloc(4): 0x%x\n", sbrk(0));
-  i1 = (int *) malloc(4);
-  printf("sbrk(0) after 'i1 = (int *) malloc(4)': 0x%x\n", sbrk(0));
-  i2 = (int *) malloc(4);
-  printf("sbrk(0) after 'i2 = (int *) malloc(4)': 0x%x\n", sbrk(0));
-  printf("i1 = 0x%x, i2 = 0x%x\n", i1, i2);
+  printf(<span style="color: #8b2252;">"sbrk(0) before malloc(4): 0x%x\n"</span>, sbrk(0));
+  i1 = (<span style="color: #228b22;">int</span> *) malloc(4);
+  printf(<span style="color: #8b2252;">"sbrk(0) after 'i1 = (int *) malloc(4)': 0x%x\n"</span>, sbrk(0));
+  i2 = (<span style="color: #228b22;">int</span> *) malloc(4);
+  printf(<span style="color: #8b2252;">"sbrk(0) after 'i2 = (int *) malloc(4)': 0x%x\n"</span>, sbrk(0));
+  printf(<span style="color: #8b2252;">"i1 = 0x%x, i2 = 0x%x\n"</span>, i1, i2);
 }
 </pre>
 </div>
@@ -192,16 +192,16 @@ UNIX&gt;
 
 <div class="org-src-container">
 
-<pre class="src src-C">#include &lt;stdio.h&gt;
-#include &lt;stdlib.h&gt;
+<pre class="src src-C"><span style="color: #483d8b;">#include</span> <span style="color: #8b2252;">&lt;stdio.h&gt;</span>
+<span style="color: #483d8b;">#include</span> <span style="color: #8b2252;">&lt;stdlib.h&gt;</span>
 
-main()
+<span style="color: #0000ff;">main</span>()
 {
-  int j, *buf;
+  <span style="color: #228b22;">int</span> <span style="color: #a0522d;">j</span>, *<span style="color: #a0522d;">buf</span>;
 
-  for (j = 0; j &lt; 10; j++) {
-    buf = (int *) malloc(4);
-    printf("malloc(4) returned 0x%x\n", buf);
+  <span style="color: #a020f0;">for</span> (j = 0; j &lt; 10; j++) {
+    buf = (<span style="color: #228b22;">int</span> *) malloc(4);
+    printf(<span style="color: #8b2252;">"malloc(4) returned 0x%x\n"</span>, buf);
   }
 }
 </pre>
@@ -236,32 +236,32 @@ UNIX&gt;
 
 <div class="org-src-container">
 
-<pre class="src src-C">#include &lt;stdio.h&gt;
-#include &lt;sys/types.h&gt;
-#include &lt;stdlib.h&gt;
+<pre class="src src-C"><span style="color: #483d8b;">#include</span> <span style="color: #8b2252;">&lt;stdio.h&gt;</span>
+<span style="color: #483d8b;">#include</span> <span style="color: #8b2252;">&lt;sys/types.h&gt;</span>
+<span style="color: #483d8b;">#include</span> <span style="color: #8b2252;">&lt;stdlib.h&gt;</span>
 
-main()
+<span style="color: #0000ff;">main</span>()
 {
-  int *buf;
-  int i, sz;
+  <span style="color: #228b22;">int</span> *<span style="color: #a0522d;">buf</span>;
+  <span style="color: #228b22;">int</span> <span style="color: #a0522d;">i</span>, <span style="color: #a0522d;">sz</span>;
 
   i = 1000;
-  printf("sbrk(0) = 0x%x\n", sbrk(0));
-  for (sz = 4; sz &lt; 32; sz += 4) {
-    buf = (int *) malloc(sz);
+  printf(<span style="color: #8b2252;">"sbrk(0) = 0x%x\n"</span>, sbrk(0));
+  <span style="color: #a020f0;">for</span> (sz = 4; sz &lt; 32; sz += 4) {
+    buf = (<span style="color: #228b22;">int</span> *) malloc(sz);
     buf[0] = i;
     i++;
-  printf("Allocated %d bytes.  buf = 0x%x, buf[-1] = %d, buf[-2] = %d, buf[0] = %d\n", 
-            sz, (unsigned int) buf, buf[-1], buf[-2], buf[0]);
+  printf(<span style="color: #8b2252;">"Allocated %d bytes.  buf = 0x%x, buf[-1] = %d, buf[-2] = %d, buf[0] = %d\n"</span>, 
+            sz, (<span style="color: #228b22;">unsigned</span> <span style="color: #228b22;">int</span>) buf, buf[-1], buf[-2], buf[0]);
   }
 
   sz = 100;
-  buf = (int *) malloc(sz);
+  buf = (<span style="color: #228b22;">int</span> *) malloc(sz);
   buf[0] = i;
   i++;
-  printf("Allocated %d bytes.  buf = 0x%x, buf[-1] = %d, buf[-2] = %d, buf[0] = %d\n", 
-            sz, (unsigned int) buf, buf[-1], buf[-2], buf[0]);
-  printf("sbrk(0) = 0x%x\n", sbrk(0));
+  printf(<span style="color: #8b2252;">"Allocated %d bytes.  buf = 0x%x, buf[-1] = %d, buf[-2] = %d, buf[0] = %d\n"</span>, 
+            sz, (<span style="color: #228b22;">unsigned</span> <span style="color: #228b22;">int</span>) buf, buf[-1], buf[-2], buf[0]);
+  printf(<span style="color: #8b2252;">"sbrk(0) = 0x%x\n"</span>, sbrk(0));
 }
 </pre>
 </div>
@@ -411,9 +411,9 @@ UNIX&gt;
 
 <div class="org-src-container">
 
-<pre class="src src-C">int *i;
+<pre class="src src-C"><span style="color: #228b22;">int</span> *<span style="color: #a0522d;">i</span>;
 
-i = (int *) malloc(4);
+i = (<span style="color: #228b22;">int</span> *) malloc(4);
 *i = 4;
 </pre>
 </div>
@@ -428,8 +428,8 @@ i = (int *) malloc(4);
 
 <div class="org-src-container">
 
-<pre class="src src-C">char *malloc_begin = NULL;
-char *malloc_end = NULL;
+<pre class="src src-C"><span style="color: #228b22;">char</span> *<span style="color: #a0522d;">malloc_begin</span> = <span style="color: #008b8b;">NULL</span>;
+<span style="color: #228b22;">char</span> *<span style="color: #a0522d;">malloc_end</span> = <span style="color: #008b8b;">NULL</span>;
 </pre>
 </div>
 
