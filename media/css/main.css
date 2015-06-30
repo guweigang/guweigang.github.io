@@ -83,7 +83,7 @@ a:hover { text-decoration: none; }
 
 .org-src-container {
     line-height: 1em;
-    border: 1px dashed rgb(216, 87, 16);
+    border: 1px dashed #999;
     font-size: 14px;
     padding: 0 0 0 10px;
 }
