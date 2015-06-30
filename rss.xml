@@ -4,10 +4,17 @@
     <title>Gu Weigang</title>
     <link>http://guweigang.com/</link>
     <description>A Geek&#39;s Blog</description>
-    <pubDate>Wed, 06 May 2015 21:53:18 CST</pubDate>
-    <lastBuildDate>Wed, 06 May 2015 21:53:18 CST</lastBuildDate>
+    <pubDate>Tue, 30 Jun 2015 12:12:54 CST</pubDate>
+    <lastBuildDate>Tue, 30 Jun 2015 12:12:54 CST</lastBuildDate>
     <docs>http://www.rssboard.org/rss-specification</docs>
     <generator>Org-page static site generator (https://github.com/kelvinh/org-page)</generator>
+    <item>
+      <title>PHP扩展语言: Zephir</title>
+      <link>http://guweigang.com/blog/2015/06/30/php-ext-lang-zephir</link>
+      <description>Zephir是PHP的扩展语言，由Phalcon框架团队开发完成。</description>
+      <pubDate>2015-06-30</pubDate>
+      <guid>http://guweigang.com/blog/2015/06/30/php-ext-lang-zephir</guid>
+    </item>
     <item>
       <title>A Hacker&#39;s Guide to Git</title>
       <link>http://guweigang.com/blog/2014/05/31/A-Hacker&#39;s-Guide-to-Git</link>
@@ -70,13 +77,6 @@
       <description>MySQL实时增量解析</description>
       <pubDate>2013-11-26</pubDate>
       <guid>http://guweigang.com/blog/2013/11/18/mysql-binlog-in-realtime/</guid>
-    </item>
-    <item>
-      <title>又一个中国省份select联动jquery插件</title>
-      <link>http://guweigang.com/blog/2009/12/06/another-chinese-province-select-linkage-jquery-plugin/</link>
-      <description></description>
-      <pubDate>2013-07-05</pubDate>
-      <guid>http://guweigang.com/blog/2009/12/06/another-chinese-province-select-linkage-jquery-plugin/</guid>
     </item>
   </channel>
 </rss>
