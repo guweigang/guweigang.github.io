@@ -1,0 +1,54 @@
+#+TITLE:       PHP扩展语言: Zephir
+#+AUTHOR:      Gu Weigang
+#+EMAIL:       guweigang@outlook.com
+#+DATE:        2015-06-30 Tue
+#+URI:         /blog/%y/%m/%d/php-ext-lang-zephir
+#+KEYWORDS:    php, zephir, php extension
+#+TAGS:        php
+#+LANGUAGE:    en
+#+OPTIONS:     H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: Zephir是PHP的扩展语言，由Phalcon框架团队开发完成。
+
+** 什么是Zephir
+
+[[http://zephir-lang.com/][Zephir]] 是由 [[http://phalconphp.com][Phalcon]] 团队打造的专门用于PHP扩展开发的领域特定语言。由于
+Phalcon是PHP扩展级框架，是完全使用C开发的，随着功能越来越多、代码越来
+越复杂，这给社区带来了巨大的维护代价，直接导致新功能、bug fix进展都很
+缓慢。在这样一个大背景下，Zephir出世了！
+
+** 语言特性
+
+类似于PHP、Hack语言，编写简单，去除了指针、内存泄露等的烦恼。一段简单的示例如下：
+
+#+BEGIN_SRC PHP
+namespace Test;
+
+/**
+ * MyTest (test/mytest.zep)
+ */
+class MyTest
+{
+    public function someMethod()
+    {
+        /* Variables must be declared */
+        var myArray;
+        int i = 0, length;
+
+        /* Create an array */
+        let myArray = ["hello", 0, 100.25, false, null];
+
+        /* Count the array into a 'int' variable */
+        let length = count(myArray);
+
+        /* Print value types */
+        while i < length {
+            echo typeof myArray[i], "\n";
+            let i++;
+        }
+
+        return myArray;
+    }
+}
+#+END_SRC
+
+实际上，zephir把上面那段代码翻译成C代码后再编译。
