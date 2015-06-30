@@ -80,3 +80,10 @@ a:hover { text-decoration: none; }
     font-size: 75%;
     color: #555;
 }
+
+.org-src-container {
+    line-height: 1em;
+    border: 1px dashed rgb(216, 87, 16);
+    font-size: 14px;
+    padding: 0 0 0 10px;
+}
