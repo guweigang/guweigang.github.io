@@ -1,0 +1,17 @@
+#+TITLE:       PHP扩展语言: Zephir
+#+AUTHOR:      Gu Weigang
+#+EMAIL:       guweigang@outlook.com
+#+DATE:        2015-06-30 Tue
+#+URI:         /blog/%y/%m/%d/php-ext-lang-zephir
+#+KEYWORDS:    php, zephir, php extension
+#+TAGS:        php
+#+LANGUAGE:    en
+#+OPTIONS:     H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: Zephir是PHP的扩展语言，由Phalcon框架团队开发完成。
+
+** 什么是Zephir
+
+[[http://zephir-lang.com/][Zephir]] 是由 [[http://phalconphp.com][Phalcon]] 团队打造的专门用于PHP扩展开发的领域特定语言。由于
+Phalcon是PHP扩展级框架，是完全使用C开发的，随着功能越来越多、代码越来
+越复杂，这给社区带来了巨大的维护代价，直接导致新功能、bug fix进展都很
+缓慢。在这样一个大背景下，Zephir出世了！
