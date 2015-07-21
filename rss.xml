@@ -4,10 +4,24 @@
     <title>Gu Weigang</title>
     <link>http://guweigang.com/</link>
     <description>A Geek&#39;s Blog</description>
-    <pubDate>Tue, 30 Jun 2015 18:02:58 CST</pubDate>
-    <lastBuildDate>Tue, 30 Jun 2015 18:02:58 CST</lastBuildDate>
+    <pubDate>Tue, 21 Jul 2015 17:15:07 CST</pubDate>
+    <lastBuildDate>Tue, 21 Jul 2015 17:15:07 CST</lastBuildDate>
     <docs>http://www.rssboard.org/rss-specification</docs>
     <generator>Org-page static site generator (https://github.com/kelvinh/org-page)</generator>
+    <item>
+      <title>一个C/CPP垃圾回收器</title>
+      <link>http://guweigang.com/blog/2015/07/10/a-garbage-collector-for-c-and-cpp</link>
+      <description>C/CPP自动垃圾回收器</description>
+      <pubDate>2015-07-21</pubDate>
+      <guid>http://guweigang.com/blog/2015/07/10/a-garbage-collector-for-c-and-cpp</guid>
+    </item>
+    <item>
+      <title>Designing a Programming Language: I</title>
+      <link>http://guweigang.com/blog/2015/07/17/designing-a-programming-language-i</link>
+      <description>设计一门语言，深入浅出构建解释器。</description>
+      <pubDate>2015-07-21</pubDate>
+      <guid>http://guweigang.com/blog/2015/07/17/designing-a-programming-language-i</guid>
+    </item>
     <item>
       <title>PHP扩展语言: Zephir</title>
       <link>http://guweigang.com/blog/2015/06/30/php-ext-lang-zephir</link>
@@ -63,20 +77,6 @@
       <description>使用XMLPIPE2方式创建sphinx索引</description>
       <pubDate>2013-12-02</pubDate>
       <guid>http://guweigang.com/blog/2013/12/02/php-xmlpipe2-for-sphinx/</guid>
-    </item>
-    <item>
-      <title>sphinx search introduction</title>
-      <link>http://guweigang.com/blog/2013/12/02/sphinx-search-introduction/</link>
-      <description>&lt;TODO: insert your description here&gt;</description>
-      <pubDate>2013-12-02</pubDate>
-      <guid>http://guweigang.com/blog/2013/12/02/sphinx-search-introduction/</guid>
-    </item>
-    <item>
-      <title>mysql binlog in realtime</title>
-      <link>http://guweigang.com/blog/2013/11/18/mysql-binlog-in-realtime/</link>
-      <description>MySQL实时增量解析</description>
-      <pubDate>2013-11-26</pubDate>
-      <guid>http://guweigang.com/blog/2013/11/18/mysql-binlog-in-realtime/</guid>
     </item>
   </channel>
 </rss>

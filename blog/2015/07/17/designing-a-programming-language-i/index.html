@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+  <title>Designing a Programming Language: I - Gu Weigang</title>
+  <meta charset="utf-8" />
+  <meta name="author" content="Gu Weigang" />
+  <meta name="description" content="设计一门语言，深入浅出构建解释器。" />
+  <meta name="keywords" content="programming-language" />
+
+  <link rel="alternate" title="RSS Feed" href="/rss.xml" type="application/rss+xml">
+
+  <link rel="stylesheet" href="/media/css/main.css" type="text/css">
+  <link rel="stylesheet" href="/media/css/prettify.css" type="text/css">
+</head>
+
+  <body class="container">
+<header id="header">
+  <h1 class="title"><a href="/">Gu Weigang</a></h1>
+  <ul>
+    <li><a href="/blog/">Blog</a></li>
+    <li><a href="/tags/">Tags</a></li>
+    <li><a href="/about/">About</a></li>
+  </ul>
+  <form method="get" id="search" action="https://duckduckgo.com">
+    <input type="text" class="field" name="q" id="s" placeholder="Search">
+    <input type="hidden" name="as_sitesearch" value="guweigang.com">
+  </form>
+</header>
+
+<section id="content" role="main">
+  <h1>Designing a Programming Language: I</h1>
+  
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1">第一回：假设</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+随着编程语言越来越多，同时也出现了各种不同的范式。即便如此，总体来说编程语言分为两大阵营：静态语言和动态语言。为了避免繁杂的历史问题和任何不必要的进一步分析，本文将会做一系列假设来简化问题。其中一个假设就是静态语言总是会被编译成机器码，动态语言总是在解释器中运行，虽然这不一定是正确的。
+</p>
+
+<p>
+验证一门语言是静态的还是动态的更能说明问题。在静态语言中，变量和过程有严格的类型定义。尝试访问一个在作用域中不存在的变量将会导致编译时语法错误。编程语言的结构组成：在解析源代码时，所有变量和函数的位置是由词法地址决定的。即给出相关的作用域范围，就能根据变量定义的顺序找到它。
+</p>
+
+<p>
+例如，考虑在 <b>Visual Basic</b> 中定义一个变量：
+</p>
+</div>
+</div>
+
+</section>
+
+
+
+<footer id="footer">
+    Send comments, critique and suggestions to <a href="mailto:guweigang &lt;at&gt; outlook &lt;dot&gt; com">Gu Weigang</a>.
+    Powered by <a href="https://github.com/kelvinh/org-page">org-page</a>
+</footer>
+
+  </body>
+</html>
