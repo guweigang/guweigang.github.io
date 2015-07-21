@@ -1,0 +1,20 @@
+#+TITLE:       Designing a Programming Language: I
+#+AUTHOR:      Gu Weigang
+#+EMAIL:       guweigang@outlook.com
+#+DATE:        2015-07-17 Fri
+#+URI:         /blog/%y/%m/%d/designing-a-programming-language-i
+#+KEYWORDS:    programming-language
+#+TAGS:        programmin-language
+#+LANGUAGE:    en
+#+OPTIONS:     H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 设计一门语言，深入浅出构建解释器。
+
+** 第一回：假设
+
+随着编程语言越来越多，同时也出现了各种不同的范式。即便如此，总体来说编程语言分为两大阵营：静态语言和动态语言。为了避免繁杂的历史问题和任何不必要的进一步分析，本文将会做一系列假设来简化问题。其中一个假设就是静态语言总是会被编译成机器码，动态语言总是在解释器中运行，虽然这不一定是正确的。
+
+验证一门语言是静态的还是动态的更能说明问题。在静态语言中，变量和过程有严格的类型定义。尝试访问一个在作用域中不存在的变量将会导致编译时语法错误。编程语言的结构组成：在解析源代码时，所有变量和函数的位置是由词法地址决定的。即给出相关的作用域范围，就能根据变量定义的顺序找到它。
+
+例如，考虑在```Visual Basic```中定义一个变量：
+
+
