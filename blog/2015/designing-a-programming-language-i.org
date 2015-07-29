@@ -45,9 +45,53 @@ var text;
 
 考虑到这一点，我们将在原子层面梳理一下 /鸭子语言/ 的基本机制，在此同时也会探索事情的本质。我们会挖掘语言的本质，以透辙地理解语言的精粹，如果能这样便足够了。编程语言也是表达作者观点的系统。为了更好的与同行交流，我们需要有共同点。
 
-我们将创建一门非常中立的语言，并使用命令式风格。虽然函数式风格可能会最终渗入，但现在我们的目标是大多数程序员。
+我们将使用命令式风格创建一门非常中立的语言，虽然函数式风格可能会最终渗入，但现在我们的目标是为大多数程序员服务。
 
-从哪里着手呢？我们要找到一个根概念，从 /语句/ 开始吧。操作是由语句组成，给你两个值，把它们相加，然后把结果赋给一个变量。如果一个表达式返回值为 /真/ , 则执行一个语句块。对一个表达式求值，然后传参做过程调用等等。
+那从哪里着手呢？从 /语句/ 这个最基础的概念开始吧。大家都知道操作是由语句组成，如：给你两个值，把它们相加，然后把结果赋给一个变量；如果一个表达式返回值为 /真/ , 则执行一个语句块；对一个表达式求值，然后传参做过程调用等等。语句块会被描述成语句列表，函数声明也是一种语句，由函数名和一系列参数名构成，函数体中还有一系列语句。/if//else/ 语句也是类似的。这种语句中还包含了其他语句。
 
+为了进一步继续，先来研究一段具体的示例。
 
+#+BEGIN_SRC TXT
+if some condition then
 
+    here is a block of statements
+
+end
+#+END_SRC
+
+这是一个最简单的 /IF/ 语句。考虑到当我们的条件求值为 /false/ 时，我们总会想执行另外一些语句，所以我们仍须支持 /ELSE/ 语句。
+
+#+BEGIN_SRC TXT
+if some condition then
+
+    here is a block of statements
+    to run if the condition is true
+
+else
+
+    here is a block of statements
+    to run if the condition is false
+
+end
+#+END_SRC
+
+注意看上面的语法，貌似我们借鉴了 /Lua/ 的结束标记，但这真的只是巧合。我们也可以像 *BASIC* 一样，把 /IF/ 的结束标记从 /END/ 换成 /ENDIF/ 。我对使用哪个无所谓，没有任何倾向。
+
+我更坚持的是要在语法中使用完整的词汇。我觉得这样更清晰，可读性更强，比起那些使用大量界定符号来构建结构强多了。因此，如果有可能我们将在语法中使用完整的词汇。
+
+上面刚提到过函数定义/声明，来看看函数定义的语法：
+
+#+BEGIN_SRC TXT
+function our_new_function(parameter1, parameters2)
+
+    here we have statements that do work
+    if this function returns a value then we might have
+
+    return ourResult
+
+    at the end
+
+end
+#+END_SRC
+
+这里我们不会做任何限制。函数可以定义在另一个函数里面，函数只在定义的范围可见。我们不想在刚开始定义的时候就介绍限制，因为他们可能并不是我们的预期。
