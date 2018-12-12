@@ -3,15 +3,15 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2018-12-12 三 18:11 -->
+<!-- 2018-12-12 三 18:08 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>BLOG</title>
+<title>PHP扩展语言: Zephir</title>
 <meta name="generator" content="Org mode" />
-<meta name="author" content="Guweigang" />
-<meta name="description" content="顾伟刚的博客"
+<meta name="author" content="Gu Weigang" />
+<meta name="description" content="Zephir是PHP的扩展语言，由Phalcon框架团队开发完成。"
  />
-<meta name="keywords" content="技术博客" />
+<meta name="keywords" content="php, zephir, php extension" />
 <style type="text/css">
  <!--/*--><![CDATA[/*><!--*/
   .title  { text-align: center;
@@ -305,7 +305,24 @@ for the JavaScript code in this tag.
 </head>
 <body>
 <div id="content">
-<h1 class="title">BLOG</h1>
+<h1 class="title">PHP扩展语言: Zephir</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#org12364f1">1. 什么是Zephir</a></li>
+<li><a href="#orge2c668f">2. 为什么使用Zephir?</a>
+<ul>
+<li><a href="#orga0f183a">2.1. 如果你是一个PHP程序员&#x2026;</a></li>
+<li><a href="#org838aba3">2.2. 如果你是一个C程序员&#x2026;</a></li>
+<li><a href="#org0ba1022">2.3. 编译和解释</a></li>
+<li><a href="#orgd221334">2.4. 静态类型 VS 动态类型</a></li>
+</ul>
+</li>
+<li><a href="#org8390709">3. 语言特性</a></li>
+</ul>
+</div>
+</div>
 <style>
 ul.blog-menu {
   list-style-type: none;
@@ -339,50 +356,185 @@ ul.blog-menu {
 </ul>
 
 
-<ul class="org-ul">
-<li>2018
-<ul class="org-ul">
-<li>2018-12-12 &gt;&gt; to be added</li>
-</ul></li>
+<div id="outline-container-org12364f1" class="outline-2">
+<h2 id="org12364f1"><span class="section-number-2">1</span> 什么是Zephir</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+<a href="http://zephir-lang.com/">Zephir</a> 是由 <a href="http://phalconphp.com">Phalcon</a> 团队打造的专门用于PHP扩展开发的领域特定语言。由于
+Phalcon是PHP扩展级框架，是完全使用C开发的，随着功能越来越多、代码越来
+越复杂，这给社区带来了巨大的维护代价，直接导致新功能、bug fix进展都很
+缓慢。在这样一个大背景下，Zephir出世了！
+</p>
+</div>
+</div>
 
-<li>2017
-<ul class="org-ul">
-<li>blank year</li>
-</ul></li>
+<div id="outline-container-orge2c668f" class="outline-2">
+<h2 id="orge2c668f"><span class="section-number-2">2</span> 为什么使用Zephir?</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+互联网发展迅猛，业务增长飞快，所以如今的PHP应用必须在稳定性、性能和功
+能上取得一个平衡，以应付日益增长的业务量。所有PHP应
+用都会基于一套通用的组件开发。这些组件可能是某些类库或框架，也可能是他们的
+集成。框架一旦安装好了，很少会需要修改，作为应用的基础，他们必须功能丰
+富并且速度不凡。
+</p>
 
-<li>2016
-<ul class="org-ul">
-<li>blank year</li>
-</ul></li>
+<p>
+要开发出性能好且健壮的类库是比较复杂的，因为它们的实现一般是高度抽象的。
+假设基础库不常修改，那我们可以创建扩展来提供要同的功能，但是得益于先编
+译后执行的优势，在性能和资源利用上都会得到极大的提升。
+</p>
 
-<li>2015
-<ul class="org-ul">
-<li>2015-07-17 -&gt; <a href="file:///blog/2015/designing-a-programming-language-i.html">Designing a Programming Language: I</a></li>
-<li>2015-06-30 -&gt; <a href="file:///blog/2015/zephir-lang.html">PHP扩展语言: Zephir</a></li>
-</ul></li>
+<p>
+使用Zephir，你就可以实现在PHP语言呈面可用的面向对象类库/框架/应用，
+提升性能的同时改善和用户体验。
+</p>
+</div>
 
-<li>2014
-<ul class="org-ul">
-<li>to be added</li>
-</ul></li>
-<li>2013
-<ul class="org-ul">
-<li>to be added</li>
-</ul></li>
-<li>2012
-<ul class="org-ul">
-<li>to be added</li>
-</ul></li>
-<li>2011
-<ul class="org-ul">
-<li>to be added</li>
-</ul></li>
-</ul>
+
+<div id="outline-container-orga0f183a" class="outline-3">
+<h3 id="orga0f183a"><span class="section-number-3">2.1</span> 如果你是一个PHP程序员&#x2026;</h3>
+<div class="outline-text-3" id="text-2-1">
+<p>
+PHP是开发WEB应用最流行的语言。动态类型和解释执行带来的灵活度让开发PHP
+变得非常高效。
+</p>
+
+<p>
+从版本4开始，到现在的版本5，到之后的版本7，PHP都是基于Zend引擎实现的。
+这是一个虚拟机负责执行转换成字节码的PHP代码。Zend引擎存在于所有PHP分发
+版本中，使用Zephir，你可以创建基于Zend引擎的PHP扩展。
+</p>
+
+<p>
+PHP是Zephir的宿主，所以它们之间很类似。但是，它们之间还是有很大区别，
+Zephir仍然有自己的特性。例如，Zephir更加严谨，跟PHP对比，它是编译型语
+言，开发效率相对会低一些。
+</p>
+</div>
+</div>
+
+<div id="outline-container-org838aba3" class="outline-3">
+<h3 id="org838aba3"><span class="section-number-3">2.2</span> 如果你是一个C程序员&#x2026;</h3>
+<div class="outline-text-3" id="text-2-2">
+<p>
+C是有史以来最强大和最流行的编程语言。事实上，PHP就是用C写成了，这也就
+是PHP扩展可以在C中直接使用。C让你能自由管理内存，使用底层变量，甚至直
+接内嵌汇编片断。
+</p>
+
+<p>
+但是，跟PHP、Zephir相对，使用C语言开发大型应用会花费更长的时间，而且如
+果你不是很精通的话，有些错误是很难发现的。
+</p>
+
+<p>
+Zephir在设计的时候就考虑到了编程安全，所以经没有实现如指针、手动内存管
+理这些功能。如果你是一个C程序员，你会发现和C相比Zephir虽没有那么强大但
+更友好。
+</p>
+</div>
+</div>
+
+<div id="outline-container-org0ba1022" class="outline-3">
+<h3 id="org0ba1022"><span class="section-number-3">2.3</span> 编译和解释</h3>
+<div class="outline-text-3" id="text-2-3">
+<p>
+编译过程通常会降低开发效率；在运行你代码之前，你需要更多的耐心来编译你
+的代码。而解释过程倾向于牺牲执行效率来换取开发效率。
+</p>
+
+<p>
+在某些情况下，解释执行和编译后再执行的速度是没有太大差距的。
+</p>
+
+<p>
+编译型是一次编译多次运行，而解释型是每次运行都需要解释。开发者可以自己
+决定应用的哪部分使用Zephir，哪部分不使用。
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgd221334" class="outline-3">
+<h3 id="orgd221334"><span class="section-number-3">2.4</span> 静态类型 VS 动态类型</h3>
+<div class="outline-text-3" id="text-2-4">
+<p>
+通常来说，在静态类型语言中，变量在它的生命周期内绑定到指定的类型。它的
+类型是不能更改的，它仅接受类型兼容的值和操作。C/C++就是这样实现的：
+</p>
+
+<div class="org-src-container">
+<pre class="src src-C"><span style="color: #df005f; font-weight: bold;">int</span> <span style="color: #8787d7;">a</span> = <span style="color: #d75fd7;">0</span>;
+a = <span style="color: #2aa198;">"hello"</span>; <span style="color: #008787; background-color: #262626;">// </span><span style="color: #008787; background-color: #262626;">not allowed</span>
+</pre>
+</div>
+
+<p>
+在动态类型语言中，类型是绑定到值的，而不是绑定到变量。因此，一个变量可
+能开始指向某个类型的值，之后又指定另一个类型的值。Javascript/PHP就是典
+理的动态类型语言：
+</p>
+
+<div class="org-src-container">
+<pre class="src src-C"><span style="color: #df005f; font-weight: bold;">var</span> <span style="color: #8787d7;">a</span> = <span style="color: #d75fd7;">0</span>;
+a = <span style="color: #2aa198;">"hello"</span>; <span style="color: #008787; background-color: #262626;">// </span><span style="color: #008787; background-color: #262626;">allowed</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-org8390709" class="outline-2">
+<h2 id="org8390709"><span class="section-number-2">3</span> 语言特性</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+语法类似于PHP、Hack语言，编写简单，避免了指针、内存管理等的烦恼。一段简单的示例如下：
+</p>
+
+<div class="org-src-container">
+<pre class="src src-PHP">namespace Test;
+
+/**
+ * MyTest (test/mytest.zep)
+ */
+class MyTest
+{
+    public function someMethod()
+    {
+        /* Variables must be declared */
+        var myArray;
+        int i = 0, length;
+
+        /* Create an array */
+        let myArray = ["hello", 0, 100.25, false, null];
+
+        /* Count the array into a 'int' variable */
+        let length = count(myArray);
+
+        /* Print value types */
+        while i &lt; length {
+            echo typeof myArray[i], "\n";
+            let i++;
+        }
+
+        return myArray;
+    }
+}
+</pre>
+</div>
+
+<p>
+和PHP语法很像吧？实际上，zephir会把上面那段代码翻译成C后再编译成PHP扩
+展。
+</p>
+</div>
+</div>
 </div>
 <div id="postamble" class="status">
-<p class="date">Date: 2013-06-20 Thu</p>
-<p class="author">Author: Guweigang</p>
-<p class="date">Created: 2018-12-12 三 18:11</p>
+<p class="date">Date: 2015-06-30 Tue</p>
+<p class="author">Author: Gu Weigang</p>
+<p class="date">Created: 2018-12-12 三 18:08</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>

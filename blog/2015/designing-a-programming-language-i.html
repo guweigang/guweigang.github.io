@@ -3,15 +3,15 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2018-12-12 三 18:11 -->
+<!-- 2018-12-12 三 18:09 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>BLOG</title>
+<title>Designing a Programming Language: I</title>
 <meta name="generator" content="Org mode" />
-<meta name="author" content="Guweigang" />
-<meta name="description" content="顾伟刚的博客"
+<meta name="author" content="Gu Weigang" />
+<meta name="description" content="设计一门语言，深入浅出构建解释器。"
  />
-<meta name="keywords" content="技术博客" />
+<meta name="keywords" content="programming-language" />
 <style type="text/css">
  <!--/*--><![CDATA[/*><!--*/
   .title  { text-align: center;
@@ -251,7 +251,7 @@ org_html_manager.set("LOCAL_TOC", "1");
 org_html_manager.set("VIEW_BUTTONS", "0");
 org_html_manager.set("MOUSE_HINT", "underline");
 org_html_manager.set("FIXED_TOC", "0");
-org_html_manager.set("TOC", "0");
+org_html_manager.set("TOC", "1");
 org_html_manager.set("VIEW", "1");
 org_html_manager.setup();  // activate after the parameters are set
 /*]]>*///-->
@@ -305,84 +305,157 @@ for the JavaScript code in this tag.
 </head>
 <body>
 <div id="content">
-<h1 class="title">BLOG</h1>
-<style>
-ul.blog-menu {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
-  border-bottom: 1px solid black;
-}
-.blog-menu li {
-  float: left;
-}
-.blog-menu li a {
-  display: block;
-  text-align: center;
-  padding: 14px 16px;
-  text-decoration: none;
-}
-.blog-menu li a:hover:not(.active) {
-  background-color: black;
-}
-.blog-menu li a.active {
-  color: #859900;
-  background-color: black;
-}
-</style>
-<ul class="blog-menu">
-  <li><a href="http://guweigang.com">Home</a></li>
-  <li><a href="#" class="active">Blog</a></li>
-  <li><a href="http://guweigang.com/life">Life</a></li>
-  <li><a href="http://guweigang.com/about">About</a></li>
-</ul>
-
-
-<ul class="org-ul">
-<li>2018
-<ul class="org-ul">
-<li>2018-12-12 &gt;&gt; to be added</li>
-</ul></li>
-
-<li>2017
-<ul class="org-ul">
-<li>blank year</li>
-</ul></li>
-
-<li>2016
-<ul class="org-ul">
-<li>blank year</li>
-</ul></li>
-
-<li>2015
-<ul class="org-ul">
-<li>2015-07-17 -&gt; <a href="file:///blog/2015/designing-a-programming-language-i.html">Designing a Programming Language: I</a></li>
-<li>2015-06-30 -&gt; <a href="file:///blog/2015/zephir-lang.html">PHP扩展语言: Zephir</a></li>
-</ul></li>
-
-<li>2014
-<ul class="org-ul">
-<li>to be added</li>
-</ul></li>
-<li>2013
-<ul class="org-ul">
-<li>to be added</li>
-</ul></li>
-<li>2012
-<ul class="org-ul">
-<li>to be added</li>
-</ul></li>
-<li>2011
-<ul class="org-ul">
-<li>to be added</li>
-</ul></li>
+<h1 class="title">Designing a Programming Language: I</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#orgf4c3b90">1. 假设</a></li>
+<li><a href="#org4e88491">2. 语法</a></li>
 </ul>
 </div>
+</div>
+
+<div id="outline-container-orgf4c3b90" class="outline-2">
+<h2 id="orgf4c3b90"><span class="section-number-2">1</span> 假设</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+随着编程语言越来越多，世面上出现了各种不同的范式。即便如此，总体来说编程语言分为两大阵营：静态语言和动态语言。为了避免繁杂的历史问题和任何不必要的进一步分析，本文将会做一系列假设来简化一些事情。其中一个假设就是静态语言总是会被编译成机器码，动态语言总是在解释器中运行，虽然这不总是正确的。
+</p>
+
+<p>
+如果验证一门语言是静态的还是动态的呢？在静态语言中，变量和过程有严格的类型定义。尝试访问一个在作用域中不存在的变量将会导致编译时语法错误。在解析语言源代码时，所有变量和函数的位置是由词法位置决定的。即给出相关的作用域范围，就能根据变量定义的顺序找到它。
+</p>
+
+<p>
+例如，在 <b>Visual Basic</b> 中定义一个变量：
+</p>
+
+<p>
+一个简单的示例如下：
+</p>
+
+<div class="org-src-container">
+<pre class="src src-vb">Dim num1, num2 As Integer
+Dim text As String
+</pre>
+</div>
+
+<p>
+这是静态语言的变量定义原型。当变量首次声明的时候，必须指定它的类型。与之不同的是，动态语言则不需要，下面是一段ECMA脚本：
+</p>
+
+<div class="org-src-container">
+<pre class="src src-javascript"><span style="color: #268bd2; font-weight: bold;">var</span> <span style="color: #8787d7;">num1</span>, <span style="color: #8787d7;">num2</span>;
+<span style="color: #268bd2; font-weight: bold;">var</span> <span style="color: #8787d7;">text</span>;
+</pre>
+</div>
+
+<p>
+在这个示例中，没有为这些变量指定任何类型。 你可以赋予变量 <i>num1</i> 任何类型的值。不仅如此，变量声明过程也是完全是没有必要的，动态语言的类型信息存储在值对象中。
+</p>
+
+<p>
+除Javascript之外，还有很多流行的动态语言，如：Python, Ruby, Lua, Scheme, Lisp等。除了语法风格和表达程度不一样，其他方面都非常类似，如一致的类型系统。所以动态类型语言还常常被理解成鸭子类型或鸭子语言。
+</p>
+
+<p>
+我们在从头开始设计鸭子语言的时候，会遵循这些共同特性。不过我们要时刻告诫自己，从零开始构建一门语言仅仅是一个锻炼，在探索过程中我们将不考虑实用性和可行性，当完成这一过程之后再来考虑其他有用的想法。
+</p>
+
+<p>
+在开始之前，我要友好地提醒一下各位读者：接下来的章节可能会包含一些非常复杂的知识，即使我已经尽我所能使用朴素和简单的语言来陈述他们。我建议大家在开始此次『语言设计之旅』之前做一些编程语言设计的调研，之后再继续阅读本文。
+</p>
+</div>
+</div>
+
+<div id="outline-container-org4e88491" class="outline-2">
+<h2 id="org4e88491"><span class="section-number-2">2</span> 语法</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+现在网上应该很容易就能找到一份关于词法表达式的新手指南、Wiki或者某语言语法向导的完整文档，不过先暂时放下这些让我们继续吧。有时从语法层面来看，设计一门语言好比在参考手册上画线做笔录，但这本手册并不是已经写好存在的，或许还会随时间推移发生变化。我这样解释的目的不是建议你设计的编程语言要被精雕细琢，并且实现多么牛逼的概念。相反，我们应该在每一步都思考是否能改变、扩展，随着时间能否进化。一个任务解决所有的问题是不现实的，我们应该有更多的方法来改变事情并且让我们的努力不会白费。
+</p>
+
+<p>
+考虑到这一点，我们将在原子层面梳理一下 <i>鸭子语言</i> 的基本机制，在此同时也会探索事情的本质。我们会挖掘语言的本质，以透辙地理解语言的精粹，如果能这样便足够了。编程语言也是表达作者观点的系统。为了更好的与同行交流，我们需要有共同点。
+</p>
+
+<p>
+我们将使用命令式风格创建一门非常中立的语言，虽然函数式风格可能会最终渗入，但现在我们的目标是为大多数程序员服务。
+</p>
+
+<p>
+那从哪里着手呢？从 <i>语句</i> 这个最基础的概念开始吧。大家都知道操作是由语句组成，如：给你两个值，把它们相加，然后把结果赋给一个变量；如果一个表达式返回值为 <i>真</i> , 则执行一个语句块；对一个表达式求值，然后传参做过程调用等等。语句块会被描述成语句列表，函数声明也是一种语句，由函数名和一系列参数名构成，函数体中还有一系列语句。/if//else/ 语句也是类似的。这种语句中还包含了其他语句。
+</p>
+
+<p>
+为了进一步继续，先来研究一段具体的示例。
+</p>
+
+<div class="org-src-container">
+<pre class="src src-TXT">if some condition then
+
+    here is a block of statements
+
+end
+</pre>
+</div>
+
+<p>
+这是一个最简单的 <i>IF</i> 语句。考虑到当我们的条件求值为 <i>false</i> 时，我们总会想执行另外一些语句，所以我们仍须支持 <i>ELSE</i> 语句。
+</p>
+
+<div class="org-src-container">
+<pre class="src src-TXT">if some condition then
+
+    here is a block of statements
+    to run if the condition is true
+
+else
+
+    here is a block of statements
+    to run if the condition is false
+
+end
+</pre>
+</div>
+
+<p>
+注意看上面的语法，貌似我们借鉴了 <i>Lua</i> 的结束标记，但这真的只是巧合。我们也可以像 <b>BASIC</b> 一样，把 <i>IF</i> 的结束标记从 <i>END</i> 换成 <i>ENDIF</i> 。我对使用哪个无所谓，没有任何倾向。
+</p>
+
+<p>
+我更坚持的是要在语法中使用完整的词汇。我觉得这样更清晰，可读性更强，比起那些使用大量界定符号来构建结构强多了。因此，如果有可能我们将在语法中使用完整的词汇。
+</p>
+
+<p>
+上面刚提到过函数定义/声明，来看看函数定义的语法：
+</p>
+
+<div class="org-src-container">
+<pre class="src src-TXT">function our_new_function(parameter1, parameters2)
+
+    here we have statements that do work
+    if this function returns a value then we might have
+
+    return ourResult
+
+    at the end
+
+end
+</pre>
+</div>
+
+<p>
+这里我们不会做任何限制。函数可以定义在另一个函数里面，函数只在定义的范围可见。我们不想在刚开始定义的时候就介绍限制，因为他们可能并不是我们的预期。
+</p>
+</div>
+</div>
+</div>
 <div id="postamble" class="status">
-<p class="date">Date: 2013-06-20 Thu</p>
-<p class="author">Author: Guweigang</p>
-<p class="date">Created: 2018-12-12 三 18:11</p>
+<p class="date">Date: 2015-07-17 Fri</p>
+<p class="author">Author: Gu Weigang</p>
+<p class="date">Created: 2018-12-12 三 18:09</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
