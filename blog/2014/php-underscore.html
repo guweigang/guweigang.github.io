@@ -1,0 +1,992 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2018-12-11 二 19:26 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>PHP Underscore</title>
+<meta name="generator" content="Org mode" />
+<meta name="author" content="Gu Weigang" />
+<meta name="description" content="Underscore.php is a PHP port of the popular Underscore.js library."
+ />
+<meta name="keywords" content="php, php library" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<link rel="stylesheet" type="text/css" href="http://thomasf.github.io/solarized-css/solarized-light.min.css" />
+
+<script type="text/javascript" src="http://thomasf.github.io/solarized-css/org-info.min.js">
+/**
+ *
+ * @source: http://thomasf.github.io/solarized-css/org-info.min.js
+ *
+ * @licstart  The following is the entire license notice for the
+ *  JavaScript code in http://thomasf.github.io/solarized-css/org-info.min.js.
+ *
+ * Copyright (C) 2012-2018 Free Software Foundation, Inc.
+ *
+ *
+ * The JavaScript code in this tag is free software: you can
+ * redistribute it and/or modify it under the terms of the GNU
+ * General Public License (GNU GPL) as published by the Free Software
+ * Foundation, either version 3 of the License, or (at your option)
+ * any later version.  The code is distributed WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+ *
+ * As additional permission under GNU GPL version 3 section 7, you
+ * may distribute non-source (e.g., minimized or compacted) forms of
+ * that code without the copy of the GNU GPL normally required by
+ * section 4, provided you include this license notice and a URL
+ * through which recipients can access the Corresponding Source.
+ *
+ * @licend  The above is the entire license notice
+ * for the JavaScript code in http://thomasf.github.io/solarized-css/org-info.min.js.
+ *
+ */
+</script>
+
+<script type="text/javascript">
+
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2018 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+
+<!--/*--><![CDATA[/*><!--*/
+org_html_manager.set("TOC_DEPTH", "3");
+org_html_manager.set("LINK_HOME", "");
+org_html_manager.set("LINK_UP", "");
+org_html_manager.set("LOCAL_TOC", "1");
+org_html_manager.set("VIEW_BUTTONS", "0");
+org_html_manager.set("MOUSE_HINT", "underline");
+org_html_manager.set("FIXED_TOC", "0");
+org_html_manager.set("TOC", "1");
+org_html_manager.set("VIEW", "1");
+org_html_manager.setup();  // activate after the parameters are set
+/*]]>*///-->
+</script>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2018 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">PHP Underscore</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#orgf339df8">什么是Underscore？</a></li>
+<li><a href="#orgf34a281">安装/下载</a></li>
+<li><a href="#org3f81e31">PHP Underscore 语法</a></li>
+<li><a href="#orgf59feeb">处理集合和数组</a>
+<ul>
+<li><a href="#org121a1b2">Each</a></li>
+<li><a href="#orgbe0518d">Pluck</a></li>
+<li><a href="#orgf495d8c">求最小值和最大值</a></li>
+<li><a href="#orgf91dce1">过滤和排除</a></li>
+<li><a href="#org2adf6eb">sortBy</a></li>
+<li><a href="#orga5e1405">groupBy</a></li>
+<li><a href="#orga72665f">Reduce</a></li>
+<li><a href="#org7ec5817">Find</a></li>
+<li><a href="#orgaf8d64b">模板</a></li>
+</ul>
+</li>
+<li><a href="#org4b364cb">扩展Underscore</a></li>
+<li><a href="#org738b8b3">总结</a></li>
+</ul>
+</div>
+</div>
+<blockquote>
+<p>
+
+</p>
+
+<p>
+原文地址： <a href="https://www.sitepoint.com/getting-started-php-underscore/">https://www.sitepoint.com/getting-started-php-underscore/</a>
+</p>
+
+<p>
+Underscore：下划线。
+</p>
+
+<p>
+如果你曾使用过Javascript的Backbone框架，你可能已经很熟悉Underscore是什么。不得不承认，它对于JS开发者来说已经变得非常重要。但是你想过在PHP中实现Underscore吗？
+</p>
+
+<p>
+本文将介绍Underscore，以及它能做什么，并且提供一些有用的示例。
+</p>
+</blockquote>
+
+<div id="outline-container-orgf339df8" class="outline-2">
+<h2 id="orgf339df8">什么是Underscore？</h2>
+<div class="outline-text-2" id="text-orgf339df8">
+<p>
+Underscore的自我诠释是: "一个提供函数式编程支持的公共工具类，就像你在Prototype.js(或Ruby)看到的一样，但它没有基于任何Javascript内置对象。它能把jQuery和Backbone.js完美地结合在一起"。
+</p>
+
+<p>
+很明显，Underscore提供的工具大多是用来处理集合、数组和对象的，不过额外还提供了基本模板的功能和其他一些有用的函数。
+</p>
+
+<p>
+那些操作集合和数组的函数在处理JSON时尤其有用，这在处理Web服务返回结果的时候显得极其方便。
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgf34a281" class="outline-2">
+<h2 id="orgf34a281">安装/下载</h2>
+<div class="outline-text-2" id="text-orgf34a281">
+<p>
+最简单的安装方式是通过<a href="http://getcomposer.org/">Composer</a>：
+</p>
+
+<div class="org-src-container">
+<pre class="src src-JSON">{
+    "require": {
+        "underscore/underscore.php": "dev-master"
+    }   
+}
+</pre>
+</div>
+
+<p>
+你也可以手动下载，或从<a href="https://github.com/brianhaveri/Underscore.php">Github</a> 检出 - 安装相当简单，只需要在代码中 <code>require</code> 一个文件（underscore.php）即可。
+</p>
+</div>
+</div>
+
+<div id="outline-container-org3f81e31" class="outline-2">
+<h2 id="org3f81e31">PHP Underscore 语法</h2>
+<div class="outline-text-2" id="text-org3f81e31">
+<p>
+在原始的Javascript库中，所有Underscore的函数名均以一个下划线和一个点开始；如： <code>_.each</code> ,  <code>_.map</code> ,  <code>_.reduce</code> 。而在PHP中，下划线是保留符号，是 <code>gettext</code> 函数的别名，所以只能使用双下划线取而代之。
+</p>
+
+<p>
+所以，如果我们想寻找Javascript Underscore在PHP中的对等实现的话：
+</p>
+
+<div class="org-src-container">
+<pre class="src src-TXT">JavaScript          PHP
+_.each              __::each
+_.map               __::map
+_.reduce            __::reduce
+</pre>
+</div>
+
+<p>
+要像这样转换一下。
+</p>
+
+<p>
+除了上面看到的，在PHP中你还可以用面向对象的方式：
+</p>
+
+<div class="org-src-container">
+<pre class="src src-PHP">__(array(1, 2, 3))-&gt;map(function($n) { return $n * 2; });
+</pre>
+</div>
+
+<p>
+这等价于：
+</p>
+
+<div class="org-src-container">
+<pre class="src src-PHP">__::map(array(1, 2, 3), function($n) { return $n * 2; });
+</pre>
+</div>
+
+<p>
+在本文中，我将全部使用静态方法这种风格。
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgf59feeb" class="outline-2">
+<h2 id="orgf59feeb">处理集合和数组</h2>
+<div class="outline-text-2" id="text-orgf59feeb">
+</div>
+<div id="outline-container-org121a1b2" class="outline-3">
+<h3 id="org121a1b2">Each</h3>
+<div class="outline-text-3" id="text-org121a1b2">
+<p>
+使用它迭代整个数组，并对数组的每个元素执行一个函数。
+</p>
+
+<p>
+例如：
+</p>
+
+<div class="org-src-container">
+<pre class="src src-PHP">$items = array(1, 2, 3, 4, 5);
+__::each($items, function($item) { print $item; });
+</pre>
+</div>
+
+<p>
+将输出：
+</p>
+
+<div class="org-src-container">
+<pre class="src src-TEXT">12345
+</pre>
+</div>
+
+<p>
+下面是一个更详细的示例：
+</p>
+
+<div class="org-src-container">
+<pre class="src src-PHP">
+$student_records = array(
+    array(
+        'name'    =&gt;  'Joe Bloggs',
+        'id'      =&gt;  1,
+        'grade'   =&gt;  72,
+        'class'   =&gt;  'A',
+    ),
+    array(
+        'name'    =&gt;  'Jack Brown',
+        'id'      =&gt;  2,
+        'grade'   =&gt;  67,
+        'class'   =&gt;  'B',
+    ),
+    array(
+        'name'    =&gt;  'Jill Beaumont',
+        'id'      =&gt;  3,
+        'grade'   =&gt;  81,
+        'class'   =&gt;  'B',
+    ),
+);
+
+__::each($student_records, function($record) { 
+    print $record['name'] . ' ' . $record['grade'] . '&lt;br /&gt;'; 
+});
+
+</pre>
+</div>
+
+<p>
+这个示例的输出是：
+</p>
+
+<div class="org-src-container">
+<pre class="src src-TXT">Joe Bloggs A
+Jack Brown B
+Jill Beaumont B
+</pre>
+</div>
+
+<p>
+一会儿在我们探索模板的时候我们将使用更好的方式来处理。
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgbe0518d" class="outline-3">
+<h3 id="orgbe0518d">Pluck</h3>
+<div class="outline-text-3" id="text-orgbe0518d">
+<p>
+如果你有一个多维数组，并且你想“摘出“某些确定的值最终且获得一个一的数组，你可使用以 <code>__::pluk</code> 。
+</p>
+
+<p>
+Facebook API 提供了一个真实的示例，这看起来靠谱多了。当你请求Facebook的用户列表时，返回结果（经 <code>json_deoce</code> 处理后的多维数组）大致是这样的：
+</p>
+
+<div class="org-src-container">
+<pre class="src src-PHP">
+$response = array(
+    'data'  =&gt;  array(
+        array(
+            'name'  =&gt;  'Joe Bloggs',
+            'id'        =&gt;   123456789,
+        ),
+        array(
+            'name'  =&gt;  'Jack Brown',
+            'id'        =&gt;  987654321,
+        ),
+    )
+// ...
+);
+
+</pre>
+</div>
+
+<p>
+如果我们想获取Facebook用户IDs的一维数组，我们可以这么做：
+</p>
+
+<div class="org-src-container">
+<pre class="src src-PHP">$ids = __::pluck($response['data'], 'id');
+// array(123456789, 98765432)
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgf495d8c" class="outline-3">
+<h3 id="orgf495d8c">求最小值和最大值</h3>
+<div class="outline-text-3" id="text-orgf495d8c">
+<p>
+基于上面提到的一个学生信息的示例，我们可以使用 <code>__::max</code> 找出学生名单中的最高分得者：
+</p>
+
+<div class="org-src-container">
+<pre class="src src-PHP">__::max($student_records, function($student) { return $student['grade']; });
+// returns array('name' =&gt; 'Jill Beaumont', 'id' =&gt; 3, 'grade' =&gt; 81, 'class' =&gt; 'B)
+</pre>
+</div>
+
+<p>
+或者使用 <code>__::main</code> 求出最低分：
+</p>
+
+<div class="org-src-container">
+<pre class="src src-PHP">__::min($student_records, function($student) { return $student['grade']; });
+// returns array('name' =&gt; 'Jack Brown', 'id' =&gt; 2, 'grade' =&gt; 67, 'class' =&gt; 'B')
+</pre>
+</div>
+
+<p>
+如你所见，这个示例不仅仅简单地返回最高分或最低分，而是返回整条记录 － 学生信息。
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgf91dce1" class="outline-3">
+<h3 id="orgf91dce1">过滤和排除</h3>
+<div class="outline-text-3" id="text-orgf91dce1">
+<p>
+<code>filter</code> 方法对集合或数组执行真值测试，并且返回那些通过测试的元素。
+</p>
+
+<p>
+让我们回到刚才那个学生信息的示例，假设70分及以上才被认为通过考试。我们可以使用 <code>__::filter</code> 为数组每个元素执行一个简单的函数，这样我们就能得到通过考试的学生名单。
+</p>
+
+<div class="org-src-container">
+<pre class="src src-PHP">$passed = __::filter($student_records, function($student) { return $student['grade'] &gt;= 70; });
+</pre>
+</div>
+
+<p>
+<code>reject</code> 函数正好和 <code>filter</code> 相反。它会排除那些通过真值测试的元素。
+</p>
+
+<p>
+换言之，下面两个函数的执行结果是一样的：
+</p>
+
+<div class="org-src-container">
+<pre class="src src-PHP">__::filter($student_records, function($student) { return $student['grade'] &gt;= 70; });
+
+__::reject($student_records, function($student) { return $student['grade'] &lt; 70; });
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org2adf6eb" class="outline-3">
+<h3 id="org2adf6eb">sortBy</h3>
+<div class="outline-text-3" id="text-org2adf6eb">
+<p>
+<code>sortBy</code> 函数对数组进行排序 － 默认按升序排 －通过一个迭代函数。下面是一个简单的示例：
+</p>
+
+<div class="org-src-container">
+<pre class="src src-PHP">
+$scores = array(476, 323, 1010, 567, 723, 1009, 600);
+$sorted = __::sortBy($scores, function($score) { return $score; });
+
+</pre>
+</div>
+
+<p>
+如果想以降序进行排序，简单地对值取负数即可。如：要获得按分数降序排序的学生名单，可以这样：
+</p>
+
+<div class="org-src-container">
+<pre class="src src-PHP">$ordered = __::sortBy($student_records, function($student) { return -$student['grade']; });
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orga5e1405" class="outline-3">
+<h3 id="orga5e1405">groupBy</h3>
+<div class="outline-text-3" id="text-orga5e1405">
+<p>
+现在假设我们想按班级来重新组织我们的数组。
+</p>
+
+<p>
+这就是 <code>groupBy</code> 的用武之地。我们可以像这样做：
+</p>
+
+<div class="org-src-container">
+<pre class="src src-PHP">var_dump( __::groupBy($student_records, 'class') );
+</pre>
+</div>
+
+<p>
+输出将是：
+</p>
+
+<div class="org-src-container">
+<pre class="src src-PHP">array(2) {
+["A"]=&gt;
+array(1) {
+    [0]=&gt;
+    array(4) {
+    ["name"]=&gt;
+    string(10) "Joe Bloggs"
+    ["id"]=&gt;
+    int(1)
+    ["grade"]=&gt;
+    int(72)
+    ["class"]=&gt;
+    string(1) "A"
+    }
+}
+["B"]=&gt;
+array(2) {
+    [0]=&gt;
+    array(4) {
+    ["name"]=&gt;
+    string(10) "Jack Brown"
+    ["id"]=&gt;
+    int(2)
+    ["grade"]=&gt;
+    int(67)
+    ["class"]=&gt;
+    string(1) "B"
+    }
+    [1]=&gt;
+    array(4) {
+    ["name"]=&gt;
+    string(13) "Jill Beaumont"
+    ["id"]=&gt;
+    int(3)
+    ["grade"]=&gt;
+    int(81)
+    ["class"]=&gt;
+    string(1) "B"
+    }
+}
+}
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orga72665f" class="outline-3">
+<h3 id="orga72665f">Reduce</h3>
+<div class="outline-text-3" id="text-orga72665f">
+<p>
+<code>reduce</code> 函数用于把一个集合或数组降为一个单值。
+</p>
+
+<p>
+例如，为了求得一维数组的元素和可以这么做：
+</p>
+
+<div class="org-src-container">
+<pre class="src src-PHP">__::reduce(array(1, 2, 3), function($first, $second) { return $first + $second; }, 0); // 6
+</pre>
+</div>
+
+<p>
+如果我们在学生信息那个示例中结合 <code>reduct</code> 和 <code>pluck</code> ，我们可以求得学生平均成绩：
+</p>
+
+<div class="org-src-container">
+<pre class="src src-PHP">$average = round( ( __::reduce(__::pluck($student_records, 'grade'), function($first, $second) { return $first + $second; }, 0) / count($student_records) ), 2);
+</pre>
+</div>
+
+<p>
+这里我们首先使用 <code>pluck</code> 把学生成绩解出来成为一个一维数组，然后使用一个简单的加法迭代把数组降为一个单值，再除以学生个数，最后结果保留两位小数。
+</p>
+</div>
+</div>
+
+<div id="outline-container-org7ec5817" class="outline-3">
+<h3 id="org7ec5817">Find</h3>
+<div class="outline-text-3" id="text-org7ec5817">
+<p>
+<code>find</code> 函数迭代整个数组，对每相元素执行函数直到函数返回真，也就是说，它返回第一次匹配到的“记录“。
+</p>
+
+<p>
+例如，为了找出第一个成绩低于70分的学生，你可以这样做：
+</p>
+
+<div class="org-src-container">
+<pre class="src src-PHP">__::find($student_records, function($student) { return $student['grade'] &lt; 70; })
+</pre>
+</div>
+
+<p>
+如果你 <code>var_dump</code> 结果的话，这个示例的输出应该是这样的：
+</p>
+
+<div class="org-src-container">
+<pre class="src src-PHP">array(4) {
+["name"]=&gt;
+string(10) "Jack Brown"
+["id"]=&gt;
+int(2)
+["grade"]=&gt;
+int(67)
+["class"]=&gt;
+string(1) "B"
+}
+</pre>
+</div>
+
+<p>
+假设我们想通过ID找到某个学生，我们可以这样做：
+</p>
+
+<div class="org-src-container">
+<pre class="src src-PHP">function findById($records, $id) {
+    return __::find($records, function($record) use ($id) { return ($record['id'] == $id); });
+}
+</pre>
+</div>
+
+<p>
+如果你执行下面这段代码：
+</p>
+
+<div class="org-src-container">
+<pre class="src src-PHP">var_dump(findById($student_records, 2));
+</pre>
+</div>
+
+<p>
+你会获得如下结果：
+</p>
+
+
+<div class="org-src-container">
+<pre class="src src-PHP">
+array(4) {
+    ["name"]=&gt;
+    string(10) "Jack Brown"
+    ["id"]=&gt;
+    int(2)
+    ["grade"]=&gt;
+    int(67)
+    ["class"]=&gt;
+    string(1) "B"
+}
+
+</pre>
+</div>
+
+<p>
+注意到上面的示例中我们引入了 <code>use</code> 关词字，这样在闭包中才可以使用变量 <code>$id</code> 。
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgaf8d64b" class="outline-3">
+<h3 id="orgaf8d64b">模板</h3>
+<div class="outline-text-3" id="text-orgaf8d64b">
+<p>
+Backbone使用Underscore最频繁的功能其实是它的模板功能。
+</p>
+
+<p>
+用Underscore简直就是太简洁了，比如说字符串连接，而且如果结合其他Underscore函数(如 <code>__::each</code> )就更加强大了。
+</p>
+
+<p>
+在一个模板字符串中，你可以像这样打印出变量的值：
+</p>
+
+<div class="org-src-container">
+<pre class="src src-PHP">&lt;%= $student['name'] %&gt;
+</pre>
+</div>
+
+<p>
+你可以使用这个语法执行代码：
+</p>
+
+<div class="org-src-container">
+<pre class="src src-PHP">&lt;% __::each($records, function($student) { %&gt;
+ // …
+&lt;% }) %&gt;
+</pre>
+</div>
+
+<p>
+模板功能这块有两个常用方法。一个是定义字符串，使用上面的语法注入变量或代码，然后用 <code>::template()</code> 函数渲染。
+</p>
+
+<pre class="example">
+$welcome = 'Hello &lt;%= $name %&gt;, welcome back!';
+print __::template($welcome, array('name' =&gt; 'Jack'));
+</pre>
+
+<p>
+当然，你也可以先“编译“一个模板，并把 <code>__::template</code> 函数（接收一个字符串参数）的结果值给一个变量。
+</p>
+
+<p>
+下面的代码和上面的示例是等价的：
+</p>
+
+<div class="org-src-container">
+<pre class="src src-PHP">$compiled = __::template('Hello &lt;%= $name %&gt;, welcome back!');
+print $compiled(array('name'=&gt;'Jack'));
+
+// Hello Jack, welcome back!
+</pre>
+</div>
+
+<p>
+这儿有一个你可能会经常使用的简单模板，它结合 <code>__::template</code> 和 <code>__::each</code> 输出一个无序列表。
+</p>
+
+<div class="org-src-container">
+<pre class="src src-PHP">$ul = __::template('&lt;ul&gt;&lt;% __::each($items, function($item)  { %&gt;&lt;li&gt;&lt;%= $item %&gt;&lt;/li&gt;&lt;% }); %&gt;&lt;/ul&gt;');
+
+print $ul(array('items' =&gt; array('one', 'two', 'three')));
+</pre>
+</div>
+
+<p>
+让我们开始构建一个模板，它接收一个学生名单参数，并由此创建一个由学生姓名组成的无序列表：
+</p>
+
+<div class="org-src-container">
+<pre class="src src-PHP">$list_students = __::template('&lt;ul&gt;&lt;% __::each($records,  function($student) { %&gt;&lt;li&gt;&lt;%= $student["name"] %&gt;&lt;/li&gt;&lt;% }); %&gt;&lt;/ul&gt;');
+</pre>
+</div>
+
+<p>
+然后，渲染它：
+</p>
+
+<div class="org-src-container">
+<pre class="src src-PHP">print $list_students(array('records' =&gt; $student_records));
+</pre>
+</div>
+
+<p>
+你应该会得到以下输出：
+</p>
+
+<div class="org-src-container">
+<pre class="src src-HTML">&lt;ul&gt;
+    &lt;li&gt;Joe Bloggs&lt;/li&gt;
+    &lt;li&gt;Jack Brown&lt;/li&gt;
+    &lt;li&gt;Jill Beaumont&lt;/li&gt;
+&lt;/ul&gt;
+</pre>
+</div>
+
+<p>
+或者我们也可以创建一个学生姓名和成绩的表格：
+</p>
+
+<div class="org-src-container">
+<pre class="src src-PHP">$grades_table = __::template('&lt;table&gt;&lt;thead&gt;&lt;tr&gt;&lt;td&gt;Student&lt;/td&gt;&lt;td&gt;Grade&lt;/td&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;&lt;% __::each($records, function($student) { %&gt;&lt;tr&gt;&lt;td&gt;&lt;%= $student["name"] %&gt;&lt;/td&gt;&lt;td&gt;&lt;%= $student["grade"] %&gt;%&lt;/td&gt;&lt;/tr&gt;&lt;% }); %&gt;&lt;/tbody&gt;&lt;/table&gt;');
+
+print $grades_table(array('records' =&gt; $student_records));
+</pre>
+</div>
+
+<p>
+你当然可以传入多个参数，所以我们试着给这个表格加上表头信息，例如：
+</p>
+
+<div class="org-src-container">
+<pre class="src src-PHP">$grades_table = __::template('&lt;h4&gt;&lt;%= $title %&gt;&lt;/h4&gt;&lt;table&gt;&lt;thead&gt;&lt;tr&gt;&lt;td&gt;Student&lt;/td&gt;&lt;td&gt;Grade&lt;/td&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;&lt;% __::each($records, function($student) { %&gt;&lt;tr&gt;&lt;td&gt;&lt;%= $student["name"] %&gt;&lt;/td&gt;&lt;td&gt;&lt;%= $student["grade"] %&gt;%&lt;/td&gt;&lt;/tr&gt;&lt;% }); %&gt;&lt;/tbody&gt;&lt;/table&gt;');
+
+print $grades_table(array('title' =&gt; $title, 'records' =&gt; $student_records));
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-org4b364cb" class="outline-2">
+<h2 id="org4b364cb">扩展Underscore</h2>
+<div class="outline-text-2" id="text-org4b364cb">
+<p>
+你可以使用 <code>mixin</code> 创建你的函数。
+</p>
+
+<div class="org-src-container">
+<pre class="src src-PHP">__::mixin(array(
+'capitalize'=&gt; function($string) { return ucwords($string); },
+'shout'      =&gt; function($string) { return strtoupper($string); }
+));
+__::capitalize('joe bloggs'); // 'Joe Bloggs'
+__::shout('Joe bloggs');       // 'JOE BLOGGS'
+</pre>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-org738b8b3" class="outline-2">
+<h2 id="org738b8b3">总结</h2>
+<div class="outline-text-2" id="text-org738b8b3">
+<p>
+本文介绍了重量级工具库Underscore的PHP移植版。虽然我大体概述了它的可用特性；但是还有更多值得探索的功能和特性。猛击这里查看<a href="http://brianhaveri.github.io/Underscore.php/">官方手册</a>。
+</p>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="date">Date: 2014-05-30 五</p>
+<p class="author">Author: Gu Weigang</p>
+<p class="date">Created: 2018-12-11 二 19:26</p>
+<p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>

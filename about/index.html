@@ -1,162 +1,469 @@
-<!DOCTYPE html>
-<html lang="en-us">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-  <title>关于我 - Gu Weigang</title>
-  <meta charset="utf-8" />
-  <meta name="author" content="Gu Weigang" />
-  <meta name="description" content="关于我，个人简介" />
-  <meta name="keywords" content="关于我" />
+<!-- 2019-02-12 二 14:45 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>About Me</title>
+<meta name="generator" content="Org mode" />
+<meta name="author" content="Gu Weigang" />
+<meta name="description" content="顾伟刚的博客"
+ />
+<meta name="keywords" content="技术博客" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
 
-  <link rel="alternate" title="RSS Feed" href="/rss.xml" type="application/rss+xml">
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<link rel="stylesheet" type="text/css" href="http://thomasf.github.io/solarized-css/solarized-light.min.css" />
 
-  <link rel="stylesheet" href="/media/css/main.css" type="text/css">
-  <link rel="stylesheet" href="/media/css/prettify.css" type="text/css">
+<script type="text/javascript" src="http://thomasf.github.io/solarized-css/org-info.min.js">
+/**
+ *
+ * @source: http://thomasf.github.io/solarized-css/org-info.min.js
+ *
+ * @licstart  The following is the entire license notice for the
+ *  JavaScript code in http://thomasf.github.io/solarized-css/org-info.min.js.
+ *
+ * Copyright (C) 2012-2019 Free Software Foundation, Inc.
+ *
+ *
+ * The JavaScript code in this tag is free software: you can
+ * redistribute it and/or modify it under the terms of the GNU
+ * General Public License (GNU GPL) as published by the Free Software
+ * Foundation, either version 3 of the License, or (at your option)
+ * any later version.  The code is distributed WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+ *
+ * As additional permission under GNU GPL version 3 section 7, you
+ * may distribute non-source (e.g., minimized or compacted) forms of
+ * that code without the copy of the GNU GPL normally required by
+ * section 4, provided you include this license notice and a URL
+ * through which recipients can access the Corresponding Source.
+ *
+ * @licend  The above is the entire license notice
+ * for the JavaScript code in http://thomasf.github.io/solarized-css/org-info.min.js.
+ *
+ */
+</script>
+
+<script type="text/javascript">
+
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2019 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+
+<!--/*--><![CDATA[/*><!--*/
+org_html_manager.set("TOC_DEPTH", "3");
+org_html_manager.set("LINK_HOME", "");
+org_html_manager.set("LINK_UP", "");
+org_html_manager.set("LOCAL_TOC", "1");
+org_html_manager.set("VIEW_BUTTONS", "0");
+org_html_manager.set("MOUSE_HINT", "underline");
+org_html_manager.set("FIXED_TOC", "0");
+org_html_manager.set("TOC", "0");
+org_html_manager.set("VIEW", "1");
+org_html_manager.setup();  // activate after the parameters are set
+/*]]>*///-->
+</script>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2019 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
 </head>
-
-  <body class="container">
-<header id="header">
-  <h1 class="title"><a href="/">Gu Weigang</a></h1>
-  <ul>
-    <li><a href="/blog/">Blog</a></li>
-    <li><a href="/tags/">Tags</a></li>
-    <li><a href="/about/">About</a></li>
-  </ul>
-  <form method="get" id="search" action="https://duckduckgo.com">
-    <input type="text" class="field" name="q" id="s" placeholder="Search">
-    <input type="hidden" name="as_sitesearch" value="guweigang.com">
-  </form>
-</header>
-
-<section id="content" role="main">
-  <h1>关于我</h1>
-  
-<div id="outline-container-sec-1" class="outline-2">
-<h2 id="sec-1">联系方式</h2>
-<div class="outline-text-2" id="text-1">
-<ul class="org-ul">
-<li>邮箱：guweigang#outlook.com, iamguweigang#gmail.com
-</li>
-<li>新浪微博：
+<body>
+<div id="content">
+<h1 class="title">About Me</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#org40f482f">1. 联系方式</a></li>
+<li><a href="#org8718c5b">2. 教育经历</a></li>
+<li><a href="#orgbf9b404">3. 工作及项目经历</a></li>
+<li><a href="#org94faf74">4. 开源项目</a></li>
+</ul>
+</div>
+</div>
+<style>
+ul.blog-menu {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  border-bottom: 1px solid black;
+}
+.blog-menu li {
+  float: left;
+}
+.blog-menu li a {
+  display: block;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+.blog-menu li a:hover:not(.active) {
+  background-color: black;
+}
+.blog-menu li a.active {
+  color: #859900;
+  background-color: black;
+}
+h2 {
+  font-size: 16px;
+}
+</style>
+<ul class="blog-menu">
+  <li><a href="http://guweigang.com">Home</a></li>
+  <li><a href="http://guweigang.com/blog/">Blog</a></li>
+  <li><a href="http://guweigang.com/life">Life</a></li>
+  <li><a href="http://guweigang.com/about" class="active">About</a></li>
+</ul>
 
 
 <div class="figure">
-<p><img src="http://service.t.sina.com.cn/widget/qmd/1651724537/2149560e/1.png" alt="1.png" />
+<p><img src="https://static.bullsoft.org/guweigang/gujiashu001.jpeg" alt="gujiashu001.jpeg" height="240px" align="right" />
 </p>
 </div>
-</li>
-<li>QQ：258047660
-</li>
-<li>Github: <a href="https://github.com/guweigang">@guweigang</a>
-</li>
+
+<p>
+顾伟刚，生肖丑牛，水瓶座，老宅洋沙紫居，故自称洋沙居士，出生在江西南昌祖籍在湖南湘阴户口在天津目前在北京工作。
+</p>
+
+<p>
+信奉的名言佳句：
+</p>
+<ul class="org-ul">
+<li>学习不分春夏秋冬，贵在坚持；奋斗可分鼠雀鲲鹏，人生贵搏。</li>
+<li>山不过来，我就过去。</li>
+</ul>
+
+
+<div id="outline-container-org40f482f" class="outline-2">
+<h2 id="org40f482f"><span class="section-number-2">1</span> 联系方式</h2>
+<div class="outline-text-2" id="text-1">
+<ul class="org-ul">
+<li>邮箱：guweigang(at)bullsoft(dot)org</li>
+<li>微博：<a href="https://weibo.com/cnwggu">@洋沙居士</a></li>
+<li>Github：<a href="https://github.com/guweigang">@guweigang</a></li>
 </ul>
 </div>
 </div>
-<div id="outline-container-sec-2" class="outline-2">
-<h2 id="sec-2">教育经历</h2>
+
+
+<div id="outline-container-org8718c5b" class="outline-2">
+<h2 id="org8718c5b"><span class="section-number-2">2</span> 教育经历</h2>
 <div class="outline-text-2" id="text-2">
 <ul class="org-ul">
-<li>2008 - 2011中南大学信息学院攻读硕士学位；系统分析与集成专业；课题：无线传感器网络；导师：王国军。
-</li>
-<li>2004 - 2008 中南大学信息学院攻读学士学位，电子信息工程专业。 
-</li>
+<li>2008.09 - 2011.07 中南大学，硕士，信息院 系统分析与集成专业，导师 <a href="http://trust.gzhu.edu.cn/faculty/~csgjwang/">王国军教授</a></li>
+<li>2004.09 - 2008.07 中南大学，本科，信息院 电子信息工程专业，获"湖南省优秀毕业生"证书，成绩TOP 8%， 获保送研究生资格</li>
+<li>2000.09 - 2004.07 安义中学，虽贵为高三（0）班（全校唯一的尖子班）的一员，但2003年高考题目大大超出预期，脆弱的心态导致高考失利，遂复读一年，保守的报考策略引导我选择了中南大学</li>
 </ul>
 </div>
 </div>
-<div id="outline-container-sec-3" class="outline-2">
-<h2 id="sec-3">工作经历</h2>
+
+<div id="outline-container-orgbf9b404" class="outline-2">
+<h2 id="orgbf9b404"><span class="section-number-2">3</span> 工作及项目经历</h2>
 <div class="outline-text-2" id="text-3">
 <ul class="org-ul">
-<li>2011.7 - 至今 百度高级研发工程师 - PHP方向。入职后先后负责／参与过的项目如下：
+<li>2017.12 - 至今 平安证券集团控股 任 技术总监，从无到有领导团队开发 丰收财富 平台，目前包括：
 <ul class="org-ul">
-<li>总控中心（黑白名单等配置中心）
-</li>
-<li>新样式鼻祖－蹊径广告业务系统
-</li>
-<li>电商广告平台
-</li>
-<li>微购平台
-</li>
-<li>创新实验平台（凤巢新广告样式）
-</li>
-<li>商业知心
-</li>
-</ul>
-</li>
+<li>账户体系建设</li>
+<li>港美股开户、交易</li>
+<li>资讯、行情服务</li>
+<li>海外公私募基金行情及交易</li>
+<li>营销体系（红包、礼金、佣金等）的建立</li>
+</ul></li>
+<li>2014.08 - 2017.11 网信集团 任 架构师（PHP方向）
+<ul class="org-ul">
+<li>通用CMS系统（Content, Config, Controller)</li>
+<li>统一流程管理平台（BPM）</li>
+<li>网信框架的开发及服务化</li>
+<li>网贷业务</li>
+<li>公私募基金交易系统</li>
+<li>证券相关业务</li>
+<li>金融交易中心相关业务</li>
+</ul></li>
+<li>2011.07 - 2014.08 百度 任 高级研发工程师
+<ul class="org-ul">
+<li>总控中心（黑白灰名单管理），处理来自不同类型数据源的数据，抽象校验规则，建表入库以及自动导出给下游系统</li>
+<li>百度新样式广告鼻祖：蹊径广告业务系统</li>
+<li>电商广告平台</li>
+<li>微购平台</li>
+<li>凤巢新广告样式实验平台</li>
+<li>商业知心系统</li>
+</ul></li>
+<li>2009.03 - 2010.09 湖南出版集团<a href="https://baike.baidu.com/item/%E5%90%8D%E5%B8%88%E7%BD%91">名师网</a> 在校实习</li>
 </ul>
 </div>
 </div>
-<div id="outline-container-sec-4" class="outline-2">
-<h2 id="sec-4">开源项目</h2>
+
+
+<div id="outline-container-org94faf74" class="outline-2">
+<h2 id="org94faf74"><span class="section-number-2">4</span> 开源项目</h2>
 <div class="outline-text-2" id="text-4">
 <ul class="org-ul">
-<li>参与PHP开源项目Solar，并创建Solar Framework for PHP 5 中国（ <a href="http://solarphp.cn">http://solarphp.cn</a> ），领导Solar中国项目开发。
-</li>
-<li>参与PHP开源项目Aura <a href="https://github.com/auraphp">https://github.com/auraphp</a> 。
-</li>
-<li>参与PHP开源项目Phalcon <a href="https://github.com/phalcon">https://github.com/phalcon</a> 。
-</li>
-<li>创办开源组织布尔软件：<a href="http://bullsoft.org">http://bullsoft.org</a>, 且已经有如下产出：
-<ul class="org-ul">
-<li>MySQL实时binlog接收及解析：Mysql Replication Listener
-</li>
-<li>基于MySQLbinlog解析库的PHP扩展：PHP Binlog
-</li>
-<li>PHP汉字转拼音扩展：PHP Pinyin
-</li>
-<li>PHP二进制Json打包及解包扩展：PHP Binary Json
-</li>
-<li>PHP高级配置解析器：PHP ACP
-</li>
-</ul>
-</li>
+<li>创建了松散的开源组织：<a href="http://bullsoft.org/">布尔软件</a>，致力于把大家工作中碰到的问题抽象、加工、扩展成通用解决方案并开放出来，回馈社区</li>
+<li>PHP扩展级框架 <a href="http://phalconplus.bullsoft.org/">Phalcon+</a>，基于<a href="https://phalconphp.com/zh/">Phalcon</a> 及 <a href="https://zephir-lang.com/en">Zephir</a> 开发而成，功能完善，性能强劲</li>
+<li>MySQL实时binlog接收及解析：Mysql Replication Listener</li>
+<li>基于MySQLbinlog解析库的PHP扩展：PHP Binlog</li>
+<li>基于Mysql+Redis的ID自增序列发号器</li>
+<li>PHP汉字转拼音扩展：PHP Pinyin</li>
+<li>参与PHP开源框架Solar项目，并独自翻译了 <a href="http://solarphp.bullsoft.org/manual/">中文手册</a></li>
 </ul>
 </div>
 </div>
-<div id="outline-container-sec-5" class="outline-2">
-<h2 id="sec-5">在校经历</h2>
-<div class="outline-text-2" id="text-5">
-<ul class="org-ul">
-<li>2004年-2006年 在校期间担任班长、学生会副主席、创业俱乐部会长等职务。
-</li>
-<li>2006年 创建SODO电子商务创业团队，项目负责人。
-</li>
-<li>2007年 与黎胤（学工办主任）、毛天石联合创办“中南大学科研训练中心”培训机构。
-</li>
-<li>2008年 Smart-Call长沙高校销售代表。
-</li>
-<li>2009年 中南出版传媒集团，开发名师网，技术骨干，任职1.5年。
-</li>
-<li>2011年 创办长沙市尤盛网络科技有限公司，开展团购、技术支持等业务。
-</li>
-</ul>
 </div>
+<div id="postamble" class="status">
+<p class="date">Date: 2018-12-14 五 00:00</p>
+<p class="author">Author: Gu Weigang</p>
+<p class="date">Created: 2019-02-12 二 14:45</p>
+<p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
-<div id="outline-container-sec-6" class="outline-2">
-<h2 id="sec-6">特长爱好</h2>
-<div class="outline-text-2" id="text-6">
-<ul class="org-ul">
-<li>热爱英语，曾译过Solar PHP手册<a href="http://solarphp.cn/manual-new/">http://solarphp.cn/manual-new/</a> ；Aura包文档 <a href="http://bullsoft.org/auraphp/index.html">http://bullsoft.org/auraphp/index.html</a> ，并能轻松阅读英文资料及文档。
-</li>
-<li>喜欢互联网并对互联网有自己的见解，擅长PHP编程，熟悉C、Lisp语言，熟悉Linux、MySQL，Sphinx等常用服务组件，熟悉Emacs编辑器。
-</li>
-<li>热爱开源，乐于分享，在github上有自己的源：<a href="https://github.com/guweigang">https://github.com/guweigang</a>。
-</li>
-<li>有创业经验，有一定管理能力，有项目管理经验。
-</li>
-<li>喜欢羽毛球，网球，乒乓球；性格开朗，健谈，有幽默细胞；喜欢写博客、微博，善于总结。
-</li>
-</ul>
-</div>
-</div>
-
-</section>
-
-
-
-<footer id="footer">
-    Send comments, critique and suggestions to <a href="mailto:guweigang &lt;at&gt; outlook &lt;dot&gt; com">Gu Weigang</a>.
-    Powered by <a href="https://github.com/kelvinh/org-page">org-page</a>
-</footer>
-
-  </body>
+</body>
 </html>
